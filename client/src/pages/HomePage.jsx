@@ -2,56 +2,31 @@ const Header = () => {
     return (
       <header className="header">
         <div className="container">
-          <h1 className="logo">MyWebsite</h1>
+          <h1 className="logo">New Flow Beauty Salon & Barber Shop</h1>
+          <p>New Flow, New You.</p>
         </div>
       </header>
     );
   };
-  
-  const HeroSection = () => {
-    return (
-      <section className="hero" id="home">
-        <div className="container">
-          <h1>Welcome to MyWebsite</h1>
-          <p>Your one-stop solution for amazing features.</p>
-          <button className="btn-primary">Get Started</button>
-        </div>
-      </section>
-    );
-  };
+
   
   const Features = () => {
     return (
-      <section className="features" id="features">
+      <section className="services" id="services">
         <div className="container">
-          <h2>Features</h2>
-          <div className="feature-list">
-            <div className="feature-item">
-              <h3>Feature One</h3>
-              <p>Details about this amazing feature.</p>
+          <h2>Services</h2>
+          <div className="services-list container">
+            <div className="service-item">
+              <h3>Haircuts</h3>
+              <p>Details about this amazing servcie.</p>
             </div>
-            <div className="feature-item">
-              <h3>Feature Two</h3>
-              <p>Details about another amazing feature.</p>
-            </div>
-            <div className="feature-item">
-              <h3>Feature Three</h3>
-              <p>Details about yet another feature.</p>
+            <div className="service-item">
+              <h3>Hair Styling</h3>
+              <p>Details about another amazing servcie.</p>
             </div>
           </div>
         </div>
       </section>
-    );
-  };
-  
-  
-  const Footer = () => {
-    return (
-      <footer className="footer">
-        <div className="container">
-          <p>&copy; {new Date().getFullYear()} MyWebsite. All rights reserved.</p>
-        </div>
-      </footer>
     );
   };
   
@@ -60,10 +35,8 @@ const Header = () => {
       <div>
         <Header />
         <main className="container">
-          <HeroSection />
           <Features />
         </main>
-        <Footer />
       </div>
     );
   };

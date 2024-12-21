@@ -4,7 +4,7 @@ const AppointmentsPage = () => {
   return (
     <div className="container">
       <h2>Make an Appointment!</h2>
-      <p>Reach out to us via email or phone.</p>
+      <p>You can also reach out to us via phone to schedule an appointment!</p>
     </div>
   );
 };
