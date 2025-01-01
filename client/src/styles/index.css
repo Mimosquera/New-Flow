@@ -30,6 +30,15 @@ body {
   min-height: 100vh;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6em 2.4em;
+  white-space: nowrap;
+}
+
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
