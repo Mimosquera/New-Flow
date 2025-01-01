@@ -59,8 +59,8 @@ main {
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
   padding: 1.6em 2.4em;
   white-space: nowrap;
   gap: 2em;
