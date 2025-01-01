@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="header container">
+    <header className="header container-fluid">
       <div>
         <h2 className="logo">About Us</h2>
         <p>We are dedicated to bringing out your best you!</p>
@@ -13,9 +13,9 @@ const Header = () => {
 
 const Services = () => {
   return (
-    <section className="container">
+    <section className="container-fluid">
         <h3>Services</h3>
-          <div className="services-list container">
+          <div className="services-list container-fluid">
             <div className="service-item">
               <h4>Haircuts</h4>
               <p>Details about this amazing servcie.</p>
@@ -31,9 +31,9 @@ const Services = () => {
 
 const AboutPage = () => {
   return (
-    <div className="container">
+    <div className="container-fluid">
       <Header />
-      <main className="container">
+      <main className="container-fluid">
         <Services />
       </main>
     </div>
