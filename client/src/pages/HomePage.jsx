@@ -1,9 +1,9 @@
 const Header = () => {
     return (
-      <header className="header container">
+      <header className="header">
         <div>
-          <h1 className="logo">New Flow Beauty Salon & Barber Shop</h1>
-          <p>New Flow, New You.</p>
+          <h2>New Flow</h2>
+          <p>New You.</p>
         </div>
       </header>
     );
@@ -13,19 +13,17 @@ const Header = () => {
   const Services = () => {
     return (
       <section className="services" id="services">
-        <div className="container">
-          <h2>Services</h2>
-          <div className="services-list container">
-            <div className="service-item">
-              <h3>Haircuts</h3>
-              <p>Details about this amazing servcie.</p>
+          <h3>Services</h3>
+            <div className="services-list container">
+              <div className="service-item">
+                <h4>Haircuts</h4>
+                <p>Details about this amazing servcie.</p>
+              </div>
+              <div className="service-item">
+                <h4>Hair Styling</h4>
+                <p>Details about another amazing servcie.</p>
+              </div>
             </div>
-            <div className="service-item">
-              <h3>Hair Styling</h3>
-              <p>Details about another amazing servcie.</p>
-            </div>
-          </div>
-        </div>
       </section>
     );
   };
@@ -35,7 +33,7 @@ const Header = () => {
       <div className="container">
         <Header />
         <main className="container">
-          <Services />
+          
         </main>
       </div>
     );

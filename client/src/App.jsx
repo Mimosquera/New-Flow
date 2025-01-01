@@ -10,7 +10,7 @@ const App = () => {
     <div className="d-flex flex-column min-vh-100">
       <Router>
         <Header />
-        <main className="flex-grow-1">
+        <main className="flex-grow-1 w-100">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
