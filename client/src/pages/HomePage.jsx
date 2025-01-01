@@ -15,10 +15,12 @@ const Header = () => {
       <div className="container-fluid">
         <Header />
         <main className="container-fluid">
-          
+          <div className="content">
+            {/* Add your content here */}
+          </div>
         </main>
       </div>
     );
   };
   
-  export default HomePage;  
+  export default HomePage;

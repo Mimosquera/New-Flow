@@ -3,7 +3,7 @@ import React from "react";
 const AppointmentsPage = () => {
   return (
     <header className="container-fluid header">
-      <div>
+      <div className="content">
         <h2>Make an Appointment!</h2>
         <p>Call or schedule online to make an appointment!</p>
       </div>

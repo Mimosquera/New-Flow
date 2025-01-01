@@ -34,7 +34,9 @@ const AboutPage = () => {
     <div className="container-fluid">
       <Header />
       <main className="container-fluid">
-        <Services />
+        <div className="content">
+          <Services />
+        </div>
       </main>
     </div>
   );
