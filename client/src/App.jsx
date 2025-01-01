@@ -7,17 +7,19 @@ import Footer from "./components/Footer.jsx";
 
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <main>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/appointments" element={<AppointmentsPage />} />
-        </Routes>
-      </main>
-      <Footer />
-    </Router>
+    <div className="d-flex flex-column min-vh-100">
+      <Router>
+        <Header />
+        <main className="flex-grow-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/appointments" element={<AppointmentsPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </Router>
+    </div>
   );
 };
 
