@@ -3,7 +3,7 @@ const Header = () => {
     <header className="header">
       <div className="content">
         <h2>New Flow</h2>
-        <p>New You.</p>
+        <p className="light-text">New You.</p>
       </div>
     </header>
   );

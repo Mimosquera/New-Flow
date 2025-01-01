@@ -3,7 +3,7 @@ const Header = () => {
     <header className="header container-fluid">
       <div className="content">
         <h2>Make an Appointment!</h2>
-        <p>Call or schedule online to make an appointment!</p>
+        <p className="light-text">Call or schedule online to make an appointment!</p>
       </div>
     </header>
   );

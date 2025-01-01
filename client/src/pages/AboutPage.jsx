@@ -2,8 +2,8 @@ const Header = () => {
   return (
     <header className="header container-fluid">
       <div className="content">
-        <h2 className="logo">About Us</h2>
-        <p>We are dedicated to bringing out your best you!</p>
+        <h2>About Us</h2>
+        <p className="light-text">We are dedicated to bringing out your best you!</p>
       </div>
     </header>
   );
@@ -16,11 +16,11 @@ const Services = () => {
           <div className="services-list container-fluid">
             <div className="service-item">
               <h4>Haircuts</h4>
-              <p>Details about this amazing servcie.</p>
+              <p className="light-text">Details about this amazing servcie.</p>
             </div>
             <div className="service-item">
               <h4>Hair Styling</h4>
-              <p>Details about another amazing servcie.</p>
+              <p className="light-text">Details about another amazing servcie.</p>
             </div>
           </div>
     </section>
