@@ -9,9 +9,7 @@ const App = () => {
   return (
     <div className="d-flex flex-column min-vh-100 w-100">
       <Router>
-        <header className="w-100">
           <Header />
-        </header>
         <main className="flex-grow-1 w-100">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -19,9 +17,7 @@ const App = () => {
             <Route path="/appointments" element={<AppointmentsPage />} />
           </Routes>
         </main>
-        <footer className="w-100">
           <Footer />
-        </footer>
       </Router>
     </div>
   );
