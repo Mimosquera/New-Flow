@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <header className="header">
-      <div className="content">
+      <div>
         <h2>New Flow</h2>
         <p className="light-text">New You.</p>
       </div>
@@ -14,7 +14,7 @@ const HomePage = () => {
     <div className="container-fluid">
       <Header />
       <main className="container-fluid">
-        <div className="content">
+        <div>
           {/* Add your content here */}
         </div>
       </main>

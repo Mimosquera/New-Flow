@@ -1,7 +1,7 @@
 const Header = () => {
   return (
     <header className="header container-fluid">
-      <div className="content">
+      <div>
         <h2>About Us</h2>
         <p className="light-text">We are dedicated to bringing out your best you!</p>
       </div>
@@ -32,7 +32,7 @@ const AboutPage = () => {
     <div className="container-fluid">
       <Header />
       <main className="container-fluid">
-        <div className="content">
+        <div>
           <Services />
         </div>
       </main>
