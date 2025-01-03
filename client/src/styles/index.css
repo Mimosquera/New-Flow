@@ -53,11 +53,21 @@ main {
   white-space: nowrap;
 }
 
+.logo-container {
+  text-align: center; /* Centers the logo horizontally */
+  flex-grow: 1; /* Ensures the logo gets the central space */
+  padding-left: 20em; /* Adds some space between the logo and the title */
+}
+
 .header-logo {
-  max-width: 10%;
+  max-width: 15%;
   height: auto; /* Maintains aspect ratio */
   display: block;
   margin: 0 auto; /* Centers the logo */
+}
+
+.navbar {
+  padding-right: 5em;
 }
 
 h1 {
