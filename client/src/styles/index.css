@@ -49,25 +49,33 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1.6em 2.4em;
-  white-space: nowrap;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em; 
 }
 
 .logo-container {
-  text-align: center; /* Centers the logo horizontally */
-  flex-grow: 1; /* Ensures the logo gets the central space */
-  padding-left: 20em; /* Adds some space between the logo and the title */
+  flex-grow: 1; 
+  text-align: center;
 }
 
 .header-logo {
-  max-width: 15%;
-  height: auto; /* Maintains aspect ratio */
-  display: block;
-  margin: 0 auto; /* Centers the logo */
+  max-width: 15%; 
+  height: auto;
+  margin: 0 auto;
 }
 
-.navbar {
-  padding-right: 5em;
+.navbar-nav {
+  display: flex; 
+  justify-content: flex-end;
+}
+
+.nav-link:hover {
+  color: #549ad4;
 }
 
 h1 {
