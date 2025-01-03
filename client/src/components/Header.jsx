@@ -1,10 +1,11 @@
 import Navigation from './Navigation.jsx'
+import logo from '../assets/images/full-logo-nobuffer.jpg'
 
 const Header = () => {
     return (
     <header className="header container-fluid">
-        <h1>New Flow Beauty Salon & Barber Shop</h1>
-        <Navigation />
+            <img src={logo} alt="New Flow Beauty Salon & Barber Shop Logo" className="header-logo" />
+            <Navigation />
     </header>
     )
 }
