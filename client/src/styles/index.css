@@ -38,13 +38,13 @@ body {
 }
 
 .container-fluid {
-  width: 100%;
+  width: 100vh;
   padding: 0 2em;
 }
 
 main {
   flex-grow: 1;
-  width: 100%;
+  width: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,12 +58,6 @@ main {
   align-items: center;
   text-align: center;
   margin-bottom: 2em;
-}
-
-.header h2 {
-  font-size: 2.5rem;
-  color: #ffffff;
-  margin-bottom: 0.5em;
 }
 
 .site-header {
@@ -82,10 +76,11 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  padding-top: 2em;
 }
 
 .header-logo {
-  max-width: 15%;
+  max-width: 25%;
   height: auto;
 }
 
@@ -93,6 +88,7 @@ main {
 .navigation-wrapper {
   display: flex;
   justify-content: flex-end;
+  padding-top: 2em;
 }
 
 .navbar-nav {
@@ -126,9 +122,9 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%; /* Ensure the video spans the full width */
-  height: 100%; /* Full height of the container */
-  object-fit: cover; /* Ensure the video fills the container without distortion */
+  width: 100%; 
+  height: 100%;
+  object-fit: cover;
   transform: translate(-50%, -50%);
   z-index: 1;
 }
@@ -137,7 +133,7 @@ main {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.151); /* Semi-transparent overlay */
+  background-color: rgba(0, 0, 0, 0.151);
   z-index: 2;
 }
 
@@ -146,17 +142,7 @@ main {
   .hero-banner {
     height: 300px; /* Smaller height for mobile screens */
   }
-
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1rem;
-  }
 }
-
-
 
 /* Typography */
 h1 {

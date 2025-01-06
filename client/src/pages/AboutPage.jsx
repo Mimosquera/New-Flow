@@ -1,7 +1,7 @@
 import React from "react";
 import heroVideo from "../assets/videos/hero-banner-video.mp4";
 
-const Header = () => {
+const PageTitle = () => {
   return (
     <header className="header container-fluid">
       <div>
@@ -54,10 +54,10 @@ const Services = () => {
 const AboutPage = () => {
   return (
     <div className="container-fluid">
-      <Header />
+      <HeroBanner />
       <main className="container-fluid">
         <div>
-          <HeroBanner />
+          <PageTitle />
           <Services />
         </div>
       </main>
