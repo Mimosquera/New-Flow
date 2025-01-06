@@ -4,6 +4,7 @@ import AboutPage from "./pages/AboutPage.jsx";
 import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import React from "react";
 
 const App = () => {
   return (

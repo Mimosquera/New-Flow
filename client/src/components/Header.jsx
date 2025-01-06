@@ -1,5 +1,6 @@
 import Navigation from './Navigation.jsx'
 import logo from '../assets/images/full-logo-nobuffer.jpg'
+import React from 'react';
 
 const Header = () => {
     return (
