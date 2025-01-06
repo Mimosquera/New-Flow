@@ -78,7 +78,7 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  padding-top: 2em;
+  padding-top: 5em;
 }
 
 .header-logo {
@@ -91,6 +91,7 @@ main {
   display: flex;
   justify-content: flex-end;
   padding-top: 2em;
+  padding-left: 2em;
 }
 
 .navbar-nav {
