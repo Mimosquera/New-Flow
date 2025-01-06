@@ -21,34 +21,35 @@
   color: #ffffff;
 }
 
-/* Possible Light Color Alternative: #549ad4 */
-
+/* General Body Setup */
 html, body {
   background-color: rgb(5, 45, 63);
-  width: 100%;
-  height: 100%;
+  width: 100%;   /* Take full viewport width */
+  height: 100%;  /* Take full viewport height */
 }
 
 body {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 100vh;
-  min-height: 100vh;
+  flex-direction: column;
+  justify-content: flex-start; /* Ensure content starts from top */
+  min-height: 100vh; /* Ensure body takes the full viewport height */
+  width: 100%;   /* Ensure body takes full width */
 }
 
+/* Main container for all content */
 .container-fluid {
-  width: 100vh;
+  width: 100%;  /* Ensure container takes full width */
   padding: 0 2em;
 }
 
+/* Main content container */
 main {
   flex-grow: 1;
-  width: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  width: 100%;  /* Ensure main takes full width */
+  height: auto; /* Allow height to adjust based on content */
 }
 
 /* Header and Site Header */
@@ -61,17 +62,18 @@ main {
 }
 
 .site-header {
-  position: relative; 
+  position: relative;
   display: flex;
-  justify-content: flex-end; 
+  justify-content: flex-end;
   align-items: center;
   height: 80px;
-  padding: 0 1em; 
-  background-color: rgb(5, 45, 63); 
+  padding: 0 1em;
+  background-color: rgb(5, 45, 63);
+  z-index: 10;
 }
 
 .logo-container {
-  position: absolute; 
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -108,8 +110,8 @@ main {
 /* Hero Banner Container */
 .hero-banner {
   position: relative;
-  width: 100%; 
-  height: 400px;
+  width: 100%;  /* Ensure hero banner takes full width */
+  height: 400px; /* Fixed height for the hero banner */
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -122,7 +124,7 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100%; 
+  width: 100%;
   height: 100%;
   object-fit: cover;
   transform: translate(-50%, -50%);
@@ -139,8 +141,17 @@ main {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .hero-banner {
-    height: 300px; /* Smaller height for mobile screens */
+  .site-header {
+    flex-direction: column; /* Stack logo and nav on smaller screens */
+    height: auto;
+  }
+
+  .logo-container {
+    margin-bottom: 1em; /* Add space between logo and nav */
+  }
+
+  .navigation-wrapper {
+    padding-top: 1em; /* Adjust navigation spacing */
   }
 }
 

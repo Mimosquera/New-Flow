@@ -14,6 +14,9 @@ const Navigation = () => {
         <li className="nav-item">
           <Link className="nav-link light-text" to="/appointments">Appointments</Link>
         </li>
+        <li className="nav-item">
+          <Link className="nav-link light-text" to="/login">Log In</Link>
+        </li>
       </ul>
     </nav>
   );
