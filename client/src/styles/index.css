@@ -1,3 +1,4 @@
+/* General Reset */
 * {
   margin: 0;
   padding: 0;
@@ -17,10 +18,10 @@
 }
 
 .light-text {
-  color: #ffffff
+  color: #ffffff;
 }
 
-/* possible light color alternative: #549ad4 */
+/* Possible Light Color Alternative: #549ad4 */
 
 html, body {
   background-color: rgb(6, 46, 65);
@@ -45,6 +46,7 @@ main {
   flex-direction: column;
 }
 
+/* Header and Site Header */
 .header {
   display: flex;
   justify-content: center;
@@ -52,32 +54,49 @@ main {
 }
 
 .site-header {
+  position: relative; 
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; 
   align-items: center;
-  padding: 1em; 
+  height: 80px;
+  padding: 0 1em; 
+  background-color: rgb(6, 46, 65); 
 }
 
 .logo-container {
-  flex-grow: 1; 
+  position: absolute; 
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
 }
 
 .header-logo {
-  max-width: 15%; 
+  max-width: 15%;
   height: auto;
-  margin: 0 auto;
+}
+
+/* Navigation */
+.navigation-wrapper {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .navbar-nav {
-  display: flex; 
-  justify-content: flex-end;
+  display: flex;
+  gap: 1em;
+}
+
+.nav-link {
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .nav-link:hover {
   color: #549ad4;
 }
 
+/* Typography */
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
