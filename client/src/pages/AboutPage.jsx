@@ -1,4 +1,5 @@
 import React from "react";
+import heroVideo from "../assets/videos/hero-banner-video.mp4";
 
 const Header = () => {
   return (
@@ -8,6 +9,27 @@ const Header = () => {
         <p className="light-text">We are dedicated to bringing out your best you!</p>
       </div>
     </header>
+  );
+};
+
+const HeroBanner = () => {
+  return (
+    <div className="homepage">
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <video
+          className="hero-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={heroVideo} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="hero-overlay"></div>
+      </div>
+    </div>
   );
 };
 
@@ -35,6 +57,7 @@ const AboutPage = () => {
       <Header />
       <main className="container-fluid">
         <div>
+          <HeroBanner />
           <Services />
         </div>
       </main>
