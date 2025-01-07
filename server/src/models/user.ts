@@ -14,15 +14,6 @@ export class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {
-  static findAll(arg0: { attributes: { exclude: string[]; }; }) {
-    throw new Error('Method not implemented.');
-  }
-  static findByPk(id: any, arg1: { attributes: { exclude: string[]; }; }) {
-    throw new Error('Method not implemented.');
-  }
-  static create(arg0: { username: any; email: any; password: any; }) {
-    throw new Error('Method not implemented.');
-  }
   public id!: number;
   public username!: string;
   public email!: string;

@@ -6,6 +6,7 @@ import AppointmentsPage from "./pages/AppointmentsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
+import SignupPage from "./pages/SignupPage.tsx";
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false); // Track login state
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/about" element={<AboutPage />} />
             <Route path="/appointments" element={<AppointmentsPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage/>} />
           </Routes>
         </main>
         <Footer />
