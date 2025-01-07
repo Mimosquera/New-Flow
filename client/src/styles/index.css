@@ -45,11 +45,12 @@ body {
 /* Main content container */
 main {
   flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
-  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 2rem 1rem;
 }
 
 /* Header and Site Header */
@@ -66,9 +67,8 @@ main {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  height: 80px;
+  height: 200px;
   padding: 0 1em;
-  background-color: rgb(5, 45, 63);
   z-index: 10;
 }
 
@@ -78,7 +78,6 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  padding-top: 5em;
 }
 
 .header-logo {
@@ -118,6 +117,7 @@ main {
   align-items: center;
   justify-content: center;
   margin-bottom: 2em;
+  z-index: 1;
 }
 
 /* Video Styling */
@@ -160,4 +160,13 @@ main {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.login-page {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
 }

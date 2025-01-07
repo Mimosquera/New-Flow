@@ -11,7 +11,7 @@ const App = () => {
   return (
     <div className="d-flex flex-column min-vh-100 w-100">
       <Router>
-          <Header />
+        <Header />
         <main className="flex-grow-1 w-100">
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -20,10 +20,11 @@ const App = () => {
             <Route path="/login" element={<LoginPage />} />
           </Routes>
         </main>
-          <Footer />
+        <Footer />
       </Router>
     </div>
   );
 };
+
 
 export default App;

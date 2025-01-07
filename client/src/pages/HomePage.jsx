@@ -1,7 +1,7 @@
 import React from "react";
 import heroVideo from "../assets/videos/hero-banner-video.mp4";
 
-const HomePage = () => {
+const HeroBanner = () => {
   return (
     <div className="homepage">
       {/* Hero Banner */}
@@ -18,15 +18,27 @@ const HomePage = () => {
         </video>
         <div className="hero-overlay"></div>
       </div>
+    </div>
+  );
+};
 
-      {/* Additional Content */}
+const PageTitle = () => {
+  return (
+    <header className="header container-fluid">
+      <div>
+        <h2>Welcome!</h2>
+        <p className="light-text">We're here to help you find the New You!</p>
+      </div>
+    </header>
+  );
+};
+
+const HomePage = () => {
+  return (
+    <div className="d-flex flex-column w-100">
+      <HeroBanner />
       <main className="container-fluid">
-        <section className="additional-content">
-          <h2>About Us</h2>
-          <p className="light-text">
-            New Flow Beauty Salon & Barber Shop offers exceptional services tailored to your needs. Discover the perfect balance of beauty and relaxation with us.
-          </p>
-        </section>
+          <PageTitle />
       </main>
     </div>
   );

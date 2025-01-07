@@ -1,17 +1,6 @@
 import React from "react";
 import heroVideo from "../assets/videos/hero-banner-video.mp4";
 
-const PageTitle = () => {
-  return (
-    <header className="header container-fluid">
-      <div>
-        <h2>Make an Appointment!</h2>
-        <p className="light-text">Call or schedule online to make an appointment!</p>
-      </div>
-    </header>
-  );
-};
-
 const HeroBanner = () => {
   return (
     <div className="homepage">
@@ -33,9 +22,20 @@ const HeroBanner = () => {
   );
 };
 
+const PageTitle = () => {
+  return (
+    <header className="header container-fluid">
+      <div>
+        <h2>Make an Appointment!</h2>
+        <p className="light-text">Call or schedule online to make an appointment!</p>
+      </div>
+    </header>
+  );
+};
+
 const AppointmentsPage = () => {
   return (
-    <div className="container-fluid">
+    <div className="d-flex flex-column w-100">
       <HeroBanner />
       <main className="container-fluid">
         <div>

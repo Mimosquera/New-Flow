@@ -20,7 +20,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center">
+    <div className="container d-flex justify-content-center align-items-center login-page">
       <div className="card" style={{ width: '25rem' }}>
         <div className="card-body">
           <h3 className="card-title text-center">Login</h3>
