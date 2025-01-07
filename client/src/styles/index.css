@@ -24,21 +24,21 @@
 /* General Body Setup */
 html, body {
   background-color: rgb(5, 45, 63);
-  width: 100%;   /* Take full viewport width */
-  height: 100%;  /* Take full viewport height */
+  width: 100%;
+  height: 100%;
 }
 
 body {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure content starts from top */
-  min-height: 100vh; /* Ensure body takes the full viewport height */
-  width: 100%;   /* Ensure body takes full width */
+  justify-content: flex-start;
+  min-height: 100vh;
+  width: 100%;
 }
 
 /* Main container for all content */
 .container-fluid {
-  width: 100%;  /* Ensure container takes full width */
+  width: 100%;
   padding: 0 2em;
 }
 
@@ -48,8 +48,8 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;  /* Ensure main takes full width */
-  height: auto; /* Allow height to adjust based on content */
+  width: 100%;
+  height: auto;
 }
 
 /* Header and Site Header */
@@ -111,8 +111,8 @@ main {
 /* Hero Banner Container */
 .hero-banner {
   position: relative;
-  width: 100%;  /* Ensure hero banner takes full width */
-  height: 400px; /* Fixed height for the hero banner */
+  width: 100%;
+  height: 400px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -143,16 +143,16 @@ main {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
   .site-header {
-    flex-direction: column; /* Stack logo and nav on smaller screens */
+    flex-direction: column;
     height: auto;
   }
 
   .logo-container {
-    margin-bottom: 1em; /* Add space between logo and nav */
+    margin-bottom: 1em;
   }
 
   .navigation-wrapper {
-    padding-top: 1em; /* Adjust navigation spacing */
+    padding-top: 1em;
   }
 }
 
