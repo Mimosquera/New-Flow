@@ -170,3 +170,40 @@ h1 {
   width: 100%;
   height: auto;
 }
+
+.news-updates {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.news-updates h3 {
+  color: #ffffff;
+}
+
+.posts {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.post {
+  background-color: #073645;
+  color: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.post h5 {
+  margin-bottom: 0.5rem;
+}
+
+.post h6 {
+  font-size: 0.9rem;
+  color: #c0bfbfb4;
+}
+
+.post p {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
