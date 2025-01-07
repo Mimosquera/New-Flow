@@ -37,9 +37,9 @@ const NewsUpdates = ({ loggedIn }) => {
   const samplePosts = [
     {
       id: 1,
-      title: "Grand Opening Celebration!",
-      content: "Join us for our grand opening celebration with special discounts on services.",
-      date: "2025-01-01",
+      title: "Happy Holidays from New Flow!",
+      content: "We’re sorry to let you know that we will be closed Christmas Day to give our team a well-deserved break to spend time with their loved ones. Wishing you a holiday season filled with joy, love, and warmth!",
+      date: "2024-12-24",
     },
     {
       id: 2,
@@ -62,7 +62,7 @@ const NewsUpdates = ({ loggedIn }) => {
           <div key={post.id} className="post card mb-3">
             <div className="card-body">
               <h5 className="card-title">{post.title}</h5>
-              <h6 className="card-subtitle mb-2 text-muted">{post.date}</h6>
+              <h6 className="card-subtitle mb-2">{post.date}</h6>
               <p className="card-text">{post.content}</p>
             </div>
           </div>
