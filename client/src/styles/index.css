@@ -17,6 +17,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Typography */
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
 .light-text {
   color: #ffffff;
 }
@@ -42,13 +48,11 @@ body {
   width: 100%;
 }
 
-/* Main container for all content */
 .container-fluid {
   width: 100%;
   padding: 0 2em;
 }
 
-/* Main content container */
 main {
   flex-grow: 1;
   width: 100%;
@@ -56,7 +60,7 @@ main {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  padding: 2rem 1rem;
+  padding: 0;
 }
 
 /* Header and Site Header */
@@ -71,46 +75,56 @@ main {
 .site-header {
   position: relative;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column; 
   align-items: center;
-  height: 200px;
-  padding: 0 1em;
-  z-index: 10;
+  justify-content: flex-start;
+  padding: 20px 0; 
+  width: 100%;
 }
 
 .logo-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  margin-bottom: 20px;
   text-align: center;
 }
 
 .header-logo {
-  max-width: 25%;
+  max-width: 20%;
   height: auto;
 }
 
 /* Navigation */
 .navigation-wrapper {
   display: flex;
-  justify-content: flex-end;
-  padding-top: 2em;
-  padding-left: 2em;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 10px 0;
+  box-sizing: border-box;
 }
 
 .navbar-nav {
   display: flex;
-  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-item {
+  margin: 0 15px;
 }
 
 .nav-link {
-  color: #ffffff;
   text-decoration: none;
+  color: inherit;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
+  border-radius: 15px;
 }
 
 .nav-link:hover {
-  color: #549ad4;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Hero Banner Container */
@@ -126,7 +140,6 @@ main {
   z-index: 1;
 }
 
-/* Video Styling */
 .hero-video {
   position: absolute;
   top: 50%;
@@ -146,28 +159,7 @@ main {
   z-index: 2;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .site-header {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .logo-container {
-    margin-bottom: 1em;
-  }
-
-  .navigation-wrapper {
-    padding-top: 1em;
-  }
-}
-
-/* Typography */
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Login Page */
 .login-page {
   flex-grow: 1;
   display: flex;
@@ -177,6 +169,7 @@ h1 {
   height: auto;
 }
 
+/* News and Updates */
 .news-updates {
   width: 100%;
   margin-top: 2rem;
