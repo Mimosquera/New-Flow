@@ -207,6 +207,12 @@ main {
   margin-top: 0.5rem;
 }
 
+/* GMAP Iframe Styling */
+.google-map-iframe {
+  width: 200%;
+  height: 400px;
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .google-map-iframe {
