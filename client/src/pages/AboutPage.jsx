@@ -33,31 +33,46 @@ const PageTitle = () => {
   );
 };
 
-const Services = () => {
+const AboutUsDetails = () => {
   return (
     <section className="container-fluid">
-        <h3>Services</h3>
-          <div className="services-list container-fluid">
-            <div className="service-item">
-              <h4>Haircuts</h4>
-              <p className="light-text">Details about this amazing servcie.</p>
-            </div>
-            <div className="service-item">
-              <h4>Hair Styling</h4>
-              <p className="light-text">Details about another amazing servcie.</p>
-            </div>
-          </div>
+      <h3>Our Story</h3>
+      <p className="light-text sub-text">
+        At New Flow, we are proud to be a Latino-owned barbershop and beauty salon rooted in the heart of our community. Since opening our doors in 2009, our mission has been to blend tradition, culture, and creativity to bring out the best in everyone who walks through our doors.
+      </p>
+      <h3>Our Mission</h3>
+      <p className="light-text sub-text">
+        We strive to provide exceptional grooming and beauty services while celebrating the vibrant spirit of our Latino heritage. From the rhythmic beats of salsa and reggaetón in the background to the warm and lively conversations in Spanish and English, our space reflects the richness of our culture. But above all, our doors are open to everyone, and we’re dedicated to making all feel welcomed, valued, and at home.
+      </p>
+      <h3>Why Choose Us?</h3>
+      <ul>
+        <li className="light-text sub-text">Expert barbers and stylists who are mostly Latino and proudly local.</li>
+        <li className="light-text sub-text">An authentic, lively atmosphere inspired by Latino culture.</li>
+        <li className="light-text sub-text">A commitment to inclusivity—everyone is welcome here!</li>
+        <li className="light-text sub-text">High-quality haircare and grooming services tailored to all hair types and styles.</li>
+        <li className="light-text sub-text">A community-centered approach, supporting local events and initiatives.</li>
+      </ul>
+      <h3>Meet Our Team</h3>
+      <p className="light-text sub-text">
+        Our team is the heart of New Flow. Most of our barbers and stylists are proud Latinos who bring years of expertise and a deep passion for their craft. With every cut, color, and style, we infuse a bit of our culture and creativity to ensure you leave looking and feeling your absolute best.
+      </p>
+      <h3>Our Community</h3>
+      <p className="light-text sub-text">
+        We believe a barbershop and salon should be more than a place for a haircut—it should be a hub for connection and culture. Whether you’re stopping by for a quick trim or a total transformation, you’ll feel the warmth and vibrancy that define our community. ¡Todos son bienvenidos aquí!
+      </p>
     </section>
   );
 };
+
+
 
 const AboutPage = () => {
   return (
     <div className="d-flex flex-column w-100">
       <HeroBanner />
       <main className="container-fluid">
-          <PageTitle />
-          <Services />
+        <PageTitle />
+        <AboutUsDetails />
       </main>
     </div>
   );

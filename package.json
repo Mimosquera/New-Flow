@@ -24,5 +24,11 @@
     "concurrently": "^8.2.2",
     "nodemon": "^3.1.3",
     "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "install": "^0.13.0",
+    "typescri": "^1.0.0",
+    "typescript": "^5.7.2",
+    "typescriptnpm": "^1.0.1"
   }
 }

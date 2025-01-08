@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import heroVideo from "../assets/videos/hero-banner-video.mp4";
 
 const HeroBanner = () => {
@@ -34,51 +34,82 @@ const PageTitle = () => {
 };
 
 const NewsUpdates = ({ loggedIn }) => {
-  const samplePosts = [
-    {
-      id: 1,
-      title: "Happy Holidays from New Flow!",
-      content: "We’re sorry to let you know that we will be closed Christmas Day to give our team a well-deserved break to spend time with their loved ones. Wishing you a holiday season filled with joy, love, and warmth!",
-      date: "2024-12-24",
-    },
-    {
-      id: 2,
-      title: "New Year, New Look!",
-      content: "Check out our new styles and services for the new year.",
-      date: "2025-01-05",
-    },
-  ];
+  const [posts, setPosts] = useState([
+    { id: 1, title: "Welcome to our salon!", content: "Check out our latest updates and offers.", date: "2024-12-24" },
+    { id: 2, title: "New Barber in Town", content: "We’ve added a talented barber to our team!", date: "2025-01-05" },
+  ]);
+  const [newPost, setNewPost] = useState({ title: "", content: "" });
+
+  const handlePostSubmit = (e) => {
+    e.preventDefault();
+    if (newPost.title.trim() && newPost.content.trim()) {
+      const newPostObject = {
+        id: Date.now(),
+        title: newPost.title,
+        content: newPost.content,
+        date: new Date().toLocaleDateString(),
+      };
+      setPosts([newPostObject, ...posts]); 
+      setNewPost({ title: "", content: "" });
+    }
+  };
 
   return (
-    <section className="news-updates container-fluid">
-      <h3 className="text-center mb-4">News & Updates</h3>
+    <div className="news-updates container">
+      <h2 className="header">News & Updates</h2>
       {loggedIn && (
-        <div className="text-center mb-3">
-          <button className="btn btn-primary">Create Post</button>
+        <div className="create-post-form">
+          <h3>Create a Post</h3>
+          <form onSubmit={handlePostSubmit}>
+            <div className="mb-3">
+              <label htmlFor="post-title" className="form-label">Title</label>
+              <input
+                type="text"
+                id="post-title"
+                className="form-control"
+                value={newPost.title}
+                onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="post-content" className="form-label">Content</label>
+              <textarea
+                id="post-content"
+                className="form-control"
+                value={newPost.content}
+                onChange={(e) => setNewPost({ ...newPost, content: e.target.value })}
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">Post</button>
+          </form>
         </div>
       )}
-      <div className="posts">
-        {samplePosts.map((post) => (
-          <div key={post.id} className="post card mb-3">
+
+      <div className="posts-list">
+        {posts.map((post) => (
+          <div key={post.id} className="post card my-3">
             <div className="card-body">
-              <h5 className="card-title">{post.title}</h5>
+              <h4 className="card-title">{post.title}</h4>
               <h6 className="card-subtitle mb-2">{post.date}</h6>
               <p className="card-text">{post.content}</p>
             </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
 const HomePage = () => {
+  // Replace this with your actual logic for determining if the user is logged in
+  const [loggedIn] = useState(true);
+
   return (
     <div className="d-flex flex-column w-100">
       <HeroBanner />
       <main className="container-fluid">
         <PageTitle />
-        <NewsUpdates />
+        <NewsUpdates loggedIn={loggedIn} />
       </main>
     </div>
   );
