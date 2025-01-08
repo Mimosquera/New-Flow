@@ -206,3 +206,18 @@ main {
   font-size: 1rem;
   margin-top: 0.5rem;
 }
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .google-map-iframe {
+    height: 300px; /* Reduce height on smaller screens */
+    width: 150%;
+  }
+}
+
+@media (max-width: 480px) {
+  .google-map-iframe {
+    height: 250px; /* Further reduce height on very small screens */
+    width: 100%;
+  }
+}
