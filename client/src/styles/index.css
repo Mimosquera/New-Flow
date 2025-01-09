@@ -245,6 +245,10 @@ main {
   transform: scale(1.1);
 }
 
+#language-select {
+  background-color: rgb(5, 45, 63);
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .google-map-iframe {

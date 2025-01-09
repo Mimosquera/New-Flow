@@ -28,9 +28,11 @@
     "wait-on": "^7.2.0"
   },
   "dependencies": {
+    "axios": "^1.7.9",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
     "install": "^0.13.0",
+    "react-select": "^5.9.0",
     "typescri": "^1.0.0",
     "typescript": "^5.7.2",
     "typescriptnpm": "^1.0.1"
