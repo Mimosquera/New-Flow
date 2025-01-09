@@ -1,6 +1,6 @@
 // src/LoginPage.jsx
-import React, { useState } from 'react';
-// import Auth from '../utils/auth';
+import { useState } from 'react';
+import auth from '../utils/auth';
 import { signup } from '../api/authAPI';
 // import type { UserSignup } from '../interfaces/UserSignup';
 
@@ -25,6 +25,7 @@ const SignupPage = () => {
         password: password
       }
       const data = await signup(newUser)
+      auth.login(data.token);
       if (data) {
         console.log('success');
         
@@ -80,7 +81,7 @@ const SignupPage = () => {
               />
             </div>
             <button type="submit" className="btn btn-primary w-100">
-              Login
+              Signup
             </button>
           </form>
         </div>

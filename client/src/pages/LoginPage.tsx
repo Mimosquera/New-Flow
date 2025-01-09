@@ -1,6 +1,6 @@
 // src/LoginPage.jsx
 import { useState } from 'react';
-import Auth from '../utils/auth';
+import auth from '../utils/auth';
 import { login } from '../api/authAPI';
 // import type { UserLogin } from '../interfaces/UserLogin';
 const LoginPage = () => {
@@ -23,7 +23,7 @@ const LoginPage = () => {
           password: password
         }
         const data = await login(loginData);
-        Auth.login(data.token);
+        auth.login(data.token);
       } catch (err) {
         console.error('Failed to login', err);
       }

@@ -2,6 +2,7 @@ import express from 'express';
 import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
 import { authenticateToken } from '../../middleware/auth.js';
+import jwt from 'jsonwebtoken';
 const router = express.Router();
 
 // GET /users - Get all users
@@ -37,10 +38,13 @@ router.get('/:id', async (req: Request, res: Response) => {
 router.post('/', async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
   try {
-    const newUser = await User.create({ username, email, password });
-    res.status(201).json(newUser);
+    await User.create({ username, email, password });
+    const secretKey = process.env.JWT_SECRET_KEY || '';
+
+    const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
+    return res.json({ token });
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: error.message });
   }
 });
 
