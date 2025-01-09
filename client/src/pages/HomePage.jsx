@@ -1,32 +1,12 @@
 import React, { useState } from "react";
-import heroVideo from "../assets/videos/hero-banner-video.mp4";
-
-const HeroBanner = () => {
-  return (
-    <div className="homepage">
-      {/* Hero Banner */}
-      <div className="hero-banner">
-        <video
-          className="hero-video"
-          autoPlay
-          loop
-          muted
-          playsInline
-        >
-          <source src={heroVideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div className="hero-overlay"></div>
-      </div>
-    </div>
-  );
-};
+import HeroBanner from "../components/HeroBanner";
+import ContactSection from "../components/ContactSection";
 
 const PageTitle = () => {
   return (
     <header className="header container-fluid">
       <div>
-        <h2>Welcome!</h2>
+        <h2>New Flow Beauty Salon & Barber Shop!</h2>
         <p className="light-text">We're here to help you find the New You!</p>
       </div>
     </header>
@@ -56,7 +36,7 @@ const NewsUpdates = ({ loggedIn }) => {
 
   return (
     <div className="news-updates container">
-      <h2 className="header">News & Updates</h2>
+      <h2 className="header">Salon News & Updates</h2>
       {loggedIn && (
         <div className="create-post-form">
           <h3>Create a Post</h3>
@@ -110,6 +90,7 @@ const HomePage = () => {
       <main className="container-fluid">
         <PageTitle />
         <NewsUpdates loggedIn={loggedIn} />
+        <ContactSection />
       </main>
     </div>
   );

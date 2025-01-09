@@ -120,11 +120,13 @@ main {
   color: inherit;
   padding: 5px 10px;
   transition: background-color 0.3s ease;
+  transition: transform 0.3s ease;
   border-radius: 15px;
 }
 
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 /* Hero Banner Container */
@@ -213,17 +215,47 @@ main {
   height: 400px;
 }
 
+/* Contact Section */
+.contact-section {
+  margin-top: 2em;
+  padding: 1.5em 0;
+  background-color: #073645;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.contact-section h3 {
+  margin-bottom: 1em;
+}
+
+.contact-section p {
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+.instagram-logo {
+  width: 60px;
+  height: 60px;
+  transition: transform 0.3s ease;
+}
+
+.instagram-logo:hover {
+  transform: scale(1.1);
+}
+
 /* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .google-map-iframe {
-    height: 300px; /* Reduce height on smaller screens */
+    height: 300px;
     width: 150%;
   }
 }
 
 @media (max-width: 480px) {
   .google-map-iframe {
-    height: 250px; /* Further reduce height on very small screens */
+    height: 250px; 
     width: 100%;
   }
 }
