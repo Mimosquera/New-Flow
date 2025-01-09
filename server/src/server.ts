@@ -16,13 +16,13 @@ app.use(helmet());
 app.use(cors());
 
 // Content Security Policy (CSP) to secure iframes and other content
-app.use((req, res, next) => {
-  res.setHeader(
-    'Content-Security-Policy',
-    "frame-ancestors 'self'; default-src 'self'; frame-src 'https://www.google.com';"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     'Content-Security-Policy',
+//     "frame-ancestors 'self'; default-src 'self'; frame-src 'https://www.google.com';"
+//   );
+//   next();
+// });
 
 // Serves static files in the client's dist folder
 app.use(express.static('../client/dist'));
@@ -31,17 +31,17 @@ app.use(express.static('../client/dist'));
 app.use(express.json());
 
 // Add rate limiting to prevent abuse (optional but recommended)
-import rateLimit from 'express-rate-limit';
+// import rateLimit from 'express-rate-limit';
 
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per `window` (15 minutes)
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+// const apiLimiter = rateLimit({
+//     windowMs: 15 * 60 * 1000, // 15 minutes
+//     max: 100, // Limit each IP to 100 requests per `window` (15 minutes)
+//     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+// });
 
-// Apply the rate limiter to API routes
-app.use('/api', apiLimiter);
+// // Apply the rate limiter to API routes
+// app.use('/api', apiLimiter);
 
 
 // Define API routes
