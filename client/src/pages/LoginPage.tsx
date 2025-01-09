@@ -1,12 +1,14 @@
 // src/LoginPage.jsx
-import React, { useState } from 'react';
-
+import { useState } from 'react';
+import Auth from '../utils/auth';
+import { login } from '../api/authAPI';
+// import type { UserLogin } from '../interfaces/UserLogin';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     // Dummy validation
@@ -15,6 +17,16 @@ const LoginPage = () => {
     } else {
       setErrorMessage('');
       // Proceed with your login logic (e.g., API call)
+      try {
+        const loginData = {
+          email: email,
+          password: password
+        }
+        const data = await login(loginData);
+        Auth.login(data.token);
+      } catch (err) {
+        console.error('Failed to login', err);
+      }
       console.log('Logged in successfully');
     }
   };

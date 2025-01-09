@@ -2,7 +2,7 @@ import Navigation from './Navigation.jsx';
 import logo from '../assets/images/logo-transparent.png';
 import React from 'react';
 
-const Header = () => {
+const Header = ({loggedIn}) => {
   return (
     <header className="site-header container-fluid">
       {/* Logo Container */}
@@ -16,7 +16,7 @@ const Header = () => {
 
       {/* Navigation Wrapper */}
       <div className="navigation-wrapper">
-        <Navigation />
+        <Navigation loggedIn = {loggedIn}/>
       </div>
     </header>
   );
