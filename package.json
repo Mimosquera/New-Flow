@@ -29,10 +29,14 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
     "install": "^0.13.0",
+    "pg": "^8.13.1",
+    "pg-hstore": "^2.3.4",
     "react-select": "^5.9.0",
+    "sequelize": "^6.37.5",
     "typescri": "^1.0.0",
     "typescript": "^5.7.2",
     "typescriptnpm": "^1.0.1"
