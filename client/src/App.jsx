@@ -10,6 +10,31 @@ import Footer from "./components/Footer.jsx";
 import SignupPage from "./pages/SignupPage.tsx";
 import auth from "./utils/auth";
 
+const AppContent = ({ language, translatePage, loggedIn, handleLanguageChange }) => {
+  const location = useLocation(); // Now inside Router context
+
+  useEffect(() => {
+    // Translate the page whenever the route changes or language changes
+    translatePage(language);
+  }, [language, location]);
+
+  return (
+    <>
+      <Header loggedIn={loggedIn} />
+      <main className="flex-grow-1 w-100">
+        <Routes>
+          <Route path="/" element={<HomePage loggedIn={loggedIn} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/appointments" element={<AppointmentsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+        </Routes>
+      </main>
+      <Footer onLanguageChange={handleLanguageChange} />
+    </>
+  );
+};
+
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(false); // Track login state
   const [language, setLanguage] = useState(localStorage.getItem("language") || "en"); // Track selected language
@@ -32,7 +57,6 @@ const App = () => {
     );
 
     if (targetLanguage === "en") {
-      // Restore original text if "en" is selected
       elements.forEach((el) => {
         el.childNodes.forEach((node) => {
           if (node.nodeType === Node.TEXT_NODE) {
@@ -46,7 +70,6 @@ const App = () => {
       return;
     }
 
-    // Store original text if not already stored
     const newOriginalTexts = new Map(originalTexts);
     elements.forEach((el) => {
       el.childNodes.forEach((node) => {
@@ -57,7 +80,6 @@ const App = () => {
     });
     setOriginalTexts(newOriginalTexts);
 
-    // Extract text content for translation
     const texts = elements
       .flatMap((el) =>
         Array.from(el.childNodes)
@@ -66,7 +88,7 @@ const App = () => {
       )
       .filter((text) => text);
 
-    if (texts.length === 0) return; // Skip if no text is found
+    if (texts.length === 0) return;
 
     try {
       const response = await axios.post(
@@ -83,7 +105,6 @@ const App = () => {
 
       const translations = response.data.data.translations;
 
-      // Apply translations to corresponding text nodes
       let translationIndex = 0;
       elements.forEach((el) => {
         el.childNodes.forEach((node) => {
@@ -99,39 +120,22 @@ const App = () => {
   };
 
   const handleLanguageChange = (newLanguage) => {
-    localStorage.setItem("language", newLanguage); // Save the selected language
-    setLanguage(newLanguage); // Update state
-  };
-
-  const LocationChangeHandler = () => {
-    const location = useLocation();
-
-    useEffect(() => {
-      translatePage(language); // Reapply translation on route change
-    }, [location.pathname]); // Trigger on route changes
-
-    return null; // This component doesn't render anything
+    localStorage.setItem("language", newLanguage);
+    setLanguage(newLanguage);
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100 w-100">
-      <Router>
-        <LocationChangeHandler />
-        <Header loggedIn={loggedIn} />
-        <main className="flex-grow-1 w-100">
-          <Routes>
-            <Route path="/" element={<HomePage loggedIn={loggedIn} />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/appointments" element={<AppointmentsPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-          </Routes>
-        </main>
-        <Footer onLanguageChange={handleLanguageChange} />
-      </Router>
-    </div>
+    <Router>
+      <div className="d-flex flex-column min-vh-100 w-100">
+        <AppContent
+          language={language}
+          translatePage={translatePage}
+          loggedIn={loggedIn}
+          handleLanguageChange={handleLanguageChange}
+        />
+      </div>
+    </Router>
   );
 };
 
 export default App;
-  
