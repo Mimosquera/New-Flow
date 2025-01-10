@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
 interface JwtPayload {
+  id: number;      // Add `id` to the JWT payload
   username: string;
 }
 
@@ -22,7 +23,7 @@ export const authenticateToken = (
         return res.sendStatus(403); // Forbidden
       }
 
-      req.user = user as JwtPayload;
+      req.user = user as JwtPayload; // Type-casting `user` to the JwtPayload type
       return next();
     });
   } else {

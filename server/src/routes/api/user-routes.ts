@@ -3,7 +3,39 @@ import type { Request, Response } from 'express';
 import { User } from '../../models/index.js';
 import { authenticateToken } from '../../middleware/auth.js';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 const router = express.Router();
+
+// POST /users - Create a new user (Sign-up)
+router.post('/', async (req: Request, res: Response) => {
+  const { username, email, password } = req.body;
+  try {
+    const user = await User.create({ username, email, password });
+    const secretKey = process.env.JWT_SECRET_KEY || '';
+
+    const token = jwt.sign({ id: user.id, email }, secretKey, { expiresIn: '1h' });
+    return res.json({ token });
+  } catch (error: any) {
+    return res.status(400).json({ message: error.message });
+  }
+});
+
+// POST /login - User login (returns JWT token)
+router.post('/login', async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ where: { email } });
+    if (user && await bcrypt.compare(password, user.password)) {
+      const secretKey = process.env.JWT_SECRET_KEY || '';
+      const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+      return res.json({ token });
+    } else {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
 // GET /users - Get all users
 router.get('/', authenticateToken,  async (_req: Request, res: Response) => {

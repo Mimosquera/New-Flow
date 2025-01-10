@@ -10,6 +10,6 @@
 
     "types": ["node", "express"]
   },
-  "include": ["src"],
+  "include": ["src", "types.d.ts"],
   "typeRoots": ["./node_modules/@types", "./src/types"]
 }
