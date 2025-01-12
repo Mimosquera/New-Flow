@@ -9,7 +9,7 @@ const PageTitle = () => {
   // const [error, setError] = useState(null);
   // const [error, setError] = useState<string | null>(null);
   const [eventTypes, setEventTypes] = useState([]);
-
+  const baseUrl = (import.meta as any).env.VITE_BASE_URL || "http://localhost:3001"
   useEffect(() => {
     console.log("eventTypes:", eventTypes);
   }, [eventTypes]);
@@ -22,7 +22,8 @@ const PageTitle = () => {
     if (!accessToken) return;
 
     try {
-      const response = await axios.get('http://localhost:3001/event-types', {
+     
+      const response = await axios.get(`${baseUrl}/event-types`, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Include Authorization header
         },
@@ -75,8 +76,8 @@ const PageTitle = () => {
         <h2>Make an Appointment!</h2>
 
         {!accessToken ? (
-          <button
-            onClick={() => (window.location.href = "http://localhost:3001/auth")}
+          <button className="btn btn-primary w-100 my-4" 
+            onClick={() => (window.location.href = `${baseUrl}/auth`) }
           >
             Login with Calendly
           </button>
