@@ -18,18 +18,50 @@ New Flow, is proud to be a Latino-owned barbershop and beauty salon rooted in th
 This project is licensed with MIT
 
 ## Installation 
-npm i
+npm install
 
 ## Usage
+### Pages
+* [Home](#home)
+* [About](#about)
+* [Appointments](#appointments)
+* [Log In](#log_in)
+* [Sign Up](#sign_up)
 
 
+### Home
+From New Flow home page the user can select from the menu of page options, Home, About, Appointments, Login, and Sign Up
+![NewFlow Main Page Top](/client/src/assets/images/NewFlowMainPage.png)
+
+You can also create a post to make customers aware of current events or promotions
+![Create Post](/client/src/assets/images/NewFlowCreatePost.png)
+
+Access the Intagram page by clicking on the icon 
+![Insta Access](/client/src/assets/images/NewFlowInsta.png)
+
+And you can change the language of the webpage between Spanish and English at the bottom of the page 
+![Language Button](/client/src/assets/images/NewFlowLanguageButton.png)
+
+### About 
+The About pages includes location information using an embedded Goodle Map, it also includes the salons mission statement and story. 
+![About Page](/client/src/assets/images/NewFlowAbout.png)
+
+### Appointments
+![Appointments Page]()
+
+### Log In
+![LogIn Page](/client/src/assets/images/NewFlowLogin.png)
+
+### Sign Up
+![Sign Up Page](/client/src/assets/images/NewFlowSignUp.png)
 
 ## Contributions
-
-
+Michael Mosquera, Khadijih Garcia, and Erin Jacobsen
+ 
 ## Contact Information
-My GitHub account is [GitHub Account Link]()
-To email me you can contact me at 
+Michael Mosquera - My GitHub account is [GitHub Account Link](https://github.com/Mimosquera)
+Khadijih Garcia - My GitHub account is [GitHub Account Link](https://github.com/KhadijihG)
+Erin Jacobsen - My GitHub account is [GitHub Account Link](https://github.com/achensen)
 
 ## Delployed Website
 Please follow this link for The New Flow Website : [Deployed Website]()
