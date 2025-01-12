@@ -1,4 +1,4 @@
-# React + Vite
+
 # New-Flow Salon Website
   ![license badge](https://img.shields.io/badge/license-MIT-blue)
 ## Table of Contents
@@ -25,8 +25,8 @@ npm install
 * [Home](#home)
 * [About](#about)
 * [Appointments](#appointments)
-* [Log In](#log_in)
-* [Sign Up](#sign_up)
+* [Log In](#log-in)
+* [Sign Up](#sign-up)
 
 
 ### Home
