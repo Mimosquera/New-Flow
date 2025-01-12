@@ -73,7 +73,15 @@ const PageTitle = () => {
   return (
     <header className="header container-fluid">
       <div>
-        <h2>Make an Appointment!</h2>
+      <h2
+          style={{
+            marginTop: "50px", // Add space above the h2
+            textAlign: "center", // Center the text horizontally
+            fontSize: "1.5rem", // Adjust font size
+          }}
+        >
+          Select your service type to view available appointment times
+        </h2>
 
         {!accessToken ? (
           <button className="btn btn-primary w-100 my-4" 
