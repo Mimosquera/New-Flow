@@ -8,17 +8,17 @@
 * [Usage](#usage)
 * [Contributions](#contributions)
 * [Contact Information](#contact-information)
-* [Walkthough Video](#walkthrough-video)
+* [Delployed Website](#deployed-website)
 * [Additional Notes](#additional-notes)
 
 ## Description
-
+New Flow, is proud to be a Latino-owned barbershop and beauty salon rooted in the heart of our community. Since opening our doors in 2009, our mission has been to blend tradition, culture, and creativity to bring out the best in everyone who walks through our doors. This is the main webpage for the business were the user can find shop information and schdule an appointment.
 
 ## License
 This project is licensed with MIT
 
 ## Installation 
-
+npm i
 
 ## Usage
 
@@ -31,8 +31,8 @@ This project is licensed with MIT
 My GitHub account is [GitHub Account Link]()
 To email me you can contact me at 
 
-## Walkthrough Video
-Please follow this link for my Screencastify walkthrough : [Walkthrough Video]()
+## Delployed Website
+Please follow this link for The New Flow Website : [Deployed Website]()
 
 ## Additional Notes 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
