@@ -10,6 +10,25 @@ const PageTitle = () => {
   // const [error, setError] = useState<string | null>(null);
   const [eventTypes, setEventTypes] = useState([]);
 
+  const buttonStyles = {
+    backgroundColor: "#007bff", // Bootstrap primary color
+    color: "#fff", // White text
+    padding: "10px 20px", // Add padding for size
+    fontSize: "1rem", // Adjust font size
+    border: "none", // Remove default border
+    borderRadius: "5px", // Rounded corners
+    cursor: "pointer", // Pointer cursor on hover
+    transition: "background-color 0.3s ease", // Smooth hover effect
+    width: "100%", // Full width
+  };
+
+  const hoverHandlers = {
+    onMouseOver: (e: React.MouseEvent<HTMLButtonElement>) =>
+      (e.currentTarget.style.backgroundColor = "#0056b3"), // Darken on hover
+    onMouseOut: (e: React.MouseEvent<HTMLButtonElement>) =>
+      (e.currentTarget.style.backgroundColor = "#007bff"), // Reset on mouse out
+  };
+
   useEffect(() => {
     console.log("eventTypes:", eventTypes);
   }, [eventTypes]);
@@ -72,7 +91,7 @@ const PageTitle = () => {
   return (
     <header className="header container-fluid">
       <div>
-      <h2
+        <h2
           style={{
             marginTop: "50px", // Add space above the h2
             textAlign: "center", // Center the text horizontally
@@ -84,7 +103,9 @@ const PageTitle = () => {
 
         {!accessToken ? (
           <button
+            style={buttonStyles}
             onClick={() => (window.location.href = "http://localhost:3001/auth")}
+            {...hoverHandlers}
           >
             Login with Calendly
           </button>
@@ -94,7 +115,16 @@ const PageTitle = () => {
               eventTypes.map((item: any) => {
                 return <div className="p-2 m-4">
                   <div className="m-2">{item.name}</div>
-                  <div><a href={item.scheduling_url} target="_blank" rel="noopener noreferrer"><button className="btn btn-primary w-100">Schedule</button></a></div>
+                  <div>
+                    <a href={item.scheduling_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <button style={buttonStyles} {...hoverHandlers}>
+                        Schedule
+                      </button>
+                    </a>
+                  </div>
                 </div>
               })
               : <></>
