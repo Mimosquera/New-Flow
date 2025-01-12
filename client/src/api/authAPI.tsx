@@ -2,8 +2,10 @@ import type { UserLogin } from '../interfaces/UserLogin';
 import type { UserSignup } from '../interfaces/UserSignup';
 
 const login = async (userInfo: UserLogin) => {
+  
   try {
-    const response = await fetch('http://localhost:3001/auth/login', {
+    const baseUrl = (import.meta as any).env.VITE_BASE_URL||"http://localhost:3001"
+    const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +27,8 @@ const login = async (userInfo: UserLogin) => {
 };
 const signup = async (userInfo: UserSignup) => {
   try {
-    const response = await fetch('http://localhost:3001/api/users', {
+     const baseUrl = (import.meta as any).env.VITE_BASE_URL||"http://localhost:3001"
+    const response = await fetch(`${baseUrl}/api/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -9,26 +9,7 @@ const PageTitle = () => {
   // const [error, setError] = useState(null);
   // const [error, setError] = useState<string | null>(null);
   const [eventTypes, setEventTypes] = useState([]);
-
-  const buttonStyles = {
-    backgroundColor: "#007bff", // Bootstrap primary color
-    color: "#fff", // White text
-    padding: "10px 20px", // Add padding for size
-    fontSize: "1rem", // Adjust font size
-    border: "none", // Remove default border
-    borderRadius: "5px", // Rounded corners
-    cursor: "pointer", // Pointer cursor on hover
-    transition: "background-color 0.3s ease", // Smooth hover effect
-    width: "100%", // Full width
-  };
-
-  const hoverHandlers = {
-    onMouseOver: (e: React.MouseEvent<HTMLButtonElement>) =>
-      (e.currentTarget.style.backgroundColor = "#0056b3"), // Darken on hover
-    onMouseOut: (e: React.MouseEvent<HTMLButtonElement>) =>
-      (e.currentTarget.style.backgroundColor = "#007bff"), // Reset on mouse out
-  };
-
+  const baseUrl = (import.meta as any).env.VITE_BASE_URL || "http://localhost:3001"
   useEffect(() => {
     console.log("eventTypes:", eventTypes);
   }, [eventTypes]);
@@ -41,7 +22,8 @@ const PageTitle = () => {
     if (!accessToken) return;
 
     try {
-      const response = await axios.get('http://localhost:3001/event-types', {
+     
+      const response = await axios.get(`${baseUrl}/event-types`, {
         headers: {
           Authorization: `Bearer ${accessToken}`, // Include Authorization header
         },
@@ -102,10 +84,8 @@ const PageTitle = () => {
         </h2>
 
         {!accessToken ? (
-          <button
-            style={buttonStyles}
-            onClick={() => (window.location.href = "http://localhost:3001/auth")}
-            {...hoverHandlers}
+          <button className="btn btn-primary w-100 my-4" 
+            onClick={() => (window.location.href = `${baseUrl}/auth`) }
           >
             Login with Calendly
           </button>
