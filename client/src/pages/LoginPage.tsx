@@ -2,13 +2,13 @@
 import { useState } from 'react';
 import auth from '../utils/auth';
 import { login } from '../api/authAPI';
-// import type { UserLogin } from '../interfaces/UserLogin';
-const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async(e) => {
+const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Dummy validation
@@ -20,12 +20,13 @@ const LoginPage = () => {
       try {
         const loginData = {
           email: email,
-          password: password
-        }
+          password: password,
+        };
         const data = await login(loginData);
         auth.login(data.token);
       } catch (err) {
         console.error('Failed to login', err);
+        setErrorMessage('Login failed. Please check your credentials.');
       }
       console.log('Logged in successfully');
     }

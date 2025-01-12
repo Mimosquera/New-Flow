@@ -1,48 +1,36 @@
-import { DataTypes, Sequelize, Model, Optional } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config/connection';
 
-interface PostAttributes {
-  title: string;
-  content: string;
-  userId: string;
+class Post extends Model {
+  id!: number;
+  content!: string;
+  userId!: number;
 }
 
-interface PostCreationAttributes extends Optional<PostAttributes, 'userId'> {}
-
-export class Post extends Model<PostAttributes, PostCreationAttributes> implements PostAttributes {
-  public id!: string;
-  public title!: string;
-  public content!: string;
-  public userId!: string;
-
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-}
-
-export function PostFactory(sequelize: Sequelize): typeof Post {
-  Post.init(
-    {
-      title: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'users', // Assuming you have a users table
-          key: 'id',
-        },
+Post.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id',
       },
     },
-    {
-      tableName: 'posts',
-      sequelize,
-    }
-  );
+  },
+  {
+    sequelize,
+    modelName: 'Post',
+  }
+);
 
-  return Post;
-}
+export default Post;

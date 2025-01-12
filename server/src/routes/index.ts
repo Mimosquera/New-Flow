@@ -1,11 +1,10 @@
-import { Router } from 'express';
-import authRoutes from './auth-routes.js';
-import apiRoutes from './api/index.js';
-// import { authenticateToken } from '../middleware/auth.js';
+import express from 'express';
+import authRoutes from './auth-routes';
+import postRoutes from './post-routes';
 
-const router = Router();
+const router = express.Router();
 
 router.use('/auth', authRoutes);
-router.use('/api', apiRoutes);
+router.use('/posts', postRoutes);
 
 export default router;

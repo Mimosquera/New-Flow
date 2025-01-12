@@ -1,8 +1,8 @@
 const forceDatabaseRefresh = false;
 
 import express from 'express';
-import sequelize from './config/connection.js';
-import routes from './routes/index.js';
+import sequelize from './config/connection';
+import routes from './routes/index';
 import cors from 'cors';
 import helmet from 'helmet';
 import axios from 'axios';

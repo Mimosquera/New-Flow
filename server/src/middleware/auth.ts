@@ -1,32 +1,21 @@
-import type { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-interface JwtPayload {
-  id: number;      // Add `id` to the JWT payload
-  username: string;
-}
+const authenticate = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(' ')[1];
 
-export const authenticateToken = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const authHeader = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ error: 'Access denied. No token provided.' });
+  }
 
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-
-    const secretKey = process.env.JWT_SECRET_KEY || '';
-
-    jwt.verify(token, secretKey, (err, user) => {
-      if (err) {
-        return res.sendStatus(403); // Forbidden
-      }
-
-      req.user = user as JwtPayload; // Type-casting `user` to the JwtPayload type
-      return next();
-    });
-  } else {
-    res.sendStatus(401); // Unauthorized
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    req.user = decoded as any;
+    next(); // Proceed to the next middleware/handler
+    return; // Ensure all code paths return
+  } catch (err) {
+    return res.status(400).json({ error: 'Invalid token' });
   }
 };
+
+export default authenticate;

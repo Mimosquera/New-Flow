@@ -1,16 +1,15 @@
-// src/LoginPage.jsx
+// src/SignupPage.tsx
 import { useState } from 'react';
 import auth from '../utils/auth';
 import { signup } from '../api/authAPI';
-// import type { UserSignup } from '../interfaces/UserSignup';
 
-const SignupPage = () => {
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+const SignupPage: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Dummy validation
@@ -18,17 +17,21 @@ const SignupPage = () => {
       setErrorMessage('Please fill in all fields.');
     } else {
       setErrorMessage('');
-      // Proceed with your login logic (e.g., API call)
-      const newUser = {
-        email: email,
-        username: username,
-        password: password
-      }
-      const data = await signup(newUser)
-      auth.login(data.token);
-      if (data) {
-        console.log('success');
-        
+      // Proceed with your signup logic (e.g., API call)
+      try {
+        const newUser = {
+          email: email,
+          username: username,
+          password: password,
+        };
+        const data = await signup(newUser);
+        auth.login(data.token);
+        if (data) {
+          console.log('Signup successful');
+        }
+      } catch (err) {
+        console.error('Failed to signup', err);
+        setErrorMessage('Signup failed. Please try again.');
       }
       console.log('Logged in successfully');
     }

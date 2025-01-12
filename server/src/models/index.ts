@@ -1,6 +1,4 @@
-import sequelize from '../config/connection.js';
-import { UserFactory } from './user.js';
+import User from './user';
+import Post from './post';
 
-const User = UserFactory(sequelize);
-
-export { sequelize, User };
+export { User, Post };
