@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import axios from "axios";
 import HomePage from "./pages/HomePage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
-import AppointmentsPage from "./pages/AppointmentsPage.jsx";
+import AppointmentsPage from "./pages/AppointmentsPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
