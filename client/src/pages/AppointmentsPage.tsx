@@ -10,14 +10,14 @@ const PageTitle = () => {
 
   const buttonStyles = {
     backgroundColor: "#007bff", // Bootstrap primary color
-    color: "#fff", // White text
-    padding: "10px 20px", // Add padding for size
-    fontSize: "1rem", // Adjust font size
-    border: "none", // Remove default border
-    borderRadius: "5px", // Rounded corners
-    cursor: "pointer", // Pointer cursor on hover
+    color: "#fff", 
+    padding: "10px 20px", 
+    fontSize: "1rem", 
+    border: "none", 
+    borderRadius: "5px", 
+    cursor: "pointer", 
     transition: "background-color 0.3s ease", // Smooth hover effect
-    width: "100%", // Full width
+    width: "100%", 
   };
 
   const hoverHandlers = {

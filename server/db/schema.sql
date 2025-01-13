@@ -1,2 +1,2 @@
-DROP DATABASE IF EXISTS salon_db;
-CREATE DATABASE salon_db;
+DROP DATABASE IF EXISTS salonnf_db;
+CREATE DATABASE salonnf_db;
