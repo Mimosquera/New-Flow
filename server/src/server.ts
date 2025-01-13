@@ -1,5 +1,5 @@
 const forceDatabaseRefresh = false;
-
+import path from 'path';
 import express from 'express';
 import sequelize from './config/connection.js';
 import routes from './routes/index.js';
@@ -18,6 +18,9 @@ app.use(cors());
 
 // Serves static files in the client's dist folder
 app.use(express.static('../client/dist'));
+
+const distPath = path.resolve(__dirname, '../client/dist');
+app.get('/', (_req, res) => { res.sendFile(path.resolve(distPath, 'index.html')); });
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
