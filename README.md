@@ -34,10 +34,6 @@ From New Flow home page the user can select from the menu of page options, Home,
 
 ![NewFlow Main Page Top](/client/src/assets/images/NewFlowMainPage.png)
 
-You can also create a post to make customers aware of current events or promotions
-
-![Create Post](/client/src/assets/images/NewFlowCreatePost.png)
-
 Access the Intagram page by clicking on the icon 
 
 ![Insta Access](/client/src/assets/images/NewFlowInsta.png)
@@ -66,25 +62,31 @@ Next you will be directed to Calendly on a new tab to select from the available 
 
 
 ### Log In
-Ths log in page 
+Ths log in page is something we are going to implement in the future, by using our autheticated sign in method to allow employees to post announcements on the main page. 
 
 ![LogIn Page](/client/src/assets/images/NewFlowLogin.png)
 
 ### Sign Up
-The sign up page is our first step toward and employee login creation. Eventually this would be on a different pages entirely so that employee could eventually sign up, be authenticated and then be permitted to make posts on the main page for clients to see. The information that is inputted into the sign up is saved to our salon_db. 
+The sign up page is our first step toward and employee login creation. Eventually this would be on a different pages entirely so that employee could eventually sign up, be authenticated and then be permitted to make posts on the main page for clients to see. The information that is inputted into the sign up is saved to our salon_db.Assess the database using postgres. 
 
 ![Sign Up Page](/client/src/assets/images/NewFlowSignUp.png)
 
+Database 
+
+![Database Using Postgres](/client/src/assets/images/NewFlowDataBase.png)
+
 ## Contributions
 Michael Mosquera, Khadijih Garcia, and Erin Jacobsen
+
+Github Repository Location: [GitHub Link](https://github.com/achensen/New-Flow.git)
  
 ## Contact Information
-Michael Mosquera - My GitHub account is [GitHub Account Link](https://github.com/Mimosquera)
-Khadijih Garcia - My GitHub account is [GitHub Account Link](https://github.com/KhadijihG)
-Erin Jacobsen - My GitHub account is [GitHub Account Link](https://github.com/achensen)
+* Michael Mosquera - My [GitHub Account Link](https://github.com/Mimosquera)
+* Khadijih Garcia - My [GitHub Account Link](https://github.com/KhadijihG)
+* Erin Jacobsen - My  [GitHub Account Link](https://github.com/achensen)
 
 ## Delployed Website
 Please follow this link for The New Flow Website : [Deployed Website]()
 
 ## Additional Notes 
-
+We worked together on this code and to deploy this site using many different resources. We used Calendly documentation as well as suggestions from Open AI to implement the web apis. We also utilized tutoring to help bring peices of this code together. This is project 2 for our EDX course. 
