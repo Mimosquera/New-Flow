@@ -23,8 +23,6 @@ app.use(cors());
 // Serves static files in the client's dist folder
 app.use(express.static('../client/dist'));
 
-const distPath = path.resolve(__dirname, '../client/dist');
-app.get('*', (_req, res) => { res.sendFile(path.resolve(distPath, 'index.html')); });
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
@@ -154,8 +152,12 @@ app.get('/event-types', async (req, res) => {
   }
 });
 
+
 // Define API routes
 app.use(routes);
+
+const distPath = path.resolve(__dirname, '../client/dist');
+app.get('*', (_req, res) => { res.sendFile(path.resolve(distPath, 'index.html')); });
 
 // Connect to database and start the server
 sequelize.sync({ force: forceDatabaseRefresh}).then(() => {
@@ -163,6 +165,7 @@ sequelize.sync({ force: forceDatabaseRefresh}).then(() => {
     console.log(`Server is listening on port ${PORT}`);
   });
 });
+
 
 // Type guard to check if error is an AxiosError
 function isAxiosError(error: unknown): error is AxiosError {
