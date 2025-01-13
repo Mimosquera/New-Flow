@@ -6,6 +6,10 @@ import routes from './routes/index.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import axios, { AxiosError } from 'axios';
+import { fileURLToPath } from 'url'; // Recreate __dirname in ES module
+
+const __filename = fileURLToPath(import.meta.url); 
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3001;
