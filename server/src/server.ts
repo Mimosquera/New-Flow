@@ -5,7 +5,7 @@ import sequelize from './config/connection';
 import routes from './routes/index';
 import cors from 'cors';
 import helmet from 'helmet';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -16,33 +16,11 @@ app.use(helmet());
 // Add CORS for cross-origin resource sharing
 app.use(cors());
 
-// Content Security Policy (CSP) to secure iframes and other content
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     'Content-Security-Policy',
-//     "frame-ancestors 'self'; default-src 'self'; frame-src 'https://www.google.com';"
-//   );
-//   next();
-// });
-
 // Serves static files in the client's dist folder
 app.use(express.static('../client/dist'));
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
-
-// Add rate limiting to prevent abuse (optional but recommended)
-// import rateLimit from 'express-rate-limit';
-
-// const apiLimiter = rateLimit({
-//     windowMs: 15 * 60 * 1000, // 15 minutes
-//     max: 100, // Limit each IP to 100 requests per `window` (15 minutes)
-//     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-//     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-// });
-
-// // Apply the rate limiter to API routes
-// app.use('/api', apiLimiter);
 
 // Start OAuth flow
 app.get('/auth', (_req, res) => {
@@ -56,8 +34,8 @@ app.get('/auth', (_req, res) => {
 app.get('/callback', async (req, res) => {
   const { code } = req.query;
 
-  if (!code) {
-    res.status(400).send('Authorization code is missing.');
+  if (!code || typeof code !== 'string') {
+    return res.status(400).send('Authorization code is missing or invalid.');
   }
 
   const clientId = process.env.CALENDLY_CLIENT_ID!;
@@ -69,22 +47,27 @@ app.get('/callback', async (req, res) => {
       'https://calendly.com/oauth/token',
       new URLSearchParams({
         grant_type: 'authorization_code',
-        code: code as string,
-        redirect_uri: redirectUri,
-        client_id: clientId,
-        client_secret: clientSecret,
+        code: code,
+        redirect_uri: redirectUri || '', // Ensure that it's a valid string
+        client_id: clientId || '', // Ensure that it's a valid string
+        client_secret: clientSecret || '', // Ensure that it's a valid string
       }),
       { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
     );
 
     const { access_token } = response.data;
     if (!access_token) {
-      res.status(500).send('Access token not found.');
+      return res.status(500).send('Access token not found.');
     }
 
-    res.redirect(`${process.env.FRONTEND_URL}/appointments?access_token=${access_token}`);
-  } catch (error: any) {
-    res.status(500).send('Error during authentication.');
+    return res.redirect(`${process.env.FRONTEND_URL}/appointments?access_token=${access_token}`);
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      const message = error.response?.data || 'Error during authentication.';
+      const status = error.response?.status || 500;
+      return res.status(status).send(message);
+    }
+    return res.status(500).send('Unexpected error during authentication.');
   }
 });
 
@@ -92,8 +75,8 @@ app.get('/callback', async (req, res) => {
 app.get('/user-data', async (req, res) => {
   const { access_token } = req.query;
 
-  if (!access_token) {
-    return res.status(400).send('Access token is missing.');
+  if (!access_token || typeof access_token !== 'string') {
+    return res.status(400).send('Access token is missing or invalid.');
   }
 
   try {
@@ -103,11 +86,17 @@ app.get('/user-data', async (req, res) => {
       },
     });
     return res.json(response.data);
-  } catch (error) {
-    return res.status(500).send('Error fetching user data.');
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      const message = error.response?.data || 'Error fetching user data.';
+      const status = error.response?.status || 500;
+      return res.status(status).send(message);
+    }
+    return res.status(500).send('Unexpected error fetching user data.');
   }
 });
 
+// Fetch event types
 app.get('/event-types', async (req, res) => {
   const authHeader = req.headers.authorization;
 
@@ -120,7 +109,6 @@ app.get('/event-types', async (req, res) => {
   const accessToken = authHeader.split(' ')[1];
 
   try {
-
     const userResponse = await axios.get('https://api.calendly.com/users/me', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -129,7 +117,6 @@ app.get('/event-types', async (req, res) => {
 
     const userUri = userResponse.data.resource.uri;
     console.log('User URI:', userUri);
-
 
     const response = await axios.get('https://api.calendly.com/event_types', {
       headers: {
@@ -143,18 +130,22 @@ app.get('/event-types', async (req, res) => {
     console.log('Event Types:', response.data);
 
     return res.json(response.data);
-  } catch (error: any) {
-    console.error('Error fetching event types:', error.response?.data || error.message);
+  } catch (error: unknown) {
+    if (isAxiosError(error)) {
+      const status = error.response?.status || 500;
+      const message = error.response?.data || 'Internal Server Error';
 
-    const statusCode = error.response?.status || 500;
-    const errorMessage = error.response?.data || 'Internal Server Error';
+      console.error('Error fetching event types:', message);
 
-    return res.status(statusCode).json({
-      error: errorMessage,
+      return res.status(status).json({
+        error: message,
+      });
+    }
+    return res.status(500).json({
+      error: 'Unexpected error fetching event types.',
     });
   }
 });
-
 
 // Define API routes
 app.use(routes);
@@ -165,3 +156,8 @@ sequelize.sync({ force: forceDatabaseRefresh }).then(() => {
     console.log(`Server is listening on port ${PORT}`);
   });
 });
+
+// Type guard to check if error is an AxiosError
+function isAxiosError(error: unknown): error is AxiosError {
+  return (error as AxiosError).isAxiosError !== undefined;
+}
