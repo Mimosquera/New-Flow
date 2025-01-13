@@ -1,4 +1,4 @@
 export interface UserLogin {
-  email: string | null;
-  password: string | null;
+  identifier: string; // Email or username
+  password: string;
 }

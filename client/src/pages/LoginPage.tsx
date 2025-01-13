@@ -1,34 +1,31 @@
-// src/LoginPage.jsx
+// src/LoginPage.tsx
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import auth from '../utils/auth';
 import { login } from '../api/authAPI';
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
+  const [identifier, setIdentifier] = useState<string>(''); // Username or email
   const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Dummy validation
-    if (!email || !password) {
+    if (!identifier || !password) {
       setErrorMessage('Please fill in both fields.');
-    } else {
-      setErrorMessage('');
-      // Proceed with your login logic (e.g., API call)
-      try {
-        const loginData = {
-          email: email,
-          password: password,
-        };
-        const data = await login(loginData);
-        auth.login(data.token);
-      } catch (err) {
-        console.error('Failed to login', err);
-        setErrorMessage('Login failed. Please check your credentials.');
-      }
-      console.log('Logged in successfully');
+      return;
+    }
+
+    try {
+      const loginData = { identifier, password }; // Identifier can be username or email
+      const data = await login(loginData);
+      auth.login(data.token);
+      navigate('/'); // Redirect to homepage
+    } catch (err) {
+      console.error('Failed to login:', err);
+      setErrorMessage('Login failed. Please check your credentials.');
     }
   };
 
@@ -40,16 +37,16 @@ const LoginPage: React.FC = () => {
           {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email address
+              <label htmlFor="identifier" className="form-label">
+                Username or Email
               </label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
-                id="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                id="identifier"
+                placeholder="Enter username or email"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
               />
             </div>
             <div className="mb-3">
@@ -60,7 +57,7 @@ const LoginPage: React.FC = () => {
                 type="password"
                 className="form-control"
                 id="password"
-                placeholder="Password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

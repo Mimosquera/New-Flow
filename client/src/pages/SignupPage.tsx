@@ -1,6 +1,6 @@
 // src/SignupPage.tsx
 import { useState } from 'react';
-import auth from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 import { signup } from '../api/authAPI';
 
 const SignupPage: React.FC = () => {
@@ -8,32 +8,28 @@ const SignupPage: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [successMessage, setSuccessMessage] = useState<string>('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Dummy validation
-    if (!email || !password || !username) {
+    if (!email || !username || !password) {
       setErrorMessage('Please fill in all fields.');
-    } else {
-      setErrorMessage('');
-      // Proceed with your signup logic (e.g., API call)
-      try {
-        const newUser = {
-          email: email,
-          username: username,
-          password: password,
-        };
-        const data = await signup(newUser);
-        auth.login(data.token);
-        if (data) {
-          console.log('Signup successful');
-        }
-      } catch (err) {
-        console.error('Failed to signup', err);
-        setErrorMessage('Signup failed. Please try again.');
-      }
-      console.log('Logged in successfully');
+      return;
+    }
+
+    try {
+      const newUser = { email, username, password };
+      await signup(newUser);
+      setSuccessMessage('Signup successful! Redirecting to login page...');
+      setEmail('');
+      setUsername('');
+      setPassword('');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (err) {
+      console.error('Failed to signup:', err);
+      setErrorMessage('Signup failed. Please try again.');
     }
   };
 
@@ -43,6 +39,7 @@ const SignupPage: React.FC = () => {
         <div className="card-body">
           <h3 className="card-title text-center">Signup</h3>
           {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+          {successMessage && <div className="alert alert-success">{successMessage}</div>}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
@@ -65,7 +62,7 @@ const SignupPage: React.FC = () => {
                 type="text"
                 className="form-control"
                 id="username"
-                placeholder="Enter Username"
+                placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -78,7 +75,7 @@ const SignupPage: React.FC = () => {
                 type="password"
                 className="form-control"
                 id="password"
-                placeholder="Password"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

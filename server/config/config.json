@@ -1,0 +1,23 @@
+{
+    "development": {
+      "username": "postgres",
+      "password": "071011",
+      "database": "salon_db",
+      "host": "localhost",
+      "dialect": "postgres"
+    },
+    "test": {
+      "username": "postgres",
+      "password": "071011",
+      "database": "salon_db",
+      "host": "localhost",
+      "dialect": "postgres"
+    },
+    "production": {
+      "username": "postgres",
+      "password": "071011",
+      "database": "salon_db",
+      "host": "localhost",
+      "dialect": "postgres"
+    }
+  }  
