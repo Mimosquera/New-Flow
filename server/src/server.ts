@@ -21,7 +21,7 @@ app.use(helmet());
 app.use(cors());
 
 // Serves static files in the client's dist folder
-app.use(express.static('../client/dist'));
+app.use(express.static('../../client/dist'));
 
 
 // Middleware for parsing JSON request bodies
@@ -156,7 +156,7 @@ app.get('/event-types', async (req, res) => {
 // Define API routes
 app.use(routes);
 
-const distPath = path.resolve(__dirname, '../client/dist');
+const distPath = path.resolve(__dirname, '../../client/dist');
 app.get('*', (_req, res) => { res.sendFile(path.resolve(distPath, 'index.html')); });
 
 // Connect to database and start the server
