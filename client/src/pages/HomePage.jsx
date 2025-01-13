@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+// src/pages/HomePage.jsx
+import React, { useState, useEffect } from "react";
 import HeroBanner from "../components/HeroBanner";
 import ContactSection from "../components/ContactSection";
+import { getPosts, createPost } from "../api/postAPI"; // Add this API call
 
 const PageTitle = () => {
   return (
@@ -14,22 +16,28 @@ const PageTitle = () => {
 };
 
 const NewsUpdates = ({ loggedIn }) => {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "Welcome to our salon!", content: "Check out our latest updates and offers.", date: "2024-12-24" },
-    { id: 2, title: "New Barber in Town", content: "We’ve added a talented barber to our team!", date: "2025-01-05" },
-  ]);
+  const [posts, setPosts] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", content: "" });
 
-  const handlePostSubmit = (e) => {
+  // Fetch posts from the backend
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const fetchedPosts = await getPosts();
+      setPosts(fetchedPosts);
+    };
+    fetchPosts();
+  }, []);
+
+  const handlePostSubmit = async (e) => {
     e.preventDefault();
     if (newPost.title.trim() && newPost.content.trim()) {
-      const newPostObject = {
-        id: Date.now(),
+      const postData = {
         title: newPost.title,
         content: newPost.content,
-        date: new Date().toLocaleDateString(),
       };
-      setPosts([newPostObject, ...posts]); 
+
+      const newPostObject = await createPost(postData); // Save new post
+      setPosts([newPostObject, ...posts]);
       setNewPost({ title: "", content: "" });
     }
   };
@@ -81,8 +89,12 @@ const NewsUpdates = ({ loggedIn }) => {
 };
 
 const HomePage = () => {
-  // Replace this with your actual logic for determining if the user is logged in
-  const [loggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in
+    setLoggedIn(localStorage.getItem('id_token') ? true : false);
+  }, []);
 
   return (
     <div className="d-flex flex-column w-100">

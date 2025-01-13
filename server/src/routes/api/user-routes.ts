@@ -66,20 +66,6 @@ router.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
-// POST /users - Create a new user
-router.post('/', async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
-  try {
-    await User.create({ username, email, password });
-    const secretKey = process.env.JWT_SECRET_KEY || '';
-
-    const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
-    return res.json({ token });
-  } catch (error: any) {
-    return res.status(400).json({ message: error.message });
-  }
-});
-
 // PUT /users/:id - Update a user by id
 router.put('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;

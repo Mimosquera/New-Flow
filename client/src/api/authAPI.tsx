@@ -2,9 +2,8 @@ import type { UserLogin } from '../interfaces/UserLogin';
 import type { UserSignup } from '../interfaces/UserSignup';
 
 const login = async (userInfo: UserLogin) => {
-  
   try {
-    const baseUrl = (import.meta as any).env.VITE_BASE_URL||"http://localhost:3001"
+    const baseUrl = (import.meta as any).env.VITE_BASE_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/auth/login`, {
       method: 'POST',
       headers: {
@@ -25,10 +24,11 @@ const login = async (userInfo: UserLogin) => {
     return Promise.reject('Could not fetch user info');
   }
 };
+
 const signup = async (userInfo: UserSignup) => {
   try {
-     const baseUrl = (import.meta as any).env.VITE_BASE_URL||"http://localhost:3001"
-    const response = await fetch(`${baseUrl}/api/users`, {
+    const baseUrl = (import.meta as any).env.VITE_BASE_URL || "http://localhost:3001";
+    const response = await fetch(`${baseUrl}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,9 +44,9 @@ const signup = async (userInfo: UserSignup) => {
 
     return data;
   } catch (err) {
-    console.log('Error from user login: ', err);
+    console.log('Error from user signup: ', err);
     return Promise.reject('Could not fetch user info');
   }
 };
 
-export { login, signup }
+export { login, signup };
