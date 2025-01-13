@@ -1,5 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
-import sequelize from '../config/connection';
+import sequelize from '../config/connection.js';
 
 class Post extends Model {
   id!: number;
