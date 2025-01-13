@@ -21,6 +21,7 @@ const SignupPage: React.FC = () => {
 
     try {
       const newUser = { email, username, password };
+      console.log('Submitting new user:', newUser); // Debug log
       await signup(newUser);
       setSuccessMessage('Signup successful! Redirecting to login page...');
       setEmail('');

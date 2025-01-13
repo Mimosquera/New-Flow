@@ -151,7 +151,7 @@ app.get('/event-types', async (req, res) => {
 app.use(routes);
 
 // Connect to database and start the server
-sequelize.sync({ force: forceDatabaseRefresh }).then(() => {
+sequelize.sync({ force: forceDatabaseRefresh}).then(() => {
   app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
   });
