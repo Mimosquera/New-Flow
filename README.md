@@ -136,6 +136,7 @@ new_flow_0.2/
 │   ├── routes/            # API endpoints
 │   ├── middleware/        # Auth, validation
 │   ├── config/            # Configuration
+│   ├── scripts/           # Utility scripts (setup/maintenance)
 │   └── package.json
 │
 ├── MAINTENANCE.md          # Maintenance guide ⭐

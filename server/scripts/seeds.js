@@ -1,8 +1,8 @@
 import 'dotenv/config.js';
-import { User } from './models/User.js';
-import { Update } from './models/Update.js';
-import { Service } from './models/Service.js';
-import { sequelize } from './config/database.js';
+import { User } from '../models/User.js';
+import { Update } from '../models/Update.js';
+import { Service } from '../models/Service.js';
+import { sequelize } from '../config/database.js';
 
 async function seed() {
   try {

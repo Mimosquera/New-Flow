@@ -1,15 +1,20 @@
 import 'dotenv/config.js';
-import { sequelize } from './config/database.js';
-import { User } from './models/User.js';
+import { sequelize } from '../config/database.js';
+import { User } from '../models/User.js';
 
 async function createAdminUser() {
   try {
     await sequelize.authenticate();
     console.log('Connected to database');
 
-    const email = 'michael2000ny@gmail.com';
-    const plainPassword = '1234'; // Plain text password - model will hash it
-    const name = 'Admin';
+    // Get credentials from environment variables or use defaults
+    const email = process.env.ADMIN_EMAIL || 'admin@example.com';
+    const plainPassword = process.env.ADMIN_PASSWORD || 'change_me_123';
+    const name = process.env.ADMIN_NAME || 'Admin';
+
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      console.log('⚠️  Using default credentials. Set ADMIN_EMAIL and ADMIN_PASSWORD env vars for custom values.');
+    }
 
     // Check if user exists
     const existingUser = await User.findOne({ where: { email } });
@@ -32,7 +37,7 @@ async function createAdminUser() {
     }
     
     console.log('Email:', email);
-    console.log('Password: 1234');
+    console.log('Password:', plainPassword);
 
     process.exit(0);
   } catch (error) {

@@ -1,5 +1,5 @@
 import 'dotenv/config.js';
-import { sequelize } from './config/database.js';
+import { sequelize } from '../config/database.js';
 import './models/User.js';
 import './models/Update.js';
 import './models/Service.js';
