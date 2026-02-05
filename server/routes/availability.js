@@ -4,7 +4,7 @@ import { User } from '../models/User.js';
 import { Appointment } from '../models/Appointment.js';
 import { BlockedDate } from '../models/BlockedDate.js';
 import { verifyToken } from '../middleware/auth.js';
-import { validateRequired } from '../middleware/validation.js';
+import { requireEmployee, validateRequired } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const isAdmin = (user) => user.email === process.env.SEED_EMPLOYEE_EMAIL;
  * Get availability slots
  * Protected route - employees see only their own, admin sees all
  */
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', verifyToken, requireEmployee, async (req, res) => {
   try {
     const whereClause = {};
     
@@ -213,7 +213,7 @@ router.get('/available-times/:date', async (req, res) => {
  * POST /api/availability
  * Create a new availability slot (requires authentication)
  */
-router.post('/', verifyToken, validateRequired(['dayOfWeek', 'startTime', 'endTime']), async (req, res) => {
+router.post('/', verifyToken, requireEmployee, validateRequired(['dayOfWeek', 'startTime', 'endTime']), async (req, res) => {
   try {
     const { dayOfWeek, startTime, endTime } = req.body;
     const userId = req.user.id;
@@ -246,7 +246,7 @@ router.post('/', verifyToken, validateRequired(['dayOfWeek', 'startTime', 'endTi
  * PUT /api/availability/:id
  * Update an availability slot (requires authentication)
  */
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
     const { startTime, endTime } = req.body;
@@ -284,7 +284,7 @@ router.put('/:id', verifyToken, async (req, res) => {
  * DELETE /api/availability/:id
  * Delete an availability slot (requires authentication)
  */
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;

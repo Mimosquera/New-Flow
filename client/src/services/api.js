@@ -131,6 +131,39 @@ export const authService = {
     }
     return apiClient.post('/auth/create-employee', employeeData);
   },
+
+  /**
+   * Get all employees (Admin only)
+   * @returns {Promise} API response with employees list
+   */
+  getEmployees: () => apiClient.get('/auth/employees'),
+
+  /**
+   * Update employee password (Admin only, requires admin password verification)
+   * @param {Object} data - { employeeId, newPassword, adminPassword }
+   * @returns {Promise} API response
+   */
+  updateEmployeePassword: (data) => {
+    if (!data?.employeeId || !data?.newPassword || !data?.adminPassword) {
+      return Promise.reject(new Error('Employee ID, new password, and admin password are required'));
+    }
+    return apiClient.put('/auth/update-employee-password', data);
+  },
+
+  /**
+   * Delete employee (Admin only, requires admin password verification)
+   * @param {string} employeeId - Employee ID to delete
+   * @param {string} adminPassword - Admin password for verification
+   * @returns {Promise} API response
+   */
+  deleteEmployee: (employeeId, adminPassword) => {
+    if (!employeeId || !adminPassword) {
+      return Promise.reject(new Error('Employee ID and admin password are required'));
+    }
+    return apiClient.delete(`/auth/employee/${employeeId}`, {
+      data: { adminPassword }
+    });
+  },
 };
 
 /**

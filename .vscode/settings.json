@@ -1,3 +1,6 @@
 {
-    "vscode-pets.petType": "snake"
+    "vscode-pets.petType": "snake",
+    "cSpell.words": [
+        "VITE"
+    ]
 }

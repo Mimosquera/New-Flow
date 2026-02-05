@@ -268,4 +268,136 @@ router.post('/create-employee', verifyToken, async (req, res) => {
   }
 });
 
+/**
+ * Get all employees (Admin only)
+ * GET /api/auth/employees
+ */
+router.get('/employees', verifyToken, async (req, res) => {
+  try {
+    // Verify the requesting user is Admin
+    const requestingUser = await User.findByPk(req.user.id);
+    if (!requestingUser || requestingUser.name !== 'Admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    // Get all employees (excluding password)
+    const employees = await User.findAll({
+      where: { isEmployee: true },
+      attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+      order: [['name', 'ASC']]
+    });
+
+    res.json({ data: employees });
+  } catch (error) {
+    console.error('Get employees error:', error);
+    res.status(500).json({ message: error.message || 'Failed to fetch employees' });
+  }
+});
+
+/**
+ * Update employee password (Admin only, requires admin password verification)
+ * PUT /api/auth/update-employee-password
+ */
+router.put('/update-employee-password', verifyToken, async (req, res) => {
+  try {
+    const { employeeId, newPassword, adminPassword } = req.body;
+
+    // Validation
+    if (!employeeId || !newPassword || !adminPassword) {
+      return res.status(400).json({ message: 'Employee ID, new password, and admin password are required' });
+    }
+
+    // Verify the requesting user is Admin
+    const requestingUser = await User.findByPk(req.user.id);
+    if (!requestingUser || requestingUser.name !== 'Admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    // Verify admin password
+    const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
+    if (!isValidAdminPassword) {
+      return res.status(401).json({ message: 'Invalid admin password' });
+    }
+
+    // Validate new password
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters' });
+    }
+
+    // Find employee
+    const employee = await User.findByPk(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    if (!employee.isEmployee) {
+      return res.status(400).json({ message: 'User is not an employee' });
+    }
+
+    // Update password (will be hashed automatically by model hook)
+    await employee.update({ password: newPassword });
+
+    res.json({
+      message: 'Employee password updated successfully',
+      user: employee.toJSON()
+    });
+  } catch (error) {
+    console.error('Update employee password error:', error);
+    res.status(500).json({ message: error.message || 'Failed to update employee password' });
+  }
+});
+
+/**
+ * Delete employee (Admin only, requires admin password verification)
+ * DELETE /api/auth/employee/:id
+ */
+router.delete('/employee/:id', verifyToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { adminPassword } = req.body;
+
+    // Validation
+    if (!adminPassword) {
+      return res.status(400).json({ message: 'Admin password is required' });
+    }
+
+    // Verify the requesting user is Admin
+    const requestingUser = await User.findByPk(req.user.id);
+    if (!requestingUser || requestingUser.name !== 'Admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    // Verify admin password
+    const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
+    if (!isValidAdminPassword) {
+      return res.status(401).json({ message: 'Invalid admin password' });
+    }
+
+    // Find employee
+    const employee = await User.findByPk(id);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    if (!employee.isEmployee) {
+      return res.status(400).json({ message: 'User is not an employee' });
+    }
+
+    // Prevent deleting the Admin account
+    if (employee.name === 'Admin') {
+      return res.status(403).json({ message: 'Cannot delete the Admin account' });
+    }
+
+    // Delete the employee
+    await employee.destroy();
+
+    res.json({
+      message: 'Employee deleted successfully'
+    });
+  } catch (error) {
+    console.error('Delete employee error:', error);
+    res.status(500).json({ message: error.message || 'Failed to delete employee' });
+  }
+});
+
 export default router;

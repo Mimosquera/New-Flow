@@ -2,7 +2,7 @@ import express from 'express';
 import { BlockedDate } from '../models/BlockedDate.js';
 import { User } from '../models/User.js';
 import { verifyToken } from '../middleware/auth.js';
-import { validateRequired } from '../middleware/validation.js';
+import { requireEmployee, validateRequired } from '../middleware/validation.js';
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const isAdmin = (user) => user.email === process.env.SEED_EMPLOYEE_EMAIL;
  * Get blocked dates
  * Protected route - employees see only their own, admin sees all
  */
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', verifyToken, requireEmployee, async (req, res) => {
   try {
     const whereClause = {};
     
@@ -47,6 +47,7 @@ router.get('/', verifyToken, async (req, res) => {
 router.post(
   '/',
   verifyToken,
+  requireEmployee,
   validateRequired(['startDate', 'endDate', 'startTime', 'endTime']),
   async (req, res) => {
     try {
@@ -162,6 +163,7 @@ router.post(
 router.put(
   '/:id',
   verifyToken,
+  requireEmployee,
   validateRequired(['date', 'startTime', 'endTime']),
   async (req, res) => {
     try {
@@ -220,7 +222,7 @@ router.put(
  * Delete a blocked date
  * Protected route - only owner or admin can delete
  */
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
 
