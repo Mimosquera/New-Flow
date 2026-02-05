@@ -1,5 +1,8 @@
 # New Flow - Appointment Management System
 
+**Repository:** https://github.com/Mimosquera/New-Flow-Salon  
+**Domain:** newflowbarbershop.com
+
 Professional barbershop and hair salon appointment management system with bilingual support (English/Spanish).
 
 **Status:** ✅ Production Ready (February 2026)
@@ -15,8 +18,11 @@ Professional barbershop and hair salon appointment management system with biling
 
 ### Installation
 
-1. **Clone and install dependencies:**
+1. **Clone the repository:**
 ```bash
+git clone https://github.com/Mimosquera/New-Flow-Salon.git
+cd New-Flow-Salon
+
 # Install server dependencies
 cd server
 npm install
@@ -51,9 +57,13 @@ npm run dev
 
 ## 📚 Documentation
 
-- **[MAINTENANCE.md](MAINTENANCE.md)** - Future-proofing, updates, and maintenance guide
-- **[TECH_DOCS.md](TECH_DOCS.md)** - Complete technical documentation
-- **Architecture, API endpoints, database schema, and more**
+See **[TECH_DOCS.md](TECH_DOCS.md)** for complete technical documentation including:
+- Architecture overview
+- API endpoints
+- Database schema
+- Authentication & security
+- Translation system
+- Deployment guide
 
 ---
 

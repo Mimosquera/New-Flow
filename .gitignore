@@ -129,3 +129,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Internal documentation (not for public repo)
+DEPLOYMENT.md
+MAINTENANCE.md
+
+# User uploads (regenerated in production)
+server/uploads/*
+!server/uploads/.gitkeep
