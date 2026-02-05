@@ -233,6 +233,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 autoPlay
                 muted
                 loop
+                playsInline
+                disablePictureInPicture
               >
                 <source src={new URL('../assets/videos/hero-banner-video.mp4', import.meta.url).href} type="video/mp4" />
                 Your browser does not support the video tag.
@@ -361,6 +363,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
                                 src={`${SERVER_BASE_URL}${article.media_url}`}
                                 className="w-100 rounded"
                                 style={{ maxHeight: '200px', objectFit: 'cover' }}
+                                playsInline
+                                disablePictureInPicture
+                                controls={false}
                               />
                             )}
                           </div>
