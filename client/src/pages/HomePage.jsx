@@ -252,6 +252,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
           >
             {t('servicesTitle')}
           </div>
+          {translatedServices.length === 0 ? (
+            <div className="text-center py-5">
+              <h4 className="text-muted">{language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}</h4>
+            </div>
+          ) : (
           <div className="row g-4">
             {displayedServices.map(service => (
               <div key={service.id} className="col-md-4">
@@ -288,7 +293,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </div>
             ))}
           </div>
-          {services.length > 3 && (
+          )}
+
+          {translatedServices.length > 0 && services.length > 3 && (
             <div className="text-center mt-4">
               {hasMoreServices ? (
                 <button 

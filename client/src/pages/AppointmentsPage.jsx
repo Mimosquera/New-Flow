@@ -279,7 +279,7 @@ export const AppointmentsPage = () => {
                       autoComplete="off"
                     >
                       <option value="">{t('noPreference')}</option>
-                      {employees.map(emp => (
+                      {employees.filter(emp => emp.name !== 'Admin').map(emp => (
                         <option key={emp.id} value={emp.id}>{emp.name}</option>
                       ))}
                     </select>
