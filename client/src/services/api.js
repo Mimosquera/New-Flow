@@ -119,6 +119,18 @@ export const authService = {
    * @returns {Promise} API response with user data
    */
   getMe: () => apiClient.get('/auth/me'),
+
+  /**
+   * Create employee account (Admin only)
+   * @param {Object} employeeData - Employee data (name, email, password)
+   * @returns {Promise} API response
+   */
+  createEmployee: (employeeData) => {
+    if (!employeeData?.name || !employeeData?.email || !employeeData?.password) {
+      return Promise.reject(new Error('Name, email, and password are required'));
+    }
+    return apiClient.post('/auth/create-employee', employeeData);
+  },
 };
 
 /**

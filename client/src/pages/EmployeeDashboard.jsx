@@ -5,6 +5,7 @@ import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
 import { UpdatePoster } from '../components/UpdatePoster.jsx';
 import { ServiceManager } from '../components/ServiceManager.jsx';
 import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
+import { EmployeeManager } from '../components/EmployeeManager.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 
@@ -30,6 +31,7 @@ export default function EmployeeDashboard() {
   });
   
   const [employeeName, setEmployeeName] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [appointmentFilter, setAppointmentFilter] = useState('all');
   const [showHeaderBg, setShowHeaderBg] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
@@ -55,6 +57,8 @@ export default function EmployeeDashboard() {
       const decoded = decodeToken(token);
       if (decoded?.name) {
         setEmployeeName(decoded.name);
+        // Check if user is Admin
+        setIsAdmin(decoded.name === 'Admin');
       }
     }
   }, []);
@@ -218,6 +222,17 @@ export default function EmployeeDashboard() {
                 {t('availability')}
               </button>
             </li>
+            {isAdmin && (
+              <li className="nav-item">
+                <button 
+                  className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('team')}
+                  style={activeTab !== 'team' ? { color: 'rgb(5, 45, 63)' } : {}}
+                >
+                  {t('team') || 'Team'}
+                </button>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -263,6 +278,7 @@ export default function EmployeeDashboard() {
                   <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                   <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                   <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                  {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
                 </select>
               </div>
               {/* Filter on desktop only */}
@@ -326,6 +342,7 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
               </select>
             </div>
           </div>
@@ -369,6 +386,7 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
               </select>
             </div>
           </div>
@@ -412,6 +430,51 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
+              </select>
+            </div>
+          </div>
+        )}
+        {activeTab === 'team' && isAdmin && (
+          <div className="d-flex align-items-center justify-content-between mb-0">
+            <div className="d-flex align-items-center">
+              <img 
+                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+                alt="Logo"
+                style={{ height: '2rem', marginRight: '0.75rem' }}
+              />
+              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('manageTeam') || 'Manage Team'}</h2>
+            </div>
+            <div className="d-md-none" style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
+              <select
+                id="mobileTabSelectTeam"
+                name="mobileTabSelectTeam"
+                value={activeTab}
+                onChange={(e) => setActiveTab(e.target.value)}
+                autoComplete="off"
+                style={{
+                  backgroundColor: 'rgb(5, 45, 63)',
+                  color: 'transparent',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '0.25rem 5px 0.25rem 0.35rem',
+                  fontSize: '0.75rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  width: '35px',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.15rem center',
+                  backgroundSize: '10px'
+                }}
+              >
+                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
+                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
+                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
+                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>
               </select>
             </div>
           </div>
@@ -423,6 +486,7 @@ export default function EmployeeDashboard() {
       {activeTab === 'updates' && <UpdatePoster />}
       {activeTab === 'services' && <ServiceManager />}
       {activeTab === 'availability' && <AvailabilityManager />}
+      {activeTab === 'team' && isAdmin && <EmployeeManager />}
 
       {/* Footer */}
       <div className="container pt-5 pb-4" style={{ marginTop: '4rem' }}>

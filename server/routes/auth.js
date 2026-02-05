@@ -207,4 +207,65 @@ router.get('/me', verifyToken, async (req, res) => {
   }
 });
 
+/**
+ * Create employee account (Admin only)
+ * POST /api/auth/create-employee
+ */
+router.post('/create-employee', verifyToken, async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    // Verify the requesting user is Admin
+    const requestingUser = await User.findByPk(req.user.id);
+    if (!requestingUser || requestingUser.name !== 'Admin') {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    // Validation
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: 'Name, email, and password are required' });
+    }
+
+    // Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: 'Invalid email format' });
+    }
+
+    // Trim and sanitize inputs
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (trimmedName.length < 2) {
+      return res.status(400).json({ message: 'Name must be at least 2 characters' });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
+    // Check if user exists
+    const existingUser = await User.findOne({ where: { email: trimmedEmail } });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Email already registered' });
+    }
+
+    // Create employee user (isEmployee: true)
+    const user = await User.create({ 
+      name: trimmedName, 
+      email: trimmedEmail, 
+      password,
+      isEmployee: true
+    });
+
+    res.status(201).json({
+      message: 'Employee account created successfully',
+      user: user.toJSON(),
+    });
+  } catch (error) {
+    console.error('Create employee error:', error);
+    res.status(500).json({ message: error.message || 'Failed to create employee account' });
+  }
+});
+
 export default router;
