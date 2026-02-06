@@ -65,8 +65,11 @@ export default function EmployeeDashboard() {
   }, []);
 
   useEffect(() => {
-    document.body.style.backgroundColor = 'rgb(5, 45, 63)';
+    document.body.style.background = 'linear-gradient(to bottom, white, rgb(5, 45, 63))';
+    document.body.style.backgroundAttachment = 'fixed';
     return () => {
+      document.body.style.background = '';
+      document.body.style.backgroundAttachment = '';
       document.body.style.backgroundColor = '#f5f5f5';
     };
   }, []);

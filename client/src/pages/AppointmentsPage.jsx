@@ -47,8 +47,11 @@ export const AppointmentsPage = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.backgroundColor = '#f5f5f5';
+    document.body.style.background = 'linear-gradient(to bottom, #000000, rgb(5, 45, 63))';
+    document.body.style.backgroundAttachment = 'fixed';
     return () => {
+      document.body.style.background = '';
+      document.body.style.backgroundAttachment = '';
       document.body.style.backgroundColor = '#f5f5f5';
     };
   }, []);
@@ -197,7 +200,7 @@ export const AppointmentsPage = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="appointments-page" style={{ minHeight: '100vh', backgroundColor: '#f5f5f5' }}>
+    <div className="appointments-page" style={{ minHeight: '100vh' }}>
       <div className="container py-5">
         <div className="text-center mb-4">
           <h1 className="fw-bold text-white mb-0">{t('bookAppointment')}</h1>

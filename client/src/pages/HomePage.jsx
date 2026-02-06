@@ -74,8 +74,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
   }, [fetchUpdates, fetchServices]);
 
   useEffect(() => {
-    document.body.style.backgroundColor = '#212529';
+    document.body.style.background = 'linear-gradient(to bottom, white, #212529)';
+    document.body.style.backgroundAttachment = 'fixed';
     return () => {
+      document.body.style.background = '';
+      document.body.style.backgroundAttachment = '';
       document.body.style.backgroundColor = '#f5f5f5';
     };
   }, []);
