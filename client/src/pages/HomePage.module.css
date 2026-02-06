@@ -164,7 +164,14 @@
   -webkit-transform: translateZ(0);
 }
 
-/* --- Animations --- */
+/* Mobile responsiveness for request button */
+@media (max-width: 767px) {
+  .requestButton {
+    margin-left: 0.4rem;
+  }
+}
+
+/* Button animation keyframes */
 @-webkit-keyframes glowingButton {
   0% {
     background-position: 0 0;
@@ -189,14 +196,10 @@
   }
 }
 
-/* Mobile-only adjustment for request button position */
-@media (max-width: 767px) {
-  .requestButton {
-    margin-left: .4rem;
-  }
-}
+/* ========================================
+   Utility Classes
+   ======================================== */
 
-/* --- Utility Classes --- */
 .cursorPointer {
   cursor: pointer;
 }
