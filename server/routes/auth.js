@@ -217,7 +217,8 @@ router.post('/create-employee', verifyToken, async (req, res) => {
 
     // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
-    if (!requestingUser || requestingUser.name !== 'Admin') {
+    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
+    if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
@@ -276,7 +277,8 @@ router.get('/employees', verifyToken, async (req, res) => {
   try {
     // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
-    if (!requestingUser || requestingUser.name !== 'Admin') {
+    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
+    if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
@@ -309,7 +311,8 @@ router.put('/update-employee-password', verifyToken, async (req, res) => {
 
     // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
-    if (!requestingUser || requestingUser.name !== 'Admin') {
+    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
+    if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
@@ -363,7 +366,8 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
 
     // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
-    if (!requestingUser || requestingUser.name !== 'Admin') {
+    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
+    if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
@@ -384,7 +388,8 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
     }
 
     // Prevent deleting the Admin account
-    if (employee.name === 'Admin') {
+    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
+    if (adminEmail && employee.email === adminEmail) {
       return res.status(403).json({ message: 'Cannot delete the Admin account' });
     }
 

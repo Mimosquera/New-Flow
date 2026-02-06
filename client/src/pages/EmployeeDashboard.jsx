@@ -57,8 +57,9 @@ export default function EmployeeDashboard() {
       const decoded = decodeToken(token);
       if (decoded?.name) {
         setEmployeeName(decoded.name);
-        // Check if user is Admin
-        setIsAdmin(decoded.name === 'Admin');
+        // Check if user is Admin by email
+        const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
+        setIsAdmin(decoded.email === adminEmail);
       }
     }
   }, []);
