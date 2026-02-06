@@ -8,7 +8,7 @@ export const translations = {
     heroTitle: 'NEW FLOW',
     heroSubtitle: 'Premium Barber & Hair Salon',
     heroDescription: 'Experience excellence in grooming. Your style, our passion.',
-    requestAppointment: 'Request an Appointment',
+    requestAppointment: 'Request Appointment',
     
     // Services Section
     servicesTitle: 'Our Services',
@@ -321,6 +321,8 @@ export const translations = {
     employeeNotFound: 'Employee not found',
     cannotDeleteAdmin: 'Cannot delete the Admin account',
     emailAlreadyExists: 'Email already registered',
+    failedToAddEmployee: 'Failed to add employee',
+    networkError: 'Network error',
   },
   
   es: {
@@ -332,7 +334,7 @@ export const translations = {
     heroTitle: 'NEW FLOW',
     heroSubtitle: 'Barbería y Salón de Peluquería Premium',
     heroDescription: 'Experimenta la excelencia en el cuidado personal. Tu estilo, nuestra pasión.',
-    requestAppointment: 'Solicitar una Cita',
+    requestAppointment: 'Solicitar Cita',
     
     // Services Section
     servicesTitle: 'Nuestros Servicios',
@@ -643,6 +645,8 @@ export const translations = {
     employeeNotFound: 'Empleado no encontrado',
     cannotDeleteAdmin: 'No se puede eliminar la cuenta de Admin',
     emailAlreadyExists: 'El correo electrónico ya está registrado',
+    failedToAddEmployee: 'Error al agregar empleado',
+    networkError: 'Error de red',
   }
 };
 

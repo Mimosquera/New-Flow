@@ -1,10 +1,32 @@
-/* HomePage Scoped Styles */
+/* ========================================
+   HomePage Scoped Styles
+   ======================================== */
 
+/* --- Hero Section --- */
+.heroSection {
+  padding-bottom: 60px !important;
+}
+
+@media (min-width: 768px) {
+  .heroSection {
+    padding-bottom: 3rem !important;
+  }
+}
+
+.heroVideo {
+  min-height: 300px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* --- Services Section --- */
 .servicesHeading {
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 3rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .card {
@@ -15,4 +37,104 @@
 .card:hover {
   transform: translateY(-5px) !important;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25) !important;
+}
+
+/* --- Updates Section --- */
+.updatesHeading {
+  text-shadow: 0 3px 6px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* --- About Section --- */
+.aboutLogo {
+  width: 70%;
+  max-width: 350px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* --- Contact Section --- */
+.contactHeading {
+  color: #3387b8;
+}
+
+.addressText {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* --- Request Appointment Button --- */
+.requestButton {
+  padding: 0.5em 1.5em;
+  margin: 0.25em 0;
+  border: none;
+  outline: none;
+  color: rgb(255, 255, 255);
+  background: rgb(5, 45, 63);
+  cursor: pointer;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+  user-select: none;
+  touch-action: manipulation;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.requestButton::before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    rgb(5, 45, 63),
+    rgb(8, 65, 90),
+    rgb(13, 109, 143),
+    rgb(51, 135, 184),
+    rgb(24, 153, 214),
+    rgb(13, 109, 143),
+    rgb(8, 65, 90),
+    rgb(5, 45, 63)
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowingButton 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.requestButton::after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgb(5, 45, 63);
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+/* --- Animations --- */
+@keyframes glowingButton {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+/* --- Utility Classes --- */
+.cursorPointer {
+  cursor: pointer;
 }

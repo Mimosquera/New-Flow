@@ -209,7 +209,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </nav>
 
       {/* Hero Section */}
-      <section className="hero-section bg-dark text-white py-5">
+      <section className={`hero-section bg-dark text-white pt-5 ${styles.heroSection}`}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-6 mb-4 mb-md-0">
@@ -218,8 +218,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <p className="mb-4">{t('heroDescription')}</p>
               <div style={{ whiteSpace: 'nowrap' }}>
                 <button 
-                  className="btn btn-lg"
-                  style={{ backgroundColor: 'rgb(5, 45, 63)', color: 'white', border: 'none', fontWeight: '300' }}
+                  className={styles.requestButton}
                   onClick={onNavigateToBooking}
                 >
                   {t('requestAppointment')}
@@ -228,8 +227,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
             <div className="col-md-6">
               <video
-                className="rounded w-100"
-                style={{ minHeight: '300px', objectFit: 'cover' }}
+                className={`w-100 ${styles.heroVideo}`}
                 autoPlay
                 muted
                 loop
@@ -253,7 +251,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {t('servicesTitle')}
           </div>
           {translatedServices.length === 0 ? (
-            <div className="text-center py-5">
+            <div className="text-center py-3">
               <h4 className="text-muted">{language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}</h4>
             </div>
           ) : (
@@ -261,8 +259,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {displayedServices.map(service => (
               <div key={service.id} className="col-md-4">
                 <div 
-                  className={`card h-100 shadow-sm border-0 ${styles.card}`}
-                  style={{ cursor: 'pointer' }}
+                  className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
                   onClick={() => handleServiceClick(service.id)}
                 >
                   <div className="card-body">
@@ -277,7 +274,18 @@ export const HomePage = ({ onNavigateToBooking }) => {
                             backgroundColor: 'rgb(5, 45, 63)',
                             color: 'white',
                             border: 'none',
-                            fontWeight: '300'
+                            fontWeight: '500',
+                            borderRadius: '20px',
+                            boxShadow: '0 3px 8px rgba(5, 45, 63, 0.3)',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-1px)';
+                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(5, 45, 63, 0.4)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 3px 8px rgba(5, 45, 63, 0.3)';
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -333,7 +341,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* News Section */}
       <section className="news-section py-5">
         <div className="container">
-          <h2 className="text-center mb-5 fw-bold text-white">{t('updatesTitle')}</h2>
+          <h2 className={`text-center mb-5 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
           {loading || translating ? (
             <div className="text-center text-white">
               <p>{translating ? t('translating') : t('loading')}</p>
@@ -348,8 +356,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 {displayedNews.map(article => (
                   <div key={article.id} className="col-md-6 col-lg-4 mb-4">
                     <div 
-                      className={`card h-100 shadow-sm border-0 ${styles.card}`}
-                      style={{ cursor: 'pointer' }}
+                      className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
                       onClick={() => handleUpdateClick(article)}
                     >
                       <div className="card-body">
@@ -427,12 +434,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <section className="about-section py-5">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-md-6 mb-4 mb-md-0">
+            <div className="col-md-6 mb-5 mb-md-0">
               <img 
                 src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
                 alt="New Flow Team"
-                className="img-fluid rounded"
-                style={{ width: '100%', height: 'auto' }}
+                className={`img-fluid rounded ${styles.aboutLogo}`}
               />
             </div>
             <div className="col-md-6 ps-md-4">
@@ -457,8 +463,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
           <h2 className="text-center mb-5 fw-bold">{t('contactTitle')}</h2>
           <div className="row text-center">
             <div className="col-md-3 mb-3">
-              <h5 style={{ color: '#3387b8' }}>📍 {t('address')}</h5>
-              <p>
+              <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
+              <p className={styles.addressText}>
                 <a 
                   href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
                   target="_blank"
@@ -466,28 +472,27 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   className="text-white text-decoration-none"
                   style={{ cursor: 'pointer' }}
                 >
-                  7102 Hull Street Rd N Suite F, North Chesterfield, VA 23235
+                  7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
                 </a>
               </p>
             </div>
             <div className="col-md-3 mb-3">
-              <h5 style={{ color: '#3387b8' }}>📞 {t('phone')}</h5>
+              <h5 className={styles.contactHeading}>📞 {t('phone')}</h5>
               <p>
                 <a 
                   href="tel:+18047452525"
                   className="text-white text-decoration-none"
-                  style={{ cursor: 'pointer' }}
                 >
                   (804) 745-2525
                 </a>
               </p>
             </div>
             <div className="col-md-3 mb-3">
-              <h5 style={{ color: '#3387b8' }}>⏰ {t('hours')}</h5>
+              <h5 className={styles.contactHeading}>⏰ {t('hours')}</h5>
               <p>{t('monSun')}: 9am - 7pm</p>
             </div>
             <div className="col-md-3 mb-3">
-              <h5 style={{ color: '#3387b8' }}>📱 {t('followUs')}</h5>
+              <h5 className={styles.contactHeading}>📱 {t('followUs')}</h5>
               <a 
                 href="https://www.instagram.com/newflowsalon/" 
                 target="_blank" 
