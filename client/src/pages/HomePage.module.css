@@ -99,6 +99,7 @@
   letter-spacing: 0.5px;
   -webkit-tap-highlight-color: transparent;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .requestButton:focus {
