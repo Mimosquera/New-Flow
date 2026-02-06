@@ -175,7 +175,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   return (
     <div className="homepage">
       {/* Navigation Bar */}
-      <nav className="navbar navbar-light shadow-sm" style={{ backgroundColor: 'white' }}>
+      <nav className="navbar navbar-light bg-light shadow-sm">
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
           <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0, fontSize: 'clamp(1rem, 4vw, 1.5rem)' }}>
             <img 
@@ -207,7 +207,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </nav>
 
       {/* Hero Section */}
-      <section className={`hero-section text-white pt-5 ${styles.heroSection}`}>
+      <section className={`hero-section bg-dark text-white pt-5 ${styles.heroSection}`}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-6 mb-4 mb-md-0">
@@ -460,7 +460,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </section>
 
       {/* Contact Section */}
-      <section className="contact-section py-5 text-white">
+      <section className="contact-section py-5 bg-dark text-white">
         <div className="container">
           <h2 className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}>{t('contactTitle')}</h2>
           <div className="row text-center">
