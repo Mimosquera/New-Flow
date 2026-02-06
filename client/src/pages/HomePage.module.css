@@ -192,7 +192,7 @@
 /* Mobile-only adjustment for request button position */
 @media (max-width: 767px) {
   .requestButton {
-    margin-left: 1rem;
+    margin-left: .5rem;
   }
 }
 
