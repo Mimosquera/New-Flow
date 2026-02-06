@@ -460,7 +460,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* Contact Section */}
       <section className="contact-section py-5 bg-dark text-white">
         <div className="container">
-          <h2 className="text-center mb-5 fw-bold">{t('contactTitle')}</h2>
+          <h2 className="text-center mb-5 fw-bold text-white">{t('contactTitle')}</h2>
           <div className="row text-center">
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
@@ -470,7 +470,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white text-decoration-none"
-                  style={{ cursor: 'pointer' }}
                 >
                   7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
                 </a>

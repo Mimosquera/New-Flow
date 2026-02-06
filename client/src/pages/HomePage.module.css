@@ -55,7 +55,7 @@
 
 /* --- Contact Section --- */
 .contactHeading {
-  color: #3387b8;
+  color: #3387b8 !important;
 }
 
 .addressText {
