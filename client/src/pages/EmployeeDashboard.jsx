@@ -90,8 +90,13 @@ export default function EmployeeDashboard() {
   }, [lastScrollY]);
   
   useEffect(() => {
-    document.body.style.background = '#000000';
+    const setBlack = () => {
+      document.body.style.background = '#000000';
+    };
+    setBlack();
+    window.addEventListener('scroll', setBlack, { passive: true });
     return () => {
+      window.removeEventListener('scroll', setBlack);
       document.body.style.background = 'rgb(3, 35, 50)';
     };
   }, []);
