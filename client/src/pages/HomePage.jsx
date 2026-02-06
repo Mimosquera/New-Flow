@@ -164,7 +164,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY <= 1) {
+      if (window.scrollY <= 50) {
         document.body.style.background = '#000000';
       } else {
         document.body.style.background = 'rgb(3, 35, 50)';

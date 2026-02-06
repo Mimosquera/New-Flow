@@ -154,26 +154,14 @@ export const UpdatePoster = () => {
     // Always start with solid black background
     document.body.style.background = '#000000';
     const handleScroll = () => {
-      // On every scroll to top, bottom, upward scroll, or when sticky card is visible, set background to black
-      const scrollY = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = window.innerHeight;
-      // Check if sticky card is visible
+      // Only trigger black background when sticky post update card reaches top of screen
       const stickyCard = document.querySelector('.card.shadow-sm.border-0.sticky-top');
-      let stickyVisible = false;
       if (stickyCard) {
         const rect = stickyCard.getBoundingClientRect();
-        stickyVisible = rect.top <= 0 && rect.bottom > 0;
+        if (rect.top <= 0) {
+          document.body.style.background = '#000000';
+        }
       }
-      if (
-        scrollY <= 10 ||
-        scrollY + clientHeight >= scrollHeight - 10 ||
-        scrollY < (window._lastScrollY || 0) ||
-        stickyVisible
-      ) {
-        document.body.style.background = '#000000';
-      }
-      window._lastScrollY = scrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
