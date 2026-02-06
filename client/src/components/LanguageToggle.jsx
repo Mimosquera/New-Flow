@@ -17,7 +17,10 @@ export const LanguageToggle = ({ inverse = false }) => {
 
   return (
     <button
-      onClick={toggleLanguage}
+      onClick={(e) => {
+        e.currentTarget.blur();
+        toggleLanguage();
+      }}
       className="btn btn-sm"
       style={{
         ...defaultStyle,
@@ -26,6 +29,8 @@ export const LanguageToggle = ({ inverse = false }) => {
         borderRadius: '4px',
         fontSize: '0.75rem',
         transition: 'all 0.3s ease',
+        WebkitTapHighlightColor: 'transparent',
+        outline: 'none',
       }}
       onMouseOver={(e) => {
         e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;

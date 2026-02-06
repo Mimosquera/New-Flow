@@ -99,14 +99,19 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent !important;
   -webkit-appearance: none;
   appearance: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
 }
 
-.requestButton:focus {
-  outline: none;
-  border: none;
+.requestButton:focus,
+.requestButton:active,
+.requestButton:focus-visible {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .requestButton::before {

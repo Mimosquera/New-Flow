@@ -220,7 +220,6 @@ export const UpdatePoster = () => {
                       className="d-none"
                       accept="image/*,video/*"
                       onChange={handleMediaChange}
-                      capture="environment"
                     />
                     <small className="text-muted d-block mt-1">{t('mediaInfo')}</small>
                   </div>
