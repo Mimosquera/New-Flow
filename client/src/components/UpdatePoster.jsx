@@ -154,11 +154,11 @@ export const UpdatePoster = () => {
     // Always start with solid black background
     document.body.style.background = '#000000';
     const handleScroll = () => {
-      // Only trigger black background when sticky post update card reaches top of screen
+      // Trigger black background when sticky post update card is near or at the top of the screen
       const stickyCard = document.querySelector('.card.shadow-sm.border-0.sticky-top');
       if (stickyCard) {
         const rect = stickyCard.getBoundingClientRect();
-        if (rect.top <= 0) {
+        if (rect.top <= 10) {
           document.body.style.background = '#000000';
         }
       }
@@ -175,7 +175,7 @@ export const UpdatePoster = () => {
         <div className="row">
           {/* Post New Update Form */}
           <div className="col-lg-5 mb-4">
-            <div className="card shadow-sm border-0 sticky-top">
+            <div className="card shadow-sm border-0">
               <div className="card-body p-4">
                 <h5 className="card-title mb-4">{t('postUpdate')}</h5>
 
