@@ -151,8 +151,21 @@ export const UpdatePoster = () => {
   };
 
   useEffect(() => {
+    // Always start with solid black background
+    document.body.style.background = '#000000';
     const handleScroll = () => {
-      document.body.style.background = '#000000';
+      // On every scroll to top, bottom, or upward scroll, set background to black
+      const scrollY = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      if (
+        scrollY <= 10 ||
+        scrollY + clientHeight >= scrollHeight - 10 ||
+        scrollY < (window._lastScrollY || 0)
+      ) {
+        document.body.style.background = '#000000';
+      }
+      window._lastScrollY = scrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
