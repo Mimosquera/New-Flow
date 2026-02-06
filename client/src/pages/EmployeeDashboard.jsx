@@ -65,15 +65,6 @@ export default function EmployeeDashboard() {
   }, []);
 
   useEffect(() => {
-    document.body.style.setProperty('background', 'linear-gradient(to bottom, white, rgb(5, 45, 63))', 'important');
-    document.body.style.setProperty('background-attachment', 'fixed', 'important');
-    return () => {
-      document.body.style.removeProperty('background');
-      document.body.style.removeProperty('background-attachment');
-    };
-  }, []);
-
-  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       
@@ -99,7 +90,7 @@ export default function EmployeeDashboard() {
   }, [lastScrollY]);
   
   return (
-    <div className="employee-dashboard">
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(5, 45, 63) 100%)' }}>
       {/* Dashboard Header - Card Style */}
       <div 
         className="container pt-3 pb-3" 

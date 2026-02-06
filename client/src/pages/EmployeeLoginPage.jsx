@@ -99,17 +99,8 @@ export const EmployeeLoginPage = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    document.body.style.setProperty('background', 'linear-gradient(to bottom, #000000, rgb(5, 45, 63))', 'important');
-    document.body.style.setProperty('background-attachment', 'fixed', 'important');
-    return () => {
-      document.body.style.removeProperty('background');
-      document.body.style.removeProperty('background-attachment');
-    };
-  }, []);
-
   return (
-    <div className="form-container">
+    <div className="form-container" style={{ background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
       <div style={{ width: '100%', maxWidth: MAX_FORM_WIDTH }}>
         <div className="form-card card">
           <div className="card-header">

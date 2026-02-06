@@ -46,15 +46,6 @@ export const AppointmentsPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    document.body.style.setProperty('background', 'linear-gradient(to bottom, #000000, rgb(5, 45, 63))', 'important');
-    document.body.style.setProperty('background-attachment', 'fixed', 'important');
-    return () => {
-      document.body.style.removeProperty('background');
-      document.body.style.removeProperty('background-attachment');
-    };
-  }, []);
-
   // Translate services when language changes
   useEffect(() => {
     const translateServices = async () => {
@@ -199,7 +190,7 @@ export const AppointmentsPage = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="appointments-page" style={{ minHeight: '100vh' }}>
+    <div className="appointments-page" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
       <div className="container py-5">
         <div className="text-center mb-4">
           <h1 className="fw-bold text-white mb-0">{t('bookAppointment')}</h1>

@@ -74,15 +74,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
   }, [fetchUpdates, fetchServices]);
 
   useEffect(() => {
-    document.body.style.setProperty('background', 'linear-gradient(to bottom, white, #212529)', 'important');
-    document.body.style.setProperty('background-attachment', 'fixed', 'important');
-    return () => {
-      document.body.style.removeProperty('background');
-      document.body.style.removeProperty('background-attachment');
-    };
-  }, []);
-
-  useEffect(() => {
     const translatePosts = async () => {
       if (news.length === 0) return;
 
@@ -172,7 +163,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const hasMoreServices = serviceDisplayCount < translatedServices.length;
 
   return (
-    <div className="homepage">
+    <div className="homepage" style={{ background: '#f5f5f5', minHeight: '100vh' }}>
       {/* Navigation Bar */}
       <nav className="navbar navbar-light bg-light shadow-sm">
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
