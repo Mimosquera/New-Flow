@@ -2,13 +2,12 @@ import nodemailer from 'nodemailer';
 import twilio from 'twilio';
 import { User } from '../models/User.js';
 
-// Initialize email transporter
 let emailTransporter = null;
 if (process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
   emailTransporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT || 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -16,23 +15,16 @@ if (process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) 
   });
 }
 
-// Initialize Twilio client
 let twilioClient = null;
 if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_PHONE_NUMBER) {
   twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 }
 
-/**
- * Format date for display
- */
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 };
 
-/**
- * Format time for display
- */
 const formatTime = (timeString) => {
   const [hours, minutes] = timeString.split(':');
   const hour = parseInt(hours, 10);
@@ -41,9 +33,6 @@ const formatTime = (timeString) => {
   return `${displayHour}:${minutes} ${ampm}`;
 };
 
-/**
- * Send email notification
- */
 const sendEmail = async (to, subject, html) => {
   if (!emailTransporter) {
     console.log('Email service not configured. Email would be sent to:', to);
@@ -67,9 +56,6 @@ const sendEmail = async (to, subject, html) => {
   }
 };
 
-/**
- * Send SMS notification
- */
 const sendSMS = async (to, message) => {
   if (!twilioClient) {
     console.log('SMS service not configured. SMS would be sent to:', to);
@@ -78,7 +64,6 @@ const sendSMS = async (to, message) => {
   }
 
   try {
-    // Format phone number for Twilio (must start with +1 for US)
     const formattedPhone = to.startsWith('+') ? to : `+1${to.replace(/\D/g, '')}`;
     
     await twilioClient.messages.create({
@@ -94,9 +79,6 @@ const sendSMS = async (to, message) => {
   }
 };
 
-/**
- * Send appointment request confirmation to customer
- */
 export const sendAppointmentRequestConfirmation = async (appointment, service) => {
   const { customerName, customerEmail, customerPhone, date, time } = appointment;
   const formattedDate = formatDate(date);
@@ -125,9 +107,6 @@ export const sendAppointmentRequestConfirmation = async (appointment, service) =
   await sendSMS(customerPhone, smsMessage);
 };
 
-/**
- * Notify employees and business email about new appointment request
- */
 export const notifyEmployeesOfNewAppointment = async (appointment, service, requestedEmployee) => {
   const { customerName, customerEmail, customerPhone, date, time } = appointment;
   const formattedDate = formatDate(date);
@@ -174,9 +153,6 @@ export const notifyEmployeesOfNewAppointment = async (appointment, service, requ
   await Promise.all(emailPromises);
 };
 
-/**
- * Send appointment accepted notification to customer
- */
 export const sendAppointmentAcceptedNotification = async (appointment, service, acceptedByEmployee) => {
   const { customerName, customerEmail, customerPhone, date, time, employeeNote } = appointment;
   const formattedDate = formatDate(date);
@@ -206,9 +182,6 @@ export const sendAppointmentAcceptedNotification = async (appointment, service, 
   await sendSMS(customerPhone, smsMessage);
 };
 
-/**
- * Send appointment declined notification to customer
- */
 export const sendAppointmentDeclinedNotification = async (appointment, service, reason) => {
   const { customerName, customerEmail, customerPhone, date, time } = appointment;
   const formattedDate = formatDate(date);
@@ -234,9 +207,6 @@ export const sendAppointmentDeclinedNotification = async (appointment, service, 
   await sendSMS(customerPhone, smsMessage);
 };
 
-/**
- * Notify employee that they have accepted an appointment
- */
 export const notifyEmployeeOfAcceptedAppointment = async (appointment, service, employee) => {
   const { customerName, customerEmail, customerPhone, date, time } = appointment;
   const formattedDate = formatDate(date);

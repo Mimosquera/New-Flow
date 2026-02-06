@@ -9,22 +9,17 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import styles from './HomePage.module.css';
 
-/**
- * Homepage Component
- */
 export const HomePage = ({ onNavigateToBooking }) => {
   const navigate = useNavigate();
   const { t, language } = useTranslation();
 
-  // State - Services
-  const [services, setServices] = useState([]); // Original services in English
-  const [translatedServices, setTranslatedServices] = useState([]); // Translated services
+  const [services, setServices] = useState([]);
+  const [translatedServices, setTranslatedServices] = useState([]);
   const [serviceDisplayCount, setServiceDisplayCount] = useState(3);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
 
-  // State - Updates/News
-  const [news, setNews] = useState([]); // Original news in English
-  const [translatedNews, setTranslatedNews] = useState([]); // Translated news
+  const [news, setNews] = useState([]);
+  const [translatedNews, setTranslatedNews] = useState([]);
   const [displayCount, setDisplayCount] = useState(3);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -32,14 +27,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [selectedUpdate, setSelectedUpdate] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  // State - Auth
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Refs for scroll behavior
   const servicesEndRef = useRef(null);
   const updatesEndRef = useRef(null);
 
-  // Modal handlers
   const handleUpdateClick = (update) => {
     setSelectedUpdate(update);
     setShowModal(true);
@@ -54,7 +46,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     try {
       const response = await serviceService.getAll();
       setServices(response.data);
-      setTranslatedServices(response.data); // Initially set to English
+      setTranslatedServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);
     }
@@ -65,7 +57,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       setLoading(true);
       const response = await updateService.getAll();
       setNews(response.data.updates);
-      setTranslatedNews(response.data.updates); // Initially set to English
+      setTranslatedNews(response.data.updates);
       setTotalUpdates(response.data.total);
     } catch (error) {
       console.error('Error fetching updates:', error);
@@ -81,7 +73,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
     fetchServices();
   }, [fetchUpdates, fetchServices]);
 
-  // Auto-translate posts when language changes to Spanish
   useEffect(() => {
     const translatePosts = async () => {
       if (news.length === 0) return;
@@ -102,14 +93,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
           setTranslating(false);
         }
       } else {
-        setTranslatedNews(news); // Use original English
+        setTranslatedNews(news);
       }
     };
 
     translatePosts();
   }, [language, news]);
 
-  // Auto-translate services when language changes
   useEffect(() => {
     const translateServices = async () => {
       if (services.length === 0) return;
@@ -137,7 +127,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
     translateServices();
   }, [language, services]);
 
-  // Updates/News handlers
   const handleViewMore = () => {
     setDisplayCount(prev => prev + 3);
   };
@@ -149,7 +138,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
     }, 100);
   };
 
-  // Services handlers
   const handleShowAllServices = () => {
     setServiceDisplayCount(services.length);
   };
