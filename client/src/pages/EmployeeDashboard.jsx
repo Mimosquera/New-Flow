@@ -89,6 +89,13 @@ export default function EmployeeDashboard() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
   
+  useEffect(() => {
+    document.body.style.background = '#000000';
+    return () => {
+      document.body.style.background = 'rgb(3, 35, 50)';
+    };
+  }, []);
+
   return (
     <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(5, 45, 63) 100%)' }}>
       {/* Dashboard Header - Card Style */}
