@@ -300,3 +300,15 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   }
 }
 
+@media (max-width: 768px) {
+  .employee-dashboard {
+    padding-top: 10px !important;
+  }
+  .container.pt-3.pb-3 {
+    width: calc(100% - 30px) !important;
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+    box-sizing: border-box;
+  }
+}
+

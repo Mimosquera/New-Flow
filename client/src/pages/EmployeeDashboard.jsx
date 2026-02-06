@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { removeToken, decodeToken, getToken } from '../utils/tokenUtils.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
@@ -33,9 +33,6 @@ export default function EmployeeDashboard() {
   const [employeeName, setEmployeeName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [appointmentFilter, setAppointmentFilter] = useState('all');
-  const [showHeaderBg, setShowHeaderBg] = useState(false);
-  const [showHeader, setShowHeader] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     localStorage.setItem('employeeDashboardTab', activeTab);
@@ -64,9 +61,24 @@ export default function EmployeeDashboard() {
     }
   }, []);
 
+  const [showHeader, setShowHeader] = useState(true);
+  const lastScrollYRef = useRef(0);
+
   useEffect(() => {
     const handleScroll = () => {
       document.body.style.background = '#000000';
+      const currentScrollY = window.scrollY;
+      // Show header and margin at top
+      if (currentScrollY <= 10) {
+        setShowHeader(true);
+      } else if (currentScrollY <= 50) {
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollYRef.current) {
+        setShowHeader(false);
+      } else if (currentScrollY < lastScrollYRef.current) {
+        setShowHeader(true);
+      }
+      lastScrollYRef.current = currentScrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
@@ -75,6 +87,9 @@ export default function EmployeeDashboard() {
     };
   }, []);
 
+  // Helper for sticky header margin
+  const headerTop = showHeader && window.scrollY <= 10 ? '3px' : '0';
+
   return (
     <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(5, 45, 63) 100%)' }}>
       {/* Dashboard Header - Card Style */}
@@ -82,14 +97,14 @@ export default function EmployeeDashboard() {
         className="container pt-3 pb-3" 
         style={{ 
           position: 'sticky', 
-          top: 0, 
+          top: headerTop, 
           zIndex: 1050,
-          backgroundColor: showHeaderBg ? 'rgba(248, 249, 250, 0.95)' : 'transparent',
-          backdropFilter: showHeaderBg ? 'blur(10px)' : 'none',
+          backgroundColor: 'white',
+          backdropFilter: 'blur(10px)',
           borderRadius: '12px',
           transition: 'all 0.3s ease',
           transform: showHeader ? 'translateY(0)' : 'translateY(-100%)',
-          opacity: showHeader ? 1 : 0
+          opacity: showHeader ? 1 : 0,
         }}
       >
         <div 
