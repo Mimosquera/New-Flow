@@ -388,7 +388,6 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
     }
 
     // Prevent deleting the Admin account
-    const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
     if (adminEmail && employee.email === adminEmail) {
       return res.status(403).json({ message: 'Cannot delete the Admin account' });
     }
