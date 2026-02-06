@@ -65,20 +65,27 @@ export default function EmployeeDashboard() {
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
+    // Always start with solid black background
+    document.body.style.background = '#000000';
     const handleScroll = () => {
-      document.body.style.background = '#000000';
-      const currentScrollY = window.scrollY;
-      // Show header and margin at top
-      if (currentScrollY <= 10) {
+      // On every scroll to top or bottom, set background to black
+      const scrollY = window.scrollY;
+      const scrollHeight = document.documentElement.scrollHeight;
+      const clientHeight = window.innerHeight;
+      if (scrollY <= 10 || scrollY + clientHeight >= scrollHeight - 10) {
+        document.body.style.background = '#000000';
+      }
+      // Sticky header logic
+      if (scrollY <= 10) {
         setShowHeader(true);
-      } else if (currentScrollY <= 50) {
+      } else if (scrollY <= 50) {
         setShowHeader(true);
-      } else if (currentScrollY > lastScrollYRef.current) {
+      } else if (scrollY > lastScrollYRef.current) {
         setShowHeader(false);
-      } else if (currentScrollY < lastScrollYRef.current) {
+      } else if (scrollY < lastScrollYRef.current) {
         setShowHeader(true);
       }
-      lastScrollYRef.current = currentScrollY;
+      lastScrollYRef.current = scrollY;
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
