@@ -162,6 +162,24 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const displayedServices = translatedServices.slice(0, serviceDisplayCount);
   const hasMoreServices = serviceDisplayCount < translatedServices.length;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY <= 1) {
+        document.body.style.background = 'rgb(5, 42, 58)'; // darker teal/blue
+      } else {
+        document.body.style.background = 'rgb(3, 35, 50)'; // default teal/blue
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.background = 'rgb(3, 35, 50)';
+    };
+  }, []);
+
   return (
     <div className="homepage" style={{ background: '#f5f5f5', minHeight: '100vh' }}>
       {/* Navigation Bar */}

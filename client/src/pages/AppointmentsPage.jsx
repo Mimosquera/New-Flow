@@ -46,6 +46,24 @@ export const AppointmentsPage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY <= 50) {
+        document.body.style.background = '#000000';
+      } else {
+        document.body.style.background = 'rgb(5, 42, 58)';
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.background = 'rgb(3, 35, 50)';
+    };
+  }, []);
+
   // Translate services when language changes
   useEffect(() => {
     const translateServices = async () => {

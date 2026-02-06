@@ -99,6 +99,24 @@ export const EmployeeLoginPage = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY <= 1) {
+        document.body.style.background = '#000000';
+      } else {
+        document.body.style.background = 'rgb(3, 38, 53)';
+      }
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.body.style.background = 'rgb(3, 35, 50)';
+    };
+  }, []);
+
   return (
     <div className="form-container" style={{ background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
       <div style={{ width: '100%', maxWidth: MAX_FORM_WIDTH }}>
