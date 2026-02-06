@@ -68,11 +68,15 @@ export default function EmployeeDashboard() {
     // Always start with solid black background
     document.body.style.background = '#000000';
     const handleScroll = () => {
-      // On every scroll to top or bottom, set background to black
+      // On every scroll to top, bottom, or upward scroll, set background to black
       const scrollY = window.scrollY;
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = window.innerHeight;
-      if (scrollY <= 10 || scrollY + clientHeight >= scrollHeight - 10) {
+      if (
+        scrollY <= 10 ||
+        scrollY + clientHeight >= scrollHeight - 10 ||
+        scrollY < lastScrollYRef.current
+      ) {
         document.body.style.background = '#000000';
       }
       // Sticky header logic
