@@ -104,6 +104,10 @@
   appearance: none;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .requestButton:focus,
@@ -133,11 +137,17 @@
   background-size: 400%;
   z-index: -1;
   filter: blur(5px);
+  -webkit-filter: blur(5px);
   width: calc(100% + 4px);
   height: calc(100% + 4px);
+  -webkit-animation: glowingButton 20s linear infinite;
   animation: glowingButton 20s linear infinite;
   transition: opacity 0.3s ease-in-out;
-  border-radius: 10px;
+  border-radius: 14px;
+  opacity: 1;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: background-position;
 }
 
 .requestButton::after {
@@ -150,9 +160,23 @@
   left: 0;
   top: 0;
   border-radius: 10px;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* --- Animations --- */
+@-webkit-keyframes glowingButton {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
 @keyframes glowingButton {
   0% {
     background-position: 0 0;
