@@ -75,7 +75,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
         style={{ zIndex: 1050 }}
       >
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-          <div className="modal-content">
+          <div className="modal-content" style={{ borderRadius: '30px', overflow: 'hidden' }}>
             <div className="modal-header">
               <h5 className="modal-title">{update.title}</h5>
               <button 

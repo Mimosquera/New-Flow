@@ -13,7 +13,7 @@
   min-height: 300px;
   object-fit: cover;
   border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
 /* Services */
@@ -27,14 +27,19 @@
 
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-  border-radius: 15px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 30px !important;
   overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.updateCardBody {
+  padding: 1.60rem !important;
+  padding-bottom: 0.5rem !important;
 }
 
 /* Updates */

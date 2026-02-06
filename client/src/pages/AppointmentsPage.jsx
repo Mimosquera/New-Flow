@@ -46,6 +46,13 @@ export const AppointmentsPage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    document.body.style.backgroundColor = '#f5f5f5';
+    return () => {
+      document.body.style.backgroundColor = '#f5f5f5';
+    };
+  }, []);
+
   // Translate services when language changes
   useEffect(() => {
     const translateServices = async () => {

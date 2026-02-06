@@ -40,6 +40,13 @@ export function CancelAppointmentPage() {
     fetchAppointment();
   }, [id]);
 
+  useEffect(() => {
+    document.body.style.backgroundColor = '#212529';
+    return () => {
+      document.body.style.backgroundColor = '#f5f5f5';
+    };
+  }, []);
+
   const handleCancel = async () => {
     setLoading(true);
     setError('');

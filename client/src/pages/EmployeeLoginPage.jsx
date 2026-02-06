@@ -11,7 +11,7 @@
  * - Navigation back to home page
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert, FormInput } from '../components/Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
@@ -98,6 +98,13 @@ export const EmployeeLoginPage = () => {
       console.error('Error navigating home:', error);
     }
   }, [navigate]);
+
+  useEffect(() => {
+    document.body.style.backgroundColor = 'rgb(5, 45, 63)';
+    return () => {
+      document.body.style.backgroundColor = '#f5f5f5';
+    };
+  }, []);
 
   return (
     <div className="form-container">

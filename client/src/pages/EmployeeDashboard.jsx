@@ -65,6 +65,13 @@ export default function EmployeeDashboard() {
   }, []);
 
   useEffect(() => {
+    document.body.style.backgroundColor = 'rgb(5, 45, 63)';
+    return () => {
+      document.body.style.backgroundColor = '#f5f5f5';
+    };
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       

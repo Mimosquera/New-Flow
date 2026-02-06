@@ -74,6 +74,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
   }, [fetchUpdates, fetchServices]);
 
   useEffect(() => {
+    document.body.style.backgroundColor = '#212529';
+    return () => {
+      document.body.style.backgroundColor = '#f5f5f5';
+    };
+  }, []);
+
+  useEffect(() => {
     const translatePosts = async () => {
       if (news.length === 0) return;
 
@@ -351,7 +358,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                       className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
                       onClick={() => handleUpdateClick(article)}
                     >
-                      <div className="card-body">
+                      <div className={`card-body ${styles.updateCardBody}`}>
                         <h5 className="card-title">{article.title}</h5>
                         
                         {/* Display media if available */}
