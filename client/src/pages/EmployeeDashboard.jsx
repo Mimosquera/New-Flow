@@ -66,37 +66,11 @@ export default function EmployeeDashboard() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY <= 10) {
-        // At the top of the page
-        setShowHeader(true);
-        setShowHeaderBg(false);
-      } else if (currentScrollY > lastScrollY) {
-        // Scrolling down
-        setShowHeader(true);
-        setShowHeaderBg(true);
-      } else if (currentScrollY < lastScrollY) {
-        // Scrolling up (but not at top)
-        setShowHeader(false);
-        setShowHeaderBg(false);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-  
-  useEffect(() => {
-    const setBlack = () => {
       document.body.style.background = '#000000';
     };
-    setBlack();
-    window.addEventListener('scroll', setBlack, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', setBlack);
+      window.removeEventListener('scroll', handleScroll);
       document.body.style.background = 'rgb(3, 35, 50)';
     };
   }, []);

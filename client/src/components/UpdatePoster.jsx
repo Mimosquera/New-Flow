@@ -150,6 +150,16 @@ export const UpdatePoster = () => {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      document.body.style.background = '#000000';
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div className="update-poster">
       <div className="container pt-3 pb-5">
