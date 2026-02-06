@@ -1,6 +1,7 @@
 /* App Styles */
 
 .app-container {
+  background-color: #f8f9fa;
   min-height: 100vh;
 }
 
@@ -15,6 +16,7 @@ h2.section-heading {
 
 /* Dashboard Styles */
 .employee-dashboard {
+  background: linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(5, 45, 63) 100%);
   min-height: 100vh;
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -81,6 +83,7 @@ h2.section-heading {
   align-items: center;
   min-height: 100vh;
   padding: 1rem;
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   width: 100%;
   position: absolute;
   top: 0;
@@ -105,7 +108,7 @@ h2.section-heading {
 }
 
 .form-card .card-header {
-  background: rgb(5, 45, 63);
+background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   color: white;
   font-weight: 600;
   padding: 1.5rem;
@@ -183,7 +186,7 @@ pre {
 
 /* Homepage Styles */
 .hero-section {
-  background: transparent;
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   padding: 4rem 0 !important;
 }
 
@@ -240,7 +243,7 @@ pre {
 }
 
 .contact-section {
-  background: transparent;
+background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 }
 
 .contact-section h2 {
@@ -256,7 +259,7 @@ pre {
 
 /* Appointments Page */
 .appointments-page {
-  background: transparent;
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 }
 
 .appointments-page .appointment-item {
