@@ -54,8 +54,24 @@
 }
 
 /* --- Contact Section --- */
+.contactTitle {
+  font-size: 2.2rem;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+}
+
 .contactHeading {
   color: #3387b8 !important;
+  font-size: 1rem;
+}
+
+.contactText {
+  font-size: 0.9rem;
+}
+
+.instagramIcon {
+  width: 32px;
+  height: 32px;
+  margin-right: 0.4rem;
 }
 
 .addressText {
@@ -81,6 +97,13 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+}
+
+.requestButton:focus {
+  outline: none;
+  border: none;
 }
 
 .requestButton::before {

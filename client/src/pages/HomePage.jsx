@@ -219,7 +219,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <div style={{ whiteSpace: 'nowrap' }}>
                 <button 
                   className={styles.requestButton}
-                  onClick={onNavigateToBooking}
+                  onClick={(e) => {
+                    e.currentTarget.blur();
+                    onNavigateToBooking();
+                  }}
                 >
                   {t('requestAppointment')}
                 </button>
@@ -289,6 +292,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
+                            e.currentTarget.blur();
                             handleRequestAppointment(service);
                           }}
                         >
@@ -460,11 +464,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* Contact Section */}
       <section className="contact-section py-5 bg-dark text-white">
         <div className="container">
-          <h2 className="text-center mb-5 fw-bold text-white">{t('contactTitle')}</h2>
+          <h2 className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}>{t('contactTitle')}</h2>
           <div className="row text-center">
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
-              <p className={styles.addressText}>
+              <p className={`${styles.addressText} ${styles.contactText}`}>
                 <a 
                   href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
                   target="_blank"
@@ -477,7 +481,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📞 {t('phone')}</h5>
-              <p>
+              <p className={styles.contactText}>
                 <a 
                   href="tel:+18047452525"
                   className="text-white text-decoration-none"
@@ -488,7 +492,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>⏰ {t('hours')}</h5>
-              <p>{t('monSun')}: 9am - 7pm</p>
+              <p className={styles.contactText}>{t('monSun')}: 9am - 7pm</p>
             </div>
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📱 {t('followUs')}</h5>
@@ -496,12 +500,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 href="https://www.instagram.com/newflowsalon/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="d-inline-flex align-items-center justify-content-center text-decoration-none text-white"
+                className={`d-inline-flex align-items-center justify-content-center text-decoration-none text-white ${styles.contactText}`}
               >
                 <img 
                   src={new URL('../assets/images/instagram-logo.png', import.meta.url).href}
                   alt="Instagram"
-                  style={{ width: '40px', height: '40px', marginRight: '0.5rem' }}
+                  className={styles.instagramIcon}
                 />
                 <span>@newflowsalon</span>
               </a>
