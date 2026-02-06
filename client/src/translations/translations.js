@@ -34,7 +34,7 @@ export const translations = {
     
     // About Section
     aboutTitle: 'About New Flow',
-    aboutParagraph1: 'With over 10 years of experience in professional grooming, New Flow brings expertise and style to every client.',
+    aboutParagraph1: 'With over 18 years of experience in professional grooming, New Flow brings expertise and style to every client.',
     aboutParagraph2: 'Our team of skilled barbers and stylists are dedicated to providing exceptional service and creating the perfect look for you.',
     aboutParagraph3: 'Whether you\'re looking for a classic cut or a modern style, we\'ve got you covered.',
     
@@ -358,7 +358,7 @@ export const translations = {
     
     // About Section
     aboutTitle: 'Acerca de New Flow',
-    aboutParagraph1: 'Con más de 10 años de experiencia en cuidado personal profesional, New Flow aporta experiencia y estilo a cada cliente.',
+    aboutParagraph1: 'Con más de 18 años de experiencia en cuidado personal profesional, New Flow aporta experiencia y estilo a cada cliente.',
     aboutParagraph2: 'Nuestro equipo de barberos y estilistas capacitados se dedica a brindar un servicio excepcional y crear el look perfecto para ti.',
     aboutParagraph3: 'Ya sea que busques un corte clásico o un estilo moderno, tenemos lo que necesitas.',
     
