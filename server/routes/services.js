@@ -100,15 +100,30 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    try {
-      await service.destroy();
-      res.json({ message: 'Service deleted successfully' });
-    } catch (err) {
-      if (err.name === 'SequelizeForeignKeyConstraintError') {
-        return res.status(400).json({ message: 'Cannot delete service: there are appointments using this service.' });
-      }
-      throw err;
+    // Find all appointments attached to this service
+    const { Appointment } = await import('../models/Appointment.js');
+    const appointments = await Appointment.findAll({ where: { serviceId: id } });
+
+    // Filter appointments that are NOT pending or upcoming (i.e., status is not 'pending' or 'accepted')
+    const deletableAppointments = appointments.filter(a => !['pending', 'accepted'].includes(a.status));
+    const remainingAppointments = appointments.filter(a => ['pending', 'accepted'].includes(a.status));
+
+    // Delete deletable appointments
+    for (const appt of deletableAppointments) {
+      await appt.destroy();
     }
+
+    // If there are still appointments attached, block deletion
+    if (remainingAppointments.length > 0) {
+      return res.status(400).json({
+        message: 'Cannot delete service: there are pending or upcoming appointments using this service.',
+        remainingAppointments: remainingAppointments.map(a => ({ id: a.id, status: a.status, date: a.date, time: a.time }))
+      });
+    }
+
+    // Now safe to delete the service
+    await service.destroy();
+    res.json({ message: 'Service deleted successfully' });
   } catch (error) {
     console.error('Error deleting service:', error);
     res.status(500).json({ message: 'Failed to delete service' });

@@ -222,7 +222,10 @@ export const ServiceManager = () => {
       setSuccess(t('serviceDeleted') || 'Service deleted successfully!');
     } catch (error) {
       console.error('Error deleting service:', error);
-      const errorMessage = t('deleteServiceFailed') || 'Failed to delete service';
+      let errorMessage = t('deleteServiceFailed') || 'Failed to delete service';
+      if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
       alert(errorMessage);
     }
   }, [services, t]);

@@ -474,7 +474,13 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                         )}
                         {apt.status === 'cancelled' && (
                           <>
-                            <strong>{t('cancelledBy')}:</strong> {apt.acceptedBy ? (isAdmin || apt.acceptedBy.id !== currentUser?.id ? apt.acceptedBy.name : t('you')) : t('unknown')}<br />
+                            <strong>{t('cancelledBy')}:</strong> {(() => {
+                              if (!apt.cancelledBy) return t('unknown');
+                              if (apt.cancelledBy === 'customer') return t('customer');
+                              if (apt.cancelledBy === 'employee') return t('employee');
+                              if (apt.cancelledBy === 'admin') return t('admin');
+                              return apt.cancelledBy;
+                            })()}<br />
                             {apt.employeeNote && (
                               <>
                                 <strong>{t('cancellationReason')}:</strong> {apt.employeeNote}<br />
