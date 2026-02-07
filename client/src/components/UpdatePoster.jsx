@@ -175,9 +175,9 @@ export const UpdatePoster = () => {
         <div className="row">
           {/* Post New Update Form */}
           <div className="col-lg-5 mb-4">
-            <div className="card shadow-sm border-0">
+            <div className="card post-update-card shadow-sm border-0">
               <div className="card-body p-4">
-                <h5 className="card-title mb-4">{t('postUpdate')}</h5>
+                <h5 className="card-title mb-4 force-black-title">{t('postUpdate')}</h5>
 
                 {success && (
                   <Alert 
@@ -229,7 +229,7 @@ export const UpdatePoster = () => {
                       >
                         {t('chooseFile')}
                       </label>
-                      <span className="text-muted">
+                      <span className="file-info-text">
                         {mediaFile ? mediaFile.name : t('noFileChosen')}
                       </span>
                     </div>
@@ -240,7 +240,7 @@ export const UpdatePoster = () => {
                       accept="image/*,video/*"
                       onChange={handleMediaChange}
                     />
-                    <small className="text-muted d-block mt-1">{t('mediaInfo')}</small>
+                    <small className="file-info-text d-block mt-1">{t('mediaInfo')}</small>
                   </div>
 
                   {/* Media Preview */}
@@ -275,8 +275,7 @@ export const UpdatePoster = () => {
 
                   <button 
                     type="submit" 
-                    className="btn btn-lg w-100"
-                    style={{ backgroundColor: 'rgb(5, 45, 63)', color: 'white', border: 'none', fontWeight: '300' }}
+                    className="btn btn-lg w-100 post-update-btn"
                   >
                     {t('post')}
                   </button>

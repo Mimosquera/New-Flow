@@ -191,15 +191,15 @@ export const EmployeeManager = () => {
     <div className="container py-4">
       <div className="row justify-content-center">
         <div className="col-12 col-lg-10">
-          <div className="card shadow-sm mb-4">
+          <div className="card post-update-card shadow-sm mb-4">
             <div className="card-body p-0">
               <button
                 className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
                 onClick={() => setShowCreateForm(!showCreateForm)}
                 style={{ color: 'inherit' }}
               >
-                <h3 className="card-title mb-0">
-                  {t('createEmployee')}
+                <h3 className="card-title mb-0 create-employee-title">
+                    {t('createEmployee')}
                 </h3>
                 <span style={{ fontSize: '1.2rem' }}>
                   {showCreateForm ? '▲' : '▼'}
@@ -208,7 +208,7 @@ export const EmployeeManager = () => {
 
               {showCreateForm && (
                 <div className="p-3 border-top">
-                  <p className="text-muted mb-4">
+                  <p className="file-info-text mb-4 employee-info-black">
                     {t('createEmployeeDescription')}
                   </p>
 
@@ -216,6 +216,7 @@ export const EmployeeManager = () => {
                   {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
                   <form onSubmit={handleSubmit}>
+
                     <div className="mb-3">
                       <label htmlFor="name" className="form-label">
                         {t('name')} *
@@ -233,6 +234,7 @@ export const EmployeeManager = () => {
                       />
                     </div>
 
+
                     <div className="mb-3">
                       <label htmlFor="email" className="form-label">
                         {t('email')} *
@@ -248,10 +250,11 @@ export const EmployeeManager = () => {
                         autoComplete="email"
                         required
                       />
-                      <small className="text-muted">
+                      <small className="file-info-text employee-info-black">
                         {t('employeeEmailNote')}
                       </small>
                     </div>
+
 
                     <div className="mb-3">
                       <label htmlFor="password" className="form-label">
@@ -269,7 +272,7 @@ export const EmployeeManager = () => {
                         minLength={6}
                         required
                       />
-                      <small className="text-muted">
+                      <small className="file-info-text employee-info-black">
                         {t('employeePasswordNote')}
                       </small>
                     </div>
@@ -277,9 +280,8 @@ export const EmployeeManager = () => {
                     <div className="d-grid gap-2">
                       <button 
                         type="submit" 
-                        className="btn btn-primary"
+                        className="btn btn-lg w-100 post-update-btn"
                         disabled={loading}
-                        style={{ backgroundColor: THEME_COLOR, border: 'none' }}
                       >
                         {loading ? t('creating') : t('createEmployee')}
                       </button>
@@ -290,9 +292,9 @@ export const EmployeeManager = () => {
             </div>
           </div>
 
-          <div className="card shadow-sm">
+          <div className="card post-update-card shadow-sm">
             <div className="card-body">
-              <h3 className="card-title mb-4">
+              <h3 className="card-title mb-4 create-employee-title">
                 {t('manageEmployees')}
               </h3>
 
@@ -303,23 +305,23 @@ export const EmployeeManager = () => {
                   </div>
                 </div>
               ) : employees.length === 0 ? (
-                <p className="text-muted text-center py-4">
+                <p className="employee-info-black text-center py-4">
                   {t('noEmployeesYet')}
                 </p>
               ) : (
                 <div className="list-group">
                   {employees.map((employee) => (
-                    <div key={employee.id} className="list-group-item p-0">
+                    <div key={employee.id} className="list-group-item p-0" style={{ background: '#fff' }}>
                       <button
                         className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
                         onClick={() => toggleEmployee(employee.id)}
-                        style={{ color: 'inherit' }}
+                        style={{ color: 'rgb(5, 45, 63)', background: '#fff', fontWeight: 600 }}
                       >
                         <div>
-                          <h5 className="mb-1">{employee.name}</h5>
+                          <h5 className="mb-1" style={{ color: 'rgb(5, 45, 63)', fontWeight: 700 }}>{employee.name}</h5>
                           <small className="text-muted">{employee.email}</small>
                         </div>
-                        <span style={{ fontSize: '1.2rem' }}>
+                        <span style={{ fontSize: '1.2rem', color: 'rgb(5, 45, 63)' }}>
                           {expandedEmployeeId === employee.id ? '▲' : '▼'}
                         </span>
                       </button>

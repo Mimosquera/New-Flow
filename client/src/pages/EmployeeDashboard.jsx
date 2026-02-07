@@ -102,16 +102,15 @@ export default function EmployeeDashboard() {
   const headerTop = showHeader && window.scrollY <= 10 ? '3px' : '0';
 
   return (
-    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(255, 255, 255) 0%, rgb(5, 45, 63) 100%)' }}>
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
       {/* Dashboard Header - Card Style */}
       <div 
-        className="container pt-3 pb-3" 
+        className="container pt-3 pb-3 dashboard-header-sticky"
         style={{ 
           position: 'sticky', 
           top: headerTop, 
           zIndex: 1050,
-          backgroundColor: 'white',
-          backdropFilter: 'blur(10px)',
+          backgroundColor: '#cfd8dc',
           borderRadius: '12px',
           transition: 'all 0.3s ease',
           transform: showHeader ? 'translateY(0)' : 'translateY(-100%)',
@@ -119,13 +118,13 @@ export default function EmployeeDashboard() {
         }}
       >
         <div 
-          className="dashboard-header mb-3" 
+          className="dashboard-header mb-3"
           style={{ 
-            backgroundColor: 'white',
+            backgroundColor: '#cfd8dc',
             borderRadius: '8px',
             padding: '0.6rem',
             boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-            border: '1px solid rgba(5, 45, 63, 0.08)'
+            border: '1px solid #b0bec5'
           }}
         >
           {/* Single Row: All Content */}
@@ -198,7 +197,7 @@ export default function EmployeeDashboard() {
 
         {/* Desktop: Horizontal Tabs */}
         <div className="mb-0 pb-3">
-          <ul className="nav nav-tabs d-none d-md-flex mb-0">
+          <ul className="nav nav-tabs d-none d-md-flex mb-0 dashboard-tabs">
             <li className="nav-item">
               <button 
                 className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
@@ -507,7 +506,12 @@ export default function EmployeeDashboard() {
           <img 
             src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
             alt="New Flow Logo"
-            style={{ maxWidth: '300px', width: '100%', height: 'auto' }}
+            style={{ 
+              maxWidth: '300px', 
+              width: '100%', 
+              height: 'auto', 
+              filter: 'drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32))' 
+            }}
           />
         </div>
       </div>

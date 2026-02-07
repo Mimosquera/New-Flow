@@ -258,9 +258,9 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
       {error && <Alert type="error" message={error} onClose={() => setError(null)} />}
       {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-      <div className="card mb-4" style={{ backgroundColor: '#f8f9fa', border: '1px solid #dee2e6' }}>
+      <div className="card post-update-card mb-4 shadow-sm border-0">
         <div className="card-body p-3">
-          <h6 className="mb-3" style={{ fontSize: '0.95rem', fontWeight: '600', color: THEME_COLOR }}>
+          <h6 className="mb-3 block-date-title">
             {t('blockDateAndTime')}
           </h6>
           <form onSubmit={handleSubmit}>
@@ -466,7 +466,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                     const timeRangeStr = `${formatTime(group.startTime, locale)} - ${formatTime(group.endTime, locale)}`;
 
                     return (
-                      <div key={group.ids?.[0] || index} className="card mb-2" style={{ border: `1px solid ${THEME_COLOR}` }}>
+                      <div key={group.ids?.[0] || index} className="card post-update-card mb-2 shadow-sm border-0">
                         <div className="card-body p-3">
                           {isAdmin && (
                             <div className="mb-2">

@@ -403,7 +403,7 @@ export const AvailabilityManager = () => {
           <div className="col-lg-4">
             {/* Availability Form */}
             <div className="mb-4">
-              <div className="card shadow-sm border-0">
+              <div className="card post-update-card shadow-sm border-0">
                 <div 
                   className="card-header d-flex justify-content-between align-items-center d-md-none"
                   style={{ 
@@ -516,7 +516,7 @@ export const AvailabilityManager = () => {
 
             {/* Blocked Dates Section */}
             <div className="mb-4">
-              <div className="card shadow-sm border-0">
+              <div className="card post-update-card shadow-sm border-0">
                 <div 
                   className="card-header d-flex justify-content-between align-items-center d-md-none"
                   style={{ 
@@ -551,10 +551,10 @@ export const AvailabilityManager = () => {
 
           {/* Right Column: Availability List */}
           <div className="col-lg-8">
-            <div className="card shadow-sm border-0">
+            <div className="card post-update-card shadow-sm border-0">
               <div className="card-body p-4">
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                  <h5 className="card-title mb-0">{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+                  <h5 className="card-title mb-0" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
                   
                   {/* Admin Employee Filter */}
                   {isAdmin && employees.length > 0 && (
@@ -591,7 +591,7 @@ export const AvailabilityManager = () => {
                         const dayName = DAYS_OF_WEEK.find(d => d.value === parseInt(dayNum))?.label || 'Unknown';
                         return (
                           <div key={dayNum} className="mb-4">
-                            <h6 className="fw-bold mb-3" style={{ color: THEME_COLOR, fontSize: '1.1rem' }}>{dayName}</h6>
+                            <h6 className="fw-bold mb-3" style={{ color: '#000', fontSize: '1.1rem' }}>{dayName}</h6>
                             
                             {/* Desktop Table View */}
                             {!isMobile ? (
@@ -755,7 +755,7 @@ export const AvailabilityManager = () => {
                                             <div className="d-grid gap-2">
                                               <button
                                                 className="btn btn-outline-primary btn-sm"
-                                                style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
+                                                style={{ color: '#fff', background: THEME_COLOR, borderColor: THEME_COLOR, fontWeight: 600 }}
                                                 onClick={() => handleEdit(avail)}
                                               >
                                                 {t('edit')}

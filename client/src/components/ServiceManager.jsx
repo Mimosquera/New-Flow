@@ -254,9 +254,9 @@ export const ServiceManager = () => {
         <div className="row">
           {/* Service Form */}
           <div className="col-lg-4 mb-4" ref={formRef}>
-            <div className="card shadow-sm border-0">
+            <div className="card post-update-card shadow-sm border-0">
               <div className="card-body p-4">
-                <h5 className="card-title mb-4">
+                <h5 className="card-title mb-4 force-black-title">
                   {editingService ? t('editService') : t('addService')}
                 </h5>
 
@@ -326,8 +326,7 @@ export const ServiceManager = () => {
                   <div className="d-flex gap-2">
                     <button 
                       type="submit" 
-                      className="btn btn-lg flex-fill"
-                      style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none', fontWeight: '300' }}
+                      className="btn btn-lg flex-fill post-update-btn"
                     >
                       {editingService ? t('updateService') : t('addService')}
                     </button>
@@ -348,9 +347,9 @@ export const ServiceManager = () => {
 
           {/* Services List */}
           <div className="col-lg-8">
-            <div className="card shadow-sm border-0">
+            <div className="card post-update-card shadow-sm border-0">
               <div className="card-body">
-                <h5 className="card-title mb-4">{t('currentServices')}</h5>
+                <h5 className="card-title mb-4" style={{ color: '#fff' }}>{t('currentServices')}</h5>
                 {loading ? (
                   <p className="text-muted">{t('loading')}</p>
                 ) : services.length === 0 ? (
@@ -376,12 +375,13 @@ export const ServiceManager = () => {
                               <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
                                 <button
                                   className="btn btn-outline-primary"
-                                  style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
+                                  style={{ color: '#fff', background: THEME_COLOR, borderColor: THEME_COLOR, fontWeight: 600, position: 'relative', zIndex: 1 }}
                                   onClick={() => handleEdit(service)}
                                   disabled={!service?.id}
                                 >
                                   {t('edit')}
                                 </button>
+                                <span style={{ display: 'inline-block', width: '1px', height: '24px', background: '#b0bec5', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
                                 <button
                                   className="btn btn-outline-danger"
                                   onClick={() => handleDelete(service?.id)}
