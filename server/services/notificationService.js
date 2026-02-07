@@ -98,6 +98,18 @@ export const sendAppointmentRequestConfirmation = async (appointment, service) =
     <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Please do not reply to this email as it is not monitored. For assistance, call us at 804-745-2525.</em></p>
     <p>Thank you!</p>
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
+    <hr>
+    <h2>¡Gracias por su solicitud de cita!</h2>
+    <p>Hola ${customerName},</p>
+    <p>Hemos recibido su solicitud de cita para <strong>${service.name}</strong>.</p>
+    <p><strong>Fecha:</strong> ${formattedDate}<br>
+    <strong>Hora:</strong> ${formattedTime}</p>
+    <p>Revisaremos su solicitud y nos pondremos en contacto con usted pronto por correo electrónico y mensaje de texto. Su cita NO está reservada hasta que reciba un correo de confirmación indicando que la cita ha sido aceptada.</p>
+    <p>Si necesita cancelar esta solicitud, por favor <a href="${process.env.CLIENT_URL}/cancel-appointment/${appointment.id}">haga clic aquí</a>.</p>
+    <p>¿Preguntas? Llámenos al <strong>804-745-2525</strong></p>
+    <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Por favor, no responda a este correo ya que no es monitoreado. Para asistencia, llámenos al 804-745-2525.</em></p>
+    <p>¡Gracias!</p>
+    <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
   `;
 
   // SMS
@@ -133,6 +145,19 @@ export const notifyEmployeesOfNewAppointment = async (appointment, service, requ
     <p><a href="${process.env.CLIENT_URL}/employee-login" style="display: inline-block; padding: 12px 24px; background-color: rgb(5, 45, 63); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; margin: 16px 0;">Go to Employee Dashboard</a></p>
     <p>Or copy this link: ${process.env.CLIENT_URL}/employee-login</p>
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'} System</p>
+    <hr>
+    <h2>Nueva Solicitud de Cita</h2>
+    <p>Se ha enviado una nueva solicitud de cita:</p>
+    <p><strong>Cliente:</strong> ${customerName}<br>
+    <strong>Correo:</strong> ${customerEmail}<br>
+    <strong>Teléfono:</strong> ${customerPhone}<br>
+    <strong>Servicio:</strong> ${service.name}<br>
+    <strong>Fecha:</strong> ${formattedDate}<br>
+    <strong>Hora:</strong> ${formattedTime}<br>
+    <strong>Empleado Solicitado:</strong> ${requestedEmployee ? requestedEmployee.name : 'Sin Preferencia'}</p>
+    <p><a href="${process.env.CLIENT_URL}/employee-login" style="display: inline-block; padding: 12px 24px; background-color: rgb(5, 45, 63); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; margin: 16px 0;">Ir al Panel de Empleados</a></p>
+    <p>O copie este enlace: ${process.env.CLIENT_URL}/employee-login</p>
+    <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'} Sistema</p>
   `;
 
   // Send to business email and all employees in parallel
