@@ -366,18 +366,17 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 {displayedNews.map(article => (
                   <div key={article.id} className="col-md-6 col-lg-4 mb-4">
                     <div 
-                      className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
+                      className="card shadow-sm border-0 h-100 update-card-desktop"
+                      style={{ cursor: 'pointer', background: '#fff', borderRadius: '16px', boxShadow: '0 3px 8px rgba(5,45,63,0.15)' }}
                       onClick={() => handleUpdateClick(article)}
                     >
-                      <div className={`card-body ${styles.updateCardBody}`}>
-                        <h5 className="card-title">{article.title}</h5>
-                        
-                        {/* Display media if available */}
+                      <div className="card-body p-4 d-flex flex-column justify-content-between">
+                        <h5 className="card-title mb-2" style={{ fontWeight: '600', color: 'rgb(5,45,63)' }}>{article.title}</h5>
                         {article.media_url && (
                           <div className="mb-3">
                             {article.media_type === 'image' ? (
                               <img 
-                                  src={`${SERVER_BASE_URL}${article.media_url}`}
+                                src={`${SERVER_BASE_URL}${article.media_url}`}
                                 alt={article.title}
                                 className="img-fluid rounded"
                                 style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
@@ -394,9 +393,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
                             )}
                           </div>
                         )}
-                        
-                        <p className="card-text">{article.content.length > 100 ? article.content.substring(0, 100) + '...' : article.content}</p>
-                        <small className="text-muted">
+                        <p className="card-text mb-3" style={{ color: '#333', fontWeight: '400', fontSize: '1rem' }}>
+                          {article.content.length > 150 ? article.content.substring(0, 150) + '...' : article.content}
+                        </p>
+                        <small className="text-muted mt-auto" style={{ fontSize: '0.9rem' }}>
                           {new Date(article.date).toLocaleDateString()} • {article.author}
                         </small>
                       </div>

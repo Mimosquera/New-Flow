@@ -76,7 +76,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
       >
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
           <div className="modal-content" style={{ borderRadius: '30px', overflow: 'hidden' }}>
-            <div className="modal-header">
+            <div className="modal-header" style={{ paddingLeft: '1.5rem' }}>
               <h5 className="modal-title">{update.title}</h5>
               <button 
                 type="button" 
@@ -85,7 +85,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body">
+            <div className="modal-body p-4" style={{ padding: '2rem' }}>
               {/* Large media display */}
               {update.media_url && (
                 <div 
@@ -115,7 +115,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
               )}
               
               {/* Content */}
-              <p className="mb-3" style={{ whiteSpace: 'pre-wrap' }}>
+              <p className="mb-3" style={{ whiteSpace: 'pre-wrap', fontSize: '1rem', color: '#333' }}>
                 {update.content}
               </p>
               

@@ -475,7 +475,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                         {apt.status === 'cancelled' && (
                           <>
                             <strong>{t('cancelledBy')}:</strong> {(() => {
-                              if (!apt.cancelledBy) return t('unknown');
+                              if (!apt.cancelledBy) return t('customer');
                               if (apt.cancelledBy === 'customer') return t('customer');
                               if (apt.cancelledBy === 'employee') return t('employee');
                               if (apt.cancelledBy === 'admin') return t('admin');
