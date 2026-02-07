@@ -51,6 +51,11 @@ export const Update = sequelize.define('Update', {
       key: 'id',
     },
   },
+  language: {
+    type: DataTypes.ENUM('en', 'es'),
+    allowNull: false,
+    defaultValue: 'en',
+  },
 }, {
   tableName: 'updates',
   timestamps: true,

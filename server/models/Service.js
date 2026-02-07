@@ -32,6 +32,11 @@ export const Service = sequelize.define('Service', {
       notEmpty: true,
     },
   },
+  language: {
+    type: DataTypes.ENUM('en', 'es'),
+    allowNull: false,
+    defaultValue: 'en',
+  },
 }, {
   tableName: 'services',
   timestamps: true,

@@ -275,6 +275,14 @@ export const sendAppointmentCancelledNotification = async (appointment, service,
       <p>Questions? Call us at <strong>804-745-2525</strong></p>
       <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Please do not reply to this email as it is not monitored. For assistance, call us at 804-745-2525.</em></p>
       <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
+      <hr>
+      <h2>Solicitud de Cita Cancelada</h2>
+      <p>Hola ${customerName},</p>
+      <p>Su solicitud de cita para <strong>${service.name}</strong> el ${formattedDate} a las ${formattedTime} ha sido cancelada exitosamente.</p>
+      <p>¡Esperamos verlo pronto! Si lo desea, puede reservar otra cita en cualquier momento.</p>
+      <p>¿Preguntas? Llámenos al <strong>804-745-2525</strong></p>
+      <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Por favor, no responda a este correo ya que no es monitoreado. Para asistencia, llámenos al 804-745-2525.</em></p>
+      <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
     `
       : `
       <h2>Confirmed Appointment Cancelled</h2>
@@ -284,6 +292,15 @@ export const sendAppointmentCancelledNotification = async (appointment, service,
       <p>We hope to see you again soon! Feel free to book another appointment anytime.</p>
       <p>Questions? Call us at <strong>804-745-2525</strong></p>
       <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Please do not reply to this email as it is not monitored. For assistance, call us at 804-745-2525.</em></p>
+      <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
+      <hr>
+      <h2>Cita Confirmada Cancelada</h2>
+      <p>Hola ${customerName},</p>
+      <p>Su cita confirmada para <strong>${service.name}</strong> el ${formattedDate} a las ${formattedTime} ha sido cancelada.</p>
+      <p>Su barbero/estilista ha sido notificado de la cancelación.</p>
+      <p>¡Esperamos verlo pronto! Si lo desea, puede reservar otra cita en cualquier momento.</p>
+      <p>¿Preguntas? Llámenos al <strong>804-745-2525</strong></p>
+      <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Por favor, no responda a este correo ya que no es monitoreado. Para asistencia, llámenos al 804-745-2525.</em></p>
       <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
     `;
 

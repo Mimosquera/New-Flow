@@ -27,14 +27,28 @@ router.get('/', async (req, res) => {
  * Create a new service
  * Protected route - only employees
  */
+
+// Language detection utility (simple, can be replaced with better lib)
+function detectLanguage(text) {
+  // Naive: if contains accented chars or common Spanish words, guess 'es', else 'en'
+  if (/[áéíóúñü¿¡]/i.test(text) || /\b(el|la|de|que|y|en|un|una|por|con|para|es)\b/i.test(text)) {
+    return 'es';
+  }
+  return 'en';
+}
+
 router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'description', 'price']), async (req, res) => {
   try {
     const { name, description, price } = req.body;
+
+    // Detect language from name+description
+    const detectedLang = detectLanguage(`${name} ${description}`);
 
     const service = await Service.create({
       name: sanitizeString(name),
       description: sanitizeString(description),
       price,
+      language: detectedLang,
     });
 
     res.status(201).json(service);
@@ -86,8 +100,15 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    await service.destroy();
-    res.json({ message: 'Service deleted successfully' });
+    try {
+      await service.destroy();
+      res.json({ message: 'Service deleted successfully' });
+    } catch (err) {
+      if (err.name === 'SequelizeForeignKeyConstraintError') {
+        return res.status(400).json({ message: 'Cannot delete service: there are appointments using this service.' });
+      }
+      throw err;
+    }
   } catch (error) {
     console.error('Error deleting service:', error);
     res.status(500).json({ message: 'Failed to delete service' });

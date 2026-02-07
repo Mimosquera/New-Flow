@@ -53,9 +53,21 @@ router.get('/', async (req, res) => {
  * Create a new update
  * Protected route - only authenticated employees can create updates
  */
+
+// Language detection utility (simple, can be replaced with better lib)
+function detectLanguage(text) {
+  if (/[áéíóúñü¿¡]/i.test(text) || /\b(el|la|de|que|y|en|un|una|por|con|para|es)\b/i.test(text)) {
+    return 'es';
+  }
+  return 'en';
+}
+
 router.post('/', verifyToken, requireEmployee, upload.single('media'), validateRequired(['title', 'content']), async (req, res) => {
   try {
     const { title, content, author } = req.body;
+
+    // Detect language from title+content
+    const detectedLang = detectLanguage(`${title} ${content}`);
 
     const updateData = {
       title: sanitizeString(title),
@@ -63,6 +75,7 @@ router.post('/', verifyToken, requireEmployee, upload.single('media'), validateR
       author: author ? sanitizeString(author) : req.user.name || 'Employee',
       date: new Date().toISOString().split('T')[0],
       user_id: req.user.id,
+      language: detectedLang,
     };
 
     // Add media info if file was uploaded

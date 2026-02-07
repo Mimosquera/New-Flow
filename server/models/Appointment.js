@@ -92,6 +92,6 @@ export const Appointment = sequelize.define(
 );
 
 // Define associations
-Appointment.belongsTo(Service, { foreignKey: 'serviceId', as: 'service' });
+Appointment.belongsTo(Service, { foreignKey: 'serviceId', as: 'service', onDelete: 'RESTRICT' });
 Appointment.belongsTo(User, { foreignKey: 'employeeId', as: 'employee' });
 Appointment.belongsTo(User, { foreignKey: 'acceptedByEmployeeId', as: 'acceptedBy' });
