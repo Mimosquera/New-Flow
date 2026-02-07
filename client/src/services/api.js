@@ -1,7 +1,11 @@
+
 import axios from 'axios';
 import { getToken, removeToken } from '../utils/tokenUtils.js';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
+// Secure conditional logic for API URL selection
+const API_BASE_URL = import.meta.env.PROD
+  ? (import.meta.env.VITE_API_URL_PROD || 'https://new-flow-barbershop-573618993028.herokuapp.com/api')
+  : (import.meta.env.VITE_API_URL_DEV || 'http://localhost:3001/api');
 const SERVER_BASE_URL = API_BASE_URL.replace('/api', '');
 const DEFAULT_TIMEOUT = 30000;
 const PROTECTED_ROUTE_PREFIX = '/dashboard';
