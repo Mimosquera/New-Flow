@@ -67,7 +67,7 @@ export const AvailabilityManager = () => {
   const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState(FILTER_ALL_VALUE);
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
   const [showAddAvailability, setShowAddAvailability] = useState(false);
-  const [showBlockedDates, setShowBlockedDates] = useState(true);
+  const [showBlockedDates, setShowBlockedDates] = useState(false);
 
   /**
    * Handle window resize to update mobile state
@@ -441,7 +441,7 @@ export const AvailabilityManager = () => {
 
                     <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                      <div className="form-label fw-semibold">{t('daysOfWeek')} *</div>
+                      <div className="form-label fw-semibold days-of-week-header">{t('daysOfWeek')} *</div>
                       <div className="border rounded p-3">
                         <div className="row row-cols-1 row-cols-md-2 g-2">
                           {DAYS_OF_WEEK.map(day => (
@@ -687,7 +687,7 @@ export const AvailabilityManager = () => {
                                 {groupedAvailabilities[dayNum]
                                   .sort((a, b) => a.startTime.localeCompare(b.startTime))
                                   .map(avail => (
-                                    <div key={avail.id} className="card mb-3" style={{ border: `1px solid ${THEME_COLOR}` }}>
+                                    <div key={avail.id} className="card mb-3" style={{ border: '2px solid #5188b6' }}>
                                       <div className="card-body p-3">
                                         {isAdmin && (
                                           <div className="mb-2">

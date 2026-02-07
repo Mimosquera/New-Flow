@@ -356,7 +356,7 @@ export const ServiceManager = () => {
                   <p className="text-muted">{t('noServices')}</p>
                 ) : (
                   <div className="table-responsive">
-                    <table className="table table-hover">
+                    <table className="table table-hover current-services-table">
                       <thead>
                         <tr>
                           <th>{t('name')}</th>

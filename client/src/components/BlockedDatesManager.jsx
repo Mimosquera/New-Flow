@@ -258,9 +258,9 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
       {error && <Alert type="error" message={error} onClose={() => setError(null)} />}
       {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-      <div className="card post-update-card mb-4 shadow-sm border-0">
+      <div className="card post-update-card mb-4 shadow-sm border-0 block-date-card-border">
         <div className="card-body p-3">
-          <h6 className="mb-3 block-date-title">
+          <h6 className="mb-3 block-date-title" style={{ color: 'white' }}>
             {t('blockDateAndTime')}
           </h6>
           <form onSubmit={handleSubmit}>

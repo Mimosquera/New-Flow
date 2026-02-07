@@ -1,3 +1,18 @@
+/* Current Services Table Styles */
+.current-services-table {
+  border: 4px solid black !important;
+  border-radius: 1rem !important;
+  overflow: hidden;
+}
+/* Block Date & Time section white border */
+.block-date-card-border {
+  border: 1px solid #fff !important;
+  border-radius: 1rem !important;
+}
+/* Force white for Days of Week header in Add Availability */
+.post-update-card .form-label.days-of-week-header {
+  color: #fff !important;
+}
 /* Blocked Dates: Block Date & Time Title */
 .block-date-title {
   font-size: 0.95rem;
@@ -79,6 +94,13 @@
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgba(5, 45, 63, 0.15);
   border: none;
+}
+
+/* Expanded Employee Name Card */
+.expanded-employee-card {
+  background: rgb(5, 45, 63) !important;
+  color: #fff !important;
+  border-radius: 1rem !important;
 }
 .post-update-card .card-title {
   color: #46a1a1;

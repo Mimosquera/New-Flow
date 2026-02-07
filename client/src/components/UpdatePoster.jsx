@@ -300,7 +300,7 @@ export const UpdatePoster = () => {
                   const canDelete = isAdmin || isOwner;
 
                   return (
-                  <div key={update.id} className="card shadow-sm border-0 mb-3">
+                  <div key={update.id} className="card shadow-sm border-0 mb-3" style={{ boxShadow: '0 12px 48px 0 rgba(5,45,63,0.45), 0 4px 16px 0 rgba(0,0,0,0.25)' }}>
                     <div className="card-body">
                       <div className="d-flex justify-content-between align-items-start mb-2">
                         <h6 
@@ -312,7 +312,15 @@ export const UpdatePoster = () => {
                         </h6>
                         {canDelete && (
                         <button
-                          className="btn btn-sm btn-outline-danger"
+                          className="btn btn-sm"
+                          style={{
+                            backgroundColor: 'rgb(5, 45, 63)',
+                            color: 'white',
+                            fontWeight: 'bold',
+                            boxShadow: '0 2px 8px rgba(5,45,63,0.18), 0 1px 1px rgba(0,0,0,0.12)',
+                            border: 'none',
+                            padding: '0.25rem 0.75rem',
+                          }}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDelete(update.id);
