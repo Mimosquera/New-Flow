@@ -177,7 +177,7 @@ export const UpdatePoster = () => {
           <div className="col-lg-5 mb-4">
             <div className="card post-update-card shadow-sm border-0">
               <div className="card-body p-4">
-                <h5 className="card-title mb-4 force-black-title">{t('postUpdate')}</h5>
+                <h5 className="card-title mb-4 force-black-title" style={{ textShadow: '0 8px 32px rgba(5,45,63,0.55), 0 4px 16px rgba(0,0,0,0.35)' }}>{t('postUpdate')}</h5>
 
                 {success && (
                   <Alert 
@@ -286,7 +286,7 @@ export const UpdatePoster = () => {
 
           {/* Updates List */}
           <div className="col-lg-7">
-            <h5 className="mb-4">{t('recentUpdates')}</h5>
+            <h5 className="mb-4" style={{ textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('recentUpdates')}</h5>
             {loading ? (
               <p className="text-muted">{t('loading')}</p>
             ) : translatedUpdates.length === 0 ? (

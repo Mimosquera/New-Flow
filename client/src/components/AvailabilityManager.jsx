@@ -421,7 +421,7 @@ export const AvailabilityManager = () => {
                 </div>
                 <div className={`d-md-block ${showAddAvailability ? 'd-block' : 'd-none'}`}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-4 d-none d-md-block">{t('addAvailability')}</h5>
+                    <h5 className="card-title mb-4 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('addAvailability')}</h5>
 
                     {success && (
                       <Alert 
@@ -534,7 +534,7 @@ export const AvailabilityManager = () => {
                 </div>
                 <div className={`d-md-block ${showBlockedDates ? 'd-block' : 'd-none'}`}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-4 d-none d-md-block" style={{ color: THEME_COLOR }}>
+                    <h5 className="card-title mb-4 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
                       {t('blockSpecificDates')}
                     </h5>
                     <BlockedDatesManager 
@@ -659,14 +659,22 @@ export const AvailabilityManager = () => {
                                                 </button>
                                               </div>
                                             ) : (
-                                              <div className="btn-group btn-group-sm">
+                                              <div className="btn-group btn-group-sm align-items-center">
                                                 <button
                                                   className="btn btn-outline-primary"
-                                                  style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
+                                                  style={{ color: '#fff', borderColor: THEME_COLOR, backgroundColor: THEME_COLOR }}
                                                   onClick={() => handleEdit(avail)}
                                                 >
                                                   {t('edit')}
                                                 </button>
+                                                <span style={{
+                                                  display: 'inline-block',
+                                                  width: '2px',
+                                                  height: '24px',
+                                                  background: '#cfd8dc',
+                                                  margin: '0 8px',
+                                                  borderRadius: '1px'
+                                                }}></span>
                                                 <button
                                                   className="btn btn-outline-danger"
                                                   onClick={() => handleDelete(avail.id)}

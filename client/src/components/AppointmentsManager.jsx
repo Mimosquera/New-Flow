@@ -405,6 +405,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       )}
 
       {/* Filter Dropdown - Mobile only (desktop version is in header) */}
+      {/* Filter Dropdown - Mobile only */}
       <div className="mb-3 d-md-none">
         <label htmlFor="statusFilter" className="form-label me-2">{t('filter')}:</label>
         <select
@@ -423,11 +424,51 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       </div>
 
       {filteredAppointments.length === 0 ? (
-        <div className="alert alert-info">
-          {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+        <div className="d-flex align-items-center mb-3">
+          {/* Desktop filter dropdown on left */}
+          <div className="me-3 d-none d-md-block">
+            <label htmlFor="statusFilterDesktop" className="form-label me-2">{t('filter')}:</label>
+            <select
+              id="statusFilterDesktop"
+              className="form-select d-inline-block w-auto"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option value="all">{t('allAppointments')}</option>
+              <option value="upcoming">{t('upcoming')}</option>
+              <option value="pending">{t('pending')}</option>
+              <option value="accepted">{t('accepted')}</option>
+              <option value="declined">{t('declined')}</option>
+              <option value="cancelled">{t('cancelled')}</option>
+            </select>
+          </div>
+          <div className="alert alert-info mb-0">
+            {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+          </div>
         </div>
       ) : (
         <div className="row g-3 justify-content-center">
+          {/* Desktop filter dropdown on left next to top card */}
+          {filteredAppointments.length > 0 && (
+            <div className="d-none d-md-flex align-items-center mb-2">
+              <div className="me-3">
+                <label htmlFor="statusFilterDesktop" className="form-label me-2">{t('filter')}:</label>
+                <select
+                  id="statusFilterDesktop"
+                  className="form-select d-inline-block w-auto"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                >
+                  <option value="all">{t('allAppointments')}</option>
+                  <option value="upcoming">{t('upcoming')}</option>
+                  <option value="pending">{t('pending')}</option>
+                  <option value="accepted">{t('accepted')}</option>
+                  <option value="declined">{t('declined')}</option>
+                  <option value="cancelled">{t('cancelled')}</option>
+                </select>
+              </div>
+            </div>
+          )}
           {filteredAppointments.map((apt) => (
             <div key={apt.id} className="col-12 col-lg-10 col-xl-8">
               <div className="card shadow-sm">

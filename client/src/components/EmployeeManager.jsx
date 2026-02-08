@@ -250,7 +250,7 @@ export const EmployeeManager = () => {
           </button>
           {expandedEmployeeId === employee.id && (
             <div className="p-3 border-top bg-light">
-              <h6 className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 700 }}>{t('editPassword')}</h6>
+              <h6 className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 700, textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('editPassword')}</h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
               <form onSubmit={(e) => handleUpdatePassword(e, employee.id)}>
@@ -295,7 +295,7 @@ export const EmployeeManager = () => {
               </form>
               <hr className="my-4 section-divider" style={{ borderColor: '#46a1a1', borderWidth: '2px' }} />
               <div className="mt-4">
-                <h6 className="mb-3 text-danger section-header">{t('removeEmployee')}</h6>
+                <h6 className="mb-3 text-danger section-header" style={{ textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('removeEmployee')}</h6>
                 {!showDeleteConfirm || showDeleteConfirm !== employee.id ? (
                   <button
                     className="btn btn-outline-danger btn-sm"

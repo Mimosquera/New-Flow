@@ -195,9 +195,9 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        {/* Desktop: Horizontal Tabs */}
-        <div className="mb-0 pb-3">
-          <ul className="nav nav-tabs d-none d-md-flex mb-0 dashboard-tabs">
+        {/* Desktop: Horizontal Tabs - moved to right end of header row */}
+        <div className="d-none d-md-flex" style={{ position: 'absolute', right: '2.2rem', top: '87%', transform: 'translateY(-87%)', zIndex: 10 }}>
+          <ul className="nav nav-tabs mb-0 dashboard-tabs">
             <li className="nav-item">
               <button 
                 className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
@@ -294,24 +294,7 @@ export default function EmployeeDashboard() {
                 </select>
               </div>
               {/* Filter on desktop only */}
-              <div className="d-none d-md-block">
-                <label htmlFor="statusFilterHeader" className="form-label me-2 mb-0">{t('filter')}:</label>
-                <select
-                  id="statusFilterHeader"
-                  name="statusFilterHeader"
-                  className="form-select d-inline-block w-auto"
-                  value={appointmentFilter}
-                  onChange={(e) => setAppointmentFilter(e.target.value)}
-                  autoComplete="off"
-                >
-                  <option value="all">{t('allAppointments')}</option>
-                  <option value="upcoming">{t('upcoming')}</option>
-                  <option value="pending">{t('pending')}</option>
-                  <option value="accepted">{t('accepted')}</option>
-                  <option value="declined">{t('declined')}</option>
-                  <option value="cancelled">{t('cancelled')}</option>
-                </select>
-              </div>
+              {/* Removed desktop filter dropdown under navbar */}
             </div>
           </div>
         )}
