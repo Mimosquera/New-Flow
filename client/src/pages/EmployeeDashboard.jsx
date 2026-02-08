@@ -493,7 +493,10 @@ export default function EmployeeDashboard() {
               maxWidth: '300px', 
               width: '100%', 
               height: 'auto', 
-              filter: 'drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32))' 
+              filter: 'drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32))',
+              WebkitBoxShadow: 'none',
+              boxShadow: 'none',
+              background: 'transparent' 
             }}
           />
         </div>

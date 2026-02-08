@@ -37,7 +37,6 @@ export const UpdatePoster = () => {
       setLoading(true);
       const response = await updateService.getAll();
       setUpdates(response.data.updates);
-      setTranslatedUpdates(response.data.updates); // Initially English
     } catch (error) {
       console.error('Error fetching updates:', error);
     } finally {
@@ -57,26 +56,44 @@ export const UpdatePoster = () => {
 
   // Auto-translate updates when language changes
   useEffect(() => {
+    // Simple language detection (checks for Spanish characters/words)
+    const detectLang = (text) => {
+      if (!text) return 'en';
+      // Basic check for Spanish words/characters
+      const spanishWords = ['el', 'la', 'de', 'que', 'y', 'en', 'los', 'del', 'se', 'por', 'un', 'una', 'con', 'para', 'es', 'al', 'lo', 'como', 'más', 'pero', 'sus', 'le', 'ya', 'o', 'este', 'sí', 'porque', 'esta', 'entre', 'cuando', 'muy', 'sin', 'sobre', 'también', 'me', 'hasta', 'hay', 'donde', 'quien', 'desde', 'todo', 'nos', 'durante', 'todos', 'uno', 'les', 'ni', 'contra', 'otros', 'ese', 'eso', 'ante', 'ellos', 'e', 'esto', 'mí', 'antes', 'algunos', 'qué', 'unos', 'yo', 'otro', 'otras', 'otra', 'él', 'tanto', 'esa', 'estos', 'mucho', 'quienes', 'nada', 'muchos', 'cual', 'sea', 'poco', 'ella', 'estar', 'estas', 'algunas', 'algo', 'nosotros', 'mi', 'mis', 'tú', 'te', 'ti', 'tu', 'tus', 'ellas', 'nosotras', 'vosotros', 'vosotras', 'os', 'mío', 'mía', 'míos', 'mías', 'tuyo', 'tuya', 'tuyos', 'tuyas', 'suyo', 'suya', 'suyos', 'suyas', 'nuestro', 'nuestra', 'nuestros', 'nuestras', 'vuestro', 'vuestra', 'vuestros', 'vuestras', 'esos', 'esas', 'estoy', 'estás', 'está', 'estamos', 'estáis', 'están', 'esté', 'estés', 'estemos', 'estéis', 'estén', 'estaré', 'estarás', 'estará', 'estaremos', 'estaréis', 'estarán', 'estaría', 'estarías', 'estaríamos', 'estaríais', 'estarían', 'estaba', 'estabas', 'estábamos', 'estabais', 'estaban', 'estuve', 'estuviste', 'estuvo', 'estuvimos', 'estuvisteis', 'estuvieron', 'estuviera', 'estuvieras', 'estuviéramos', 'estuvierais', 'estuvieran', 'estuviese', 'estuvieses', 'estuviésemos', 'estuvieseis', 'estuviesen', 'estando', 'estado', 'estada', 'estados', 'estadas', 'estad'];
+      const lower = text.toLowerCase();
+      let score = 0;
+      spanishWords.forEach(word => {
+        if (lower.includes(word)) score++;
+      });
+      // Spanish accented characters
+      if (/[áéíóúñü¿¡]/.test(lower)) score += 2;
+      return score > 2 ? 'es' : 'en';
+    };
+
     const translateUpdates = async () => {
       if (updates.length === 0) return;
-
-      if (language === 'es') {
-        try {
-          const translated = await Promise.all(
-            updates.map(update => 
-              translateObject(update, ['title', 'content', 'author'], 'es', 'en')
-            )
-          );
-          setTranslatedUpdates(translated);
-        } catch (error) {
-          console.error('Error translating updates:', error);
-          setTranslatedUpdates(updates);
-        }
-      } else {
+      try {
+        const translated = await Promise.all(
+          updates.map(update => {
+            // Prefer update.language if present
+            const sourceLang = update.language || detectLang(update.title + ' ' + update.content);
+            // Translate to opposite of UI language
+            const targetLang = language === 'es' ? 'es' : 'en';
+            // Only translate if sourceLang !== targetLang
+            if (sourceLang !== targetLang) {
+              return translateObject(update, ['title', 'content', 'author'], targetLang, sourceLang);
+            } else {
+              return Promise.resolve(update);
+            }
+          })
+        );
+        setTranslatedUpdates(await Promise.all(translated));
+      } catch (error) {
+        console.error('Error translating updates:', error);
         setTranslatedUpdates(updates);
       }
     };
-
     translateUpdates();
   }, [language, updates]);
 
@@ -108,6 +125,7 @@ export const UpdatePoster = () => {
       resetForm();
       setMediaFile(null);
       setMediaPreview(null);
+      // Do not setTranslatedUpdates here; translation effect will handle it
     }
   );
 
