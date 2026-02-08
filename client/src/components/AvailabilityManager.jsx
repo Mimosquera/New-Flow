@@ -750,30 +750,50 @@ export const AvailabilityManager = () => {
                                         ) : (
                                           /* View Mode */
                                           <div>
-                                            <div className="d-flex justify-content-between mb-2">
-                                              <div>
+                                            <div className="d-flex align-items-center mb-2">
+                                              <div className="me-3">
                                                 <small className="text-muted d-block">{t('startTime')}</small>
                                                 <strong>{formatTime(avail.startTime)}</strong>
                                               </div>
-                                              <div>
+                                              <div className="me-3">
                                                 <small className="text-muted d-block">{t('endTime')}</small>
                                                 <strong>{formatTime(avail.endTime)}</strong>
                                               </div>
-                                            </div>
-                                            <div className="d-grid gap-2">
-                                              <button
-                                                className="btn btn-outline-primary btn-sm"
-                                                style={{ color: '#fff', background: THEME_COLOR, borderColor: THEME_COLOR, fontWeight: 600 }}
-                                                onClick={() => handleEdit(avail)}
-                                              >
-                                                {t('edit')}
-                                              </button>
-                                              <button
-                                                className="btn btn-outline-danger btn-sm"
-                                                onClick={() => handleDelete(avail.id)}
-                                              >
-                                                {t('delete')}
-                                              </button>
+                                              <div className="d-flex align-items-center ms-auto">
+                                                <button
+                                                  className="btn btn-outline-primary btn-sm"
+                                                  style={{
+                                                    color: '#fff',
+                                                    borderColor: THEME_COLOR,
+                                                    backgroundColor: THEME_COLOR,
+                                                    fontWeight: 600,
+                                                    borderTopRightRadius: 0,
+                                                    borderBottomRightRadius: 0
+                                                  }}
+                                                  onClick={() => handleEdit(avail)}
+                                                >
+                                                  {t('edit')}
+                                                </button>
+                                                <span style={{
+                                                  display: 'inline-block',
+                                                  width: '2px',
+                                                  height: '24px',
+                                                  background: '#cfd8dc',
+                                                  margin: '0 8px',
+                                                  borderRadius: '1px'
+                                                }}></span>
+                                                <button
+                                                  className="btn btn-outline-danger btn-sm"
+                                                  style={{
+                                                    borderColor: THEME_COLOR,
+                                                    borderTopLeftRadius: 0,
+                                                    borderBottomLeftRadius: 0
+                                                  }}
+                                                  onClick={() => handleDelete(avail.id)}
+                                                >
+                                                  {t('delete')}
+                                                </button>
+                                              </div>
                                             </div>
                                           </div>
                                         )}

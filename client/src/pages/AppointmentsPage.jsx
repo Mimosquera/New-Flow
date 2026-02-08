@@ -426,6 +426,15 @@ export const AppointmentsPage = () => {
             style={{ maxWidth: '300px', width: '100%', height: 'auto' }}
           />
         </div>
+
+        {/* Centered No Appointments Message */}
+        {availableTimes.length === 0 && formData.date && !loadingTimes && (
+          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80px' }}>
+            <span className="text-muted text-center" style={{ fontSize: '1.2rem' }}>
+              {t('noAppointmentsAtThisTime') || 'No appointments at this time.'}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
