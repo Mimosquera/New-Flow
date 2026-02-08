@@ -121,7 +121,7 @@ export const UpdatePoster = () => {
 
       // Add new update to the top of the list
       setUpdates([response.data, ...updates]);
-      setSuccess('Update posted successfully!');
+      setSuccess(t('updatePosted'));
       resetForm();
       setMediaFile(null);
       setMediaPreview(null);
