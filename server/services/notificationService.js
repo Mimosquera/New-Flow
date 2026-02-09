@@ -310,8 +310,7 @@ export const sendAppointmentCancelledNotification = async (appointment, service,
     await sendSMS(customerPhone, smsMessage);
   }
 
-  // TODO: Notify employee if appointment was accepted
-  // This would require passing employee info to this function
+  // Note: Employee notification for cancellations is handled by notifyEmployeeOfCancellation()
 };
 
 export const notifyEmployeeOfCancellation = async (appointment, service, employee) => {
