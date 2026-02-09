@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(heroku logs:*)"
+      "Bash(heroku logs:*)",
+      "Bash(heroku auth:whoami:*)",
+      "Bash(heroku login:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
