@@ -425,6 +425,26 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   border-left: 4px solid #28a745;
 }
 
+/* Dashboard Logo */
+.dashboard-logo {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32));
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   .hero-section h1 {
@@ -454,6 +474,10 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
     margin-left: 15px !important;
     margin-right: 15px !important;
     box-sizing: border-box;
+  }
+  .no-appointments-message {
+    text-align: center;
+    width: 100%;
   }
 }
 
