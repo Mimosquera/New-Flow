@@ -298,7 +298,12 @@ export const AppointmentsPage = () => {
                     >
                       <option value="">{t('selectService')}</option>
                       {translatedServices.map(s => (
-                        <option key={s.id} value={s.id}>{s.name} - ${parseFloat(s.price).toFixed(2)}</option>
+                        <option key={s.id} value={s.id}>
+                          {s.name} - {s.price_max
+                            ? `$${parseFloat(s.price).toFixed(2)} - $${parseFloat(s.price_max).toFixed(2)}`
+                            : `$${parseFloat(s.price).toFixed(2)}`
+                          }
+                        </option>
                       ))}
                     </select>
                   </div>

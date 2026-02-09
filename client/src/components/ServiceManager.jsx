@@ -37,6 +37,7 @@ export const ServiceManager = () => {
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState(null);
+  const [isPriceRange, setIsPriceRange] = useState(false);
   const formRef = useRef(null);
 
   /**
@@ -115,7 +116,8 @@ export const ServiceManager = () => {
     {
       name: '',
       description: '',
-      price: ''
+      price: '',
+      price_max: ''
     },
     async (data) => {
       try {
@@ -128,6 +130,17 @@ export const ServiceManager = () => {
         const priceNum = parseFloat(data.price);
         if (isNaN(priceNum) || priceNum < 0) {
           throw new Error(t('invalidPrice') || 'Invalid price value');
+        }
+
+        // Validate price_max if provided
+        if (data.price_max) {
+          const priceMaxNum = parseFloat(data.price_max);
+          if (isNaN(priceMaxNum) || priceMaxNum < 0) {
+            throw new Error(t('invalidMaxPrice') || 'Invalid maximum price value');
+          }
+          if (priceMaxNum <= priceNum) {
+            throw new Error(t('maxPriceMustBeGreater') || 'Maximum price must be greater than minimum price');
+          }
         }
 
         if (editingService) {
@@ -146,8 +159,9 @@ export const ServiceManager = () => {
           setServices([...services, response.data]);
           setSuccess(t('serviceAdded') || 'Service created successfully!');
         }
-        
+
         resetForm();
+        setIsPriceRange(false);
       } catch (err) {
         console.error('Error saving service:', err);
         throw err; // Re-throw to be handled by useForm
@@ -188,7 +202,9 @@ export const ServiceManager = () => {
         name: service.name || '',
         description: service.description || '',
         price: service.price || '',
+        price_max: service.price_max || '',
       });
+      setIsPriceRange(!!service.price_max);
       setSuccess(null);
       
       // Scroll to form on mobile for better UX
@@ -209,11 +225,24 @@ export const ServiceManager = () => {
     try {
       setEditingService(null);
       resetForm();
+      setIsPriceRange(false);
       setSuccess(null);
     } catch (error) {
       console.error('Error canceling edit:', error);
     }
   }, [resetForm]);
+
+  const handlePriceRangeToggle = useCallback((e) => {
+    try {
+      const checked = e.target.checked;
+      setIsPriceRange(checked);
+      if (!checked) {
+        setFormData(prev => ({ ...prev, price_max: '' }));
+      }
+    } catch (error) {
+      console.error('Error toggling price range:', error);
+    }
+  }, [setFormData]);
 
   /**
    * Delete a service with confirmation
@@ -261,6 +290,18 @@ export const ServiceManager = () => {
       return '0.00';
     }
   }, []);
+
+  const formatPriceDisplay = useCallback((price, priceMax) => {
+    try {
+      if (priceMax && priceMax !== '' && priceMax !== null) {
+        return `$${formatPrice(price)} - $${formatPrice(priceMax)}`;
+      }
+      return `$${formatPrice(price)}`;
+    } catch (error) {
+      console.error('Error formatting price display:', error);
+      return `$${formatPrice(price)}`;
+    }
+  }, [formatPrice]);
 
   return (
     <div className="service-manager">
@@ -318,7 +359,9 @@ export const ServiceManager = () => {
                   </div>
 
                   <div className="mb-3">
-                    <label htmlFor="price" className="form-label">{t('price')}</label>
+                    <label htmlFor="price" className="form-label">
+                      {isPriceRange ? (t('minPrice') || 'Minimum Price') : t('price')}
+                    </label>
                     <div className="input-group">
                       <span className="input-group-text">$</span>
                       <input
@@ -330,12 +373,56 @@ export const ServiceManager = () => {
                         className="form-control"
                         value={formData.price}
                         onChange={handleChange}
-                        placeholder={t('pricePlaceholder')}
+                        placeholder={isPriceRange ? (t('minPricePlaceholder') || '20.00') : t('pricePlaceholder')}
                         required
                         autoComplete="off"
                       />
                     </div>
                   </div>
+
+                  <div className="mb-3">
+                    <div className="form-check">
+                      <input
+                        id="priceRangeCheckbox"
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={isPriceRange}
+                        onChange={handlePriceRangeToggle}
+                        style={{ cursor: 'pointer' }}
+                      />
+                      <label
+                        htmlFor="priceRangeCheckbox"
+                        className="form-check-label"
+                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                      >
+                        {t('usePriceRange') || 'Use price range'}
+                      </label>
+                    </div>
+                  </div>
+
+                  {isPriceRange && (
+                    <div className="mb-3">
+                      <label htmlFor="price_max" className="form-label">
+                        {t('maxPrice') || 'Maximum Price'}
+                      </label>
+                      <div className="input-group">
+                        <span className="input-group-text">$</span>
+                        <input
+                          id="price_max"
+                          name="price_max"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          className="form-control"
+                          value={formData.price_max}
+                          onChange={handleChange}
+                          placeholder={t('maxPricePlaceholder') || '40.00'}
+                          required={isPriceRange}
+                          autoComplete="off"
+                        />
+                      </div>
+                    </div>
+                  )}
 
                   <div className="d-flex gap-2">
                     <button 
@@ -384,7 +471,7 @@ export const ServiceManager = () => {
                           <tr key={service?.id || `service-${Date.now()}`}>
                             <td className="fw-bold">{service?.name || 'N/A'}</td>
                             <td className="d-none d-md-table-cell">{service?.description || 'N/A'}</td>
-                            <td>${formatPrice(service?.price)}</td>
+                            <td>{formatPriceDisplay(service?.price, service?.price_max)}</td>
                             <td>
                               <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
                                 <button
