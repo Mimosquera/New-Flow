@@ -28,7 +28,20 @@ function detectLanguage(text) {
 // POST /api/services
 router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'description', 'price']), async (req, res) => {
   try {
-    const { name, description, price } = req.body;
+    const { name, description, price, price_max } = req.body;
+
+    if (price_max) {
+      const priceNum = parseFloat(price);
+      const priceMaxNum = parseFloat(price_max);
+
+      if (isNaN(priceMaxNum) || priceMaxNum < 0) {
+        return res.status(400).json({ message: 'Invalid maximum price value' });
+      }
+
+      if (priceMaxNum <= priceNum) {
+        return res.status(400).json({ message: 'Maximum price must be greater than minimum price' });
+      }
+    }
 
     const detectedLang = detectLanguage(`${name} ${description}`);
 
@@ -36,6 +49,7 @@ router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'descri
       name: sanitizeString(name),
       description: sanitizeString(description),
       price,
+      price_max: price_max || null,
       language: detectedLang,
     });
 
@@ -50,17 +64,34 @@ router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'descri
 router.put('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price } = req.body;
+    const { name, description, price, price_max } = req.body;
 
     const service = await Service.findByPk(id);
     if (!service) {
       return res.status(404).json({ message: 'Service not found' });
     }
 
+    const updatedPrice = price || service.price;
+    const updatedPriceMax = price_max !== undefined ? price_max : service.price_max;
+
+    if (updatedPriceMax) {
+      const priceNum = parseFloat(updatedPrice);
+      const priceMaxNum = parseFloat(updatedPriceMax);
+
+      if (isNaN(priceMaxNum) || priceMaxNum < 0) {
+        return res.status(400).json({ message: 'Invalid maximum price value' });
+      }
+
+      if (priceMaxNum <= priceNum) {
+        return res.status(400).json({ message: 'Maximum price must be greater than minimum price' });
+      }
+    }
+
     await service.update({
       name: name ? sanitizeString(name) : service.name,
       description: description ? sanitizeString(description) : service.description,
-      price: price || service.price,
+      price: updatedPrice,
+      price_max: updatedPriceMax || null,
     });
 
     res.json(service);

@@ -32,6 +32,10 @@ export const Service = sequelize.define('Service', {
       notEmpty: true,
     },
   },
+  price_max: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   language: {
     type: DataTypes.ENUM('en', 'es'),
     allowNull: false,

@@ -299,7 +299,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   <div className="card-body">
                     <h5 className="card-title">{service.name}</h5>
                     <p className="card-text text-muted">{service.description}</p>
-                    <h6 className="card-subtitle fw-bold">${parseFloat(service.price).toFixed(2)}</h6>
+                    <h6 className="card-subtitle fw-bold">
+                      {service.price_max
+                        ? `$${parseFloat(service.price).toFixed(2)} - $${parseFloat(service.price_max).toFixed(2)}`
+                        : `$${parseFloat(service.price).toFixed(2)}`
+                      }
+                    </h6>
                     {expandedServiceId === service.id && (
                       <div className="mt-3">
                         <button
