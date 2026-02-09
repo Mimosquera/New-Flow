@@ -38,14 +38,14 @@ export const isTokenValid = (token) => {
 
   try {
     const decoded = jwtDecode(token);
-    
+
     if (!decoded || typeof decoded.exp !== 'number') {
       return false;
     }
 
     const expirationTime = decoded.exp * MILLISECONDS_PER_SECOND;
     const currentTime = Date.now();
-    
+
     return expirationTime > currentTime;
   } catch (error) {
     return false;

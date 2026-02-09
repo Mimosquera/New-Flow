@@ -6,9 +6,6 @@ import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-/**
- * Helper function to create JWT token
- */
 function createToken(user) {
   const payload = {
     id: user.id,
@@ -21,26 +18,20 @@ function createToken(user) {
   return jwt.encode(payload, jwtConfig.secret);
 }
 
-/**
- * Register endpoint
- * POST /api/auth/register
- */
+// POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Invalid email format' });
     }
 
-    // Trim and sanitize inputs
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
 
@@ -52,20 +43,17 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    // Check if user exists
     const existingUser = await User.findOne({ where: { email: trimmedEmail } });
     if (existingUser) {
       return res.status(409).json({ message: 'Email already registered' });
     }
 
-    // Create user
-    const user = await User.create({ 
-      name: trimmedName, 
-      email: trimmedEmail, 
-      password 
+    const user = await User.create({
+      name: trimmedName,
+      email: trimmedEmail,
+      password
     });
 
-    // Create token
     const token = createToken(user);
 
     res.status(201).json({
@@ -79,35 +67,27 @@ router.post('/register', async (req, res) => {
   }
 });
 
-/**
- * Login endpoint
- * POST /api/auth/login
- */
+// POST /api/auth/login
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    // Sanitize email
     const trimmedEmail = email.trim().toLowerCase();
 
-    // Find user
     const user = await User.findOne({ where: { email: trimmedEmail } });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Verify password
     const isValidPassword = await user.verifyPassword(password);
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Create token
     const token = createToken(user);
 
     res.json({
@@ -121,40 +101,31 @@ router.post('/login', async (req, res) => {
   }
 });
 
-/**
- * Employee Login endpoint
- * POST /api/auth/employee-login
- */
+// POST /api/auth/employee-login
 router.post('/employee-login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Validation
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    // Sanitize email
     const trimmedEmail = email.trim().toLowerCase();
 
-    // Find user
     const user = await User.findOne({ where: { email: trimmedEmail } });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Check if user is an employee
     if (!user.isEmployee) {
       return res.status(403).json({ message: 'Employee access only' });
     }
 
-    // Verify password
     const isValidPassword = await user.verifyPassword(password);
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
-    // Create token
     const token = createToken(user);
 
     res.json({
@@ -168,10 +139,7 @@ router.post('/employee-login', async (req, res) => {
   }
 });
 
-/**
- * Verify endpoint (check token validity)
- * GET /api/auth/verify
- */
+// GET /api/auth/verify
 router.get('/verify', verifyToken, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
@@ -189,10 +157,7 @@ router.get('/verify', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Get current user
- * GET /api/auth/me
- */
+// GET /api/auth/me
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
@@ -207,33 +172,26 @@ router.get('/me', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Create employee account (Admin only)
- * POST /api/auth/create-employee
- */
+// POST /api/auth/create-employee
 router.post('/create-employee', verifyToken, async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
     const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
     if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
-    // Validation
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Name, email, and password are required' });
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.status(400).json({ message: 'Invalid email format' });
     }
 
-    // Trim and sanitize inputs
     const trimmedName = name.trim();
     const trimmedEmail = email.trim().toLowerCase();
 
@@ -245,16 +203,14 @@ router.post('/create-employee', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    // Check if user exists
     const existingUser = await User.findOne({ where: { email: trimmedEmail } });
     if (existingUser) {
       return res.status(409).json({ message: 'Email already registered' });
     }
 
-    // Create employee user (isEmployee: true)
-    const user = await User.create({ 
-      name: trimmedName, 
-      email: trimmedEmail, 
+    const user = await User.create({
+      name: trimmedName,
+      email: trimmedEmail,
       password,
       isEmployee: true
     });
@@ -269,20 +225,15 @@ router.post('/create-employee', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Get all employees (Admin only)
- * GET /api/auth/employees
- */
+// GET /api/auth/employees
 router.get('/employees', verifyToken, async (req, res) => {
   try {
-    // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
     const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
     if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
-    // Get all employees (excluding password)
     const employees = await User.findAll({
       where: { isEmployee: true },
       attributes: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
@@ -296,38 +247,30 @@ router.get('/employees', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Update employee password (Admin only, requires admin password verification)
- * PUT /api/auth/update-employee-password
- */
+// PUT /api/auth/update-employee-password
 router.put('/update-employee-password', verifyToken, async (req, res) => {
   try {
     const { employeeId, newPassword, adminPassword } = req.body;
 
-    // Validation
     if (!employeeId || !newPassword || !adminPassword) {
       return res.status(400).json({ message: 'Employee ID, new password, and admin password are required' });
     }
 
-    // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
     const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
     if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
-    // Verify admin password
     const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
     if (!isValidAdminPassword) {
       return res.status(401).json({ message: 'Invalid admin password' });
     }
 
-    // Validate new password
     if (newPassword.length < 6) {
       return res.status(400).json({ message: 'New password must be at least 6 characters' });
     }
 
-    // Find employee
     const employee = await User.findByPk(employeeId);
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
@@ -337,7 +280,6 @@ router.put('/update-employee-password', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'User is not an employee' });
     }
 
-    // Update password (will be hashed automatically by model hook)
     await employee.update({ password: newPassword });
 
     res.json({
@@ -350,34 +292,27 @@ router.put('/update-employee-password', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Delete employee (Admin only, requires admin password verification)
- * DELETE /api/auth/employee/:id
- */
+// DELETE /api/auth/employee/:id
 router.delete('/employee/:id', verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { adminPassword } = req.body;
 
-    // Validation
     if (!adminPassword) {
       return res.status(400).json({ message: 'Admin password is required' });
     }
 
-    // Verify the requesting user is Admin
     const requestingUser = await User.findByPk(req.user.id);
     const adminEmail = process.env.SEED_EMPLOYEE_EMAIL;
     if (!requestingUser || !adminEmail || requestingUser.email !== adminEmail) {
       return res.status(403).json({ message: 'Access denied. Admin only.' });
     }
 
-    // Verify admin password
     const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
     if (!isValidAdminPassword) {
       return res.status(401).json({ message: 'Invalid admin password' });
     }
 
-    // Find employee
     const employee = await User.findByPk(id);
     if (!employee) {
       return res.status(404).json({ message: 'Employee not found' });
@@ -387,12 +322,10 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
       return res.status(400).json({ message: 'User is not an employee' });
     }
 
-    // Prevent deleting the Admin account
     if (adminEmail && employee.email === adminEmail) {
       return res.status(403).json({ message: 'Cannot delete the Admin account' });
     }
 
-    // Delete the employee
     await employee.destroy();
 
     res.json({

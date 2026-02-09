@@ -5,11 +5,7 @@ import { requireEmployee, validateRequired, sanitizeString } from '../middleware
 
 const router = express.Router();
 
-/**
- * GET /api/services
- * Get all services
- * Public route
- */
+// GET /api/services
 router.get('/', async (req, res) => {
   try {
     const services = await Service.findAll({
@@ -22,26 +18,18 @@ router.get('/', async (req, res) => {
   }
 });
 
-/**
- * POST /api/services
- * Create a new service
- * Protected route - only employees
- */
-
-// Language detection utility (simple, can be replaced with better lib)
 function detectLanguage(text) {
-  // Naive: if contains accented chars or common Spanish words, guess 'es', else 'en'
   if (/[áéíóúñü¿¡]/i.test(text) || /\b(el|la|de|que|y|en|un|una|por|con|para|es)\b/i.test(text)) {
     return 'es';
   }
   return 'en';
 }
 
+// POST /api/services
 router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'description', 'price']), async (req, res) => {
   try {
     const { name, description, price } = req.body;
 
-    // Detect language from name+description
     const detectedLang = detectLanguage(`${name} ${description}`);
 
     const service = await Service.create({
@@ -58,11 +46,7 @@ router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'descri
   }
 });
 
-/**
- * PUT /api/services/:id
- * Update a service
- * Protected route - only employees
- */
+// PUT /api/services/:id
 router.put('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
@@ -86,11 +70,7 @@ router.put('/:id', verifyToken, requireEmployee, async (req, res) => {
   }
 });
 
-/**
- * DELETE /api/services/:id
- * Delete a service
- * Protected route - only employees
- */
+// DELETE /api/services/:id
 router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
@@ -100,20 +80,16 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    // Find all appointments attached to this service
     const { Appointment } = await import('../models/Appointment.js');
     const appointments = await Appointment.findAll({ where: { serviceId: id } });
 
-    // Filter appointments that are NOT pending or upcoming (i.e., status is not 'pending' or 'accepted')
     const deletableAppointments = appointments.filter(a => !['pending', 'accepted'].includes(a.status));
     const remainingAppointments = appointments.filter(a => ['pending', 'accepted'].includes(a.status));
 
-    // Delete deletable appointments
     for (const appt of deletableAppointments) {
       await appt.destroy();
     }
 
-    // If there are still appointments attached, block deletion
     if (remainingAppointments.length > 0) {
       return res.status(400).json({
         message: 'Cannot delete service: there are pending or upcoming appointments using this service.',
@@ -121,7 +97,6 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       });
     }
 
-    // Now safe to delete the service
     await service.destroy();
     res.json({ message: 'Service deleted successfully' });
   } catch (error) {

@@ -1,16 +1,3 @@
-/**
- * Appointments Routes Module
- * Handles all appointment-related API endpoints
- * 
- * Features:
- * - Create appointment requests
- * - Accept/Decline appointments by employees
- * - Cancel appointments (customer or employee)
- * - Filter appointments by status
- * - Role-based access control (admin vs regular employee)
- * - Automatic email/SMS notifications
- */
-
 import express from 'express';
 import { Op } from 'sequelize';
 import { Appointment } from '../models/Appointment.js';
@@ -24,18 +11,12 @@ import { isAppointmentUpcoming } from '../utils/dateUtils.js';
 
 const router = express.Router();
 
-// Constants
 const STATUS_PENDING = 'pending';
 const STATUS_ACCEPTED = 'accepted';
 const STATUS_DECLINED = 'declined';
 const STATUS_CANCELLED = 'cancelled';
 const FILTER_UPCOMING = 'upcoming';
 
-/**
- * Check if user is admin
- * @param {Object} user - User object with email
- * @returns {boolean} True if admin
- */
 const isAdmin = (user) => {
   try {
     if (!user || !user.email) {
@@ -48,12 +29,7 @@ const isAdmin = (user) => {
   }
 };
 
-/**
- * GET /api/appointments
- * Get appointments filtered by employee role
- * Admin sees all appointments, regular employees see only relevant ones
- * @access Protected - Requires employee authentication
- */
+// GET /api/appointments
 router.get('/', verifyToken, requireEmployee, async (req, res) => {
   try {
     if (!req.user || !req.user.id) {
@@ -66,11 +42,10 @@ router.get('/', verifyToken, requireEmployee, async (req, res) => {
 
     let whereClause = {};
 
-    // Build where clause based on user role
     if (userIsAdmin) {
-      whereClause = {}; // Admin sees all appointments
+      whereClause = {};
     } else {
-      // Regular employee: show pending (assigned to them or no preference) OR their accepted/declined/cancelled
+      // Show pending (assigned to them or no preference) OR their accepted/declined/cancelled
       whereClause = {
         [Op.or]: [
           {
@@ -117,7 +92,6 @@ router.get('/', verifyToken, requireEmployee, async (req, res) => {
       order: [['createdAt', 'DESC']],
     });
 
-    // Apply 'upcoming' filter if specified
     let filteredAppointments = appointments;
     if (filter === FILTER_UPCOMING) {
       filteredAppointments = appointments.filter(apt => {
@@ -133,12 +107,7 @@ router.get('/', verifyToken, requireEmployee, async (req, res) => {
   }
 });
 
-/**
- * GET /api/appointments/public/:id
- * Get appointment details by ID without authentication
- * Used for customer cancellation page
- * @access Public
- */
+// GET /api/appointments/public/:id
 router.get('/public/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -172,31 +141,23 @@ router.get('/public/:id', async (req, res) => {
   }
 });
 
-/**
- * POST /api/appointments
- * Create a new appointment request
- * Sends notifications to customer and employees
- * @access Public
- */
+// POST /api/appointments
 router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPhone', 'serviceId', 'date', 'time']), async (req, res) => {
   try {
     const { customerName, customerEmail, customerPhone, serviceId, employeeId, date, time, customerNotes } = req.body;
 
-    // Validate service exists
     const service = await Service.findByPk(serviceId);
     if (!service) {
       return res.status(404).json({ error: 'Service not found' });
     }
 
-    // Validate employee if provided
     let requestedEmployee = null;
     if (employeeId) {
       requestedEmployee = await User.findByPk(employeeId);
       if (!requestedEmployee) {
         return res.status(404).json({ error: 'Requested employee not found' });
       }
-      
-      // Check if the requested employee has blocked this date/time
+
       const blockedDate = await BlockedDate.findOne({
         where: {
           userId: employeeId,
@@ -205,10 +166,10 @@ router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPho
           endTime: { [Op.gt]: time },
         },
       });
-      
+
       if (blockedDate) {
-        return res.status(400).json({ 
-          error: 'The requested employee is not available on this date/time. Please choose another time or employee.' 
+        return res.status(400).json({
+          error: 'The requested employee is not available on this date/time. Please choose another time or employee.'
         });
       }
     }
@@ -225,7 +186,6 @@ router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPho
       customerNotes: customerNotes || null,
     });
 
-    // Send notifications (non-blocking)
     Promise.all([
       notificationService.sendAppointmentRequestConfirmation(appointment, service),
       notificationService.notifyEmployeesOfNewAppointment(appointment, service, requestedEmployee)
@@ -240,20 +200,16 @@ router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPho
   }
 });
 
-/**
- * PUT /api/appointments/:id/accept
- * Accept a pending appointment request
- * @access Protected - Requires employee authentication
- */
+// PUT /api/appointments/:id/accept
 router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
     const { employeeNote } = req.body;
-    
+
     if (!req.user || !req.user.id) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
-    
+
     const employeeId = req.user.id;
 
     if (!id) {
@@ -269,7 +225,6 @@ router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
       return res.status(400).json({ error: 'Only pending appointments can be accepted' });
     }
 
-    // Check if the employee has blocked this date/time
     const blockedDate = await BlockedDate.findOne({
       where: {
         userId: employeeId,
@@ -278,10 +233,10 @@ router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
         endTime: { [Op.gt]: appointment.time },
       },
     });
-    
+
     if (blockedDate) {
-      return res.status(400).json({ 
-        error: 'You have blocked this date/time. Please unblock it first or decline this appointment.' 
+      return res.status(400).json({
+        error: 'You have blocked this date/time. Please unblock it first or decline this appointment.'
       });
     }
 
@@ -291,11 +246,9 @@ router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
       employeeNote: employeeNote || null,
     });
 
-    // Get related data for notifications
     const service = await Service.findByPk(appointment.serviceId);
     const acceptedByEmployee = await User.findByPk(employeeId);
-    
-    // Send notifications (non-blocking)
+
     if (service && acceptedByEmployee) {
       Promise.all([
         notificationService.sendAppointmentAcceptedNotification(appointment, service, acceptedByEmployee),
@@ -312,20 +265,16 @@ router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
   }
 });
 
-/**
- * PUT /api/appointments/:id/decline
- * Decline a pending appointment request
- * @access Protected - Requires employee authentication
- */
+// PUT /api/appointments/:id/decline
 router.put('/:id/decline', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
     const { employeeNote } = req.body;
-    
+
     if (!req.user || !req.user.id) {
       return res.status(401).json({ error: 'User not authenticated' });
     }
-    
+
     const employeeId = req.user.id;
 
     if (!id) {
@@ -345,7 +294,6 @@ router.put('/:id/decline', verifyToken, requireEmployee, async (req, res) => {
       return res.status(400).json({ error: 'Only pending appointments can be declined' });
     }
 
-    // Only assigned employee can decline, or any employee if no preference
     if (appointment.employeeId && appointment.employeeId !== employeeId) {
       return res.status(403).json({ error: 'Not authorized to decline this appointment' });
     }
@@ -356,7 +304,6 @@ router.put('/:id/decline', verifyToken, requireEmployee, async (req, res) => {
       employeeNote: employeeNote,
     });
 
-    // Send notification to customer
     const service = await Service.findByPk(appointment.serviceId);
     if (service) {
       notificationService.sendAppointmentDeclinedNotification(appointment, service, employeeNote)
@@ -370,11 +317,7 @@ router.put('/:id/decline', verifyToken, requireEmployee, async (req, res) => {
   }
 });
 
-/**
- * PUT /api/appointments/:id/cancel
- * Cancel an appointment (customer-initiated)
- * @access Public - No authentication required
- */
+// PUT /api/appointments/:id/cancel
 router.put('/:id/cancel', async (req, res) => {
   try {
     const { id } = req.params;
@@ -398,14 +341,11 @@ router.put('/:id/cancel', async (req, res) => {
       status: STATUS_CANCELLED,
     });
 
-    // Send notifications
     const service = await Service.findByPk(appointment.serviceId);
     if (service) {
-      // Notify customer
       notificationService.sendAppointmentCancelledNotification(appointment, service, 'customer', wasPending)
         .catch(error => console.error('Error sending cancellation notification:', error));
-      
-      // Notify employee if appointment was accepted
+
       if (!wasPending && appointment.acceptedByEmployeeId) {
         const employee = await User.findByPk(appointment.acceptedByEmployeeId);
         if (employee) {
@@ -422,11 +362,7 @@ router.put('/:id/cancel', async (req, res) => {
   }
 });
 
-/**
- * PUT /api/appointments/:id/cancel-by-employee
- * Cancel an accepted appointment (employee-initiated)
- * @access Protected - Requires employee authentication
- */
+// PUT /api/appointments/:id/cancel-by-employee
 router.put('/:id/cancel-by-employee', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
@@ -453,7 +389,6 @@ router.put('/:id/cancel-by-employee', verifyToken, requireEmployee, async (req, 
       return res.status(400).json({ error: 'Only accepted appointments can be cancelled by employees' });
     }
 
-    // Verify authorization
     const userIsAdmin = isAdmin(req.user);
     if (!userIsAdmin && appointment.acceptedByEmployeeId !== req.user.id) {
       return res.status(403).json({ error: 'You can only cancel appointments you accepted' });
@@ -463,10 +398,9 @@ router.put('/:id/cancel-by-employee', verifyToken, requireEmployee, async (req, 
       status: STATUS_CANCELLED,
     });
 
-    // Notify customer
     const service = await Service.findByPk(appointment.serviceId);
     const employee = await User.findByPk(appointment.acceptedByEmployeeId);
-    
+
     if (service && employee) {
       notificationService.notifyCustomerOfEmployeeCancellation(appointment, service, employee, reason)
         .catch(error => console.error('Error sending cancellation notification:', error));

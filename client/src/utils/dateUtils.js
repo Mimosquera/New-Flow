@@ -1,20 +1,3 @@
-/**
- * Date and Time Utility Functions Module
- * Provides helper functions for date/time parsing, formatting, and validation
- */
-
-// Constants
-const DEFAULT_LOCALE = 'en-US';
-const HOURS_IN_HALF_DAY = 12;
-const NOON_HOUR = 12;
-const MONTHS_IN_YEAR = 12;
-
-/**
- * Parse appointment date and time strings to create a Date object
- * @param {string} dateString - Date in YYYY-MM-DD format
- * @param {string} timeString - Time in HH:MM:SS or HH:MM format
- * @returns {Date|null} JavaScript Date object or null if invalid
- */
 export const parseAppointmentDateTime = (dateString, timeString) => {
   try {
     if (!dateString || !timeString) {
@@ -33,21 +16,18 @@ export const parseAppointmentDateTime = (dateString, timeString) => {
     const [year, month, day] = dateParts;
     const [hours, minutes] = timeParts;
 
-    // Validate date components
-    if (month < 1 || month > MONTHS_IN_YEAR || day < 1 || day > 31) {
+    if (month < 1 || month > 12 || day < 1 || day > 31) {
       console.error('Invalid date values');
       return null;
     }
 
-    // Validate time components
     if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
       console.error('Invalid time values');
       return null;
     }
 
     const date = new Date(year, month - 1, day, hours, minutes);
-    
-    // Check if date is valid
+
     if (isNaN(date.getTime())) {
       console.error('Invalid date created');
       return null;
@@ -60,16 +40,10 @@ export const parseAppointmentDateTime = (dateString, timeString) => {
   }
 };
 
-/**
- * Check if an appointment date/time is in the future
- * @param {string} dateString - Date in YYYY-MM-DD format
- * @param {string} timeString - Time in HH:MM:SS or HH:MM format
- * @returns {boolean} True if the appointment is in the future, false otherwise
- */
 export const isAppointmentUpcoming = (dateString, timeString) => {
   try {
     const appointmentDateTime = parseAppointmentDateTime(dateString, timeString);
-    
+
     if (!appointmentDateTime) {
       return false;
     }
@@ -82,20 +56,14 @@ export const isAppointmentUpcoming = (dateString, timeString) => {
   }
 };
 
-/**
- * Format date for display with localization support
- * @param {string} dateString - Date in YYYY-MM-DD format
- * @param {string} locale - Locale for formatting (e.g., 'en-US', 'es-ES')
- * @param {boolean} capitalize - Whether to capitalize the first letter
- * @returns {string} Formatted date string or original string if parsing fails
- */
-export const formatDateDisplay = (dateString, locale = DEFAULT_LOCALE, capitalize = true) => {
+export const formatDateDisplay = (dateString, locale = 'en-US', capitalize = true) => {
   try {
     if (!dateString) {
       return '';
     }
 
-    const date = new Date(dateString + 'T00:00:00'); // Add time to avoid timezone issues
+    // Add time to avoid timezone issues
+    const date = new Date(dateString + 'T00:00:00');
     
     if (isNaN(date.getTime())) {
       console.error('Invalid date string:', dateString);
@@ -120,11 +88,6 @@ export const formatDateDisplay = (dateString, locale = DEFAULT_LOCALE, capitaliz
   }
 };
 
-/**
- * Format time for display (convert 24-hour to 12-hour format)
- * @param {string} timeString - Time in HH:MM:SS or HH:MM format
- * @returns {string} Formatted time string (e.g., "2:30 PM") or original if invalid
- */
 export const formatTimeDisplay = (timeString) => {
   try {
     if (!timeString) {
@@ -147,8 +110,8 @@ export const formatTimeDisplay = (timeString) => {
       return timeString;
     }
 
-    const ampm = hour >= NOON_HOUR ? 'PM' : 'AM';
-    const displayHour = hour % HOURS_IN_HALF_DAY || HOURS_IN_HALF_DAY;
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour % 12 || 12;
     const displayMinute = minute.toString().padStart(2, '0');
     
     return `${displayHour}:${displayMinute} ${ampm}`;
@@ -158,10 +121,6 @@ export const formatTimeDisplay = (timeString) => {
   }
 };
 
-/**
- * Get today's date in YYYY-MM-DD format
- * @returns {string} Today's date
- */
 export const getTodayString = () => {
   try {
     return new Date().toISOString().split('T')[0];
@@ -171,11 +130,6 @@ export const getTodayString = () => {
   }
 };
 
-/**
- * Check if a date string is valid
- * @param {string} dateString - Date string to validate
- * @returns {boolean} True if valid date, false otherwise
- */
 export const isValidDateString = (dateString) => {
   try {
     if (!dateString || typeof dateString !== 'string') {
@@ -189,12 +143,6 @@ export const isValidDateString = (dateString) => {
   }
 };
 
-/**
- * Compare two date strings
- * @param {string} date1 - First date in YYYY-MM-DD format
- * @param {string} date2 - Second date in YYYY-MM-DD format
- * @returns {number} -1 if date1 < date2, 0 if equal, 1 if date1 > date2, null if invalid
- */
 export const compareDates = (date1, date2) => {
   try {
     if (!date1 || !date2) {

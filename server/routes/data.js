@@ -4,15 +4,12 @@ import { User } from '../models/User.js';
 
 const router = express.Router();
 
-/**
- * Get all employees (public route for appointment booking)
- * GET /api/data/employees
- */
+// GET /api/data/employees
 router.get('/employees', async (req, res) => {
   try {
     const employees = await User.findAll({
       where: { isEmployee: true },
-      attributes: ['id', 'name', 'email'], // Only return necessary fields
+      attributes: ['id', 'name', 'email'],
     });
 
     res.json({
@@ -26,10 +23,7 @@ router.get('/employees', async (req, res) => {
   }
 });
 
-/**
- * Get all users (protected route)
- * GET /api/data
- */
+// GET /api/data
 router.get('/', verifyToken, async (req, res) => {
   try {
     const users = await User.findAll({
@@ -47,10 +41,7 @@ router.get('/', verifyToken, async (req, res) => {
   }
 });
 
-/**
- * Get single user (protected route)
- * GET /api/data/:id
- */
+// GET /api/data/:id
 router.get('/:id', verifyToken, async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id, {

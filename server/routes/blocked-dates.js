@@ -6,23 +6,17 @@ import { requireEmployee, validateRequired } from '../middleware/validation.js';
 
 const router = express.Router();
 
-// Helper function to check if user is admin
 const isAdmin = (user) => user.email === process.env.SEED_EMPLOYEE_EMAIL;
 
-/**
- * GET /api/blocked-dates
- * Get blocked dates
- * Protected route - employees see only their own, admin sees all
- */
+// GET /api/blocked-dates
 router.get('/', verifyToken, requireEmployee, async (req, res) => {
   try {
     const whereClause = {};
-    
-    // If not admin, filter by their userId
+
     if (!isAdmin(req.user)) {
       whereClause.userId = req.user.id;
     }
-    
+
     const blockedDates = await BlockedDate.findAll({
       where: whereClause,
       include: [{
@@ -39,11 +33,7 @@ router.get('/', verifyToken, requireEmployee, async (req, res) => {
   }
 });
 
-/**
- * POST /api/blocked-dates
- * Create blocked date(s) - supports date ranges
- * Protected route
- */
+// POST /api/blocked-dates
 router.post(
   '/',
   verifyToken,
@@ -54,60 +44,46 @@ router.post(
       const { startDate, endDate, startTime, endTime, reason } = req.body;
       const userId = req.user.id;
 
-      // Validate date formats
       if (!/^\d{4}-\d{2}-\d{2}$/.test(startDate) || !/^\d{4}-\d{2}-\d{2}$/.test(endDate)) {
         return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
       }
 
-      // Validate that end date is not before start date
       if (new Date(endDate) < new Date(startDate)) {
         return res.status(400).json({ error: 'End date must be on or after start date' });
       }
 
-      // For single day blocks, validate that end time is after start time
       if (startDate === endDate && startTime >= endTime) {
         return res.status(400).json({ error: 'End time must be after start time for same-day blocks' });
       }
 
-      // Generate all dates in the range
       const dates = [];
       const currentDate = new Date(startDate);
       const lastDate = new Date(endDate);
-      
+
       while (currentDate <= lastDate) {
         dates.push(currentDate.toISOString().split('T')[0]);
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
-      // Create blocked dates for each day in the range
-      // Logic: 
-      // - First date: blocked from startTime to 23:59:59
-      // - Middle dates: blocked entirely (00:00:00 to 23:59:59)
-      // - Last date: blocked from 00:00:00 to endTime
       const createdBlockedDates = [];
       for (let i = 0; i < dates.length; i++) {
         const date = dates[i];
         let blockStartTime, blockEndTime;
-        
+
         if (dates.length === 1) {
-          // Single day block - use provided times
           blockStartTime = startTime;
           blockEndTime = endTime;
         } else if (i === 0) {
-          // First date - block from startTime to end of day
           blockStartTime = startTime;
           blockEndTime = '23:59:59';
         } else if (i === dates.length - 1) {
-          // Last date - block from start of day to endTime
           blockStartTime = '00:00:00';
           blockEndTime = endTime;
         } else {
-          // Middle dates - block entire day
           blockStartTime = '00:00:00';
           blockEndTime = '23:59:59';
         }
 
-        // Check if this specific date/time is already blocked
         const existingBlocked = await BlockedDate.findOne({
           where: {
             userId,
@@ -139,14 +115,14 @@ router.post(
       }
 
       if (createdBlockedDates.length === 0) {
-        return res.status(400).json({ 
-          error: 'All dates in this range are already blocked with the same time' 
+        return res.status(400).json({
+          error: 'All dates in this range are already blocked with the same time'
         });
       }
 
-      res.status(201).json({ 
-        message: `${createdBlockedDates.length} date(s) blocked successfully`, 
-        data: createdBlockedDates 
+      res.status(201).json({
+        message: `${createdBlockedDates.length} date(s) blocked successfully`,
+        data: createdBlockedDates
       });
     } catch (error) {
       console.error('Error creating blocked dates:', error);
@@ -155,11 +131,7 @@ router.post(
   }
 );
 
-/**
- * PUT /api/blocked-dates/:id
- * Update a blocked date
- * Protected route - only owner or admin can update
- */
+// PUT /api/blocked-dates/:id
 router.put(
   '/:id',
   verifyToken,
@@ -176,17 +148,14 @@ router.put(
         return res.status(404).json({ error: 'Blocked date not found' });
       }
 
-      // Check authorization - only owner or admin can update
       if (!isAdmin(req.user) && blockedDate.userId !== req.user.id) {
         return res.status(403).json({ error: 'Unauthorized to update this blocked date' });
       }
 
-      // Validate date format
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
       }
 
-      // Validate that end time is after start time
       if (startTime >= endTime) {
         return res.status(400).json({ error: 'End time must be after start time' });
       }
@@ -206,9 +175,9 @@ router.put(
         }],
       });
 
-      res.json({ 
-        message: 'Blocked date updated successfully', 
-        data: updatedBlockedDate 
+      res.json({
+        message: 'Blocked date updated successfully',
+        data: updatedBlockedDate
       });
     } catch (error) {
       console.error('Error updating blocked date:', error);
@@ -217,11 +186,7 @@ router.put(
   }
 );
 
-/**
- * DELETE /api/blocked-dates/:id
- * Delete a blocked date
- * Protected route - only owner or admin can delete
- */
+// DELETE /api/blocked-dates/:id
 router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
@@ -232,7 +197,6 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(404).json({ error: 'Blocked date not found' });
     }
 
-    // Check authorization - only owner or admin can delete
     if (!isAdmin(req.user) && blockedDate.userId !== req.user.id) {
       return res.status(403).json({ error: 'Unauthorized to delete this blocked date' });
     }
