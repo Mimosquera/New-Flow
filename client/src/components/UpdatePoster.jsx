@@ -351,21 +351,21 @@ export const UpdatePoster = () => {
                       
                       {/* Display media if available */}
                       {update.media_url && (
-                        <div 
+                        <div
                           className="mb-3"
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleUpdateClick(update)}
                         >
                           {update.media_type === 'image' ? (
-                            <img 
-                              src={`${SERVER_BASE_URL}${update.media_url}`}
+                            <img
+                              src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                               alt={update.title}
                               className="img-fluid rounded"
                               style={{ maxHeight: '300px', width: '100%', objectFit: 'cover' }}
                             />
                           ) : (
-                            <video 
-                              src={`${SERVER_BASE_URL}${update.media_url}`}
+                            <video
+                              src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                               className="w-100 rounded"
                               style={{ maxHeight: '300px', objectFit: 'cover' }}
                             />

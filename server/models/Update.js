@@ -43,6 +43,10 @@ export const Update = sequelize.define('Update', {
     type: DataTypes.ENUM('image', 'video'),
     allowNull: true,
   },
+  cloudinary_id: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   user_id: {
     type: DataTypes.UUID,
     allowNull: true, // Allow null for existing posts

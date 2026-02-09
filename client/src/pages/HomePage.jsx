@@ -400,15 +400,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
                         {article.media_url && (
                           <div className="mb-3">
                             {article.media_type === 'image' ? (
-                              <img 
-                                src={`${SERVER_BASE_URL}${article.media_url}`}
+                              <img
+                                src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
                                 alt={article.title}
                                 className="img-fluid rounded"
                                 style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
                               />
                             ) : (
-                              <video 
-                                src={`${SERVER_BASE_URL}${article.media_url}`}
+                              <video
+                                src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
                                 className="w-100 rounded"
                                 style={{ maxHeight: '200px', objectFit: 'cover' }}
                                 playsInline

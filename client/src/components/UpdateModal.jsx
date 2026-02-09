@@ -40,15 +40,15 @@ export const UpdateModal = ({ update, show, onClose }) => {
           ✕ Close
         </button>
         {update.media_type === 'image' ? (
-          <img 
-            src={`${SERVER_BASE_URL}${update.media_url}`}
+          <img
+            src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
             alt={update.title}
             style={{ maxWidth: '95%', maxHeight: '95%', objectFit: 'contain' }}
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <video 
-            src={`${SERVER_BASE_URL}${update.media_url}`}
+          <video
+            src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
             style={{ maxWidth: '95%', maxHeight: '95%' }}
             controls
             autoPlay
@@ -94,15 +94,15 @@ export const UpdateModal = ({ update, show, onClose }) => {
                   onClick={handleMediaClick}
                 >
                   {update.media_type === 'image' ? (
-                    <img 
-                      src={`${SERVER_BASE_URL}${update.media_url}`}
+                    <img
+                      src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                       alt={update.title}
                       className="img-fluid rounded w-100"
                       style={{ maxHeight: '60vh', objectFit: 'contain' }}
                     />
                   ) : (
-                    <video 
-                      src={`${SERVER_BASE_URL}${update.media_url}`}
+                    <video
+                      src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                       className="w-100 rounded"
                       style={{ maxHeight: '60vh' }}
                       controls

@@ -2,13 +2,7 @@ import express from 'express';
 import { Update } from '../models/Update.js';
 import { verifyToken } from '../middleware/auth.js';
 import { requireEmployee, validateRequired, sanitizeString } from '../middleware/validation.js';
-import { upload } from '../config/upload.js';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import { upload, cloudinary } from '../config/upload.js';
 
 const router = express.Router();
 
@@ -78,11 +72,29 @@ router.post('/', verifyToken, requireEmployee, upload.single('media'), validateR
       language: detectedLang,
     };
 
-    // Add media info if file was uploaded
+    // Upload media to Cloudinary if file was uploaded
     if (req.file) {
-      updateData.media_url = `/uploads/${req.file.filename}`;
-      // Determine media type from mimetype
-      updateData.media_type = req.file.mimetype.startsWith('image/') ? 'image' : 'video';
+      const isVideo = req.file.mimetype.startsWith('video/');
+
+      // Upload to Cloudinary using upload_stream
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'newflow-updates',
+            resource_type: isVideo ? 'video' : 'image',
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+
+      updateData.media_url = uploadResult.secure_url;
+      updateData.media_type = isVideo ? 'video' : 'image';
+      // Store Cloudinary public_id for deletion later
+      updateData.cloudinary_id = uploadResult.public_id;
     }
 
     const update = await Update.create(updateData);
@@ -90,11 +102,7 @@ router.post('/', verifyToken, requireEmployee, upload.single('media'), validateR
     res.status(201).json(update);
   } catch (error) {
     console.error('Error creating update:', error);
-    // Clean up uploaded file if database operation fails
-    if (req.file) {
-      fs.unlinkSync(req.file.path);
-    }
-    res.status(500).json({ message: 'Failed to create update' });
+    res.status(500).json({ message: 'Failed to create update', error: error.message });
   }
 });
 
@@ -119,11 +127,14 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(403).json({ message: 'You do not have permission to delete this update' });
     }
 
-    // Delete associated media file if it exists
-    if (update.media_url) {
-      const filepath = path.join(__dirname, '..', update.media_url);
-      if (fs.existsSync(filepath)) {
-        fs.unlinkSync(filepath);
+    // Delete from Cloudinary if it exists
+    if (update.cloudinary_id) {
+      try {
+        const resourceType = update.media_type === 'video' ? 'video' : 'image';
+        await cloudinary.uploader.destroy(update.cloudinary_id, { resource_type: resourceType });
+      } catch (cloudinaryError) {
+        console.error('Error deleting from Cloudinary:', cloudinaryError);
+        // Continue with database deletion even if Cloudinary fails
       }
     }
 
