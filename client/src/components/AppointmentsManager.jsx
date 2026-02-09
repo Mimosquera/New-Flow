@@ -442,7 +442,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
               <option value="cancelled">{t('cancelled')}</option>
             </select>
           </div>
-          <div className="alert alert-info mb-0">
+          <div className="alert alert-info mb-0 no-appointments-message">
             {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
           </div>
         </div>

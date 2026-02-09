@@ -486,18 +486,10 @@ export default function EmployeeDashboard() {
       {/* Footer */}
       <div className="container pt-5 pb-4" style={{ marginTop: '4rem' }}>
         <div className="text-center">
-          <img 
+          <img
             src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
             alt="New Flow Logo"
-            style={{ 
-              maxWidth: '300px', 
-              width: '100%', 
-              height: 'auto', 
-              filter: 'drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32))',
-              WebkitBoxShadow: 'none',
-              boxShadow: 'none',
-              background: 'transparent' 
-            }}
+            className="dashboard-logo"
           />
         </div>
       </div>
