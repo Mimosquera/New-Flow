@@ -206,9 +206,10 @@ export const UpdatePoster = () => {
                 )}
 
                 {formError && (
-                  <Alert 
-                    message={formError} 
+                  <Alert
+                    message={formError}
                     type="danger"
+                    onClose={() => {}}
                   />
                 )}
 
