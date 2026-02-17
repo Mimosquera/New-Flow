@@ -116,16 +116,22 @@
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
+  accent-color: rgb(5, 45, 63);
+  -webkit-tap-highlight-color: rgba(5, 45, 63, 0.2);
 }
 
 .formSelect option {
   background-color: white;
   color: #000;
+  padding: 0.5rem;
 }
 
-.formSelect option:checked {
-  background-color: rgb(5, 45, 63);
-  color: white;
+.formSelect option:checked,
+.formSelect option:focus,
+.formSelect option[selected] {
+  background-color: rgb(5, 45, 63) !important;
+  background: rgb(5, 45, 63) !important;
+  color: white !important;
 }
 
 .textarea {
@@ -167,6 +173,16 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
   }
+
+  .dateTimeRow .formGroup {
+    min-width: 0;
+  }
+
+  .dateTimeRow .formControl,
+  .dateTimeRow .formSelect {
+    min-width: 0;
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -179,6 +195,17 @@
   .dateTimeRow {
     grid-template-columns: 1fr 1fr;
     gap: 0.6rem;
+  }
+
+  .dateTimeRow .formGroup {
+    min-width: 0;
+  }
+
+  .dateTimeRow .formControl,
+  .dateTimeRow .formSelect {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.85rem;
   }
 }
 
