@@ -285,7 +285,7 @@ export const AppointmentsPage = () => {
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="phone" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>📱</span>
+                    <span className={styles.labelIcon}></span>
                     {t('phone')}
                     <span className={styles.required}>*</span>
                   </label>
@@ -355,67 +355,69 @@ export const AppointmentsPage = () => {
               </div>
 
               {/* Date and Time Row */}
-              <div className={styles.dateTimeRow}>
-                <div className={styles.formGroup}>
-                  <label htmlFor="date" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>📅</span>
-                    {t('date')}
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <input
-                    id="date"
-                    type="date"
-                    name="date"
-                    className={styles.formControl}
-                    value={formData.date}
-                    onChange={handleChange}
-                    min={today}
-                    required
-                    autoComplete="off"
-                  />
-                </div>
+              <div className={styles.formGroup}>
+                <div className={styles.dateTimeRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="date" className={styles.formLabel}>
+                      <span className={styles.labelIcon}>📅</span>
+                      {t('date')}
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <input
+                      id="date"
+                      type="date"
+                      name="date"
+                      className={styles.formControl}
+                      value={formData.date}
+                      onChange={handleChange}
+                      min={today}
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
 
-                <div className={styles.formGroup}>
-                  <label htmlFor="time" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>🕐</span>
-                    {t('time')}
-                    <span className={styles.required}>*</span>
-                  </label>
-                  <select
-                    id="time"
-                    name="time"
-                    className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`}
-                    value={formData.time}
-                    onChange={handleChange}
-                    required
-                    disabled={!formData.date || loadingTimes}
-                    autoComplete="off"
-                  >
-                    <option value="">
-                      {!formData.date
-                        ? t('selectDateFirst')
-                        : loadingTimes
-                          ? t('loading')
-                          : availableTimes.length === 0
-                            ? t('noTimesAvailable')
-                            : t('selectTime')}
-                    </option>
-                    {availableTimes.map(time => (
-                      <option key={time} value={time}>{time}</option>
-                    ))}
-                  </select>
-                  {formData.date && !loadingTimes && availableTimes.length === 0 && (
-                    <small className={styles.alertInfo}>
-                      {t('noAvailabilityForDate')}
-                    </small>
-                  )}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="time" className={styles.formLabel}>
+                      <span className={styles.labelIcon}>🕐</span>
+                      {t('time')}
+                      <span className={styles.required}>*</span>
+                    </label>
+                    <select
+                      id="time"
+                      name="time"
+                      className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`}
+                      value={formData.time}
+                      onChange={handleChange}
+                      required
+                      disabled={!formData.date || loadingTimes}
+                      autoComplete="off"
+                    >
+                      <option value="">
+                        {!formData.date
+                          ? t('selectDateFirst')
+                          : loadingTimes
+                            ? t('loading')
+                            : availableTimes.length === 0
+                              ? t('noTimesAvailable')
+                              : t('selectTime')}
+                      </option>
+                      {availableTimes.map(time => (
+                        <option key={time} value={time}>{time}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
+                {formData.date && !loadingTimes && availableTimes.length === 0 && (
+                  <small className={styles.alertInfo}>
+                    {t('noAvailabilityForDate')}
+                  </small>
+                )}
               </div>
 
               {/* Notes */}
               <div className={styles.formGroup}>
                 <label htmlFor="notes" className={styles.formLabel}>
-                  <span className={styles.labelIcon}>📝</span>
+                  <span className={styles.labelIcon}></span>
                   {t('notes')}
                 </label>
                 <textarea

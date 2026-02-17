@@ -6,7 +6,7 @@
 }
 
 .contentWrapper {
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -95,6 +95,32 @@
   transform: translateY(-1px);
 }
 
+.formControl[type="date"] {
+  color: #000;
+  min-height: 2rem;
+}
+
+.formControl[type="date"]:focus {
+  background-color: white;
+  color: #000;
+}
+
+.formControl[type="date"]::-webkit-datetime-edit {
+  min-height: 1.2em;
+}
+
+.formControl[type="date"]::-webkit-datetime-edit-text,
+.formControl[type="date"]::-webkit-datetime-edit-month-field,
+.formControl[type="date"]::-webkit-datetime-edit-day-field,
+.formControl[type="date"]::-webkit-datetime-edit-year-field {
+  color: #000;
+  background-color: transparent;
+}
+
+.formControl[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(13%) sepia(36%) saturate(2073%) hue-rotate(161deg) brightness(95%) contrast(101%);
+}
+
 .formControl:hover,
 .formSelect:hover {
   border-color: rgb(51, 135, 184);
@@ -164,14 +190,14 @@
 
 @media (max-width: 768px) {
   .formRow {
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
   }
 
   /* Keep date/time side by side on mobile */
   .dateTimeRow {
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   .dateTimeRow .formGroup {
@@ -184,25 +210,35 @@
     min-width: 0;
     max-width: 100%;
     width: 100%;
-    padding-right: 0.5rem;
+    padding: 0.4rem 0.3rem;
+    box-sizing: border-box;
+    font-size: 0.8rem;
+    overflow: hidden;
+  }
+
+  .dateTimeRow .formControl[type="date"] {
+    padding-right: 0.2rem;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .dateTimeRow .formSelect {
-    padding-right: 2rem;
-    background-position: right 0.5rem center;
+    padding-right: 1.4rem;
+    background-position: right 0.25rem center;
+    background-size: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .formRow {
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
   }
 
   /* Keep date/time side by side even on small phones */
   .dateTimeRow {
     grid-template-columns: 1fr 1fr;
-    gap: 0.4rem;
+    gap: 0.2rem;
   }
 
   .dateTimeRow .formGroup {
@@ -215,15 +251,22 @@
     min-width: 0;
     max-width: 100%;
     width: 100%;
-    font-size: 0.85rem;
-    padding-left: 0.4rem;
-    padding-right: 0.4rem;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.25rem;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .dateTimeRow .formControl[type="date"] {
+    padding-right: 0.15rem;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .dateTimeRow .formSelect {
-    padding-right: 1.75rem;
-    background-position: right 0.4rem center;
-    background-size: 10px;
+    padding-right: 1.3rem;
+    background-position: right 0.2rem center;
+    background-size: 7px;
   }
 }
 
@@ -334,13 +377,19 @@
 
 /* Alert Messages */
 .alertInfo {
+  display: block;
   background-color: #e8f4f8;
   border: 1px solid #b3d9e8;
   color: rgb(5, 45, 63);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
-  margin-top: 0.35rem;
+  margin-top: 0.15rem;
   font-size: 0.8rem;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Loading State */
@@ -388,17 +437,21 @@
   }
 
   .contentWrapper {
-    max-width: 520px;
-    padding: 0 0.75rem;
+    max-width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
   }
 
   .formCard {
     border-radius: 20px;
-    margin: 0 0.25rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+    width: 340px;
   }
 
   .cardBody {
-    padding: 1.25rem 1rem;
+    padding: 1rem 0.4rem;
+    box-sizing: border-box;
   }
 
   .formGroup {
@@ -459,7 +512,8 @@
 
   .alertInfo {
     font-size: 0.75rem;
-    padding: 0.4rem 0.6rem;
+    padding: 0.4rem 0.5rem;
+    line-height: 1.3;
   }
 
   .successMessage {
@@ -477,11 +531,14 @@
 
   .contentWrapper {
     padding: 0 0.75rem;
+    box-sizing: border-box;
   }
 
   .formCard {
-    margin: 0 0.15rem;
+    margin: 0 auto;
     border-radius: 16px;
+    box-sizing: border-box;
+    width: 320px;
   }
 
   .header {
@@ -493,7 +550,12 @@
   }
 
   .cardBody {
-    padding: 0.85rem;
+    padding: 0.85rem 0.35rem;
+    box-sizing: border-box;
+  }
+
+  .formRow {
+    gap: 0.35rem;
   }
 
   .formGroup {
