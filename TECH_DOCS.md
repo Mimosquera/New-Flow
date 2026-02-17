@@ -1,413 +1,192 @@
-# New Flow - Technical Documentation
+# Technical Reference
 
 ## System Architecture
 
-### Frontend Stack
-- **Framework:** React 18.3.1
-- **Build Tool:** Vite 6.4.1
-- **Routing:** React Router DOM 7.12.0
-- **Styling:** Bootstrap 5.3.8
-- **HTTP Client:** Axios 1.13.2
-- **Language:** JavaScript (ES6+)
-
-### Backend Stack
-- **Runtime:** Node.js 16+
-- **Framework:** Express 4.22.1
-- **Database:** PostgreSQL 12+
-- **ORM:** Sequelize 6.37.7
-- **Authentication:** JWT (jwt-simple)
-- **Email:** Nodemailer 7.0.13
-- **SMS:** Twilio 5.12.0
+**Frontend:** React 18.3.1, Vite 6.4.1, React Router 7.12.0, Bootstrap 5.3.8, Axios 1.13.2
+**Backend:** Node.js, Express 4.22.1, PostgreSQL 12+, Sequelize 6.37.7
+**Services:** Cloudinary (media), LibreTranslate (translation), Nodemailer (email), Twilio (SMS)
 
 ---
 
 ## Database Schema
 
 ### Tables
-1. **users** - Employee accounts
-2. **services** - Service offerings
-3. **appointments** - Customer appointment requests
-4. **availabilities** - Recurring employee schedules
-5. **blocked_dates** - Date/time blocks
-6. **updates** - Posts/announcements
 
-### Key Relationships
-- Appointments → Users (employee)
-- Appointments → Services
-- Availabilities → Users
-- Blocked Dates → Users
-- Updates → Users
+**users** - Employee accounts (id, name, email, password, isEmployee)
+**services** - Service offerings (id, name, description, price, price_max, language)
+**appointments** - Customer requests (id, customerName, customerEmail, customerPhone, serviceId, employeeId, date, time, status, notes)
+**availabilities** - Employee schedules (id, userId, dayOfWeek, startTime, endTime)
+**blocked_dates** - Date/time blocks (id, userId, startDate, endDate, startTime, endTime, reason)
+**updates** - Posts/announcements (id, title, content, author, date, media_url, media_type, cloudinary_id, user_id, language)
+
+### Relationships
+
+- appointments.employeeId → users.id
+- appointments.serviceId → services.id
+- availabilities.userId → users.id
+- blocked_dates.userId → users.id
+- updates.user_id → users.id
 
 ---
 
 ## API Endpoints
 
-### Public Endpoints
+### Public
 - `GET /api/data/employees` - List employees
 - `GET /api/services` - List services
-- `POST /api/appointments` - Create appointment
-- `GET /api/availability/times/:date` - Available times
-- `GET /api/updates` - Public updates
+- `POST /api/appointments` - Create appointment request
+- `GET /api/availability/available-times/:date` - Get available time slots
+- `GET /api/updates` - List public updates
 
-### Protected Endpoints (Require Auth)
-- `POST /api/auth/login` - Employee login
-- `GET /api/appointments` - Manage appointments
+### Protected (JWT Required)
+- `POST /api/auth/employee-login` - Employee authentication
+- `GET /api/auth/verify` - Verify JWT token
+- `GET /api/appointments` - List appointments (with filters)
 - `PUT /api/appointments/:id/accept` - Accept appointment
 - `PUT /api/appointments/:id/decline` - Decline appointment
+- `PUT /api/appointments/:id/cancel-by-employee` - Cancel appointment
 - `POST /api/services` - Create service
 - `PUT /api/services/:id` - Update service
 - `DELETE /api/services/:id` - Delete service
 - `POST /api/availability` - Create availability
 - `PUT /api/availability/:id` - Update availability
 - `DELETE /api/availability/:id` - Delete availability
-- `POST /api/blocked-dates` - Block dates
-- `DELETE /api/blocked-dates/:id` - Unblock date
-- `POST /api/updates` - Create update/post
+- `POST /api/blocked-dates` - Create blocked date range
+- `DELETE /api/blocked-dates/:id` - Delete blocked date
+- `POST /api/updates` - Create update/post (multipart for media)
 - `DELETE /api/updates/:id` - Delete update
-
----
-
-## Environment Variables
-
-### Server (.env)
-```
-DATABASE_URL=postgres://user:pass@host:5432/dbname
-JWT_SECRET=your-secret-key
-EMAIL_USER=smtp@email.com
-EMAIL_PASS=smtp-password
-TWILIO_ACCOUNT_SID=your-sid
-TWILIO_AUTH_TOKEN=your-token
-TWILIO_PHONE=+1234567890
-NODE_ENV=production
-PORT=3001
-```
-
-### Client
-- API endpoint configured in `src/constants.js`
-
----
-
-## Features List
-
-### Customer Features
-- ✅ View services with prices
-- ✅ View latest updates/posts
-- ✅ Request appointment
-- ✅ Select preferred employee or "no preference"
-- ✅ View available time slots
-- ✅ Add notes to appointment
-- ✅ Cancel appointment via email link
-- ✅ Language toggle (English/Spanish)
-
-### Employee Features
-- ✅ Secure login
-- ✅ View all appointment requests
-- ✅ Accept/decline appointments
-- ✅ Add notes when declining
-- ✅ Filter by status (pending/accepted/declined/cancelled)
-- ✅ Create/edit/delete services
-- ✅ Set recurring weekly availability
-- ✅ Block specific dates/times
-- ✅ View grouped blocked dates
-- ✅ Post updates with photos/videos
-- ✅ Delete updates
-- ✅ Mobile responsive dashboard
-
-### Admin Features
-- ✅ All employee features
-- ✅ View all employees' schedules
-- ✅ Filter availability by employee
-- ✅ Filter blocked dates by employee
-
----
-
-## File Structure
-
-```
-new_flow_0.2/
-├── client/                  # Frontend React app
-│   ├── src/
-│   │   ├── assets/         # Images, videos
-│   │   ├── components/     # Reusable components
-│   │   ├── contexts/       # React contexts
-│   │   ├── hooks/          # Custom hooks
-│   │   ├── pages/          # Page components
-│   │   ├── services/       # API services
-│   │   ├── styles/         # CSS files
-│   │   ├── translations/   # i18n translations
-│   │   ├── utils/          # Helper functions
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # Entry point
-│   ├── package.json
-│   └── vite.config.js
-│
-├── server/                  # Backend Express app
-│   ├── config/             # Configuration
-│   ├── middleware/         # Express middleware
-│   ├── models/             # Sequelize models
-│   ├── routes/             # API routes
-│   ├── services/           # Business logic
-│   ├── uploads/            # User uploaded files
-│   ├── utils/              # Helper functions
-│   ├── index.js            # Server entry point
-│   ├── init-db.js          # Database setup
-│   ├── seeds.js            # Sample data
-│   └── package.json
-│
-├── MAINTENANCE.md           # Maintenance guide
-└── TECH_DOCS.md            # This file
-```
-
----
-
-## Key Components
-
-### Frontend Components
-- `AppointmentsManager` - Manage appointment requests
-- `AvailabilityManager` - Set recurring schedules
-- `BlockedDatesManager` - Block specific dates
-- `ServiceManager` - CRUD for services
-- `UpdatePoster` - Create posts/updates
-- `LanguageToggle` - Switch languages
-- `FormInput` - Reusable form component
-
-### Backend Models
-- `User` - Employee accounts
-- `Service` - Services offered
-- `Appointment` - Customer appointments
-- `Availability` - Recurring schedules
-- `BlockedDate` - Date/time blocks
-- `Update` - Posts/announcements
-
----
-
-## Authentication Flow
-
-1. Employee enters email/password
-2. Server validates credentials
-3. Server generates JWT token
-4. Token stored in localStorage
-5. Token sent in Authorization header for protected routes
-6. Middleware validates token on each request
-7. Token decoded to get user info
-
----
-
-## Appointment Workflow
-
-1. **Customer requests appointment**
-   - Selects service, employee (optional), date, time
-   - Adds optional notes
-   - Appointment created with status "pending"
-
-2. **Employee reviews request**
-   - Sees appointment in dashboard
-   - Can accept or decline
-   - Must provide note if declining
-
-3. **If accepted:**
-   - Status changes to "accepted"
-   - Customer receives confirmation email
-   - Appointment shows in employee's schedule
-
-4. **If declined:**
-   - Status changes to "declined"
-   - Customer receives email with reason
-   - Time slot becomes available again
-
-5. **Cancellation:**
-   - Customer can cancel via email link
-   - Status changes to "cancelled"
-   - Employee notified
-   - Time slot becomes available
+- `POST /api/auth/create-employee` - Create employee account (admin only)
+- `DELETE /api/auth/employee/:id` - Delete employee (admin only)
 
 ---
 
 ## Translation System
 
-### Structure
-- Centralized in `client/src/translations/translations.js`
-- Two languages: English (en), Spanish (es)
-- Keys accessed via `useTranslation()` hook
+### Language Detection
 
-### Usage
-```javascript
-const { t, language } = useTranslation();
-return <h1>{t('welcome')}</h1>;
-```
+File: `client/src/utils/languageDetection.js`
 
-### Adding New Translations
-1. Add key to both `en` and `es` objects
-2. Use `t('keyName')` in components
-3. No hardcoded strings in JSX
+Detects language using Spanish word patterns and special characters (áéíóúñü¿¡). Returns `'en'` or `'es'`.
+
+### Auto-Translation Flow
+
+1. Backend detects and stores language when creating services/updates
+2. Frontend fetches content with language field
+3. If UI language differs from content language, translates via LibreTranslate API
+4. Translation cached on frontend for performance
+
+Implementation:
+- `UpdatePoster.jsx` - Lines 58-84 (translation effect)
+- `ServiceManager.jsx` - Lines 73-98 (translation effect)
+- Language field stored in database for services and updates tables
 
 ---
 
-## Date/Time Handling
+## Authentication
 
-### Database Format
-- Dates: `YYYY-MM-DD` (e.g., "2026-02-04")
-- Times: `HH:MM:SS` (24-hour, e.g., "14:30:00")
-- Timezone: Stored in UTC, displayed in local
+**Method:** JWT (jwt-simple)
+**Token Storage:** localStorage (key: `'token'`)
+**Token Format:** `Bearer <token>`
+**Expiration:** Configured in `server/config/constants.js`
 
-### Display Format
-- Dates: Localized based on language
-  - English: "Feb 4, 2026"
-  - Spanish: "4 feb 2026"
-- Times: 12-hour format with AM/PM
-  - "2:30 PM" / "2:30 p. m."
+**Password Hashing:** bcrypt with salt rounds
+**Protected Routes:** Require `verifyToken` middleware
+**Employee Verification:** `requireEmployee` middleware checks `isEmployee` flag
+
+---
+
+## File Upload (Cloudinary)
+
+**Implementation:** `server/config/upload.js`
+**Middleware:** Multer with memory storage
+**Accepted Types:** Images (JPEG, PNG, GIF, WebP), Videos (MP4, MOV, AVI, WMV, WebM)
+**Size Limit:** 50MB
+**Storage:** Cloudinary with folder `newflow-updates`
+
+Update model stores: `media_url`, `media_type`, `cloudinary_id`
+
+---
+
+## Environment Variables
+
+### Server
+
+See `server/.env.example` for complete list. Required variables:
+
+- Database: `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_NAME`, `DB_PASSWORD`
+- Security: `JWT_SECRET_KEY`, `CLIENT_URL`
+- Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+- Email: `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`
+- SMS (optional): `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`
+
+### Client
+
+- Development: `VITE_API_URL`
+- Production: `VITE_API_URL_PROD` (in `.env.production`)
 
 ---
 
 ## Security Features
 
-- ✅ JWT authentication
-- ✅ Password hashing (bcrypt)
-- ✅ Rate limiting on login endpoint
-- ✅ Helmet.js security headers
-- ✅ CORS configured
-- ✅ SQL injection prevention (Sequelize ORM)
-- ✅ XSS protection (React auto-escaping)
-- ✅ Environment variables for secrets
+- JWT authentication with token verification
+- bcrypt password hashing
+- Rate limiting (15 min window, configurable)
+- Helmet.js security headers
+- CORS with origin whitelist
+- SQL injection prevention via Sequelize ORM
+- XSS protection via React
+- All secrets in environment variables
 
 ---
 
-## Performance Optimizations
-
-- ✅ React memoization (useMemo, useCallback)
-- ✅ Lazy loading images
-- ✅ Minified production build
-- ✅ Database indexes on foreign keys
-- ✅ Efficient queries (minimal N+1 issues)
-- ✅ Client-side caching where appropriate
-
----
-
-## Testing Checklist
-
-### Manual Testing
-- [ ] Create appointment as customer
-- [ ] Accept appointment as employee
-- [ ] Decline appointment with note
-- [ ] Cancel appointment
-- [ ] Create/edit/delete service
-- [ ] Set weekly availability
-- [ ] Block specific dates
-- [ ] Post update with media
-- [ ] Switch language (EN/ES)
-- [ ] Test on mobile device
-- [ ] Verify email notifications
-- [ ] Verify SMS notifications (if enabled)
-
-### Code Quality
-```bash
-cd client && npm run lint
-cd server && npm run lint (if configured)
-```
-
----
-
-## Deployment Notes
-
-### Production Checklist
-1. Set `NODE_ENV=production` in server .env
-2. Update `DATABASE_URL` to production database
-3. Set strong `JWT_SECRET`
-4. Configure SMTP for email
-5. Configure Twilio for SMS
-6. Build client: `cd client && npm run build`
-7. Serve client build from server or separate host
-8. Set up HTTPS/SSL
-9. Configure domain DNS
-10. Set up database backups
-
-### Hosting Requirements
-- Node.js 16+ runtime
-- PostgreSQL 12+ database
-- Storage for uploaded media files
-- SSL certificate for HTTPS
-
----
-
-## Common Issues & Solutions
-
-### Issue: "Token expired"
-**Solution:** User needs to log in again. Token TTL can be adjusted in auth middleware.
-
-### Issue: "No times available"
-**Solution:** Employee needs to set availability for that day/time.
-
-### Issue: "Email not sending"
-**Solution:** Check SMTP credentials in .env file.
-
-### Issue: "Database connection failed"
-**Solution:** Verify DATABASE_URL in .env and database is running.
-
----
-
-## Browser Compatibility
-
-### Supported Browsers
-- ✅ Chrome 90+
-- ✅ Firefox 88+
-- ✅ Safari 14+
-- ✅ Edge 90+
-- ✅ Mobile browsers (iOS Safari, Chrome Android)
-
-### Not Supported
-- ❌ Internet Explorer
-- ❌ Very old browser versions (3+ years old)
-
----
-
-## Accessibility Features
-
-- ✅ Semantic HTML
-- ✅ ARIA labels where needed
-- ✅ Keyboard navigation support
-- ✅ Form labels associated with inputs
-- ✅ Proper heading hierarchy
-- ✅ Sufficient color contrast
-- ✅ Responsive touch targets (44x44px minimum)
-
----
-
-## Dependencies Reference
-
-### Why Each Package?
+## Key Code Locations
 
 **Frontend:**
-- `react` - UI framework (industry standard)
-- `react-router-dom` - Client-side routing
-- `axios` - HTTP requests (better than fetch)
-- `bootstrap` - Quick, responsive styling
-- `jwt-decode` - Parse JWT tokens
-- `prop-types` - Runtime type checking
+- API client: `client/src/services/api.js`
+- Language detection: `client/src/utils/languageDetection.js`
+- Translations: `client/src/translations/translations.js`
+- Auth utils: `client/src/utils/tokenUtils.js`
 
 **Backend:**
-- `express` - Web server framework
-- `sequelize` - SQL ORM (prevents SQL injection)
-- `pg` - PostgreSQL driver
-- `bcryptjs` - Password hashing
-- `jwt-simple` - JWT token generation
-- `nodemailer` - Send emails
-- `twilio` - Send SMS
-- `cors` - Allow cross-origin requests
-- `helmet` - Security headers
-- `express-rate-limit` - Prevent brute force
-- `multer` - File uploads
-- `dotenv` - Environment variables
+- Models: `server/models/`
+- Routes: `server/routes/`
+- Auth middleware: `server/middleware/auth.js`
+- Validation middleware: `server/middleware/validation.js`
+- Database config: `server/config/database.js`
+- Upload config: `server/config/upload.js`
 
 ---
 
-## Support & Maintenance
+## Date/Time Handling
 
-For questions about this codebase:
-1. Review this documentation
-2. Check MAINTENANCE.md for update procedures
-3. Review inline code comments
-4. Check package documentation links
+**Storage:** PostgreSQL DATEONLY for dates, TIME for times
+**Format:** Database uses 24-hour format (HH:MM:SS)
+**Display:** Frontend converts to 12-hour format (h:MM AM/PM)
+**Conversion:** `convertTo24Hour()` in AppointmentsPage.jsx
 
 ---
 
-*Last updated: February 4, 2026*
+## Dependencies (Locked Versions)
+
+All package versions locked to prevent breaking changes. Key dependencies:
+- React 18.3.1
+- Express 4.22.1
+- Sequelize 6.37.7
+- React Router 7.12.0
+- Bootstrap 5.3.8
+- Cloudinary 2.5.1
+- jwt-simple 0.5.6
+- bcrypt 5.1.1
+
+---
+
+## Browser Support
+
+- Chrome, Firefox, Safari, Edge (last 2 versions)
+- iOS Safari 14+
+- Chrome Android 90+
+- Mobile responsive (Bootstrap grid)
+
+---
+
+**Last Updated:** February 17, 2026
