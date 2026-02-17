@@ -6,6 +6,7 @@ import { serviceService, availabilityService, appointmentService, dataService } 
 import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import styles from './AppointmentsPage.module.css';
 
 /**
  * Appointments Page
@@ -225,221 +226,258 @@ export const AppointmentsPage = () => {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="appointments-page" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
-      <div className="container py-5">
-        <div className="text-center mb-4">
-          <h1 className="fw-bold text-white mb-0">{t('bookAppointment')}</h1>
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
+        {/* Header */}
+        <div className={styles.header}>
+          <h1 className={styles.title}>{t('bookAppointment')}</h1>
+          <p className={styles.subtitle}>{t('appointmentDetails')}</p>
         </div>
-        
-        <div className="row justify-content-center">
-          {/* Booking Form */}
-          <div className="col-11 col-sm-10 col-md-8 col-lg-6 mb-4">
-            <div className="card shadow-sm border-0">
-              <div className="card-body p-3 p-md-4">
-                <h5 className="card-title mb-4">{t('appointmentDetails')}</h5>
-                
-                {success && (
-                  <Alert 
-                    message={success} 
-                    type="success"
-                    onClose={() => setSuccess(null)}
-                  />
-                )}
-                
-                {error && (
-                  <Alert 
-                    message={error} 
-                    type="danger"
-                    onClose={() => setError(null)}
-                  />
-                )}
 
-                <form onSubmit={handleSubmit}>
-                  <FormInput
-                    label={`${t('name')} *`}
+        {/* Form Card */}
+        <div className={styles.formCard}>
+          <div className={styles.cardBody}>
+            {success && (
+              <div className={styles.successMessage}>
+                {success}
+              </div>
+            )}
+
+            {error && (
+              <Alert
+                message={error}
+                type="danger"
+                onClose={() => setError(null)}
+              />
+            )}
+
+            <form onSubmit={handleSubmit}>
+              {/* Name and Email Row */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="name" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>👤</span>
+                    {t('name')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    id="name"
                     name="name"
                     type="text"
+                    className={styles.formControl}
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    autocomplete="name"
+                    autoComplete="name"
+                    placeholder={t('name')}
                   />
+                </div>
 
-                  <FormInput
-                    label={`${t('email')} *`}
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>✉️</span>
+                    {t('email')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    id="email"
                     name="email"
                     type="email"
+                    className={styles.formControl}
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    autocomplete="email"
+                    autoComplete="email"
+                    placeholder={t('email')}
                   />
+                </div>
+              </div>
 
-                  <FormInput
-                    label={`${t('phone')} *`}
+              {/* Phone and Service Row */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="phone" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>📱</span>
+                    {t('phone')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    id="phone"
                     name="phone"
                     type="tel"
+                    className={styles.formControl}
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    autocomplete="tel"
+                    autoComplete="tel"
+                    placeholder={t('phone')}
                   />
+                </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="service" className="form-label">{t('service')} *</label>
-                    <select
-                      id="service"
-                      name="service"
-                      className="form-select"
-                      value={formData.service}
-                      onChange={handleChange}
-                      required
-                      autoComplete="off"
-                    >
-                      <option value="">{t('selectService')}</option>
-                      {translatedServices.map(s => (
-                        <option key={s.id} value={s.id}>
-                          {s.name} - {s.price_max
-                            ? `$${parseFloat(s.price).toFixed(2)} - $${parseFloat(s.price_max).toFixed(2)}`
-                            : `$${parseFloat(s.price).toFixed(2)}`
-                          }
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="employee" className="form-label">{t('barberStylist')}</label>
-                    <select
-                      id="employee"
-                      name="employee"
-                      className="form-select"
-                      value={formData.employee}
-                      onChange={handleChange}
-                      autoComplete="off"
-                    >
-                      <option value="">{t('noPreference')}</option>
-                      {employees.filter(emp => emp.name !== 'Admin').map(emp => (
-                        <option key={emp.id} value={emp.id}>{emp.name}</option>
-                      ))}
-                    </select>
-                    <small className="text-muted">
-                      {t('noPreferenceNote')}
-                    </small>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="date" className="form-label">{t('date')} *</label>
-                        <input
-                          id="date"
-                          type="date"
-                          name="date"
-                          className="form-control"
-                          value={formData.date}
-                          onChange={handleChange}
-                          min={today}
-                          required
-                          autoComplete="off"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label htmlFor="time" className="form-label">{t('time')} *</label>
-                        <select
-                          id="time"
-                          name="time"
-                          className="form-select"
-                          value={formData.time}
-                          onChange={handleChange}
-                          required
-                          disabled={!formData.date || loadingTimes}
-                          autoComplete="off"
-                        >
-                          <option value="">
-                            {!formData.date 
-                              ? t('selectDateFirst')
-                              : loadingTimes 
-                                ? t('loading')
-                                : availableTimes.length === 0 
-                                  ? t('noTimesAvailable')
-                                  : t('selectTime')}
-                          </option>
-                          {availableTimes.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                          ))}
-                        </select>
-                        {formData.date && !loadingTimes && availableTimes.length === 0 && (
-                          <small className="text-muted d-block mt-1">
-                            {t('noAvailabilityForDate')}
-                          </small>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="notes" className="form-label">{t('notes')}</label>
-                    <textarea
-                      id="notes"
-                      name="notes"
-                      className="form-control"
-                      rows="2"
-                      value={formData.notes}
-                      onChange={handleChange}
-                      placeholder={t('notesPlaceholder')}
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  <button 
-                    type="submit" 
-                    className="btn btn-lg w-100"
-                    style={{ backgroundColor: 'rgb(5, 45, 63)', color: 'white', border: 'none', fontWeight: '300' }}
+                <div className={styles.formGroup}>
+                  <label htmlFor="service" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>✂️</span>
+                    {t('service')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <select
+                    id="service"
+                    name="service"
+                    className={styles.formSelect}
+                    value={formData.service}
+                    onChange={handleChange}
+                    required
+                    autoComplete="off"
                   >
-                    {t('submitRequest')}
-                  </button>
-                </form>
+                    <option value="">{t('selectService')}</option>
+                    {translatedServices.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} - {s.price_max
+                          ? `$${parseFloat(s.price).toFixed(2)} - $${parseFloat(s.price_max).toFixed(2)}`
+                          : `$${parseFloat(s.price).toFixed(2)}`
+                        }
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
-            
-            <div className="text-center mt-3">
-              <div className="d-flex justify-content-center align-items-center gap-2">
-                <button 
-                  className="btn btn-sm"
-                  style={{ backgroundColor: 'white', color: 'rgb(5, 45, 63)', border: '1px solid rgb(5, 45, 63)' }}
-                  onClick={() => {
-                    navigate('/');
-                    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-                  }}
+
+              {/* Employee */}
+              <div className={styles.formGroup}>
+                <label htmlFor="employee" className={styles.formLabel}>
+                  <span className={styles.labelIcon}>💈</span>
+                  {t('barberStylist')}
+                </label>
+                <select
+                  id="employee"
+                  name="employee"
+                  className={styles.formSelect}
+                  value={formData.employee}
+                  onChange={handleChange}
+                  autoComplete="off"
                 >
-                  ⌂ {t('backToHome')}
-                </button>
-                <LanguageToggle inverse />
+                  <option value="">{t('noPreference')}</option>
+                  {employees.filter(emp => emp.name !== 'Admin').map(emp => (
+                    <option key={emp.id} value={emp.id}>{emp.name}</option>
+                  ))}
+                </select>
+                <small className={styles.helpText}>
+                  {t('noPreferenceNote')}
+                </small>
               </div>
-            </div>
+
+              {/* Date and Time Row */}
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="date" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>📅</span>
+                    {t('date')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <input
+                    id="date"
+                    type="date"
+                    name="date"
+                    className={styles.formControl}
+                    value={formData.date}
+                    onChange={handleChange}
+                    min={today}
+                    required
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="time" className={styles.formLabel}>
+                    <span className={styles.labelIcon}>🕐</span>
+                    {t('time')}
+                    <span className={styles.required}>*</span>
+                  </label>
+                  <select
+                    id="time"
+                    name="time"
+                    className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`}
+                    value={formData.time}
+                    onChange={handleChange}
+                    required
+                    disabled={!formData.date || loadingTimes}
+                    autoComplete="off"
+                  >
+                    <option value="">
+                      {!formData.date
+                        ? t('selectDateFirst')
+                        : loadingTimes
+                          ? t('loading')
+                          : availableTimes.length === 0
+                            ? t('noTimesAvailable')
+                            : t('selectTime')}
+                    </option>
+                    {availableTimes.map(time => (
+                      <option key={time} value={time}>{time}</option>
+                    ))}
+                  </select>
+                  {formData.date && !loadingTimes && availableTimes.length === 0 && (
+                    <small className={styles.alertInfo}>
+                      {t('noAvailabilityForDate')}
+                    </small>
+                  )}
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div className={styles.formGroup}>
+                <label htmlFor="notes" className={styles.formLabel}>
+                  <span className={styles.labelIcon}>📝</span>
+                  {t('notes')}
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  className={`${styles.formControl} ${styles.textarea}`}
+                  rows="2"
+                  value={formData.notes}
+                  onChange={handleChange}
+                  placeholder={t('notesPlaceholder')}
+                  autoComplete="off"
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className={styles.submitButton}
+              >
+                {t('submitRequest')}
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center" style={{ marginTop: '4rem', paddingTop: '3rem', paddingBottom: '2rem' }}>
-          <img 
+        {/* Footer Actions */}
+        <div className={styles.footerActions}>
+          <div className={styles.actionButtons}>
+            <button
+              className={styles.backButton}
+              onClick={() => {
+                navigate('/');
+                setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+              }}
+            >
+              <span>⌂</span>
+              {t('backToHome')}
+            </button>
+            <LanguageToggle inverse />
+          </div>
+        </div>
+
+        {/* Logo */}
+        <div className={styles.logoContainer}>
+          <img
             src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
             alt="New Flow Logo"
-            style={{ maxWidth: '300px', width: '100%', height: 'auto' }}
+            className={styles.logo}
           />
         </div>
-
-        {/* Centered No Appointments Message */}
-        {availableTimes.length === 0 && formData.date && !loadingTimes && (
-          <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80px' }}>
-            <span className="text-muted text-center" style={{ fontSize: '1.2rem' }}>
-              {t('noAppointmentsAtThisTime') || 'No appointments at this time.'}
-            </span>
-          </div>
-        )}
       </div>
     </div>
   );
