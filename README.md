@@ -1,7 +1,7 @@
 # New Flow - Appointment Management System
 
 **Repository:** https://github.com/Mimosquera/New-Flow-Salon
-**Domain:** newflowbarbershop.com
+**Domain:** [newflowbarbershop.com](https://newflowbarbershop.com)
 
 Barbershop appointment management system with bilingual support (EN/ES).
 
