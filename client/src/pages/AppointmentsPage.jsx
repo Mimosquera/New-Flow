@@ -367,7 +367,7 @@ export const AppointmentsPage = () => {
               </div>
 
               {/* Date and Time Row */}
-              <div className={styles.formRow}>
+              <div className={styles.dateTimeRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="date" className={styles.formLabel}>
                     <span className={styles.labelIcon}>📅</span>
