@@ -110,10 +110,22 @@
 .formSelect {
   cursor: pointer;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23052d3f' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   padding-right: 2.5rem;
+}
+
+.formSelect option {
+  background-color: white;
+  color: #000;
+}
+
+.formSelect option:checked {
+  background-color: rgb(5, 45, 63);
+  color: white;
 }
 
 .textarea {
@@ -138,10 +150,35 @@
   gap: 1rem;
 }
 
+.dateTimeRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 @media (max-width: 768px) {
   .formRow {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+
+  /* Keep date/time side by side on mobile */
+  .dateTimeRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Keep date/time side by side even on small phones */
+  .dateTimeRow {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
   }
 }
 
@@ -307,11 +344,12 @@
 
   .contentWrapper {
     max-width: 600px;
-    padding: 0 0.75rem;
+    padding: 0 1rem;
   }
 
   .formCard {
     border-radius: 20px;
+    margin: 0 0.25rem;
   }
 
   .cardBody {
@@ -359,8 +397,9 @@
   }
 
   .backButton {
-    padding: 0.45rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
   }
 
   .logoContainer {
@@ -392,7 +431,12 @@
   }
 
   .contentWrapper {
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
+  }
+
+  .formCard {
+    margin: 0 0.15rem;
+    border-radius: 16px;
   }
 
   .header {
