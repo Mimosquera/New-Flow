@@ -133,6 +133,7 @@
   opacity: 0.6;
 }
 
+/* Hide letters behind dropdown arrow for service select on mobile */
 .formSelect {
   cursor: pointer;
   appearance: none;
@@ -145,6 +146,46 @@
   accent-color: rgb(5, 45, 63);
   -webkit-tap-highlight-color: transparent;
   color: rgb(5, 45, 63);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  /* Service dropdown: hide text behind arrow */
+  .formSelect {
+    padding-right: 2.5rem;
+    background-position: right 0.5rem center;
+    background-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Keep name/email fields on same row in Spanish */
+  .formRow {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  .formGroup {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .formGroup input[type="email"] {
+    margin-top: 0 !important;
+    align-self: flex-start;
+  }
+  .formLabel {
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-break: break-word;
+  }
 }
 
 .formSelect option {
