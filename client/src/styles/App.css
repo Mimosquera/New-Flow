@@ -20,16 +20,8 @@
   color: black;
   margin-bottom: 1rem;
 }
-.post-update-card .card-title.create-employee-title {
-  text-shadow: 0 2px 8px rgba(5,45,63,0.10), 0 1px 1px rgba(0,0,0,0.08);
-}
-/* Force black for post update and add service card titles */
-.post-update-card .card-title.force-black-title {
-  color: #fff !important;
-  text-shadow: 0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65);
-  text-shadow: 0 2px 8px rgba(5,45,63,0.10), 0 1px 1px rgba(0,0,0,0.08);
-}
-/* Force black for create employee card title only */
+/* Post update and service card titles */
+.post-update-card .card-title.force-black-title,
 .post-update-card .card-title.create-employee-title {
   color: #fff !important;
   text-shadow: 0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65);
@@ -58,9 +50,6 @@
 .dashboard-header-sticky {
   background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%) !important;
   box-shadow: 0 8px 32px 0 rgba(5, 45, 63, 0.28), 0 2px 8px 0 rgba(0,0,0,0.12);
-}
-.dashboard-header {
-  box-shadow: 0 4px 18px 0 rgba(5, 45, 63, 0.22), 0 1.5px 4px 0 rgba(0,0,0,0.10) !important;
 }
 /* Tab header shadow */
 .dashboard-tabs {
@@ -109,9 +98,6 @@
 .post-update-card .form-label {
   color: rgb(5, 45, 63) !important;
 }
-.post-update-card .form-control {
-  color: rgb(5, 45, 63) !important;
-}
 .post-update-card .text-muted {
   color: #3a4a5a !important;
   font-weight: 500;
@@ -149,15 +135,6 @@
   min-height: 100vh;
 }
 
-/* Section Heading Styles */
-.section-heading {
-  color: rgb(5, 45, 63) !important;
-}
-
-h2.section-heading {
-  color: rgb(5, 45, 63) !important;
-}
-
 /* Dashboard Styles */
 .employee-dashboard {
   min-height: 100vh;
@@ -176,7 +153,7 @@ h2.section-heading {
   padding: 1rem;
   background: white;
   border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: 0 4px 18px 0 rgba(5, 45, 63, 0.22), 0 1.5px 4px 0 rgba(0,0,0,0.10) !important;
   gap: 1rem;
   max-width: 1200px;
   margin-left: auto;
@@ -196,28 +173,6 @@ h2.section-heading {
   font-size: 0.875rem;
 }
 
-@media (max-width: 768px) {
-  .dashboard-header {
-    padding: 1rem;
-    margin-bottom: 0;
-    gap: 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .dashboard-header h1 {
-    font-size: 1.25rem;
-    margin-bottom: 0;
-  }
-  
-  .dashboard-header .d-flex {
-    margin-top: 0;
-  }
-  
-  .dashboard-header .btn {
-    margin: 0;
-  }
-}
 
 /* Form Container Styles */
 .form-container {
@@ -262,68 +217,8 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   background: white;
 }
 
-/* Link Styles */
-a {
-  color: #667eea;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
 
-a:hover {
-  color: #764ba2;
-  text-decoration: underline;
-}
-
-/* Data Display Styles */
-pre {
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  padding: 1rem;
-  font-size: 0.875rem;
-  overflow-x: auto;
-  color: #333;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-}
-
-/* Loading State */
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .dashboard-header {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-    align-items: flex-start;
-  }
-
-  .dashboard-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .dashboard-header button {
-    width: 100%;
-  }
-
-  .form-container {
-    min-height: auto;
-    padding: 2rem 1rem;
-  }
-
-  .form-card {
-    max-width: 100%;
-  }
-
-  .form-card .card-body {
-    padding: 1.5rem;
-  }
-}
+/* Responsive Design - Consolidated media queries */
 
 
 /* Homepage Styles */
@@ -415,15 +310,6 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   border-left-color: #0056b3;
 }
 
-/* Update Poster Styles */
-.update-poster .btn-sm {
-  font-size: 0.75rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.updates-list .card {
-  border-left: 4px solid #28a745;
-}
 
 /* Dashboard Logo */
 .dashboard-logo {
@@ -447,6 +333,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  /* Hero Section */
   .hero-section h1 {
     font-size: 2.5rem;
   }
@@ -455,26 +342,60 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
     font-size: 1.1rem;
   }
 
+  /* Dashboard Header */
   .dashboard-header {
+    padding: 1rem;
+    margin-bottom: 0;
+    gap: 1rem;
     flex-direction: column;
+    text-align: center;
     align-items: flex-start;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .dashboard-header .d-flex {
+    margin-top: 0;
+  }
+
+  .dashboard-header .btn {
+    margin: 0;
   }
 
   .dashboard-header button {
     margin-top: 1rem;
+    width: 100%;
   }
-}
 
-@media (max-width: 768px) {
+  /* Form Container */
+  .form-container {
+    min-height: auto;
+    padding: 2rem 1rem;
+  }
+
+  .form-card {
+    max-width: 100%;
+  }
+
+  .form-card .card-body {
+    padding: 1.5rem;
+  }
+
+  /* Employee Dashboard */
   .employee-dashboard {
     padding-top: 10px !important;
   }
+
   .container.pt-3.pb-3 {
     width: calc(100% - 30px) !important;
     margin-left: 15px !important;
     margin-right: 15px !important;
     box-sizing: border-box;
   }
+
   .no-appointments-message {
     text-align: center;
     width: 100%;

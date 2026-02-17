@@ -87,11 +87,16 @@ router.put('/:id', verifyToken, requireEmployee, async (req, res) => {
       }
     }
 
+    const updatedName = name ? sanitizeString(name) : service.name;
+    const updatedDescription = description ? sanitizeString(description) : service.description;
+    const detectedLang = detectLanguage(`${updatedName} ${updatedDescription}`);
+
     await service.update({
-      name: name ? sanitizeString(name) : service.name,
-      description: description ? sanitizeString(description) : service.description,
+      name: updatedName,
+      description: updatedDescription,
       price: updatedPrice,
       price_max: updatedPriceMax || null,
+      language: detectedLang,
     });
 
     res.json(service);

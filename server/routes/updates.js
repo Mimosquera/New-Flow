@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
     const options = {
       order: [['date', 'DESC'], ['createdAt', 'DESC']],
-      attributes: ['id', 'title', 'content', 'author', 'date', 'media_url', 'media_type', 'user_id', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'title', 'content', 'author', 'date', 'media_url', 'media_type', 'user_id', 'language', 'createdAt', 'updatedAt'],
     };
 
     if (limit) {
