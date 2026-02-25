@@ -401,7 +401,7 @@ export const translations = {
     // Appointments Page
     bookAppointment: 'Solicitar una Cita',
     name: 'Nombre',
-    email: 'Correo Electrónico',
+    email: 'Correo',
     phone: 'Teléfono',
     service: 'Servicio',
     selectService: 'Seleccionar un servicio',

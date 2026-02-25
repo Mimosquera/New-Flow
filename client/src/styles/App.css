@@ -1,3 +1,37 @@
+/* Global Mobile Touch States - Prevent Sticky Selection */
+@media (hover: none) and (pointer: coarse) {
+  button:focus,
+  a:focus {
+    outline: none;
+  }
+
+  button:active,
+  a:active {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input,
+  textarea,
+  select {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}
+
+/* Prevent pre-selected state on page navigation */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 /* Current Services Table Styles */
 .current-services-table {
   border: 4px solid black !important;

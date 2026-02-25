@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import { HomePage } from './pages/HomePage.jsx';
 import { AppointmentsPage } from './pages/AppointmentsPage.jsx';
 import { EmployeeLoginPage } from './pages/EmployeeLoginPage.jsx';
@@ -11,6 +12,45 @@ import { LanguageProvider } from './contexts/LanguageContext.jsx';
  */
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Clear focus and selections when navigating between pages
+  useEffect(() => {
+    if (document.activeElement && document.activeElement !== document.body) {
+      document.activeElement.blur();
+    }
+
+    if (window.getSelection) {
+      const selection = window.getSelection();
+      if (selection) {
+        selection.removeAllRanges();
+      }
+    }
+
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Auto-blur buttons after tap on mobile
+  useEffect(() => {
+    const handleButtonBlur = (e) => {
+      const target = e.target;
+      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.closest('button') || target.closest('a')) {
+        setTimeout(() => {
+          if (document.activeElement) {
+            document.activeElement.blur();
+          }
+        }, 100);
+      }
+    };
+
+    document.addEventListener('touchend', handleButtonBlur);
+    document.addEventListener('click', handleButtonBlur);
+
+    return () => {
+      document.removeEventListener('touchend', handleButtonBlur);
+      document.removeEventListener('click', handleButtonBlur);
+    };
+  }, []);
 
   const handleBookingClick = () => {
     navigate('/appointments');
