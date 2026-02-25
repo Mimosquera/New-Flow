@@ -170,28 +170,6 @@ export default function EmployeeDashboard() {
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'center' }}>
                 <LanguageToggle inverse />
               </div>
-              <button 
-                className="btn btn-sm"
-                style={{
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.2rem 0.4rem',
-                  fontSize: '0.85rem',
-                  fontWeight: '500',
-                  borderRadius: '4px',
-                  lineHeight: '1'
-                }}
-                onClick={() => {
-                  if (window.confirm(t('logoutConfirm'))) {
-                    removeToken();
-                    navigate('/');
-                  }
-                }}
-                title={t('logout')}
-              >
-                ×
-              </button>
             </div>
           </div>
         </div>
@@ -541,7 +519,14 @@ export default function EmployeeDashboard() {
       {activeTab === 'updates' && <UpdatePoster />}
       {activeTab === 'services' && <ServiceManager />}
       {activeTab === 'availability' && <AvailabilityManager />}
-      {activeTab === 'profile' && <ProfileManager />}
+      {activeTab === 'profile' && (
+        <ProfileManager
+          onLogout={() => {
+            removeToken();
+            navigate('/');
+          }}
+        />
+      )}
       {activeTab === 'team' && isAdmin && <EmployeeManager />}
 
       {/* Footer */}

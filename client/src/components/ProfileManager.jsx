@@ -11,6 +11,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -19,7 +20,7 @@ import { setToken } from '../utils/tokenUtils.js';
 const THEME_COLOR = 'rgb(5, 45, 63)';
 const SECONDARY_COLOR = '#46a1a1';
 
-export const ProfileManager = () => {
+export const ProfileManager = ({ onLogout }) => {
   const { t } = useTranslation();
   const fileInputRef = useRef(null);
 
@@ -797,8 +798,49 @@ export const ProfileManager = () => {
               </div>
             </div>
           )}
+
+          {/* Logout Button */}
+          {onLogout && (
+            <div className="text-center mt-5 pt-4" style={{ borderTop: '2px solid rgba(70, 161, 161, 0.2)' }}>
+              <button
+                onClick={() => {
+                  if (window.confirm(t('logoutConfirm'))) {
+                    onLogout();
+                  }
+                }}
+                className="btn btn-lg"
+                style={{
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  padding: '0.75rem 3rem',
+                  fontSize: '1rem',
+                  fontWeight: '600',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 12px rgba(220, 53, 69, 0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = '#c82333';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(220, 53, 69, 0.4)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = '#dc3545';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 53, 69, 0.3)';
+                }}
+              >
+                {t('logout')}
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
+};
+
+ProfileManager.propTypes = {
+  onLogout: PropTypes.func,
 };

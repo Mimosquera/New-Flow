@@ -1,0 +1,119 @@
+/* Language Toggle Slider Container */
+.toggleContainer {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toggleContainer:focus {
+  outline: none;
+}
+
+/* Track (background of the slider) */
+.track {
+  position: relative;
+  width: 70px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(70, 161, 161, 0.4);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.trackActive {
+  background: rgba(70, 161, 161, 0.15);
+  border-color: #46a1a1;
+}
+
+/* Labels inside the track */
+.label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  z-index: 1;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.labelLeft {
+  margin-left: 2px;
+}
+
+.labelRight {
+  margin-right: 2px;
+}
+
+.labelActive {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Sliding circle/knob */
+.slider {
+  position: absolute;
+  left: 4px;
+  width: 36px;
+  height: 24px;
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%);
+  border-radius: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(70, 161, 161, 0.2);
+  letter-spacing: 0.3px;
+  z-index: 2;
+}
+
+.sliderRight {
+  left: calc(100% - 40px);
+  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
+}
+
+/* Hover effects - only on devices that support hover */
+@media (hover: hover) {
+  .toggleContainer:hover .track {
+    border-color: #46a1a1;
+    box-shadow: 0 4px 12px rgba(70, 161, 161, 0.25);
+  }
+
+  .toggleContainer:hover .slider {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(70, 161, 161, 0.3);
+  }
+}
+
+/* Active/pressed state */
+.toggleContainer:active .slider {
+  transform: scale(0.95);
+}
+
+/* Inverse style (for dark backgrounds) */
+.inverse .track {
+  background: rgba(5, 45, 63, 0.3);
+  border-color: rgba(70, 161, 161, 0.6);
+}
+
+.inverse .trackActive {
+  background: rgba(70, 161, 161, 0.2);
+  border-color: #46a1a1;
+}
+
+.inverse .label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.inverse .labelActive {
+  color: rgba(255, 255, 255, 0.35);
+}

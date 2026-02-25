@@ -1,49 +1,36 @@
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import PropTypes from 'prop-types';
+import styles from './LanguageToggle.module.css';
 
 export const LanguageToggle = ({ inverse = false }) => {
   const { language, toggleLanguage } = useLanguage();
 
-  const defaultStyle = {
-    backgroundColor: inverse ? 'rgb(5, 45, 63)' : 'transparent',
-    color: inverse ? 'white' : 'rgb(5, 45, 63)',
-    border: '1px solid rgb(5, 45, 63)',
-  };
-
-  const hoverStyle = {
-    backgroundColor: inverse ? 'transparent' : 'rgb(5, 45, 63)',
-    color: inverse ? 'rgb(5, 45, 63)' : 'white',
-  };
-
   return (
-    <button
-      onClick={(e) => {
-        e.currentTarget.blur();
-        toggleLanguage();
-      }}
-      className="btn btn-sm"
-      style={{
-        ...defaultStyle,
-        fontWeight: '500',
-        padding: '4px 8px',
-        borderRadius: '4px',
-        fontSize: '0.75rem',
-        transition: 'all 0.3s ease',
-        WebkitTapHighlightColor: 'transparent',
-        outline: 'none',
-      }}
-      onMouseOver={(e) => {
-        e.currentTarget.style.backgroundColor = hoverStyle.backgroundColor;
-        e.currentTarget.style.color = hoverStyle.color;
-      }}
-      onMouseOut={(e) => {
-        e.currentTarget.style.backgroundColor = defaultStyle.backgroundColor;
-        e.currentTarget.style.color = defaultStyle.color;
-      }}
+    <div
+      className={`${styles.toggleContainer} ${inverse ? styles.inverse : ''}`}
+      onClick={() => toggleLanguage()}
       title={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleLanguage();
+        }
+      }}
     >
-      {language === 'en' ? 'ES' : 'EN'}
-    </button>
+      <div className={`${styles.track} ${language === 'es' ? styles.trackActive : ''}`}>
+        <span className={`${styles.label} ${styles.labelLeft} ${language === 'en' ? styles.labelActive : ''}`}>
+          EN
+        </span>
+        <span className={`${styles.label} ${styles.labelRight} ${language === 'es' ? styles.labelActive : ''}`}>
+          ES
+        </span>
+        <div className={`${styles.slider} ${language === 'es' ? styles.sliderRight : ''}`}>
+          {language === 'en' ? 'EN' : 'ES'}
+        </div>
+      </div>
+    </div>
   );
 };
 
