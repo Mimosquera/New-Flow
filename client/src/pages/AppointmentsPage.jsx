@@ -244,7 +244,6 @@ export const AppointmentsPage = () => {
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="name" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>👤</span>
                     {t('name')}
                     <span className={styles.required}>*</span>
                   </label>
@@ -263,7 +262,6 @@ export const AppointmentsPage = () => {
 
                 <div className={styles.formGroup}>
                   <label htmlFor="email" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>✉️</span>
                     {t('email')}
                     <span className={styles.required}>*</span>
                   </label>
@@ -285,7 +283,6 @@ export const AppointmentsPage = () => {
               <div className={styles.formRow}>
                 <div className={styles.formGroup}>
                   <label htmlFor="phone" className={styles.formLabel}>
-                    <span className={styles.labelIcon}></span>
                     {t('phone')}
                     <span className={styles.required}>*</span>
                   </label>
@@ -304,7 +301,6 @@ export const AppointmentsPage = () => {
 
                 <div className={styles.formGroup}>
                   <label htmlFor="service" className={styles.formLabel}>
-                    <span className={styles.labelIcon}>✂️</span>
                     {t('service')}
                     <span className={styles.required}>*</span>
                   </label>
@@ -333,7 +329,6 @@ export const AppointmentsPage = () => {
               {/* Employee */}
               <div className={styles.formGroup}>
                 <label htmlFor="employee" className={styles.formLabel}>
-                  <span className={styles.labelIcon}>💈</span>
                   {t('barberStylist')}
                 </label>
                 <select
@@ -359,7 +354,6 @@ export const AppointmentsPage = () => {
                 <div className={styles.dateTimeRow}>
                   <div className={styles.formGroup}>
                     <label htmlFor="date" className={styles.formLabel}>
-                      <span className={styles.labelIcon}>📅</span>
                       {t('date')}
                       <span className={styles.required}>*</span>
                     </label>
@@ -378,7 +372,6 @@ export const AppointmentsPage = () => {
 
                   <div className={styles.formGroup}>
                     <label htmlFor="time" className={styles.formLabel}>
-                      <span className={styles.labelIcon}>🕐</span>
                       {t('time')}
                       <span className={styles.required}>*</span>
                     </label>
@@ -417,7 +410,6 @@ export const AppointmentsPage = () => {
               {/* Notes */}
               <div className={styles.formGroup}>
                 <label htmlFor="notes" className={styles.formLabel}>
-                  <span className={styles.labelIcon}></span>
                   {t('notes')}
                 </label>
                 <textarea

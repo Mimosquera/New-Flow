@@ -6,7 +6,7 @@
 }
 
 .contentWrapper {
-  max-width: 750px;
+  max-width: 850px;
   margin: 0 auto;
   padding: 0 1rem;
 }
@@ -19,7 +19,7 @@
 
 .title {
   color: white;
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -28,7 +28,7 @@
 
 .subtitle {
   color: rgba(255, 255, 255, 0.85);
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 300;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
@@ -40,15 +40,16 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(70, 161, 161, 0.1);
 }
 
 .formCard:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 48px rgba(70, 161, 161, 0.2), 0 0 0 1px rgba(70, 161, 161, 0.2);
 }
 
 .cardBody {
-  padding: 2rem;
+  padding: 2rem 2.5rem;
 }
 
 /* Form Groups */
@@ -79,19 +80,19 @@
 .formSelect {
   width: 100%;
   padding: 0.65rem 0.85rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid #d0e8e8;
   border-radius: 10px;
   font-size: 0.95rem;
   transition: all 0.3s ease;
-  background-color: #fafafa;
+  background-color: #f5fafa;
 }
 
 .formControl:focus,
 .formSelect:focus {
   outline: none;
-  border-color: rgb(5, 45, 63);
+  border-color: #46a1a1;
   background-color: white;
-  box-shadow: 0 0 0 4px rgba(5, 45, 63, 0.1);
+  box-shadow: 0 0 0 4px rgba(70, 161, 161, 0.15);
   transform: translateY(-1px);
 }
 
@@ -123,7 +124,7 @@
 
 .formControl:hover,
 .formSelect:hover {
-  border-color: rgb(51, 135, 184);
+  border-color: #46a1a1;
 }
 
 .formControl:disabled,
@@ -212,7 +213,7 @@
   display: block;
   margin-top: 0.35rem;
   font-size: 0.8rem;
-  color: #666;
+  color: #5a8a8a;
   font-style: italic;
 }
 
@@ -334,7 +335,7 @@
 .submitButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 20px rgba(5, 45, 63, 0.4);
-  background: rgb(8, 65, 90);
+  background: #46a1a1;
 }
 
 .submitButton:active {
@@ -375,25 +376,26 @@
 }
 
 .backButton {
-  padding: 0.5rem 1.25rem;
-  font-size: 0.9rem;
+  padding: 0.3rem 0.65rem;
+  font-size: 0.7rem;
   font-weight: 500;
   background-color: white;
   color: rgb(5, 45, 63);
-  border: 2px solid rgb(5, 45, 63);
-  border-radius: 8px;
+  border: 2px solid #46a1a1;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .backButton:hover {
-  background-color: rgb(5, 45, 63);
+  background-color: #46a1a1;
+  border-color: #46a1a1;
   color: white;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(5, 45, 63, 0.3);
+  box-shadow: 0 4px 12px rgba(70, 161, 161, 0.3);
 }
 
 /* Logo */
@@ -410,6 +412,18 @@
   height: auto;
   filter: drop-shadow(0 8px 24px rgba(255, 255, 255, 0.1));
   transition: filter 0.3s ease;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .logo:hover {
@@ -419,13 +433,14 @@
 /* Alert Messages */
 .alertInfo {
   display: block;
-  background-color: #e8f4f8;
-  border: 1px solid #b3d9e8;
+  background-color: #d0f0f0;
+  border: 1px solid #46a1a1;
   color: rgb(5, 45, 63);
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
   margin-top: 0.15rem;
   font-size: 0.8rem;
+  font-weight: 500;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -447,15 +462,16 @@
 
 /* Success Message */
 .successMessage {
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
+  background-color: #d0f0f0;
+  border: 2px solid #46a1a1;
+  color: rgb(5, 45, 63);
   padding: 0.85rem;
   border-radius: 10px;
   margin-bottom: 1.25rem;
   font-size: 0.95rem;
+  font-weight: 600;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(70, 161, 161, 0.2);
 }
 
 /* Responsive adjustments */
@@ -465,12 +481,12 @@
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 0.15rem;
   }
 
   .subtitle {
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
 
   .header {
@@ -487,11 +503,11 @@
     border-radius: 20px;
     margin: 0 auto;
     box-sizing: border-box;
-    width: 340px;
+    width: 380px;
   }
 
   .cardBody {
-    padding: 1rem 0.4rem;
+    padding: 1rem 0.8rem;
     box-sizing: border-box;
   }
 
@@ -536,9 +552,9 @@
   }
 
   .backButton {
-    padding: 0.4rem 0.85rem;
-    font-size: 0.8rem;
-    border-radius: 6px;
+    padding: 0.25rem 0.55rem;
+    font-size: 0.65rem;
+    border-radius: 5px;
   }
 
   .logoContainer {
@@ -579,7 +595,7 @@
     margin: 0 auto;
     border-radius: 16px;
     box-sizing: border-box;
-    width: 320px;
+    width: 350px;
   }
 
   .header {
@@ -587,11 +603,11 @@
   }
 
   .title {
-    font-size: 1.35rem;
+    font-size: 1.6rem;
   }
 
   .cardBody {
-    padding: 0.85rem 0.35rem;
+    padding: 0.85rem 0.6rem;
     box-sizing: border-box;
   }
 

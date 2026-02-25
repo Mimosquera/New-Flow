@@ -13,16 +13,13 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Alert, FormInput } from '../components/Common/index.jsx';
+import { Alert } from '../components/Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { authService } from '../services/api.js';
 import { setToken } from '../utils/tokenUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
-
-// Constants
-const THEME_COLOR = 'rgb(5, 45, 63)';
-const MAX_FORM_WIDTH = '450px';
+import styles from './EmployeeLoginPage.module.css';
 
 /**
  * Employee Login Page Component
@@ -118,16 +115,16 @@ export const EmployeeLoginPage = () => {
   }, []);
 
   return (
-    <div className="form-container" style={{ background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
-      <div style={{ width: '100%', maxWidth: MAX_FORM_WIDTH }}>
-        <div className="form-card card">
-          <div className="card-header">
-            <h3 className="mb-0">{t('employeeLoginTitle')}</h3>
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.formCard}>
+          <div className={styles.cardHeader}>
+            <h3 className={styles.cardTitle}>{t('employeeLoginTitle')}</h3>
           </div>
-          <div className="card-body">
+          <div className={styles.cardBody}>
             {(globalError || error) && (
-              <Alert 
-                message={globalError || error} 
+              <Alert
+                message={globalError || error}
                 type="danger"
                 onClose={() => {
                   setGlobalError(null);
@@ -135,55 +132,66 @@ export const EmployeeLoginPage = () => {
                 }}
               />
             )}
-            
+
             <form onSubmit={handleSubmit}>
-              <FormInput
-                label={t('email')}
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                autocomplete="email"
-              />
-              
-              <FormInput
-                label={t('password')}
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                autocomplete="current-password"
-              />
-              
-              <button 
-                type="submit" 
-                className="btn w-100"
-                style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none' }}
+              <div className={styles.formGroup}>
+                <label htmlFor="email" className={styles.formLabel}>
+                  {t('email')}
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  className={styles.formInput}
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                  placeholder={t('email')}
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="password" className={styles.formLabel}>
+                  {t('password')}
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  className={styles.formInput}
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  autoComplete="current-password"
+                  placeholder={t('password')}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={styles.submitButton}
                 disabled={loading}
               >
                 {loading ? t('loggingIn') : t('employeeLogin')}
               </button>
             </form>
 
-            <p className="mt-3 text-center text-muted">
-              <small>{t('employeeAccessOnly')}</small>
+            <p className={styles.footerText}>
+              {t('employeeAccessOnly')}
             </p>
           </div>
         </div>
-        
-        <div className="text-center mt-3">
-          <div className="d-flex justify-content-center align-items-center gap-2">
-            <button 
-              className="btn btn-sm"
-              style={{ backgroundColor: 'white', color: THEME_COLOR, border: '1px solid white' }}
-              onClick={handleBackToHome}
-            >
-              ⌂ {t('backToHome')}
-            </button>
-            <LanguageToggle inverse />
-          </div>
+
+        <div className={styles.actionButtons}>
+          <button
+            className={styles.backButton}
+            onClick={handleBackToHome}
+          >
+            <span>⌂</span>
+            {t('backToHome')}
+          </button>
+          <LanguageToggle inverse />
         </div>
       </div>
     </div>
