@@ -68,6 +68,7 @@ export const AvailabilityManager = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
   const [showAddAvailability, setShowAddAvailability] = useState(false);
   const [showBlockedDates, setShowBlockedDates] = useState(false);
+  const [showAvailabilityList, setShowAvailabilityList] = useState(false);
 
   /**
    * Handle window resize to update mobile state
@@ -397,6 +398,19 @@ export const AvailabilityManager = () => {
 
   return (
     <div className="availability-manager">
+      <style>{`
+        @keyframes headerGlow {
+          0%, 100% {
+            box-shadow: 0 0 10px rgba(70, 161, 161, 0.3), 0 0 20px rgba(70, 161, 161, 0.2);
+          }
+          50% {
+            box-shadow: 0 0 20px rgba(70, 161, 161, 0.5), 0 0 30px rgba(70, 161, 161, 0.3), 0 0 40px rgba(70, 161, 161, 0.1);
+          }
+        }
+        .collapsible-header {
+          animation: headerGlow 2s ease-in-out infinite;
+        }
+      `}</style>
       <div className="container py-4">
         <div className="row">
           {/* Left Column: Add Availability and Block Dates */}
@@ -405,7 +419,7 @@ export const AvailabilityManager = () => {
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
                 <div
-                  className="card-header d-flex justify-content-between align-items-center d-md-none"
+                  className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
                   style={{
                     backgroundColor: THEME_COLOR,
                     color: 'white',
@@ -511,7 +525,9 @@ export const AvailabilityManager = () => {
                   </form>
                 </div>
               </div>
-              <div className="mt-3" style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
+            </div>
+            <div style={{ marginTop: '1.5rem' }}>
+              <div style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
                 {t('availabilityDescription')}
               </div>
             </div>
@@ -521,7 +537,7 @@ export const AvailabilityManager = () => {
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
                 <div
-                  className="card-header d-flex justify-content-between align-items-center d-md-none"
+                  className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
                   style={{
                     backgroundColor: THEME_COLOR,
                     color: 'white',
@@ -548,7 +564,9 @@ export const AvailabilityManager = () => {
                   />
                 </div>
               </div>
-              <div className="mt-3" style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
+            </div>
+            <div style={{ marginTop: '1.5rem' }}>
+              <div style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
                 {t('blockDatesDescription')}
               </div>
             </div>
@@ -558,32 +576,48 @@ export const AvailabilityManager = () => {
           {/* Right Column: Availability List */}
           <div className="col-lg-8">
             <div className="card post-update-card shadow-sm border-0">
-              <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div className="flex-grow-1">
-                    <h5 className="card-title mb-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+              <div
+                className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
+                style={{
+                  backgroundColor: THEME_COLOR,
+                  color: 'white',
+                  cursor: 'pointer',
+                  padding: '0.75rem 1rem'
+                }}
+                onClick={() => setShowAvailabilityList(!showAvailabilityList)}
+              >
+                <h5 className="mb-0" style={{ fontSize: '1rem' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+                <span style={{ fontSize: '1.2rem' }}>
+                  {showAvailabilityList ? '−' : '+'}
+                </span>
+              </div>
+              <div className={`d-md-block ${showAvailabilityList ? 'd-block' : 'd-none'}`}>
+                <div className="card-body p-4">
+                  <div className="d-flex justify-content-between align-items-start mb-3">
+                    <div className="flex-grow-1">
+                      <h5 className="card-title mb-2 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+                    </div>
+
+                    {/* Admin Employee Filter */}
+                    {isAdmin && employees.length > 0 && (
+                      <select
+                        id="availabilityEmployeeFilter"
+                        name="availabilityEmployeeFilter"
+                        className="form-select"
+                        style={{ width: 'auto', minWidth: '200px' }}
+                        value={selectedEmployeeFilter}
+                        onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                        autoComplete="off"
+                      >
+                        <option value="all">{t('allEmployees')}</option>
+                        {employees.map(emp => (
+                          <option key={emp.id} value={emp.id}>{emp.name}</option>
+                        ))}
+                      </select>
+                    )}
                   </div>
 
-                  {/* Admin Employee Filter */}
-                  {isAdmin && employees.length > 0 && (
-                    <select
-                      id="availabilityEmployeeFilter"
-                      name="availabilityEmployeeFilter"
-                      className="form-select"
-                      style={{ width: 'auto', minWidth: '200px' }}
-                      value={selectedEmployeeFilter}
-                      onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
-                      autoComplete="off"
-                    >
-                      <option value="all">{t('allEmployees')}</option>
-                      {employees.map(emp => (
-                        <option key={emp.id} value={emp.id}>{emp.name}</option>
-                      ))}
-                    </select>
-                  )}
-                </div>
-
-                {loading ? (
+                  {loading ? (
                   <div className="text-center py-4">
                     <p>{t('loading')}</p>
                   </div>
@@ -815,6 +849,7 @@ export const AvailabilityManager = () => {
                       })}
                   </div>
                 )}
+                </div>
               </div>
             </div>
           </div>

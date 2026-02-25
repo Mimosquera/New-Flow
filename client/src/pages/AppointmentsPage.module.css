@@ -39,6 +39,7 @@
   -webkit-transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  margin-top: 3rem;
 }
 
 .formCard:hover {
@@ -587,7 +588,7 @@
 
   .formCard {
     border-radius: 20px;
-    margin: 0 auto;
+    margin: 2rem auto 0;
     box-sizing: border-box;
     width: 380px;
   }
@@ -703,7 +704,7 @@
   }
 
   .formCard {
-    margin: 0 auto;
+    margin: 1.5rem auto 0;
     border-radius: 16px;
     box-sizing: border-box;
     width: 350px;
