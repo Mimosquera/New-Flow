@@ -13,7 +13,8 @@
       "Bash(ls:*)",
       "Bash(node scripts/run-migration.js:*)",
       "Bash(timeout 10 node:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(npm run migrate:*)"
     ]
   }
 }

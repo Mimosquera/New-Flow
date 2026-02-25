@@ -216,14 +216,14 @@ export const AppointmentsPage = () => {
   return (
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
-        {/* Header */}
-        <div className={styles.header}>
-          <h1 className={styles.title}>{t('bookAppointment')}</h1>
-          <p className={styles.subtitle}>{t('appointmentDetails')}</p>
-        </div>
-
         {/* Form Card */}
         <div className={styles.formCard}>
+          {/* Card Header */}
+          <div className={styles.cardHeader}>
+            <h1 className={styles.cardTitle}>{t('bookAppointment')}</h1>
+            <p className={styles.cardSubtitle}>{t('appointmentDetails')}</p>
+          </div>
+
           <div className={styles.cardBody}>
             {success && (
               <div className={styles.successMessage}>
@@ -254,7 +254,6 @@ export const AppointmentsPage = () => {
                     className={styles.formControl}
                     value={formData.name}
                     onChange={handleChange}
-                    required
                     autoComplete="name"
                     placeholder={t('name')}
                   />
@@ -272,7 +271,6 @@ export const AppointmentsPage = () => {
                     className={styles.formControl}
                     value={formData.email}
                     onChange={handleChange}
-                    required
                     autoComplete="email"
                     placeholder={t('email')}
                   />
@@ -293,7 +291,6 @@ export const AppointmentsPage = () => {
                     className={styles.formControl}
                     value={formData.phone}
                     onChange={handleChange}
-                    required
                     autoComplete="tel"
                     placeholder={t('phone')}
                   />
@@ -310,7 +307,6 @@ export const AppointmentsPage = () => {
                     className={styles.formSelect}
                     value={formData.service}
                     onChange={handleChange}
-                    required
                     autoComplete="off"
                   >
                     <option value="">{t('selectService')}</option>
@@ -365,7 +361,6 @@ export const AppointmentsPage = () => {
                       value={formData.date}
                       onChange={handleChange}
                       min={today}
-                      required
                       autoComplete="off"
                     />
                   </div>
@@ -381,7 +376,6 @@ export const AppointmentsPage = () => {
                       className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`}
                       value={formData.time}
                       onChange={handleChange}
-                      required
                       disabled={!formData.date || loadingTimes}
                       autoComplete="off"
                     >
