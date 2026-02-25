@@ -404,10 +404,10 @@ export const AvailabilityManager = () => {
             {/* Availability Form */}
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
-                <div 
+                <div
                   className="card-header d-flex justify-content-between align-items-center d-md-none"
-                  style={{ 
-                    backgroundColor: THEME_COLOR, 
+                  style={{
+                    backgroundColor: THEME_COLOR,
                     color: 'white',
                     cursor: 'pointer',
                     padding: '0.75rem 1rem'
@@ -421,7 +421,7 @@ export const AvailabilityManager = () => {
                 </div>
                 <div className={`d-md-block ${showAddAvailability ? 'd-block' : 'd-none'}`}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-4 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('addAvailability')}</h5>
+                    <h5 className="card-title mb-3 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('addAvailability')}</h5>
 
                     {success && (
                       <Alert 
@@ -511,16 +511,19 @@ export const AvailabilityManager = () => {
                   </form>
                 </div>
               </div>
+              <div className="mt-3" style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
+                {t('availabilityDescription')}
+              </div>
             </div>
           </div>
 
             {/* Blocked Dates Section */}
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
-                <div 
+                <div
                   className="card-header d-flex justify-content-between align-items-center d-md-none"
-                  style={{ 
-                    backgroundColor: THEME_COLOR, 
+                  style={{
+                    backgroundColor: THEME_COLOR,
                     color: 'white',
                     cursor: 'pointer',
                     padding: '0.75rem 1rem'
@@ -534,16 +537,19 @@ export const AvailabilityManager = () => {
                 </div>
                 <div className={`d-md-block ${showBlockedDates ? 'd-block' : 'd-none'}`}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-4 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
+                    <h5 className="card-title mb-2 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
                       {t('blockSpecificDates')}
                     </h5>
-                    <BlockedDatesManager 
+                    <BlockedDatesManager
                     blockedDates={blockedDates}
                     onBlockedDateChange={fetchBlockedDates}
                     isAdmin={isAdmin}
                     employees={employees}
                   />
                 </div>
+              </div>
+              <div className="mt-3" style={{ backgroundColor: '#e8f4f8', border: '1px solid #46a1a1', borderRadius: '8px', padding: '0.75rem', fontSize: '0.875rem', color: '#46a1a1', fontStyle: 'italic', lineHeight: '1.4' }}>
+                {t('blockDatesDescription')}
               </div>
             </div>
           </div>
@@ -553,9 +559,11 @@ export const AvailabilityManager = () => {
           <div className="col-lg-8">
             <div className="card post-update-card shadow-sm border-0">
               <div className="card-body p-4">
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                  <h5 className="card-title mb-0" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
-                  
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <div className="flex-grow-1">
+                    <h5 className="card-title mb-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+                  </div>
+
                   {/* Admin Employee Filter */}
                   {isAdmin && employees.length > 0 && (
                     <select
@@ -574,7 +582,7 @@ export const AvailabilityManager = () => {
                     </select>
                   )}
                 </div>
-                
+
                 {loading ? (
                   <div className="text-center py-4">
                     <p>{t('loading')}</p>
