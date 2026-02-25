@@ -18,6 +18,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [translatedServices, setTranslatedServices] = useState([]);
   const [serviceDisplayCount, setServiceDisplayCount] = useState(3);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
+  const serviceCardsRef = useRef([]);
 
   const [news, setNews] = useState([]);
   const [translatedNews, setTranslatedNews] = useState([]);
@@ -154,6 +155,24 @@ export const HomePage = ({ onNavigateToBooking }) => {
     setExpandedServiceId(expandedServiceId === serviceId ? null : serviceId);
   };
 
+  // Collapse expanded service card when clicking outside
+  useEffect(() => {
+    if (expandedServiceId === null) return;
+    const handleClickOutside = (event) => {
+      // Check if click is inside any service card
+      if (
+        serviceCardsRef.current &&
+        !serviceCardsRef.current.some(ref => ref && ref.contains(event.target))
+      ) {
+        setExpandedServiceId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [expandedServiceId]);
+
   const handleRequestAppointment = (service) => {
     navigate('/appointments', { state: { selectedService: service } });
   };
@@ -266,11 +285,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
           ) : (
           <div className="row g-4">
-            {displayedServices.map(service => (
+            {displayedServices.map((service, idx) => (
               <div key={service.id} className="col-md-4">
-                <div 
+                <div
                   className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
                   onClick={() => handleServiceClick(service.id)}
+                  ref={el => serviceCardsRef.current[idx] = el}
                 >
                   <div className="card-body">
                     <h5 className="card-title">{service.name}</h5>
@@ -479,17 +499,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
           <h2 className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}>{t('contactTitle')}</h2>
           <div className="row text-center">
             <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
-              <p className={`${styles.addressText} ${styles.contactText}`}>
-                <a 
-                  href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white text-decoration-none"
-                >
-                  7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
-                </a>
-              </p>
+              <h5 className={styles.contactHeading}>⏰ {t('hours')}</h5>
+              <p className={styles.contactText}>{t('monSun')}: 9am - 7pm</p>
             </div>
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📞 {t('phone')}</h5>
@@ -501,10 +512,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   (804) 745-2525
                 </a>
               </p>
-            </div>
-            <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>⏰ {t('hours')}</h5>
-              <p className={styles.contactText}>{t('monSun')}: 9am - 7pm</p>
             </div>
             <div className="col-md-3 mb-3">
               <h5 className={styles.contactHeading}>📱 {t('followUs')}</h5>
@@ -521,6 +528,19 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 />
                 <span>@newflowsalon</span>
               </a>
+            </div>
+            <div className="col-md-3 mb-3">
+              <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
+              <p className={`${styles.addressText} ${styles.contactText}`}>
+                <a 
+                  href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white text-decoration-none"
+                >
+                  7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
+                </a>
+              </p>
             </div>
           </div>
         </div>

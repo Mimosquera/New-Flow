@@ -38,6 +38,14 @@ export const User = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    profileImageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',

@@ -1,3 +1,8 @@
+/* Prevent overscrolling (rubber band/bounce) globally */
+html, body {
+  overscroll-behavior: none;
+  touch-action: pan-x pan-y;
+}
 /* Global Mobile Touch States - Prevent Sticky Selection */
 @media (hover: none) and (pointer: coarse) {
   button:focus,

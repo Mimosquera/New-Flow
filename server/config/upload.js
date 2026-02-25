@@ -25,13 +25,35 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Configure multer
+// Configure multer for general uploads
 export const upload = multer({
   storage: storage,
   limits: {
     fileSize: 50 * 1024 * 1024, // 50MB max file size
   },
   fileFilter: fileFilter,
+});
+
+// File filter for profile images only
+const profileImageFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif|webp/;
+  const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = allowedTypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only image files (JPEG, PNG, GIF, WebP) are allowed for profile pictures'));
+  }
+};
+
+// Configure multer specifically for profile images
+export const uploadProfileImage = multer({
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB max for profile images
+  },
+  fileFilter: profileImageFilter,
 });
 
 // Export cloudinary instance for use in routes
