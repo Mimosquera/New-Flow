@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { HomePage } from './pages/HomePage.jsx';
 import { AppointmentsPage } from './pages/AppointmentsPage.jsx';
 import { EmployeeLoginPage } from './pages/EmployeeLoginPage.jsx';
+import { PasswordResetPage } from './pages/PasswordResetPage.jsx';
 import EmployeeDashboard from './pages/EmployeeDashboard.jsx';
 import { CancelAppointmentPage } from './pages/CancelAppointmentPage.jsx';
 import { LanguageProvider } from './contexts/LanguageContext.jsx';
@@ -63,6 +64,7 @@ function App() {
           <Route path="/" element={<HomePage onNavigateToBooking={handleBookingClick} />} />
           <Route path="/appointments" element={<AppointmentsPage />} />
           <Route path="/employee-login" element={<EmployeeLoginPage />} />
+          <Route path="/reset-password/:token" element={<PasswordResetPage />} />
           <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
           <Route path="/cancel-appointment/:id" element={<CancelAppointmentPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

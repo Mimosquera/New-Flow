@@ -359,3 +359,34 @@ export const notifyCustomerOfEmployeeCancellation = async (appointment, service,
   await sendEmail(customerEmail, emailSubject, emailHtml);
   await sendSMS(customerPhone, smsMessage);
 };
+
+export const sendPasswordResetEmail = async (email, name, resetToken) => {
+  const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
+
+  const emailSubject = 'Password Reset Request';
+  const emailHtml = `
+    <h2>Password Reset Request</h2>
+    <p>Hi ${name},</p>
+    <p>You requested a password reset for your New Flow employee account.</p>
+    <p>Click the link below to reset your password:</p>
+    <p><a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background-color: rgb(5, 45, 63); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; margin: 16px 0;">Reset Password</a></p>
+    <p>Or copy this link: ${resetUrl}</p>
+    <p><strong>This link will expire in 1 hour.</strong></p>
+    <p>If you didn't request this reset, please ignore this email and your password will remain unchanged.</p>
+    <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Please do not reply to this email as it is not monitored. For assistance, call us at 804-745-2525.</em></p>
+    <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
+    <hr>
+    <h2>Solicitud de Restablecimiento de Contraseña</h2>
+    <p>Hola ${name},</p>
+    <p>Solicitó restablecer la contraseña de su cuenta de empleado de New Flow.</p>
+    <p>Haga clic en el enlace a continuación para restablecer su contraseña:</p>
+    <p><a href="${resetUrl}" style="display: inline-block; padding: 12px 24px; background-color: rgb(5, 45, 63); color: white; text-decoration: none; border-radius: 4px; font-weight: 500; margin: 16px 0;">Restablecer Contraseña</a></p>
+    <p>O copie este enlace: ${resetUrl}</p>
+    <p><strong>Este enlace caducará en 1 hora.</strong></p>
+    <p>Si no solicitó este restablecimiento, ignore este correo y su contraseña permanecerá sin cambios.</p>
+    <p style="color: #666; font-size: 0.9em; margin-top: 20px;"><em>Por favor, no responda a este correo ya que no es monitoreado. Para asistencia, llámenos al 804-745-2525.</em></p>
+    <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
+  `;
+
+  await sendEmail(email, emailSubject, emailHtml);
+};

@@ -6,6 +6,7 @@ import { UpdatePoster } from '../components/UpdatePoster.jsx';
 import { ServiceManager } from '../components/ServiceManager.jsx';
 import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
 import { EmployeeManager } from '../components/EmployeeManager.jsx';
+import { ProfileManager } from '../components/ProfileManager.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 
@@ -234,9 +235,18 @@ export default function EmployeeDashboard() {
                 {t('availability')}
               </button>
             </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
+                onClick={() => setActiveTab('profile')}
+                style={activeTab !== 'profile' ? { color: 'rgb(5, 45, 63)' } : {}}
+              >
+                {t('profile')}
+              </button>
+            </li>
             {isAdmin && (
               <li className="nav-item">
-                <button 
+                <button
                   className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
                   onClick={() => setActiveTab('team')}
                   style={activeTab !== 'team' ? { color: 'rgb(5, 45, 63)' } : {}}
@@ -290,6 +300,7 @@ export default function EmployeeDashboard() {
                   <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                   <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                   <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                  <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
                   {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
                 </select>
               </div>
@@ -337,6 +348,7 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
                 {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
               </select>
             </div>
@@ -381,6 +393,7 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
                 {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
               </select>
             </div>
@@ -425,6 +438,52 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
+                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
+              </select>
+            </div>
+          </div>
+        )}
+        {activeTab === 'profile' && (
+          <div className="d-flex align-items-center justify-content-between mb-0">
+            <div className="d-flex align-items-center">
+              <img
+                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+                alt="Logo"
+                style={{ height: '2rem', marginRight: '0.75rem' }}
+              />
+              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('myProfile')}</h2>
+            </div>
+            <div className="d-md-none" style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
+              <select
+                id="mobileTabSelectProfile"
+                name="mobileTabSelectProfile"
+                value={activeTab}
+                onChange={(e) => setActiveTab(e.target.value)}
+                autoComplete="off"
+                style={{
+                  backgroundColor: 'rgb(5, 45, 63)',
+                  color: 'transparent',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '0.25rem 5px 0.25rem 0.35rem',
+                  fontSize: '0.75rem',
+                  fontWeight: '500',
+                  cursor: 'pointer',
+                  appearance: 'none',
+                  width: '35px',
+                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 0.15rem center',
+                  backgroundSize: '10px'
+                }}
+              >
+                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
+                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
+                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
+                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
                 {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
               </select>
             </div>
@@ -433,7 +492,7 @@ export default function EmployeeDashboard() {
         {activeTab === 'team' && isAdmin && (
           <div className="d-flex align-items-center justify-content-between mb-0">
             <div className="d-flex align-items-center">
-              <img 
+              <img
                 src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
                 alt="Logo"
                 style={{ height: '2rem', marginRight: '0.75rem' }}
@@ -469,6 +528,7 @@ export default function EmployeeDashboard() {
                 <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
                 <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
                 <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
                 <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>
               </select>
             </div>
@@ -481,6 +541,7 @@ export default function EmployeeDashboard() {
       {activeTab === 'updates' && <UpdatePoster />}
       {activeTab === 'services' && <ServiceManager />}
       {activeTab === 'availability' && <AvailabilityManager />}
+      {activeTab === 'profile' && <ProfileManager />}
       {activeTab === 'team' && isAdmin && <EmployeeManager />}
 
       {/* Footer */}
