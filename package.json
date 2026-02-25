@@ -14,7 +14,8 @@
     "client:dev": "cd client && npm run dev",
     "build": "cd client && npm run build",
     "seed": "cd server && npm run seed",
-    "heroku-postbuild": "cd server && npm install && cd ../client && npm install && npm run build"
+    "migrate": "npx sequelize-cli db:migrate",
+    "heroku-postbuild": "cd server && npm install && cd ../client && npm install && npm run build && cd .. && npm run migrate"
   },
   "keywords": [],
   "author": "",
