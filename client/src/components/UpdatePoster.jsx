@@ -8,6 +8,11 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import { detectLang } from '../utils/languageDetection.js';
 
+/** Pagination constants */
+const INITIAL_FETCH = 5;
+const INITIAL_DISPLAY = 4;
+const LOAD_MORE_BATCH = 8;
+
 /**
  * Update Posting Component for Employees
  */
@@ -15,6 +20,9 @@ export const UpdatePoster = () => {
   const { t, language } = useTranslation();
   const [updates, setUpdates] = useState([]); // Original updates
   const [translatedUpdates, setTranslatedUpdates] = useState([]); // Translated updates
+  const [totalUpdates, setTotalUpdates] = useState(0);
+  const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
   const [mediaFile, setMediaFile] = useState(null);
@@ -37,14 +45,44 @@ export const UpdatePoster = () => {
   const fetchUpdates = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await updateService.getAll();
+      const response = await updateService.getAll(INITIAL_FETCH);
       setUpdates(response.data.updates);
+      setTotalUpdates(response.data.total);
+      setDisplayCount(INITIAL_DISPLAY);
     } catch (error) {
       console.error('Error fetching updates:', error);
     } finally {
       setLoading(false);
     }
   }, []);
+
+  /** Load next batch of posts from the server (only fetches what's needed) */
+  const handleLoadMore = async () => {
+    const newDisplayCount = Math.min(displayCount + LOAD_MORE_BATCH, totalUpdates);
+
+    // Only hit the server if we don't already have enough cached
+    if (newDisplayCount > updates.length && updates.length < totalUpdates) {
+      try {
+        setLoadingMore(true);
+        const needed = newDisplayCount - updates.length;
+        const response = await updateService.getAll(needed, updates.length);
+        setUpdates(prev => [...prev, ...response.data.updates]);
+        setTotalUpdates(response.data.total); // refresh in case total changed
+      } catch (error) {
+        console.error('Error loading more updates:', error);
+        return;
+      } finally {
+        setLoadingMore(false);
+      }
+    }
+
+    setDisplayCount(newDisplayCount);
+  };
+
+  /** Collapse list back to the initial display count */
+  const handleHidePosts = () => {
+    setDisplayCount(INITIAL_DISPLAY);
+  };
 
   // Fetch user info and updates on mount
   useEffect(() => {
@@ -84,14 +122,14 @@ export const UpdatePoster = () => {
     translateUpdates();
   }, [language, updates]);
 
-  const { formData, handleChange, handleSubmit: handleFormSubmit, error: formError, resetForm } = useForm(
+  const { formData, handleChange, handleSubmit: handleFormSubmit, error: formError, setError: setFormError, resetForm } = useForm(
     {
       title: '',
       content: ''
     },
     async (data) => {
       if (!data.title || !data.content) {
-        throw new Error('Please fill in all fields');
+        throw new Error(t('pleaseFillRequired'));
       }
 
       // Create FormData for multipart upload
@@ -108,6 +146,8 @@ export const UpdatePoster = () => {
 
       // Add new update to the top of the list
       setUpdates([response.data, ...updates]);
+      setTotalUpdates(prev => prev + 1);
+      setDisplayCount(prev => prev + 1); // keep new post visible
       setSuccess(t('updatePosted'));
       resetForm();
       setMediaFile(null);
@@ -147,7 +187,10 @@ export const UpdatePoster = () => {
   const handleDelete = async (id) => {
     try {
       await updateService.delete(id);
-      setUpdates(updates.filter(u => u.id !== id));
+      const remaining = updates.filter(u => u.id !== id);
+      setUpdates(remaining);
+      setTotalUpdates(prev => prev - 1);
+      setDisplayCount(prev => Math.min(prev, remaining.length));
       setSuccess(t('updateDeleted'));
     } catch (error) {
       console.error('Error deleting update:', error);
@@ -177,9 +220,9 @@ export const UpdatePoster = () => {
   return (
     <div className="update-poster">
       <div className="container pt-3 pb-5">
-        <div className="row">
+        <div className="row justify-content-center">
           {/* Post New Update Form */}
-          <div className="col-lg-5 mb-4">
+          <div className="col-lg-4 mb-4">
             <div className="card post-update-card shadow-sm border-0">
               <div
                 className="card-header d-flex justify-content-between align-items-center collapsible-header"
@@ -211,11 +254,11 @@ export const UpdatePoster = () => {
                   <Alert
                     message={formError}
                     type="danger"
-                    onClose={() => {}}
+                    onClose={() => setFormError('')}
                   />
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                   <FormInput
                     label={t('title')}
                     name="title"
@@ -307,15 +350,17 @@ export const UpdatePoster = () => {
           </div>
 
           {/* Updates List */}
-          <div className="col-lg-7">
-            <h5 className="mb-4" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('recentUpdates')}</h5>
+          <div className="col-lg-6">
+            <div style={{ maxWidth: '500px', margin: '0 auto' }}>
+            <h4 className="mb-4 recent-updates-header">{t('recentUpdates')}</h4>
             {loading ? (
               <p className="text-muted">{t('loading')}</p>
             ) : translatedUpdates.length === 0 ? (
               <p className="text-muted">{t('noUpdates')}</p>
             ) : (
+              <>
               <div className="updates-list">
-                {translatedUpdates.map(update => {
+                {translatedUpdates.slice(0, displayCount).map(update => {
                   // Check if user can delete this update
                   const isAdmin = currentUser?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
                   const isOwner = currentUser?.id === update.user_id;
@@ -392,7 +437,30 @@ export const UpdatePoster = () => {
                   );
                 })}
               </div>
+
+              {/* Load More / Hide Posts buttons */}
+              <div className="d-flex justify-content-center gap-2 mt-3">
+                {displayCount < totalUpdates && (
+                  <button
+                    className="btn btn-sm load-more-btn"
+                    onClick={handleLoadMore}
+                    disabled={loadingMore}
+                  >
+                    {loadingMore ? t('loading') : t('loadMorePosts')}
+                  </button>
+                )}
+                {displayCount > INITIAL_DISPLAY && (
+                  <button
+                    className="btn btn-sm hide-posts-btn"
+                    onClick={handleHidePosts}
+                  >
+                    {t('hidePosts')}
+                  </button>
+                )}
+              </div>
+              </>
             )}
+            </div>
           </div>
         </div>
       </div>

@@ -439,7 +439,7 @@ export const AvailabilityManager = () => {
                       />
                     )}
 
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} noValidate>
                     <div className="mb-3">
                       <div className="form-label fw-semibold days-of-week-header">{t('daysOfWeek')} *</div>
                       <div className="border rounded p-3">

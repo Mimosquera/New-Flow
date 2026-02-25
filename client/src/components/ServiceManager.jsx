@@ -101,7 +101,7 @@ export const ServiceManager = () => {
   /**
    * Form handling with validation
    */
-  const { formData, setFormData, handleChange, handleSubmit: handleFormSubmit, error, resetForm } = useForm(
+  const { formData, setFormData, handleChange, handleSubmit: handleFormSubmit, error, setError, resetForm } = useForm(
     {
       name: '',
       description: '',
@@ -112,7 +112,7 @@ export const ServiceManager = () => {
       try {
         // Validate required fields
         if (!data.name || !data.description || !data.price) {
-          throw new Error(t('fillAllFields') || 'Please fill in all fields');
+          throw new Error(t('pleaseFillRequired'));
         }
 
         // Validate price is a valid number
@@ -332,11 +332,11 @@ export const ServiceManager = () => {
                   <Alert 
                     message={error} 
                     type="danger"
-                    onClose={() => {}}
+                    onClose={() => setError('')}
                   />
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                   <FormInput
                     label={t('serviceName')}
                     name="name"
