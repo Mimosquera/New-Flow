@@ -22,6 +22,7 @@ export const UpdatePoster = () => {
   const [selectedUpdate, setSelectedUpdate] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   const handleUpdateClick = (update) => {
     setSelectedUpdate(update);
@@ -180,8 +181,23 @@ export const UpdatePoster = () => {
           {/* Post New Update Form */}
           <div className="col-lg-5 mb-4">
             <div className="card post-update-card shadow-sm border-0">
+              <div
+                className="card-header d-flex justify-content-between align-items-center collapsible-header"
+                style={{
+                  backgroundColor: 'rgb(5, 45, 63)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  padding: '0.75rem 1rem'
+                }}
+                onClick={() => setShowForm(!showForm)}
+              >
+                <h5 className="mb-0" style={{ fontSize: '1rem' }}>{t('postUpdate')}</h5>
+                <span className="d-lg-none" style={{ fontSize: '1.2rem' }}>
+                  {showForm ? '\u2212' : '+'}
+                </span>
+              </div>
+              <div className={`d-lg-block ${showForm ? 'd-block' : 'd-none'}`}>
               <div className="card-body p-4">
-                <h5 className="card-title mb-4 force-black-title" style={{ textShadow: '0 8px 32px rgba(5,45,63,0.55), 0 4px 16px rgba(0,0,0,0.35)' }}>{t('postUpdate')}</h5>
 
                 {success && (
                   <Alert 
@@ -288,10 +304,11 @@ export const UpdatePoster = () => {
               </div>
             </div>
           </div>
+          </div>
 
           {/* Updates List */}
           <div className="col-lg-7">
-            <h5 className="mb-4" style={{ textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('recentUpdates')}</h5>
+            <h5 className="mb-4" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('recentUpdates')}</h5>
             {loading ? (
               <p className="text-muted">{t('loading')}</p>
             ) : translatedUpdates.length === 0 ? (

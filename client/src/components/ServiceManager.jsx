@@ -39,6 +39,7 @@ export const ServiceManager = () => {
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState(null);
   const [isPriceRange, setIsPriceRange] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const formRef = useRef(null);
 
   /**
@@ -186,6 +187,7 @@ export const ServiceManager = () => {
       }
 
       setEditingService(service);
+      setShowForm(true);
       setFormData({
         name: service.name || '',
         description: service.description || '',
@@ -298,10 +300,25 @@ export const ServiceManager = () => {
           {/* Service Form */}
           <div className="col-lg-4 mb-4" ref={formRef}>
             <div className="card post-update-card shadow-sm border-0">
-              <div className="card-body p-4">
-                <h5 className="card-title mb-4 force-black-title">
+              <div
+                className="card-header d-flex justify-content-between align-items-center collapsible-header"
+                style={{
+                  backgroundColor: THEME_COLOR,
+                  color: 'white',
+                  cursor: 'pointer',
+                  padding: '0.75rem 1rem'
+                }}
+                onClick={() => setShowForm(!showForm)}
+              >
+                <h5 className="mb-0" style={{ fontSize: '1rem' }}>
                   {editingService ? t('editService') : t('addService')}
                 </h5>
+                <span className="d-lg-none" style={{ fontSize: '1.2rem' }}>
+                  {showForm ? '\u2212' : '+'}
+                </span>
+              </div>
+              <div className={`d-lg-block ${showForm ? 'd-block' : 'd-none'}`}>
+              <div className="card-body p-4">
 
                 {success && (
                   <Alert 
@@ -432,6 +449,7 @@ export const ServiceManager = () => {
                 </form>
               </div>
             </div>
+          </div>
           </div>
 
           {/* Services List */}

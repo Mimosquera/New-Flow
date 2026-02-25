@@ -128,28 +128,35 @@ export default function EmployeeDashboard() {
             border: '1px solid #b0bec5'
           }}
         >
-          {/* Single Row: All Content */}
-          <div className="d-flex align-items-center" style={{ gap: '0.4rem', width: '100%' }}>
-            <h1 className="mb-0" style={{ fontSize: '1.3rem', fontWeight: '600', color: 'rgb(5, 45, 63)', whiteSpace: 'nowrap' }}>
-              {t('employeeDashboard')}
-            </h1>
-            {employeeName && (
-              <span 
-                style={{ 
-                  backgroundColor: 'rgba(5, 45, 63, 0.1)',
-                  color: 'rgb(5, 45, 63)',
-                  padding: '0.15rem 0.5rem',
-                  borderRadius: '12px',
-                  fontSize: '0.7rem',
-                  fontWeight: '500',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {employeeName.split(' ')[0]}
-              </span>
-            )}
-            <div style={{ flexGrow: 1 }}></div>
-            <div className="d-flex align-items-center" style={{ gap: '0.3rem' }}>
+          {/* Header Row */}
+          <div className="d-flex align-items-center" style={{ width: '100%' }}>
+            {/* Left: Title + Badge */}
+            <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem', overflow: 'hidden' }}>
+              <h1 className="mb-0 dashboard-title" style={{ 
+                fontSize: '1.3rem', fontWeight: '600', color: 'rgb(5, 45, 63)', 
+                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 
+              }}>
+                {t('employeeDashboard')}
+              </h1>
+              {employeeName && (
+                <span 
+                  style={{ 
+                    backgroundColor: 'rgba(5, 45, 63, 0.1)',
+                    color: 'rgb(5, 45, 63)',
+                    padding: '0.15rem 0.5rem',
+                    borderRadius: '12px',
+                    fontSize: '0.7rem',
+                    fontWeight: '500',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0
+                  }}
+                >
+                  {employeeName.split(' ')[0]}
+                </span>
+              )}
+            </div>
+            {/* Right: Actions */}
+            <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
               <button 
                 className="btn btn-sm"
                 style={{ 
@@ -160,358 +167,145 @@ export default function EmployeeDashboard() {
                   fontSize: '0.75rem',
                   fontWeight: '500',
                   borderRadius: '4px',
-                  lineHeight: '1'
+                  lineHeight: '1',
+                  flexShrink: 0
                 }}
                 onClick={() => navigate('/')}
                 title={t('backToHome')}
               >
                 ⌂
               </button>
-              <div style={{ transform: 'scale(0.75)', transformOrigin: 'center' }}>
-                <LanguageToggle inverse />
+              <div style={{ 
+                width: '53px', 
+                height: '24px', 
+                position: 'relative',
+                flexShrink: 0
+              }}>
+                <div style={{ 
+                  transform: 'scale(0.75)', 
+                  transformOrigin: 'top left',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0
+                }}>
+                  <LanguageToggle inverse />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Desktop: Horizontal Tabs - moved to right end of header row */}
-        <div className="d-none d-md-flex" style={{ position: 'absolute', right: '2.2rem', top: '87%', transform: 'translateY(-87%)', zIndex: 10 }}>
-          <ul className="nav nav-tabs mb-0 dashboard-tabs">
-            <li className="nav-item">
-              <button 
-                className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
-                onClick={() => setActiveTab('appointments')}
-                style={activeTab !== 'appointments' ? { color: 'rgb(5, 45, 63)' } : {}}
-              >
-                {t('appointments')}
-              </button>
-            </li>
-            <li className="nav-item">
-              <button 
-                className={`nav-link ${activeTab === 'updates' ? 'active' : ''}`}
-                onClick={() => setActiveTab('updates')}
-                style={activeTab !== 'updates' ? { color: 'rgb(5, 45, 63)' } : {}}
-              >
-                {t('postsTab')}
-              </button>
-            </li>
-            <li className="nav-item">
-              <button 
-                className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
-                onClick={() => setActiveTab('services')}
-                style={activeTab !== 'services' ? { color: 'rgb(5, 45, 63)' } : {}}
-              >
-                {t('services')}
-              </button>
-            </li>
-            <li className="nav-item">
-              <button 
-                className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
-                onClick={() => setActiveTab('availability')}
-                style={activeTab !== 'availability' ? { color: 'rgb(5, 45, 63)' } : {}}
-              >
-                {t('availability')}
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
-                onClick={() => setActiveTab('profile')}
-                style={activeTab !== 'profile' ? { color: 'rgb(5, 45, 63)' } : {}}
-              >
-                {t('profile')}
-              </button>
-            </li>
-            {isAdmin && (
+        {/* Section Header + Nav: Single Row */}
+        <div className="d-flex align-items-center justify-content-between mb-0" style={{ gap: '0.5rem' }}>
+          {/* Left: Logo + Dynamic Title */}
+          <div className="d-flex align-items-center" style={{ flexShrink: 0 }}>
+            <img 
+              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+              alt="Logo"
+              style={{ height: '2rem', marginRight: '0.75rem' }}
+            />
+            <h2 className="mb-0" style={{ fontSize: '1.5rem', whiteSpace: 'nowrap' }}>
+              {activeTab === 'appointments' && t('appointmentRequests')}
+              {activeTab === 'updates' && t('managePosts')}
+              {activeTab === 'services' && t('manageServices')}
+              {activeTab === 'availability' && t('manageAvailability')}
+              {activeTab === 'profile' && t('myProfile')}
+              {activeTab === 'team' && (t('manageTeam') || 'Manage Team')}
+            </h2>
+          </div>
+
+          {/* Right on desktop: Tabs */}
+          <div className="d-none d-lg-flex" style={{ minWidth: 0, flex: '1 1 auto', justifyContent: 'flex-end' }}>
+            <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
               <li className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('team')}
-                  style={activeTab !== 'team' ? { color: 'rgb(5, 45, 63)' } : {}}
+                <button 
+                  className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('appointments')}
                 >
-                  {t('team') || 'Team'}
+                  {t('appointments')}
                 </button>
               </li>
-            )}
-          </ul>
-        </div>
-
-        {/* Section Headers */}
-        {activeTab === 'appointments' && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img 
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('appointmentRequests')}</h2>
-            </div>
-            <div className="d-flex align-items-center" style={{ gap: '0.5rem' }}>
-              {/* Mobile Tab Dropdown */}
-              <div className="d-md-none" style={{ position: 'relative' }}>
-                <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-                <select
-                  id="mobileTabSelectAppt"
-                  name="mobileTabSelectAppt"
-                  value={activeTab}
-                  onChange={(e) => setActiveTab(e.target.value)}
-                  autoComplete="off"
-                  style={{
-                    backgroundColor: 'rgb(5, 45, 63)',
-                    color: 'transparent',
-                    border: 'none',
-                    borderRadius: '6px',
-                    padding: '0.25rem 5px 0.25rem 0.35rem',
-                    fontSize: '0.75rem',
-                    fontWeight: '500',
-                    cursor: 'pointer',
-                    appearance: 'none',
-                    width: '35px',
-                    backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 0.15rem center',
-                    backgroundSize: '10px'
-                  }}
+              <li className="nav-item">
+                <button 
+                  className={`nav-link ${activeTab === 'updates' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('updates')}
                 >
-                  <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                  <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                  <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                  <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                  <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                  {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
-                </select>
-              </div>
-              {/* Filter on desktop only */}
-              {/* Removed desktop filter dropdown under navbar */}
-            </div>
+                  {t('postsTab')}
+                </button>
+              </li>
+              <li className="nav-item">
+                <button 
+                  className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('services')}
+                >
+                  {t('services')}
+                </button>
+              </li>
+              <li className="nav-item">
+                <button 
+                  className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('availability')}
+                >
+                  {t('availability')}
+                </button>
+              </li>
+              <li className="nav-item">
+                <button
+                  className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('profile')}
+                >
+                  {t('profile')}
+                </button>
+              </li>
+              {isAdmin && (
+                <li className="nav-item">
+                  <button
+                    className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('team')}
+                  >
+                    {t('team') || 'Team'}
+                  </button>
+                </li>
+              )}
+            </ul>
           </div>
-        )}
-        {activeTab === 'updates' && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img 
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('managePosts')}</h2>
-            </div>
-            <div className="d-md-none" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-              <select
-                id="mobileTabSelectUpdates"
-                name="mobileTabSelectUpdates"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                autoComplete="off"
-                style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
-                  color: 'transparent',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.25rem 5px 0.25rem 0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  width: '35px',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.15rem center',
-                  backgroundSize: '10px'
-                }}
-              >
-                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
-              </select>
-            </div>
+
+          {/* Right on mobile: Hamburger Dropdown */}
+          <div className="d-lg-none" style={{ position: 'relative', flexShrink: 0 }}>
+            <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
+            <select
+              id="mobileTabSelect"
+              name="mobileTabSelect"
+              value={activeTab}
+              onChange={(e) => setActiveTab(e.target.value)}
+              autoComplete="off"
+              style={{
+                backgroundColor: 'rgb(5, 45, 63)',
+                color: 'transparent',
+                border: '2.5px solid #b0bec5',
+                borderRadius: '6px',
+                padding: '0.25rem 5px 0.25rem 0.35rem',
+                fontSize: '0.75rem',
+                fontWeight: '500',
+                cursor: 'pointer',
+                appearance: 'none',
+                width: '35px',
+                boxShadow: '0 0 10px rgba(176, 190, 197, 0.8), 0 0 20px rgba(176, 190, 197, 0.5), 0 0 30px rgba(5, 45, 63, 0.4)',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'right 0.15rem center',
+                backgroundSize: '10px'
+              }}
+            >
+              <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
+              <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
+              <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
+              <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
+              <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
+              {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
+            </select>
           </div>
-        )}
-        {activeTab === 'services' && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img 
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('manageServices')}</h2>
-            </div>
-            <div className="d-md-none" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-              <select
-                id="mobileTabSelectServices"
-                name="mobileTabSelectServices"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                autoComplete="off"
-                style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
-                  color: 'transparent',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.25rem 5px 0.25rem 0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  width: '35px',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.15rem center',
-                  backgroundSize: '10px'
-                }}
-              >
-                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
-              </select>
-            </div>
-          </div>
-        )}
-        {activeTab === 'availability' && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img 
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('manageAvailability')}</h2>
-            </div>
-            <div className="d-md-none" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-              <select
-                id="mobileTabSelectAvailability"
-                name="mobileTabSelectAvailability"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                autoComplete="off"
-                style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
-                  color: 'transparent',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.25rem 5px 0.25rem 0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  width: '35px',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.15rem center',
-                  backgroundSize: '10px'
-                }}
-              >
-                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
-              </select>
-            </div>
-          </div>
-        )}
-        {activeTab === 'profile' && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('myProfile')}</h2>
-            </div>
-            <div className="d-md-none" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-              <select
-                id="mobileTabSelectProfile"
-                name="mobileTabSelectProfile"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                autoComplete="off"
-                style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
-                  color: 'transparent',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.25rem 5px 0.25rem 0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  width: '35px',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.15rem center',
-                  backgroundSize: '10px'
-                }}
-              >
-                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
-              </select>
-            </div>
-          </div>
-        )}
-        {activeTab === 'team' && isAdmin && (
-          <div className="d-flex align-items-center justify-content-between mb-0">
-            <div className="d-flex align-items-center">
-              <img
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '2rem', marginRight: '0.75rem' }}
-              />
-              <h2 className="mb-0" style={{ fontSize: '1.5rem' }}>{t('manageTeam') || 'Manage Team'}</h2>
-            </div>
-            <div className="d-md-none" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
-              <select
-                id="mobileTabSelectTeam"
-                name="mobileTabSelectTeam"
-                value={activeTab}
-                onChange={(e) => setActiveTab(e.target.value)}
-                autoComplete="off"
-                style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
-                  color: 'transparent',
-                  border: 'none',
-                  borderRadius: '6px',
-                  padding: '0.25rem 5px 0.25rem 0.35rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  width: '35px',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 0.15rem center',
-                  backgroundSize: '10px'
-                }}
-              >
-                <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-                <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-                <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-                <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-                <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-                <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>
-              </select>
-            </div>
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Tab Content */}
