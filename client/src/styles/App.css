@@ -48,6 +48,21 @@ a:focus:not(:focus-visible) {
   border: 1px solid #fff !important;
   border-radius: 1rem !important;
 }
+
+/* Collapsible Section Header */
+@keyframes headerGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(70, 161, 161, 0.3), 0 0 20px rgba(70, 161, 161, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(70, 161, 161, 0.5), 0 0 30px rgba(70, 161, 161, 0.3), 0 0 40px rgba(70, 161, 161, 0.1);
+  }
+}
+.collapsible-header {
+  animation: headerGlow 2s ease-in-out infinite;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
 /* Force white for Days of Week header in Add Availability */
 .post-update-card .form-label.days-of-week-header {
   color: #fff !important;
@@ -89,13 +104,50 @@ a:focus:not(:focus-visible) {
 .dashboard-header-sticky {
   background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%) !important;
   box-shadow: 0 8px 32px 0 rgba(5, 45, 63, 0.28), 0 2px 8px 0 rgba(0,0,0,0.12);
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 /* Tab header shadow */
 .dashboard-tabs {
-  box-shadow: 0 2px 10px 0 rgba(5, 45, 63, 0.13), 0 1px 2px 0 rgba(0,0,0,0.08);
+  box-shadow: 0 2px 10px 0 rgba(5, 45, 63, 0.18), 0 1px 2px 0 rgba(0,0,0,0.10);
   border-radius: 0.5rem;
-  background: #fff;
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgba(5, 45, 63, 0.85) 100%);
   margin-bottom: 1.5rem;
+  border: 1px solid rgba(70, 161, 161, 0.25);
+  align-items: center;
+  border-bottom: none;
+  padding: 0.25rem;
+}
+
+.dashboard-tabs .nav-item {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard-tabs .nav-link {
+  font-size: clamp(0.65rem, 1.1vw, 0.875rem);
+  padding: 0.35rem 0.6rem;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: none !important;
+  transition: color 0.2s, background 0.2s;
+  margin: 0;
+}
+
+.dashboard-tabs .nav-link:hover {
+  color: #46a1a1 !important;
+  background: rgba(70, 161, 161, 0.1);
+  border-radius: 0.4rem;
+}
+
+.dashboard-tabs .nav-link.active {
+  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 8px rgba(70, 161, 161, 0.35);
+  font-weight: 600;
+  margin: 0;
 }
 /* Post Update Button Custom Style */
 .post-update-btn {
@@ -167,6 +219,34 @@ a:focus:not(:focus-visible) {
 .post-update-card .btn-outline-secondary:hover {
   background: rgb(5, 45, 63);
   color: #fff;
+}
+
+/* Update/Post Listing Cards */
+.updates-list .card {
+  background: linear-gradient(135deg, #fff 0%, #e8f4f8 100%);
+  border-left: 4px solid #46a1a1 !important;
+  border-radius: 0.75rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.updates-list .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(5, 45, 63, 0.25), 0 4px 12px rgba(70, 161, 161, 0.15) !important;
+}
+
+.updates-list .card .card-title {
+  color: rgb(5, 45, 63);
+  font-weight: 600;
+}
+
+.updates-list .card .card-text {
+  color: #3a4a5a;
+}
+
+.updates-list .card .text-muted {
+  color: #46a1a1 !important;
+  font-weight: 500;
 }
 /* App Styles */
 
@@ -398,30 +478,25 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
   /* Dashboard Header */
   .dashboard-header {
-    padding: 1rem;
+    padding: 0.5rem;
     margin-bottom: 0;
-    gap: 1rem;
-    flex-direction: column;
-    text-align: center;
-    align-items: flex-start;
   }
 
   .dashboard-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     margin-bottom: 0;
   }
 
-  .dashboard-header .d-flex {
-    margin-top: 0;
+  /* Section header titles - prevent overflow */
+  .dashboard-header-sticky > .d-flex > .d-flex:first-child {
+    min-width: 0;
   }
 
-  .dashboard-header .btn {
-    margin: 0;
-  }
-
-  .dashboard-header button {
-    margin-top: 1rem;
-    width: 100%;
+  .dashboard-header-sticky h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   /* Form Container */
@@ -445,14 +520,25 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
   .container.pt-3.pb-3 {
     width: calc(100% - 30px) !important;
-    margin-left: 15px !important;
-    margin-right: 15px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
     box-sizing: border-box;
   }
 
   .no-appointments-message {
     text-align: center;
     width: 100%;
+  }
+}
+
+/* Extra-small screens */
+@media (max-width: 400px) {
+  .dashboard-header h1 {
+    font-size: 0.95rem !important;
+  }
+
+  .dashboard-header-sticky h2 {
+    font-size: 1.1rem !important;
   }
 }
 

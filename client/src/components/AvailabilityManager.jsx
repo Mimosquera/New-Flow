@@ -398,19 +398,6 @@ export const AvailabilityManager = () => {
 
   return (
     <div className="availability-manager">
-      <style>{`
-        @keyframes headerGlow {
-          0%, 100% {
-            box-shadow: 0 0 10px rgba(70, 161, 161, 0.3), 0 0 20px rgba(70, 161, 161, 0.2);
-          }
-          50% {
-            box-shadow: 0 0 20px rgba(70, 161, 161, 0.5), 0 0 30px rgba(70, 161, 161, 0.3), 0 0 40px rgba(70, 161, 161, 0.1);
-          }
-        }
-        .collapsible-header {
-          animation: headerGlow 2s ease-in-out infinite;
-        }
-      `}</style>
       <div className="container py-4">
         <div className="row">
           {/* Left Column: Add Availability and Block Dates */}
@@ -419,7 +406,7 @@ export const AvailabilityManager = () => {
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
                 <div
-                  className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
+                  className="card-header d-flex justify-content-between align-items-center collapsible-header"
                   style={{
                     backgroundColor: THEME_COLOR,
                     color: 'white',
@@ -433,9 +420,8 @@ export const AvailabilityManager = () => {
                     {showAddAvailability ? '−' : '+'}
                   </span>
                 </div>
-                <div className={`d-md-block ${showAddAvailability ? 'd-block' : 'd-none'}`}>
+                <div className={showAddAvailability ? 'd-block' : 'd-none'}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-3 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{t('addAvailability')}</h5>
 
                     {success && (
                       <Alert 
@@ -537,7 +523,7 @@ export const AvailabilityManager = () => {
             <div className="mb-4">
               <div className="card post-update-card shadow-sm border-0">
                 <div
-                  className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
+                  className="card-header d-flex justify-content-between align-items-center collapsible-header"
                   style={{
                     backgroundColor: THEME_COLOR,
                     color: 'white',
@@ -551,11 +537,8 @@ export const AvailabilityManager = () => {
                     {showBlockedDates ? '−' : '+'}
                   </span>
                 </div>
-                <div className={`d-md-block ${showBlockedDates ? 'd-block' : 'd-none'}`}>
+                <div className={showBlockedDates ? 'd-block' : 'd-none'}>
                   <div className="card-body p-4">
-                    <h5 className="card-title mb-2 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
-                      {t('blockSpecificDates')}
-                    </h5>
                     <BlockedDatesManager
                     blockedDates={blockedDates}
                     onBlockedDateChange={fetchBlockedDates}
