@@ -30,6 +30,14 @@ export const User = sequelize.define(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: 'users',
@@ -58,9 +66,9 @@ User.prototype.verifyPassword = async function (password) {
 };
 
 /**
- * Get user without password
+ * Get user without sensitive fields
  */
 User.prototype.toJSON = function () {
-  const { password, ...user } = this.get();
+  const { password, resetPasswordToken, resetPasswordExpires, ...user } = this.get();
   return user;
 };

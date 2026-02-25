@@ -9,7 +9,11 @@
       "Bash(git push:*)",
       "Bash(find:*)",
       "Bash(npm install)",
-      "Bash(npx sequelize-cli:*)"
+      "Bash(npx sequelize-cli:*)",
+      "Bash(ls:*)",
+      "Bash(node scripts/run-migration.js:*)",
+      "Bash(timeout 10 node:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

@@ -1,8 +1,11 @@
 import express from 'express';
 import jwt from 'jwt-simple';
+import crypto from 'crypto';
+import { Op } from 'sequelize';
 import { User } from '../models/User.js';
 import { jwtConfig } from '../config/constants.js';
 import { verifyToken } from '../middleware/auth.js';
+import { sendPasswordResetEmail } from '../services/notificationService.js';
 
 const router = express.Router();
 
@@ -334,6 +337,188 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
   } catch (error) {
     console.error('Delete employee error:', error);
     res.status(500).json({ message: error.message || 'Failed to delete employee' });
+  }
+});
+
+// GET /api/auth/profile
+router.get('/profile', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isEmployee: user.isEmployee
+    });
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ message: 'Failed to retrieve profile' });
+  }
+});
+
+// PUT /api/auth/profile
+router.put('/profile', verifyToken, async (req, res) => {
+  try {
+    const { name, email, currentPassword, newPassword } = req.body;
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!currentPassword) {
+      return res.status(400).json({ message: 'Current password is required' });
+    }
+
+    const isValidPassword = await user.verifyPassword(currentPassword);
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Current password is incorrect' });
+    }
+
+    if (name && name.trim().length < 2) {
+      return res.status(400).json({ message: 'Name must be at least 2 characters' });
+    }
+
+    if (email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: 'Invalid email format' });
+      }
+
+      const existingUser = await User.findOne({
+        where: {
+          email: email.trim().toLowerCase(),
+          id: { [Op.ne]: req.user.id }
+        }
+      });
+      if (existingUser) {
+        return res.status(409).json({ message: 'Email already in use' });
+      }
+    }
+
+    if (newPassword && newPassword.length < 6) {
+      return res.status(400).json({ message: 'New password must be at least 6 characters' });
+    }
+
+    const updateData = {};
+    if (name) updateData.name = name.trim();
+    if (email) updateData.email = email.trim().toLowerCase();
+    if (newPassword) updateData.password = newPassword;
+
+    await user.update(updateData);
+
+    const newToken = createToken(user);
+
+    res.json({
+      message: 'Profile updated successfully',
+      token: newToken,
+      user: user.toJSON()
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Failed to update profile' });
+  }
+});
+
+// POST /api/auth/forgot-password
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+
+    const trimmedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ where: { email: trimmedEmail } });
+
+    if (!user) {
+      return res.json({
+        message: 'If that email exists, a reset link has been sent.'
+      });
+    }
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    await user.update({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpires: new Date(Date.now() + 3600000)
+    });
+
+    await sendPasswordResetEmail(user.email, user.name, resetToken);
+
+    res.json({
+      message: 'If that email exists, a reset link has been sent.'
+    });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Failed to process request' });
+  }
+});
+
+// POST /api/auth/reset-password
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: 'Token and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters' });
+    }
+
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { [Op.gt]: new Date() }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: 'Invalid or expired reset token'
+      });
+    }
+
+    await user.update({
+      password: newPassword,
+      resetPasswordToken: null,
+      resetPasswordExpires: null
+    });
+
+    res.json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Failed to reset password' });
+  }
+});
+
+// GET /api/auth/verify-reset-token/:token
+router.get('/verify-reset-token/:token', async (req, res) => {
+  try {
+    const { token } = req.params;
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await User.findOne({
+      where: {
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { [Op.gt]: new Date() }
+      }
+    });
+
+    res.json({ valid: !!user });
+  } catch (error) {
+    console.error('Verify token error:', error);
+    res.status(500).json({ valid: false });
   }
 });
 
