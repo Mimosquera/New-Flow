@@ -51,7 +51,7 @@ export const PasswordResetPage = () => {
       if (window.scrollY <= 1) {
         document.body.style.background = '#000000';
       } else {
-        document.body.style.background = 'rgb(3, 38, 53)';
+        document.body.style.background = '#000000';
       }
     };
 
@@ -60,7 +60,7 @@ export const PasswordResetPage = () => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = 'rgb(3, 35, 50)';
+      document.body.style.background = '#000000';
     };
   }, []);
 

@@ -187,7 +187,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       if (window.scrollY <= 50) {
         document.body.style.background = '#000000';
       } else {
-        document.body.style.background = 'rgb(3, 35, 50)';
+        document.body.style.background = '#000000';
       }
     };
 
@@ -196,7 +196,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = 'rgb(3, 35, 50)';
+      document.body.style.background = '#000000';
     };
   }, []);
 

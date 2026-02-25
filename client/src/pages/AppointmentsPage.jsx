@@ -53,7 +53,7 @@ export const AppointmentsPage = () => {
       if (window.scrollY <= 50) {
         document.body.style.background = '#000000';
       } else {
-        document.body.style.background = 'rgb(5, 42, 58)';
+        document.body.style.background = '#000000';
       }
     };
 
@@ -62,7 +62,7 @@ export const AppointmentsPage = () => {
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = 'rgb(3, 35, 50)';
+      document.body.style.background = '#000000';
     };
   }, []);
 

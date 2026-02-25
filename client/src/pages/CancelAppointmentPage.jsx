@@ -41,9 +41,9 @@ export function CancelAppointmentPage() {
   }, [id]);
 
   useEffect(() => {
-    document.body.style.backgroundColor = '#212529';
+    document.body.style.backgroundColor = '#000000';
     return () => {
-      document.body.style.backgroundColor = '#f5f5f5';
+      document.body.style.backgroundColor = '#000000';
     };
   }, []);
 
