@@ -35,14 +35,10 @@ export const useForm = (initialValues, onSubmit) => {
         ...prev,
         [name]: value
       }));
-
-      if (error) {
-        setError('');
-      }
     } catch (err) {
       console.error('Error handling form change:', err);
     }
-  }, [error]);
+  }, []);
 
   const handleSubmit = useCallback(async (e) => {
     try {

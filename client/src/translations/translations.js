@@ -118,6 +118,8 @@ export const translations = {
     posting: 'Posting...',
     updatePosted: 'Update posted successfully!',
     updateDeleted: 'Update deleted successfully!',
+    loadMorePosts: 'Load More Posts',
+    hidePosts: 'Hide Posts',
     deleteUpdate: 'Delete Update',
     confirmDelete: 'Are you sure you want to delete this update?',
     
@@ -508,6 +510,8 @@ export const translations = {
     posting: 'Publicando...',
     updatePosted: '¡Actualización publicada con éxito!',
     updateDeleted: '¡Actualización eliminada con éxito!',
+    loadMorePosts: 'Cargar Más Publicaciones',
+    hidePosts: 'Ocultar Publicaciones',
     deleteUpdate: 'Eliminar Actualización',
     confirmDelete: '¿Estás seguro de que deseas eliminar esta actualización?',
     

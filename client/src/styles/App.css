@@ -167,6 +167,11 @@ a:focus:not(:focus-visible) {
   color: #fff !important;
   box-shadow: 0 4px 16px rgba(5, 45, 63, 0.18);
 }
+@media (max-width: 991.98px) {
+  .update-poster .post-update-card {
+    margin-top: 0.5rem;
+  }
+}
 /* Employee Dashboard Post Update Card Theme */
 .post-update-card {
   background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%);
@@ -193,7 +198,7 @@ a:focus:not(:focus-visible) {
   color: #3a4a5a !important;
   font-weight: 500;
 }
-.post-update-card .btn {
+.post-update-card .btn:not(.btn-close) {
   background: rgb(5, 45, 63);
   color: #fff;
   border: none;
@@ -203,11 +208,11 @@ a:focus:not(:focus-visible) {
   transition: background 0.2s, color 0.2s;
 }
 
-.post-update-card .btn:focus {
+.post-update-card .btn:focus:not(.btn-close) {
   background: rgb(5, 45, 63);
   color: #fff;
 }
-.post-update-card .btn:hover {
+.post-update-card .btn:hover:not(.btn-close) {
   background: #46a1a1;
   color: #fff;
 }
@@ -247,6 +252,63 @@ a:focus:not(:focus-visible) {
 .updates-list .card .text-muted {
   color: #46a1a1 !important;
   font-weight: 500;
+}
+
+/* Recent Updates Header */
+.recent-updates-header {
+  color: #fff;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  text-shadow: 0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65);
+  letter-spacing: 0.02em;
+}
+@media (max-width: 991.98px) {
+  .recent-updates-header {
+    margin-top: -0.75rem;
+  }
+}
+
+/* Load More / Hide Posts Buttons */
+.load-more-btn {
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%);
+  color: #fff;
+  border: 1.5px solid #46a1a1;
+  border-radius: 0.5rem;
+  padding: 0.4rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+.load-more-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0d5c6e 0%, #46a1a1 100%);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(70, 161, 161, 0.35);
+}
+.load-more-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  color: #ccc;
+}
+
+.hide-posts-btn {
+  background: transparent !important;
+  color: rgb(5, 45, 63) !important;
+  border: 1.5px solid rgb(5, 45, 63) !important;
+  border-radius: 0.5rem;
+  padding: 0.4rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+.hide-posts-btn:hover {
+  background: rgb(5, 45, 63) !important;
+  color: #fff !important;
+  border-color: rgb(5, 45, 63) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(5, 45, 63, 0.3);
 }
 /* App Styles */
 

@@ -55,7 +55,6 @@ export const EmployeeManager = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    clearAlerts();
   };
 
   const handleSubmit = async (e) => {
@@ -96,7 +95,6 @@ export const EmployeeManager = () => {
   const handleEditPasswordChange = (e) => {
     const { name, value } = e.target;
     setEditPasswordData(prev => ({ ...prev, [name]: value }));
-    clearAlerts();
   };
 
   const handleUpdatePassword = async (e, employeeId) => {
@@ -151,7 +149,6 @@ export const EmployeeManager = () => {
 
   const handleDeletePasswordChange = (employeeId, value) => {
     setDeletePasswordData(prev => ({ ...prev, [employeeId]: value }));
-    clearAlerts();
   };
 
   const handleCancelDelete = (employeeId) => {
@@ -168,7 +165,7 @@ export const EmployeeManager = () => {
       <p className="file-info-text mb-4 employee-info-black">{t('createEmployeeDescription')}</p>
       {alerts.error && <Alert type="danger" message={alerts.error} onClose={() => setAlert('error', null)} />}
       {alerts.success && <Alert type="success" message={alerts.success} onClose={() => setAlert('success', null)} />}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">{t('name')} *</label>
           <input
@@ -253,7 +250,7 @@ export const EmployeeManager = () => {
               <h6 className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 700, textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('editPassword')}</h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
-              <form onSubmit={(e) => handleUpdatePassword(e, employee.id)}>
+              <form onSubmit={(e) => handleUpdatePassword(e, employee.id)} noValidate>
                 <div className="mb-3">
                   <label htmlFor={`newPassword-${employee.id}`} className="form-label">{t('newPassword')} *</label>
                   <input
