@@ -531,7 +531,7 @@ a:focus:not(:focus-visible) {
   border: none !important;
   border-top: 4px solid #46a1a1 !important;
   border-radius: 16px !important;
-  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.12), 0 1.5px 4px rgba(70, 161, 161, 0.08) !important;
+  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.15), 0 0 16px rgba(70, 161, 161, 0.25), 0 0 32px rgba(70, 161, 161, 0.12) !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
   position: relative;
@@ -551,7 +551,7 @@ a:focus:not(:focus-visible) {
 
 .services-section .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 36px rgba(5, 45, 63, 0.2), 0 0 0 1px rgba(70, 161, 161, 0.15) !important;
+  box-shadow: 0 12px 36px rgba(5, 45, 63, 0.25), 0 0 24px rgba(70, 161, 161, 0.4), 0 0 48px rgba(70, 161, 161, 0.2), 0 0 0 1px rgba(70, 161, 161, 0.15) !important;
   border-top-color: rgb(5, 45, 63);
 }
 
@@ -562,25 +562,25 @@ a:focus:not(:focus-visible) {
 .services-section .card-title {
   color: rgb(5, 45, 63);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   letter-spacing: -0.01em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
 .services-section .card-text {
   color: #3a5a6a;
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
 .services-section .card-subtitle {
   color: #46a1a1;
-  font-size: 1.05rem;
-  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
 }
 
 .services-section .card-body {
-  padding: 1.35rem 1.5rem;
+  padding: 0.85rem 1rem;
 }
 
 .news-section {
