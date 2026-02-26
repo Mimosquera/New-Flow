@@ -1,8 +1,5 @@
 import { useState, useCallback } from 'react';
 
-const DEFAULT_ERROR_MESSAGE = 'Something went wrong';
-const DEFAULT_SUCCESS_MESSAGE = 'Success!';
-
 export const useForm = (initialValues, onSubmit) => {
   if (!initialValues || typeof initialValues !== 'object') {
     console.error('useForm: initialValues must be a valid object');
@@ -57,11 +54,9 @@ export const useForm = (initialValues, onSubmit) => {
       setSuccess('');
 
       await onSubmit(formData);
-
-      setSuccess(DEFAULT_SUCCESS_MESSAGE);
     } catch (err) {
       console.error('Form submission error:', err);
-      setError(err?.message || DEFAULT_ERROR_MESSAGE);
+      setError(err?.message || '');
     } finally {
       setIsLoading(false);
     }

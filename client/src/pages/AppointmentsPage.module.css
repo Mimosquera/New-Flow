@@ -574,6 +574,74 @@
   font-weight: bold;
 }
 
+/* Desktop: shrink card */
+@media (min-width: 993px) {
+  .contentWrapper {
+    max-width: 600px;
+  }
+
+  .cardHeader {
+    padding: 1.75rem 1.5rem;
+  }
+
+  .cardTitle {
+    font-size: 1.6rem;
+  }
+
+  .cardSubtitle {
+    font-size: 0.95rem;
+  }
+
+  .cardBody {
+    padding: 1.75rem 1.75rem 1.25rem;
+  }
+
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+
+  .formLabel {
+    font-size: 0.8rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .formControl,
+  .formSelect {
+    padding: 0.6rem 0.85rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+  }
+
+  .textarea {
+    min-height: 60px;
+  }
+
+  .submitButton {
+    padding: 0.85rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    margin-top: 0.75rem;
+  }
+
+  .formRow,
+  .dateTimeRow {
+    gap: 0.75rem;
+  }
+
+  .helpText {
+    font-size: 0.75rem;
+  }
+
+  .logoContainer {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .logo {
+    max-width: 200px;
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .pageContainer {

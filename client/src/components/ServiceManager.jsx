@@ -118,7 +118,7 @@ export const ServiceManager = () => {
         // Validate price is a valid number
         const priceNum = parseFloat(data.price);
         if (isNaN(priceNum) || priceNum < 0) {
-          throw new Error(t('invalidPrice') || 'Invalid price value');
+          throw new Error(t('invalidPrice'));
         }
 
         // Validate price_max if provided
@@ -135,7 +135,7 @@ export const ServiceManager = () => {
         if (editingService) {
           // Update existing service
           if (!editingService.id) {
-            throw new Error('Service ID is missing');
+            throw new Error(t('serviceIdMissing'));
           }
 
           const response = await serviceService.update(editingService.id, data);

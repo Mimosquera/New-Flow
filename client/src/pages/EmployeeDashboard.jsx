@@ -9,6 +9,7 @@ import { EmployeeManager } from '../components/EmployeeManager.jsx';
 import { ProfileManager } from '../components/ProfileManager.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import { ScrollToTop } from '../components/ScrollToTop.jsx';
 
 // Public placeholder dashboard (no auth redirects)
 export default function EmployeeDashboard() {
@@ -23,11 +24,11 @@ export default function EmployeeDashboard() {
     
     if (isRefresh) {
       // On refresh, load the saved tab
-      return localStorage.getItem('employeeDashboardTab') || 'appointments';
+      return localStorage.getItem('employeeDashboardTab') || 'profile';
     } else {
       // On initial navigation, start fresh
       sessionStorage.setItem('dashboardVisited', 'true');
-      return 'appointments';
+      return 'profile';
     }
   });
   
@@ -158,22 +159,11 @@ export default function EmployeeDashboard() {
             {/* Right: Actions */}
             <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
               <button 
-                className="btn btn-sm"
-                style={{ 
-                  backgroundColor: 'white', 
-                  color: 'rgb(5, 45, 63)', 
-                  border: '1px solid rgb(5, 45, 63)',
-                  padding: '0.2rem 0.4rem',
-                  fontSize: '0.75rem',
-                  fontWeight: '500',
-                  borderRadius: '4px',
-                  lineHeight: '1',
-                  flexShrink: 0
-                }}
+                className="btn btn-sm dashboard-home-btn"
                 onClick={() => navigate('/')}
                 title={t('backToHome')}
               >
-                ⌂
+                <span>⌂</span>
               </button>
               <div style={{ 
                 width: '53px', 
@@ -188,7 +178,7 @@ export default function EmployeeDashboard() {
                   top: 0,
                   left: 0
                 }}>
-                  <LanguageToggle inverse />
+                  <LanguageToggle inverse darkText />
                 </div>
               </div>
             </div>
@@ -202,14 +192,14 @@ export default function EmployeeDashboard() {
             <img 
               src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
               alt="Logo"
-              style={{ height: '2rem', marginRight: '0.75rem' }}
+              style={{ height: '1.5rem', marginRight: '0.5rem' }}
             />
             <h2 className="mb-0" style={{ fontSize: '1.5rem', whiteSpace: 'nowrap' }}>
+              {activeTab === 'profile' && t('myProfile')}
               {activeTab === 'appointments' && t('appointmentRequests')}
+              {activeTab === 'availability' && t('manageAvailability')}
               {activeTab === 'updates' && t('managePosts')}
               {activeTab === 'services' && t('manageServices')}
-              {activeTab === 'availability' && t('manageAvailability')}
-              {activeTab === 'profile' && t('myProfile')}
               {activeTab === 'team' && (t('manageTeam') || 'Manage Team')}
             </h2>
           </div>
@@ -218,11 +208,27 @@ export default function EmployeeDashboard() {
           <div className="d-none d-lg-flex" style={{ minWidth: 0, flex: '1 1 auto', justifyContent: 'flex-end' }}>
             <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
               <li className="nav-item">
+                <button
+                  className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('profile')}
+                >
+                  {t('profile')}
+                </button>
+              </li>
+              <li className="nav-item">
                 <button 
                   className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
                   onClick={() => setActiveTab('appointments')}
                 >
                   {t('appointments')}
+                </button>
+              </li>
+              <li className="nav-item">
+                <button 
+                  className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('availability')}
+                >
+                  {t('availability')}
                 </button>
               </li>
               <li className="nav-item">
@@ -239,22 +245,6 @@ export default function EmployeeDashboard() {
                   onClick={() => setActiveTab('services')}
                 >
                   {t('services')}
-                </button>
-              </li>
-              <li className="nav-item">
-                <button 
-                  className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('availability')}
-                >
-                  {t('availability')}
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('profile')}
-                >
-                  {t('profile')}
                 </button>
               </li>
               {isAdmin && (
@@ -297,11 +287,11 @@ export default function EmployeeDashboard() {
                 backgroundSize: '10px'
               }}
             >
+              <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
               <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
+              <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
               <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
               <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-              <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-              <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
               {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
             </select>
           </div>
@@ -333,6 +323,7 @@ export default function EmployeeDashboard() {
           />
         </div>
       </div>
+      <ScrollToTop />
     </div>
   );
 }

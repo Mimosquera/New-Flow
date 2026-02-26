@@ -192,7 +192,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
         onBlockedDateChange();
       }
     } catch (err) {
-      const errorMessage = err?.response?.data?.error || err?.message || 'Failed to block date';
+      const errorMessage = err?.response?.data?.error || err?.message || t('failedToBlockDate');
       setError(errorMessage);
       setSuccess(null);
       console.error('Error creating blocked dates:', err);

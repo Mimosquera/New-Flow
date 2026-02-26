@@ -5,6 +5,7 @@ import { getToken } from '../utils/tokenUtils.js';
 import { updateService, serviceService, SERVER_BASE_URL } from '../services/api.js';
 import { UpdateModal } from '../components/UpdateModal.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import { detectLang } from '../utils/languageDetection.js';
@@ -229,7 +230,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             >
               {t(isLoggedIn ? 'employeeDashboard' : 'employeeLogin')}
             </button>
-            <LanguageToggle />
+            <LanguageToggle darkText />
           </div>
         </div>
       </nav>
@@ -393,13 +394,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   <div key={article.id} className="col-md-6 col-lg-4 mb-4">
                     <div 
                       className="card shadow-sm border-0 h-100 update-card-desktop"
-                      style={{ cursor: 'pointer', background: '#fff', borderRadius: '16px', boxShadow: '0 3px 8px rgba(5,45,63,0.15)' }}
                       onClick={() => handleUpdateClick(article)}
+                      style={{ cursor: 'pointer' }}
                     >
-                      <div className="card-body p-4 d-flex flex-column justify-content-between">
+                      <div className="card-body d-flex flex-column justify-content-between">
                         <h5 className="card-title mb-2" style={{ fontWeight: '600', color: 'rgb(5,45,63)' }}>{article.title}</h5>
                         {article.media_url && (
-                          <div className="mb-3">
+                          <div className="mt-2 mb-3">
                             {article.media_type === 'image' ? (
                               <img
                                 src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
@@ -434,11 +435,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 {hasMore && (
                   <button 
                     className="btn btn-sm me-2"
-                    style={{ 
-                      backgroundColor: 'white', 
-                      color: 'rgb(5, 45, 63)', 
-                      border: '1px solid white',
-                      fontWeight: '300'
+                    style={{
+                      background: 'linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%)',
+                      color: '#fff',
+                      border: '1.5px solid rgba(255,255,255,0.4)',
+                      borderRadius: '0.5rem',
+                      padding: '0.4rem 1.25rem',
+                      fontWeight: '600',
+                      fontSize: '0.85rem',
+                      letterSpacing: '0.02em',
+                      transition: 'all 0.2s ease'
                     }}
                     onClick={handleViewMore}
                   >
@@ -448,11 +454,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 {displayCount > 3 && (
                   <button 
                     className="btn btn-sm"
-                    style={{ 
-                      backgroundColor: 'rgb(5, 45, 63)', 
-                      color: 'white', 
-                      border: '1px solid white',
-                      fontWeight: '300'
+                    style={{
+                      background: 'transparent',
+                      color: '#fff',
+                      border: '1.5px solid rgba(255,255,255,0.5)',
+                      borderRadius: '0.5rem',
+                      padding: '0.4rem 1.25rem',
+                      fontWeight: '600',
+                      fontSize: '0.85rem',
+                      letterSpacing: '0.02em',
+                      transition: 'all 0.2s ease'
                     }}
                     onClick={handleShowLess}
                   >
@@ -552,6 +563,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         show={showModal}
         onClose={handleCloseModal}
       />
+      <ScrollToTop />
     </div>
   );
 };

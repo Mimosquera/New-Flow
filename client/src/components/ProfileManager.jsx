@@ -197,13 +197,13 @@ export const ProfileManager = ({ onLogout }) => {
       // Validate file type
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
       if (!validTypes.includes(file.type)) {
-        setAlerts({ error: 'Only image files (JPEG, PNG, GIF, WebP) are allowed', success: null });
+        setAlerts({ error: t('onlyImageFilesAllowed'), success: null });
         return;
       }
 
       // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
-        setAlerts({ error: 'Image size must be less than 5MB', success: null });
+        setAlerts({ error: t('imageSizeTooLarge'), success: null });
         return;
       }
 
@@ -758,7 +758,7 @@ export const ProfileManager = ({ onLogout }) => {
               >
                 <h4 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('forgotPassword')}</h4>
                 <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1.5rem' }}>
-                  Enter your email address and we'll send you a link to reset your password.
+                  {t('forgotPasswordDescription')}
                 </p>
 
                 <form onSubmit={handleForgotPassword}>

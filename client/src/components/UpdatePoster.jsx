@@ -383,10 +383,11 @@ export const UpdatePoster = () => {
                           style={{
                             backgroundColor: 'rgb(5, 45, 63)',
                             color: 'white',
-                            fontWeight: 'bold',
+                            fontWeight: '600',
                             boxShadow: '0 2px 8px rgba(5,45,63,0.18), 0 1px 1px rgba(0,0,0,0.12)',
                             border: 'none',
-                            padding: '0.25rem 0.75rem',
+                            padding: '0.15rem 0.5rem',
+                            fontSize: '0.7rem',
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -401,7 +402,7 @@ export const UpdatePoster = () => {
                       {/* Display media if available */}
                       {update.media_url && (
                         <div
-                          className="mb-3"
+                          className="mt-2 mb-3"
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleUpdateClick(update)}
                         >
