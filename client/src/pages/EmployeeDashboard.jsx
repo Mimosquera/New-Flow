@@ -134,7 +134,7 @@ export default function EmployeeDashboard() {
             {/* Left: Title + Badge */}
             <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem', overflow: 'hidden' }}>
               <h1 className="mb-0 dashboard-title" style={{ 
-                fontSize: '1.3rem', fontWeight: '600', color: 'rgb(5, 45, 63)', 
+                fontSize: '1.1rem', fontWeight: '600', color: 'rgb(5, 45, 63)', 
                 whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 
               }}>
                 {t('employeeDashboard')}
