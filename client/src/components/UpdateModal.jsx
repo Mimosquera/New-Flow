@@ -75,17 +75,34 @@ export const UpdateModal = ({ update, show, onClose }) => {
         style={{ zIndex: 1050 }}
       >
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-          <div className="modal-content" style={{ borderRadius: '30px', overflow: 'hidden' }}>
-            <div className="modal-header" style={{ paddingLeft: '1.5rem' }}>
-              <h5 className="modal-title">{update.title}</h5>
+          <div className="modal-content" style={{ 
+            borderRadius: '20px', 
+            overflow: 'hidden', 
+            border: 'none',
+            boxShadow: '0 20px 60px rgba(5, 45, 63, 0.5), 0 0 0 1px rgba(70, 161, 161, 0.2)'
+          }}>
+            <div className="modal-header" style={{ 
+              background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
+              borderBottom: '3px solid #46a1a1',
+              padding: '1.25rem 1.5rem'
+            }}>
+              <h5 className="modal-title" style={{ 
+                color: '#fff', 
+                fontWeight: '700', 
+                letterSpacing: '-0.01em',
+                textShadow: '0 2px 8px rgba(0,0,0,0.3)'
+              }}>{update.title}</h5>
               <button 
                 type="button" 
-                className="btn-close" 
+                className="btn-close btn-close-white" 
                 onClick={onClose}
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body p-4" style={{ padding: '2rem' }}>
+            <div className="modal-body" style={{ 
+              padding: '1.75rem',
+              background: 'linear-gradient(180deg, #ffffff 0%, #eaf6f6 100%)'
+            }}>
               {/* Large media display */}
               {update.media_url && (
                 <div 
@@ -97,40 +114,74 @@ export const UpdateModal = ({ update, show, onClose }) => {
                     <img
                       src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                       alt={update.title}
-                      className="img-fluid rounded w-100"
-                      style={{ maxHeight: '60vh', objectFit: 'contain' }}
+                      className="img-fluid w-100"
+                      style={{ 
+                        maxHeight: '60vh', 
+                        objectFit: 'contain', 
+                        borderRadius: '12px',
+                        border: '1px solid rgba(70, 161, 161, 0.15)'
+                      }}
                     />
                   ) : (
                     <video
                       src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                      className="w-100 rounded"
-                      style={{ maxHeight: '60vh' }}
+                      className="w-100"
+                      style={{ 
+                        maxHeight: '60vh', 
+                        borderRadius: '12px',
+                        border: '1px solid rgba(70, 161, 161, 0.15)'
+                      }}
                       controls
                     />
                   )}
-                  <small className="text-muted d-block text-center mt-2">
+                  <small style={{ color: '#46a1a1', fontWeight: '500' }} className="d-block text-center mt-2">
                     {t('clickToViewFullscreen')}
                   </small>
                 </div>
               )}
               
               {/* Content */}
-              <p className="mb-3" style={{ whiteSpace: 'pre-wrap', fontSize: '1rem', color: '#333' }}>
+              <p className="mb-3" style={{ 
+                whiteSpace: 'pre-wrap', 
+                fontSize: '1rem', 
+                color: 'rgb(5, 45, 63)',
+                lineHeight: '1.6'
+              }}>
                 {update.content}
               </p>
               
               {/* Metadata */}
-              <div className="text-muted">
-                <small>
+              <div style={{ 
+                borderTop: '1px solid rgba(70, 161, 161, 0.2)', 
+                paddingTop: '0.75rem',
+                marginTop: '0.5rem'
+              }}>
+                <small style={{ color: '#46a1a1', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
                   {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
                 </small>
               </div>
             </div>
-            <div className="modal-footer">
+            <div className="modal-footer" style={{ 
+              background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
+              borderTop: '2px solid #46a1a1',
+              padding: '0.75rem 1.5rem'
+            }}>
               <button 
                 type="button" 
-                className="btn btn-secondary" 
                 onClick={onClose}
+                style={{
+                  background: 'linear-gradient(135deg, rgba(70, 161, 161, 0.15) 0%, rgba(70, 161, 161, 0.08) 100%)',
+                  color: '#fff',
+                  border: '1.5px solid rgba(70, 161, 161, 0.6)',
+                  borderRadius: '10px',
+                  padding: '0.4rem 1.25rem',
+                  fontWeight: '600',
+                  fontSize: '0.85rem',
+                  letterSpacing: '0.03em',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  backdropFilter: 'blur(8px)'
+                }}
               >
                 {t('close')}
               </button>

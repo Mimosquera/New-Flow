@@ -273,10 +273,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </section>
 
       {/* Services Section */}
-      <section className="services-section py-5">
+      <section className="services-section py-3">
         <div className="container">
           <div 
-            className={`${styles.servicesHeading} mb-5`}
+            className={`${styles.servicesHeading} mb-3`}
           >
             {t('servicesTitle')}
           </div>
@@ -289,13 +289,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {displayedServices.map((service, idx) => (
               <div key={service.id} className="col-md-4">
                 <div
-                  className={`card h-100 shadow-sm border-0 ${styles.card} ${styles.cursorPointer}`}
+                  className={`card h-100 ${styles.card} ${styles.cursorPointer}`}
                   onClick={() => handleServiceClick(service.id)}
                   ref={el => serviceCardsRef.current[idx] = el}
                 >
                   <div className="card-body">
                     <h5 className="card-title">{service.name}</h5>
-                    <p className="card-text text-muted">{service.description}</p>
+                    <p className="card-text">{service.description}</p>
                     <h6 className="card-subtitle fw-bold">
                       {service.price_max
                         ? `$${parseFloat(service.price).toFixed(2)} - $${parseFloat(service.price_max).toFixed(2)}`
@@ -346,10 +346,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 <button 
                   className="btn btn-sm"
                   style={{ 
-                    backgroundColor: 'rgb(5, 45, 63)', 
-                    color: 'white', 
-                    border: '1px solid rgb(5, 45, 63)',
-                    fontWeight: '300'
+                    background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%)',
+                    color: '#fff',
+                    border: '1.5px solid #46a1a1',
+                    borderRadius: '0.5rem',
+                    padding: '0.4rem 1.25rem',
+                    fontWeight: '600',
+                    fontSize: '0.85rem',
+                    letterSpacing: '0.02em',
+                    transition: 'all 0.2s ease'
                   }}
                   onClick={handleShowAllServices}
                 >
@@ -359,10 +364,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 <button 
                   className="btn btn-sm"
                   style={{ 
-                    backgroundColor: 'white', 
-                    color: 'rgb(5, 45, 63)', 
-                    border: '1px solid rgb(5, 45, 63)',
-                    fontWeight: '300'
+                    background: 'transparent',
+                    color: 'rgb(5, 45, 63)',
+                    border: '1.5px solid rgb(5, 45, 63)',
+                    borderRadius: '0.5rem',
+                    padding: '0.4rem 1.25rem',
+                    fontWeight: '600',
+                    fontSize: '0.85rem',
+                    letterSpacing: '0.02em',
+                    transition: 'all 0.2s ease'
                   }}
                   onClick={handleHideServices}
                 >
@@ -376,9 +386,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </section>
 
       {/* News Section */}
-      <section className="news-section py-5">
+      <section className="news-section py-4">
         <div className="container">
-          <h2 className={`text-center mb-5 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
+          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
           {loading || translating ? (
             <div className="text-center text-white">
               <p>{translating ? t('translating') : t('loading')}</p>
