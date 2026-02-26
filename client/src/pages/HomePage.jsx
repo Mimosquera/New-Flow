@@ -439,7 +439,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
                           {article.content.length > 100 ? article.content.substring(0, 100) + '...' : article.content}
                         </p>
                         <small className="text-muted" style={{ fontSize: '0.9rem' }}>
-                          {new Date(article.date).toLocaleDateString()} • {article.author}
+                          • {article.author}
+                        </small>
+                        <small style={{ fontSize: '0.75rem', color: '#78909c', fontWeight: '500', letterSpacing: '0.03em', fontStyle: 'italic' }}>
+                          {new Date(article.date).toLocaleDateString()}
                         </small>
                       </div>
                     </div>

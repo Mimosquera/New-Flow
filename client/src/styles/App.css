@@ -624,6 +624,14 @@ a:focus:not(:focus-visible) {
   border-left-color: rgb(5, 45, 63) !important;
 }
 
+@media (max-width: 767px) {
+  .update-card-desktop:hover {
+    transform: none !important;
+    box-shadow: 0 4px 18px rgba(5, 45, 63, 0.18), 0 1.5px 4px rgba(70, 161, 161, 0.12) !important;
+    border-left-color: #46a1a1 !important;
+  }
+}
+
 .update-card-desktop .card-body {
   padding: 0.7rem 0.85rem 0.55rem !important;
 }

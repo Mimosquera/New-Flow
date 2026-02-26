@@ -37,6 +37,13 @@
   box-shadow: 0 12px 36px rgba(5, 45, 63, 0.2) !important;
 }
 
+@media (max-width: 767px) {
+  .card:hover {
+    transform: none !important;
+    box-shadow: 0 4px 18px rgba(5, 45, 63, 0.12) !important;
+  }
+}
+
 .updateCardBody {
   padding: 1.60rem !important;
   padding-bottom: 0.5rem !important;
