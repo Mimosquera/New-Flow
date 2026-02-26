@@ -11,25 +11,18 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 
-// Public placeholder dashboard (no auth redirects)
 export default function EmployeeDashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  
-  // Only load from localStorage on refresh (not on navigation)
+
   const [activeTab, setActiveTab] = useState(() => {
-    // Check if this is a page refresh vs navigation
     const isRefresh = sessionStorage.getItem('dashboardVisited') === 'true';
-    
     if (isRefresh) {
-      // On refresh, load the saved tab
       return localStorage.getItem('employeeDashboardTab') || 'profile';
-    } else {
-      // On initial navigation, start fresh
-      sessionStorage.setItem('dashboardVisited', 'true');
-      return 'profile';
     }
+    sessionStorage.setItem('dashboardVisited', 'true');
+    return 'profile';
   });
   
   const [employeeName, setEmployeeName] = useState('');
@@ -39,8 +32,7 @@ export default function EmployeeDashboard() {
   useEffect(() => {
     localStorage.setItem('employeeDashboardTab', activeTab);
   }, [activeTab]);
-  
-  // Clear session flag when leaving the dashboard
+
   useEffect(() => {
     return () => {
       if (!location.pathname.includes('/employee/dashboard')) {
@@ -50,15 +42,12 @@ export default function EmployeeDashboard() {
   }, [location.pathname]);
 
   useEffect(() => {
-    // Get employee name from JWT token
     const token = getToken();
     if (token) {
       const decoded = decodeToken(token);
       if (decoded?.name) {
         setEmployeeName(decoded.name);
-        // Check if user is Admin by email
-        const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
-        setIsAdmin(decoded.email === adminEmail);
+        setIsAdmin(decoded.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL);
       }
     }
   }, []);
@@ -67,29 +56,14 @@ export default function EmployeeDashboard() {
   const lastScrollYRef = useRef(0);
 
   useEffect(() => {
-    // Always start with solid black background
     document.body.style.background = '#000000';
     const handleScroll = () => {
-      // On every scroll to top, bottom, or upward scroll, set background to black
       const scrollY = window.scrollY;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = window.innerHeight;
-      if (
-        scrollY <= 10 ||
-        scrollY + clientHeight >= scrollHeight - 10 ||
-        scrollY < lastScrollYRef.current
-      ) {
-        document.body.style.background = '#000000';
-      }
-      // Sticky header logic
-      if (scrollY <= 10) {
+      document.body.style.background = '#000000';
+      if (scrollY <= 50 || scrollY < lastScrollYRef.current) {
         setShowHeader(true);
-      } else if (scrollY <= 50) {
-        setShowHeader(true);
-      } else if (scrollY > lastScrollYRef.current) {
+      } else {
         setShowHeader(false);
-      } else if (scrollY < lastScrollYRef.current) {
-        setShowHeader(true);
       }
       lastScrollYRef.current = scrollY;
     };
@@ -102,8 +76,7 @@ export default function EmployeeDashboard() {
 
   return (
     <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
-      {/* Dashboard Header - Card Style */}
-      <div 
+      <div
         className="pb-3 dashboard-header-sticky"
         style={{ 
           position: 'sticky', 
@@ -130,9 +103,7 @@ export default function EmployeeDashboard() {
             border: 'none'
           }}
         >
-          {/* Header Row */}
           <div className="d-flex align-items-center" style={{ width: '100%' }}>
-            {/* Left: Logo + Title */}
             <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem', overflow: 'hidden' }}>
               <img 
                 src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
@@ -146,7 +117,6 @@ export default function EmployeeDashboard() {
                 {t('employeeDashboard')}
               </h1>
             </div>
-            {/* Right: Actions */}
             <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
               <button 
                 className="btn btn-sm dashboard-home-btn"
@@ -175,9 +145,7 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        {/* Section Header + Nav: Single Row */}
         <div className="d-flex align-items-center justify-content-between mb-0" style={{ gap: '0.5rem' }}>
-          {/* Left: Dynamic Title + Badge */}
           <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem' }}>
             <h2 className="mb-0" style={{ fontSize: 'clamp(1rem, 3.5vw, 1.5rem)', whiteSpace: 'nowrap', color: '#e0f7f7', minWidth: 0, fontWeight: '700', letterSpacing: '0.02em' }}>
               {activeTab === 'profile' && t('myProfile')}
@@ -205,7 +173,6 @@ export default function EmployeeDashboard() {
             )}
           </div>
 
-          {/* Right on desktop: Tabs */}
           <div className="d-none d-lg-flex" style={{ minWidth: 0, flex: '1 1 auto', justifyContent: 'flex-end' }}>
             <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
               <li className="nav-item">
@@ -261,7 +228,6 @@ export default function EmployeeDashboard() {
             </ul>
           </div>
 
-          {/* Right on mobile: Hamburger Dropdown */}
           <div className="d-lg-none" style={{ position: 'relative', flexShrink: 0 }}>
             <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
             <select
@@ -302,7 +268,6 @@ export default function EmployeeDashboard() {
         </div>
       </div>
 
-      {/* Tab Content */}
       {activeTab === 'appointments' && <AppointmentsManager filter={appointmentFilter} setFilter={setAppointmentFilter} />}
       {activeTab === 'updates' && <UpdatePoster />}
       {activeTab === 'services' && <ServiceManager />}
@@ -317,7 +282,6 @@ export default function EmployeeDashboard() {
       )}
       {activeTab === 'team' && isAdmin && <EmployeeManager />}
 
-      {/* Footer */}
       <div className="container pt-5 pb-4" style={{ marginTop: '4rem' }}>
         <div className="text-center">
           <img

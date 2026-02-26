@@ -7,8 +7,7 @@ import { UpdateModal } from '../components/UpdateModal.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
-import { translateObject } from '../services/translationService.js';
-import { detectLang } from '../utils/languageDetection.js';
+import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import styles from './HomePage.module.css';
 
 export const HomePage = ({ onNavigateToBooking }) => {
@@ -16,18 +15,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const { t, language } = useTranslation();
 
   const [services, setServices] = useState([]);
-  const [translatedServices, setTranslatedServices] = useState([]);
   const getDefaultServiceCount = () => window.innerWidth < 768 ? 4 : 3;
   const [serviceDisplayCount, setServiceDisplayCount] = useState(getDefaultServiceCount);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
   const serviceCardsRef = useRef([]);
 
   const [news, setNews] = useState([]);
-  const [translatedNews, setTranslatedNews] = useState([]);
   const [displayCount, setDisplayCount] = useState(4);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [translating, setTranslating] = useState(false);
   const [selectedUpdate, setSelectedUpdate] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
@@ -46,11 +42,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
     setSelectedUpdate(null);
   };
 
+  const [translatedServices, translatingServices] = useTranslateItems(services, ['name', 'description'], language);
+  const [translatedNews, translatingNews] = useTranslateItems(news, ['title', 'content', 'author'], language);
+  const translating = translatingServices || translatingNews;
+
   const fetchServices = useCallback(async () => {
     try {
       const response = await serviceService.getAll();
       setServices(response.data);
-      setTranslatedServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);
     }
@@ -61,7 +60,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
       setLoading(true);
       const response = await updateService.getAll();
       setNews(response.data.updates);
-      setTranslatedNews(response.data.updates);
       setTotalUpdates(response.data.total);
     } catch (error) {
       console.error('Error fetching updates:', error);
@@ -76,60 +74,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
     fetchUpdates();
     fetchServices();
   }, [fetchUpdates, fetchServices]);
-
-  useEffect(() => {
-    const translatePosts = async () => {
-      if (news.length === 0) return;
-      setTranslating(true);
-      try {
-        const translated = await Promise.all(
-          news.map(article => {
-            const sourceLang = article.language || detectLang((article.title || '') + ' ' + (article.content || ''));
-            const targetLang = language === 'es' ? 'es' : 'en';
-            if (sourceLang !== targetLang) {
-              return translateObject(article, ['title', 'content', 'author'], targetLang, sourceLang);
-            } else {
-              return Promise.resolve(article);
-            }
-          })
-        );
-        setTranslatedNews(await Promise.all(translated));
-      } catch (error) {
-        console.error('Error translating posts:', error);
-        setTranslatedNews(news);
-      } finally {
-        setTranslating(false);
-      }
-    };
-    translatePosts();
-  }, [language, news]);
-
-  useEffect(() => {
-    const translateServices = async () => {
-      if (services.length === 0) return;
-      setTranslating(true);
-      try {
-        const translated = await Promise.all(
-          services.map(service => {
-            const sourceLang = service.language || detectLang((service.name || '') + ' ' + (service.description || ''));
-            const targetLang = language === 'es' ? 'es' : 'en';
-            if (sourceLang !== targetLang) {
-              return translateObject(service, ['name', 'description'], targetLang, sourceLang);
-            } else {
-              return Promise.resolve(service);
-            }
-          })
-        );
-        setTranslatedServices(await Promise.all(translated));
-      } catch (error) {
-        console.error('Error translating services:', error);
-        setTranslatedServices(services);
-      } finally {
-        setTranslating(false);
-      }
-    };
-    translateServices();
-  }, [language, services]);
 
   const handleViewMore = () => {
     setDisplayCount(prev => prev + 4);
@@ -185,21 +129,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const hasMoreServices = serviceDisplayCount < translatedServices.length;
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY <= 50) {
-        document.body.style.background = '#000000';
-      } else {
-        document.body.style.background = '#000000';
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = '#000000';
-    };
+    document.body.style.background = '#000000';
   }, []);
 
   return (
@@ -307,24 +237,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     {expandedServiceId === service.id && (
                       <div className="mt-3">
                         <button
-                          className="btn btn-sm w-100"
-                          style={{
-                            backgroundColor: 'rgb(5, 45, 63)',
-                            color: 'white',
-                            border: 'none',
-                            fontWeight: '500',
-                            borderRadius: '20px',
-                            boxShadow: '0 3px 8px rgba(5, 45, 63, 0.3)',
-                            transition: 'all 0.3s ease'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-1px)';
-                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(5, 45, 63, 0.4)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 3px 8px rgba(5, 45, 63, 0.3)';
-                          }}
+                          className={`btn btn-sm w-100 ${styles.serviceBookBtn}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             e.currentTarget.blur();

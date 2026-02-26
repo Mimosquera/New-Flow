@@ -204,6 +204,24 @@
   }
 }
 
+/* Service book button */
+.serviceBookBtn {
+  background-color: rgb(5, 45, 63);
+  color: white;
+  border: none;
+  font-weight: 500;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(5, 45, 63, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .serviceBookBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(5, 45, 63, 0.4);
+  }
+}
+
 /* Utilities */
 
 .cursorPointer {

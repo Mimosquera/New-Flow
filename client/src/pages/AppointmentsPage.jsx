@@ -4,15 +4,11 @@ import { Alert } from '../components/Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { serviceService, availabilityService, appointmentService, dataService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
-import { translateObject } from '../services/translationService.js';
+import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
-import { detectLang } from '../utils/languageDetection.js';
 import styles from './AppointmentsPage.module.css';
 
-/**
- * Appointments Page
- */
 export const AppointmentsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,17 +17,18 @@ export const AppointmentsPage = () => {
   // State
   const [success, setSuccess] = useState(null);
   const [services, setServices] = useState([]);
-  const [translatedServices, setTranslatedServices] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [availableTimes, setAvailableTimes] = useState([]);
   const [loadingTimes, setLoadingTimes] = useState(false);
 
+  const [translatedServices] = useTranslateItems(services, ['name', 'description'], language);
+
   // Get pre-selected service from navigation state (if coming from homepage)
   const selectedService = location.state?.selectedService;
 
-  // Fetch services and employees on mount
   useEffect(() => {
     window.scrollTo(0, 0);
+    document.body.style.background = '#000000';
 
     const fetchData = async () => {
       try {
@@ -48,52 +45,6 @@ export const AppointmentsPage = () => {
 
     fetchData();
   }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY <= 50) {
-        document.body.style.background = '#000000';
-      } else {
-        document.body.style.background = '#000000';
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = '#000000';
-    };
-  }, []);
-
-  // Translate services when language changes
-  useEffect(() => {
-    const translateServices = async () => {
-      if (services.length === 0) {
-        setTranslatedServices([]);
-        return;
-      }
-      try {
-        const translated = await Promise.all(
-          services.map(service => {
-            const sourceLang = service.language || detectLang((service.name || '') + ' ' + (service.description || ''));
-            const targetLang = language === 'es' ? 'es' : 'en';
-            if (sourceLang !== targetLang) {
-              return translateObject(service, ['name', 'description'], targetLang, sourceLang);
-            } else {
-              return Promise.resolve(service);
-            }
-          })
-        );
-        setTranslatedServices(await Promise.all(translated));
-      } catch (error) {
-        console.error('Error translating services:', error);
-        setTranslatedServices(services);
-      }
-    };
-    translateServices();
-  }, [services, language]);
 
   // Form handling with pre-selected service (if applicable)
   const { formData, handleChange: originalHandleChange, handleSubmit: handleFormSubmit, error, setError } = useForm(
@@ -141,36 +92,27 @@ export const AppointmentsPage = () => {
     }
   );
 
-  // Custom handle change to fetch availability when date or employee changes
   const handleChange = async (e) => {
     originalHandleChange(e);
-    
+
     const { name, value } = e.target;
-    
+
     if (name === 'date') {
-      const selectedDate = value;
-      if (selectedDate) {
-        await fetchAvailabilityForDate(selectedDate, formData.employee);
+      if (value) {
+        await fetchAvailabilityForDate(value, formData.employee);
       } else {
         setAvailableTimes([]);
       }
-    } else if (name === 'employee') {
-      // If date is already selected, refetch availability for the new employee
-      if (formData.date) {
-        await fetchAvailabilityForDate(formData.date, value);
-      }
+    } else if (name === 'employee' && formData.date) {
+      await fetchAvailabilityForDate(formData.date, value);
     }
   };
 
-  // Fetch available times for a specific date, considering accepted appointments
   const fetchAvailabilityForDate = async (date, employeeId = '') => {
     try {
       setLoadingTimes(true);
       const response = await availabilityService.getAvailableTimes(date, employeeId || null);
-      
       const timeSlots = response.data.data || [];
-      
-      // Convert 24-hour format to 12-hour format for display
       const formattedSlots = timeSlots.map(time => {
         const [hours, minutes] = time.split(':');
         const hour = parseInt(hours);
@@ -188,7 +130,6 @@ export const AppointmentsPage = () => {
     }
   };
 
-  // Convert 12-hour time format to 24-hour format
   const convertTo24Hour = (time12h) => {
     const [time, modifier] = time12h.split(' ');
     let [hours, minutes] = time.split(':');
@@ -204,14 +145,12 @@ export const AppointmentsPage = () => {
     return `${hours}:${minutes}:00`;
   };
 
-  // Form submit handler
   const handleSubmit = (e) => {
     e.preventDefault();
     setSuccess(null);
     handleFormSubmit(e);
   };
 
-  // Get minimum date (today) for date picker
   const today = new Date().toISOString().split('T')[0];
 
   return (

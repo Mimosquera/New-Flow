@@ -1,18 +1,3 @@
-/**
- * AppointmentsManager Component Module
- * Manages appointment requests with accept/decline/cancel functionality
- * 
- * Features:
- * - View all appointments with status filtering
- * - Accept/Decline pending requests
- * - Cancel accepted appointments (by accepting employee or admin)
- * - Expandable appointment details
- * - Auto-translation support for Spanish
- * - Badge status indicators (pending, accepted, upcoming, declined, cancelled)
- * - Employee note/reason input for actions
- * - Admin view showing all employee appointments
- */
-
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from './Common/index.jsx';
@@ -35,13 +20,6 @@ const ACTION_ACCEPT = 'accept';
 const ACTION_DECLINE = 'decline';
 const ACTION_CANCEL = 'cancel';
 
-/**
- * AppointmentsManager Component
- * Displays appointment requests for employees with accept/decline functionality
- * @param {Object} props - Component props
- * @param {string} props.filter - External filter value (optional)
- * @param {Function} props.setFilter - External filter setter (optional)
- */
 export const AppointmentsManager = ({ filter: externalFilter, setFilter: externalSetFilter }) => {
   const { t, language } = useTranslation();
   const [appointments, setAppointments] = useState([]);
@@ -63,10 +41,6 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   const filter = externalFilter !== undefined ? externalFilter : internalFilter;
   const setFilter = externalSetFilter || setInternalFilter;
 
-  /**
-   * Fetch appointments from API
-   * @param {string|null} filterParam - Optional filter parameter for server-side filtering
-   */
   const fetchAppointments = useCallback(async (filterParam = null) => {
     try {
       setLoading(true);
@@ -85,48 +59,25 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     }
   }, []);
 
-  /**
-   * Initialize component - get user info and fetch appointments
-   */
   useEffect(() => {
-    try {
-      const token = getToken();
-      if (token) {
-        const decoded = decodeToken(token);
-        setCurrentUser(decoded);
-        const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
-        setIsAdmin(decoded?.email === adminEmail);
-      }
-      fetchAppointments();
-    } catch (error) {
-      console.error('Error initializing AppointmentsManager:', error);
-      setError(t('initializationError'));
+    const token = getToken();
+    if (token) {
+      const decoded = decodeToken(token);
+      setCurrentUser(decoded);
+      setIsAdmin(decoded?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL);
     }
+    fetchAppointments();
   }, [fetchAppointments]);
 
-  /**
-   * Re-fetch when filter changes to 'upcoming' for server-side filtering
-   */
   useEffect(() => {
-    try {
-      if (isInitialMount.current) {
-        isInitialMount.current = false;
-        return;
-      }
-      
-      if (filter === FILTER_UPCOMING) {
-        fetchAppointments(FILTER_UPCOMING);
-      } else {
-        fetchAppointments();
-      }
-    } catch (error) {
-      console.error('Error in filter effect:', error);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
     }
+    fetchAppointments(filter === FILTER_UPCOMING ? FILTER_UPCOMING : null);
   }, [filter, fetchAppointments]);
 
-  /**
-   * Translate appointments when language changes
-   */
+
   useEffect(() => {
     const translateAppointments = async () => {
       try {
@@ -162,66 +113,17 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     translateAppointments();
   }, [language, appointments]);
 
-  /**
-   * Open modal to accept an appointment
-   * @param {Object} appointment - Appointment to accept
-   */
-  const handleAccept = useCallback((appointment) => {
-    try {
-      if (!appointment || !appointment.id) {
-        console.error('Invalid appointment for accept');
-        return;
-      }
-      setCurrentAppointment(appointment);
-      setModalAction(ACTION_ACCEPT);
-      setEmployeeNote('');
-      setShowNoteModal(true);
-    } catch (error) {
-      console.error('Error opening accept modal:', error);
-    }
+  const openModal = useCallback((appointment, action) => {
+    setCurrentAppointment(appointment);
+    setModalAction(action);
+    setEmployeeNote('');
+    setShowNoteModal(true);
   }, []);
 
-  /**
-   * Open modal to decline an appointment
-   * @param {Object} appointment - Appointment to decline
-   */
-  const handleDecline = useCallback((appointment) => {
-    try {
-      if (!appointment || !appointment.id) {
-        console.error('Invalid appointment for decline');
-        return;
-      }
-      setCurrentAppointment(appointment);
-      setModalAction(ACTION_DECLINE);
-      setEmployeeNote('');
-      setShowNoteModal(true);
-    } catch (error) {
-      console.error('Error opening decline modal:', error);
-    }
-  }, []);
+  const handleAccept = useCallback((apt) => openModal(apt, ACTION_ACCEPT), [openModal]);
+  const handleDecline = useCallback((apt) => openModal(apt, ACTION_DECLINE), [openModal]);
+  const handleCancel = useCallback((apt) => openModal(apt, ACTION_CANCEL), [openModal]);
 
-  /**
-   * Open modal to cancel an appointment
-   * @param {Object} appointment - Appointment to cancel
-   */
-  const handleCancel = useCallback((appointment) => {
-    try {
-      if (!appointment || !appointment.id) {
-        console.error('Invalid appointment for cancel');
-        return;
-      }
-      setCurrentAppointment(appointment);
-      setModalAction(ACTION_CANCEL);
-      setEmployeeNote('');
-      setShowNoteModal(true);
-    } catch (error) {
-      console.error('Error opening cancel modal:', error);
-    }
-  }, []);
-
-  /**
-   * Submit appointment action (accept/decline/cancel) with optional note
-   */
   const handleSubmitNote = useCallback(async () => {
     try {
       if (!currentAppointment || !currentAppointment.id) {
@@ -257,77 +159,19 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     }
   }, [currentAppointment, modalAction, employeeNote, fetchAppointments, t]);
 
-  /**
-   * Toggle expanded details for an appointment
-   * @param {string} id - Appointment ID
-   */
   const toggleExpand = useCallback((id) => {
-    try {
-      if (!id) {
-        console.error('No ID provided for toggle');
-        return;
-      }
-      setExpandedIds(prev => {
-        const newExpanded = new Set(prev);
-        if (newExpanded.has(id)) {
-          newExpanded.delete(id);
-        } else {
-          newExpanded.add(id);
-        }
-        return newExpanded;
-      });
-    } catch (error) {
-      console.error('Error toggling expand:', error);
-    }
+    setExpandedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   }, []);
 
-  /**
-   * Check if appointment is upcoming (accepted and in the future)
-   * @param {Object} apt - Appointment object
-   * @returns {boolean} True if upcoming
-   */
   const isUpcoming = useCallback((apt) => {
-    try {
-      if (!apt || apt.status !== STATUS_ACCEPTED) {
-        return false;
-      }
-      return isAppointmentUpcoming(apt.date, apt.time);
-    } catch (error) {
-      console.error('Error checking if upcoming:', error);
-      return false;
-    }
+    return apt?.status === STATUS_ACCEPTED && isAppointmentUpcoming(apt.date, apt.time);
   }, []);
 
-  /**
-   * Get Bootstrap badge class based on appointment status
-   * @param {Object} apt - Appointment object
-   * @returns {string} Bootstrap class name
-   */
-  const getStatusBadgeClass = useCallback((apt) => {
-    try {
-      if (!apt || !apt.status) {
-        return 'bg-secondary';
-      }
-
-      const status = apt.status;
-      switch (status) {
-        case STATUS_PENDING: return 'bg-warning text-dark';
-        case STATUS_ACCEPTED: return isUpcoming(apt) ? 'bg-primary' : 'bg-success';
-        case STATUS_DECLINED: return 'bg-danger';
-        case STATUS_CANCELLED: return 'bg-secondary';
-        default: return 'bg-secondary';
-      }
-    } catch (error) {
-      console.error('Error getting badge class:', error);
-      return 'bg-secondary';
-    }
-  }, [isUpcoming]);
-
-  /**
-   * Get themed inline style for status badge
-   * @param {Object} apt - Appointment object
-   * @returns {Object} React style object
-   */
   const getStatusBadgeStyle = useCallback((apt) => {
     const base = { fontWeight: '500', letterSpacing: '0.3px', padding: '0.35em 0.75em', borderRadius: '8px', fontSize: '0.78rem' };
     const status = apt?.status;
@@ -342,55 +186,22 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     }
   }, [isUpcoming]);
 
-  /**
-   * Get badge text based on appointment status and context
-   * @param {Object} apt - Appointment object
-   * @returns {string} Badge text
-   */
   const getStatusBadgeText = useCallback((apt) => {
-    try {
-      if (!apt || !apt.status) {
-        return 'Unknown';
-      }
-
-      if (apt.status === STATUS_ACCEPTED && apt.acceptedBy) {
-        const upcoming = isUpcoming(apt);
-        
-        if (upcoming) {
-          return isAdmin || apt.acceptedBy.id !== currentUser?.id
-            ? `${t('upcomingFor')} ${apt.acceptedBy.name}`
-            : t('upcomingBadge');
-        } else {
-          return isAdmin || apt.acceptedBy.id !== currentUser?.id
-            ? `${t('completedBy')} ${apt.acceptedBy.name}`
-            : t('completed');
-        }
-      }
-      
-      if (apt.status === STATUS_PENDING) return t('pendingBadge') || 'Pending';
-      if (apt.status === STATUS_DECLINED) return t('declinedBadge') || 'Declined';
-      if (apt.status === STATUS_CANCELLED) return t('cancelledBadge') || 'Cancelled';
-      
-      return apt.status.charAt(0).toUpperCase() + apt.status.slice(1);
-    } catch (error) {
-      console.error('Error getting badge text:', error);
-      return apt?.status || 'Unknown';
+    if (apt.status === STATUS_ACCEPTED && apt.acceptedBy) {
+      const upcoming = isUpcoming(apt);
+      const showName = isAdmin || apt.acceptedBy.id !== currentUser?.id;
+      if (upcoming) return showName ? `${t('upcomingFor')} ${apt.acceptedBy.name}` : t('upcomingBadge');
+      return showName ? `${t('completedBy')} ${apt.acceptedBy.name}` : t('completed');
     }
+    if (apt.status === STATUS_PENDING) return t('pendingBadge') || 'Pending';
+    if (apt.status === STATUS_DECLINED) return t('declinedBadge') || 'Declined';
+    if (apt.status === STATUS_CANCELLED) return t('cancelledBadge') || 'Cancelled';
+    return apt.status.charAt(0).toUpperCase() + apt.status.slice(1);
   }, [isUpcoming, isAdmin, currentUser, t]);
 
-  /**
-   * Filter appointments based on selected filter
-   */
   const filteredAppointments = useMemo(() => {
-    try {
-      if (filter === FILTER_UPCOMING || filter === FILTER_ALL) {
-        return translatedAppointments;
-      }
-      return translatedAppointments.filter(apt => apt?.status === filter);
-    } catch (error) {
-      console.error('Error filtering appointments:', error);
-      return translatedAppointments;
-    }
+    if (filter === FILTER_UPCOMING || filter === FILTER_ALL) return translatedAppointments;
+    return translatedAppointments.filter(apt => apt?.status === filter);
   }, [filter, translatedAppointments]);
 
   if (loading) {
