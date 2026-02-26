@@ -47,6 +47,17 @@
   box-shadow: 0 24px 72px rgba(70, 161, 161, 0.3), 0 0 0 2px rgba(70, 161, 161, 0.3);
 }
 
+@media (max-width: 767px) {
+  .formCard {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 72px rgba(70, 161, 161, 0.3), 0 0 0 2px rgba(70, 161, 161, 0.3);
+  }
+  .formCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 72px rgba(70, 161, 161, 0.3), 0 0 0 2px rgba(70, 161, 161, 0.3);
+  }
+}
+
 /* Card Header */
 .cardHeader {
   background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%);
