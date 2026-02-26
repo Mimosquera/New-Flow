@@ -26,15 +26,15 @@
 }
 
 .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  border-radius: 30px !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.12) !important;
+  border-radius: 16px !important;
   overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 12px 36px rgba(5, 45, 63, 0.2) !important;
 }
 
 .updateCardBody {
