@@ -224,7 +224,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 fontWeight: '300', 
                 whiteSpace: 'nowrap',
                 padding: '0.25rem 0.5rem',
-                fontSize: 'clamp(0.75rem, 2.5vw, 1rem)'
+                fontSize: 'clamp(0.75rem, 2.5vw, 1rem)',
+                textShadow: '0 0 10px rgba(70, 161, 161, 0.8), 0 0 20px rgba(70, 161, 161, 0.5), 0 0 40px rgba(70, 161, 161, 0.25)'
               }}
               onClick={() => navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login')}
             >
@@ -276,7 +277,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <section className="services-section py-3">
         <div className="container">
           <div 
-            className={`${styles.servicesHeading} mb-3`}
+            className={`${styles.servicesHeading} mb-4`}
           >
             {t('servicesTitle')}
           </div>
@@ -285,9 +286,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <h4 className="text-muted">{language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}</h4>
             </div>
           ) : (
-          <div className="row g-4">
+          <div className="row g-3 justify-content-center">
             {displayedServices.map((service, idx) => (
-              <div key={service.id} className="col-md-4">
+              <div key={service.id} className="col-6 col-md-4">
                 <div
                   className={`card h-100 ${styles.card} ${styles.cursorPointer}`}
                   onClick={() => handleServiceClick(service.id)}
@@ -341,7 +342,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
           )}
 
           {translatedServices.length > 0 && services.length > 3 && (
-            <div className="text-center mt-4">
+            <div className="text-center mt-5">
               {hasMoreServices ? (
                 <button 
                   className="btn btn-sm"
@@ -388,7 +389,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* News Section */}
       <section className="news-section py-4">
         <div className="container">
-          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
+          <h2 className={`text-center mb-5 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
           {loading || translating ? (
             <div className="text-center text-white">
               <p>{translating ? t('translating') : t('loading')}</p>
