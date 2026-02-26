@@ -24,7 +24,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [news, setNews] = useState([]);
   const [translatedNews, setTranslatedNews] = useState([]);
-  const [displayCount, setDisplayCount] = useState(3);
+  const [displayCount, setDisplayCount] = useState(4);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
   const [translating, setTranslating] = useState(false);
@@ -132,11 +132,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
   }, [language, services]);
 
   const handleViewMore = () => {
-    setDisplayCount(prev => prev + 3);
+    setDisplayCount(prev => prev + 4);
   };
 
   const handleShowLess = () => {
-    setDisplayCount(3);
+    setDisplayCount(4);
     setTimeout(() => {
       updatesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
@@ -393,7 +393,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* News Section */}
       <section className="news-section py-4">
         <div className="container">
-          <h2 className={`text-center mb-5 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
+          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
           {loading || translating ? (
             <div className="text-center text-white">
               <p>{translating ? t('translating') : t('loading')}</p>
@@ -406,28 +406,28 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <>
               <div className="row">
                 {displayedNews.map(article => (
-                  <div key={article.id} className="col-md-6 col-lg-4 mb-4">
+                  <div key={article.id} className="col-6 col-lg-3 mb-3">
                     <div 
                       className="card shadow-sm border-0 h-100 update-card-desktop"
                       onClick={() => handleUpdateClick(article)}
                       style={{ cursor: 'pointer' }}
                     >
                       <div className="card-body d-flex flex-column justify-content-between">
-                        <h5 className="card-title mb-2" style={{ fontWeight: '600', color: 'rgb(5,45,63)' }}>{article.title}</h5>
+                        <h5 className="card-title mb-1" style={{ fontWeight: '600', color: 'rgb(5,45,63)' }}>{article.title}</h5>
                         {article.media_url && (
-                          <div className="mt-2 mb-3">
+                          <div className="mt-1 mb-1">
                             {article.media_type === 'image' ? (
                               <img
                                 src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
                                 alt={article.title}
                                 className="img-fluid rounded"
-                                style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
+                                style={{ maxHeight: '150px', width: '100%', objectFit: 'cover' }}
                               />
                             ) : (
                               <video
                                 src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
                                 className="w-100 rounded"
-                                style={{ maxHeight: '200px', objectFit: 'cover' }}
+                                style={{ maxHeight: '150px', objectFit: 'cover' }}
                                 playsInline
                                 disablePictureInPicture
                                 controls={false}
@@ -435,10 +435,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
                             )}
                           </div>
                         )}
-                        <p className="card-text mb-3" style={{ color: '#333', fontWeight: '400', fontSize: '1rem' }}>
-                          {article.content.length > 150 ? article.content.substring(0, 150) + '...' : article.content}
+                        <p className="card-text mb-0" style={{ color: '#333', fontWeight: '400', fontSize: '1rem' }}>
+                          {article.content.length > 100 ? article.content.substring(0, 100) + '...' : article.content}
                         </p>
-                        <small className="text-muted mt-auto" style={{ fontSize: '0.9rem' }}>
+                        <small className="text-muted" style={{ fontSize: '0.9rem' }}>
                           {new Date(article.date).toLocaleDateString()} • {article.author}
                         </small>
                       </div>
@@ -466,7 +466,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     {t('viewMore')}
                   </button>
                 )}
-                {displayCount > 3 && (
+                {displayCount > 4 && (
                   <button 
                     className="btn btn-sm"
                     style={{

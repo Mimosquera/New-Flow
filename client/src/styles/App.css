@@ -625,7 +625,7 @@ a:focus:not(:focus-visible) {
 }
 
 .update-card-desktop .card-body {
-  padding: 1.15rem 1.25rem 0.85rem !important;
+  padding: 0.7rem 0.85rem 0.55rem !important;
 }
 
 .update-card-desktop .card-title {

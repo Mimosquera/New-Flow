@@ -368,8 +368,8 @@ export const UpdatePoster = () => {
 
                   return (
                   <div key={update.id} className="card shadow-sm border-0 mb-3" style={{ boxShadow: '0 12px 48px 0 rgba(5,45,63,0.45), 0 4px 16px 0 rgba(0,0,0,0.25)' }}>
-                    <div className="card-body">
-                      <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div className="card-body" style={{ padding: '0.75rem 1rem' }}>
+                      <div className="d-flex justify-content-between align-items-start mb-1">
                         <h6 
                           className="card-title mb-0"
                           style={{ cursor: 'pointer', flex: 1 }}
@@ -402,7 +402,7 @@ export const UpdatePoster = () => {
                       {/* Display media if available */}
                       {update.media_url && (
                         <div
-                          className="mt-2 mb-3"
+                          className="mt-1 mb-1"
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleUpdateClick(update)}
                         >
@@ -411,20 +411,20 @@ export const UpdatePoster = () => {
                               src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                               alt={update.title}
                               className="img-fluid rounded"
-                              style={{ maxHeight: '300px', width: '100%', objectFit: 'cover' }}
+                              style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
                             />
                           ) : (
                             <video
                               src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                               className="w-100 rounded"
-                              style={{ maxHeight: '300px', objectFit: 'cover' }}
+                              style={{ maxHeight: '200px', objectFit: 'cover' }}
                             />
                           )}
                         </div>
                       )}
                       
                       <p 
-                        className="card-text mb-3"
+                        className="card-text mb-1"
                         style={{ cursor: 'pointer' }}
                         onClick={() => handleUpdateClick(update)}
                       >

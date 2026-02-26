@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
@@ -9,6 +9,18 @@ import { SERVER_BASE_URL } from '../services/api.js';
 export const UpdateModal = ({ update, show, onClose }) => {
   const [fullscreen, setFullscreen] = useState(false);
   const { t, language } = useTranslation();
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (show && update) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [show, update]);
 
   if (!show || !update) return null;
 

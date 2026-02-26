@@ -17,7 +17,7 @@ export const translations = {
     hideServices: 'Hide Services',
     
     // Updates Section
-    updatesTitle: 'Latest Updates',
+    updatesTitle: 'Recent Posts',
     viewMore: 'View More',
     showLess: 'Show Less',
     noUpdates: 'No updates available at this time.',
@@ -421,7 +421,7 @@ export const translations = {
     hideServices: 'Ocultar Servicios',
     
     // Updates Section
-    updatesTitle: 'Últimas Actualizaciones',
+    updatesTitle: 'Publicaciones Recientes',
     viewMore: 'Ver Más',
     showLess: 'Mostrar Menos',
     noUpdates: 'No hay actualizaciones disponibles en este momento.',
