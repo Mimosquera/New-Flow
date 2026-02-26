@@ -100,61 +100,51 @@ export default function EmployeeDashboard() {
     };
   }, []);
 
-  // Helper for sticky header margin
-  const headerTop = showHeader && window.scrollY <= 10 ? '3px' : '0';
-
   return (
     <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
       {/* Dashboard Header - Card Style */}
       <div 
-        className="container pt-3 pb-3 dashboard-header-sticky"
+        className="pb-3 dashboard-header-sticky"
         style={{ 
           position: 'sticky', 
-          top: headerTop, 
+          top: '0', 
           zIndex: 1050,
-          backgroundColor: '#cfd8dc',
-          borderRadius: '12px',
+          background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)',
+          borderRadius: '0',
           transition: 'all 0.3s ease',
           transform: showHeader ? 'translateY(0)' : 'translateY(-100%)',
           opacity: showHeader ? 1 : 0,
+          padding: '0.5rem 1rem',
+          width: '100%',
+          boxSizing: 'border-box',
+          borderBottom: '2px solid #46a1a1',
         }}
       >
         <div 
           className="dashboard-header mb-3"
           style={{ 
-            backgroundColor: '#cfd8dc',
-            borderRadius: '8px',
+            backgroundColor: 'transparent',
+            borderRadius: '0',
             padding: '0.6rem',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
-            border: '1px solid #b0bec5'
+            boxShadow: 'none',
+            border: 'none'
           }}
         >
           {/* Header Row */}
           <div className="d-flex align-items-center" style={{ width: '100%' }}>
-            {/* Left: Title + Badge */}
+            {/* Left: Logo + Title */}
             <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem', overflow: 'hidden' }}>
+              <img 
+                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+                alt="Logo"
+                style={{ height: '1.3rem', flexShrink: 0 }}
+              />
               <h1 className="mb-0 dashboard-title" style={{ 
-                fontSize: '1.1rem', fontWeight: '600', color: 'rgb(5, 45, 63)', 
+                fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', fontWeight: '600', color: '#ffffff', 
                 whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 
               }}>
                 {t('employeeDashboard')}
               </h1>
-              {employeeName && (
-                <span 
-                  style={{ 
-                    backgroundColor: 'rgba(5, 45, 63, 0.1)',
-                    color: 'rgb(5, 45, 63)',
-                    padding: '0.15rem 0.5rem',
-                    borderRadius: '12px',
-                    fontSize: '0.7rem',
-                    fontWeight: '500',
-                    whiteSpace: 'nowrap',
-                    flexShrink: 0
-                  }}
-                >
-                  {employeeName.split(' ')[0]}
-                </span>
-              )}
             </div>
             {/* Right: Actions */}
             <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
@@ -178,7 +168,7 @@ export default function EmployeeDashboard() {
                   top: 0,
                   left: 0
                 }}>
-                  <LanguageToggle inverse darkText />
+                  <LanguageToggle inverse />
                 </div>
               </div>
             </div>
@@ -187,14 +177,9 @@ export default function EmployeeDashboard() {
 
         {/* Section Header + Nav: Single Row */}
         <div className="d-flex align-items-center justify-content-between mb-0" style={{ gap: '0.5rem' }}>
-          {/* Left: Logo + Dynamic Title */}
-          <div className="d-flex align-items-center" style={{ flexShrink: 0 }}>
-            <img 
-              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-              alt="Logo"
-              style={{ height: '1.5rem', marginRight: '0.5rem' }}
-            />
-            <h2 className="mb-0" style={{ fontSize: '1.5rem', whiteSpace: 'nowrap' }}>
+          {/* Left: Dynamic Title + Badge */}
+          <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem' }}>
+            <h2 className="mb-0" style={{ fontSize: 'clamp(1rem, 3.5vw, 1.5rem)', whiteSpace: 'nowrap', color: '#e0f7f7', minWidth: 0, fontWeight: '700', letterSpacing: '0.02em' }}>
               {activeTab === 'profile' && t('myProfile')}
               {activeTab === 'appointments' && t('appointmentRequests')}
               {activeTab === 'availability' && t('manageAvailability')}
@@ -202,6 +187,22 @@ export default function EmployeeDashboard() {
               {activeTab === 'services' && t('manageServices')}
               {activeTab === 'team' && (t('manageTeam') || 'Manage Team')}
             </h2>
+            {employeeName && (
+              <span 
+                style={{ 
+                  backgroundColor: 'rgba(70, 161, 161, 0.25)',
+                  color: '#ffffff',
+                  padding: '0.15rem 0.5rem',
+                  borderRadius: '12px',
+                  fontSize: '0.7rem',
+                  fontWeight: '500',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0
+                }}
+              >
+                {employeeName.split(' ')[0]}
+              </span>
+            )}
           </div>
 
           {/* Right on desktop: Tabs */}
@@ -279,12 +280,15 @@ export default function EmployeeDashboard() {
                 fontWeight: '500',
                 cursor: 'pointer',
                 appearance: 'none',
+                WebkitAppearance: 'none',
                 width: '35px',
                 boxShadow: '0 0 10px rgba(176, 190, 197, 0.8), 0 0 20px rgba(176, 190, 197, 0.5), 0 0 30px rgba(5, 45, 63, 0.4)',
                 backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 0.15rem center',
-                backgroundSize: '10px'
+                backgroundSize: '10px',
+                outline: 'none',
+                WebkitTapHighlightColor: 'transparent'
               }}
             >
               <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>

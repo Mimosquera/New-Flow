@@ -154,10 +154,44 @@ a:focus:not(:focus-visible) {
 }
 /* Sticky Employee Dashboard Header */
 .dashboard-header-sticky {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%) !important;
-  box-shadow: 0 8px 32px 0 rgba(5, 45, 63, 0.28), 0 2px 8px 0 rgba(0,0,0,0.12);
-  margin-left: auto !important;
-  margin-right: auto !important;
+  box-shadow: none;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.dashboard-header-sticky::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30px;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 45, 63, 0.7) 0%,
+    rgba(5, 45, 63, 0.35) 30%,
+    rgba(5, 45, 63, 0.1) 65%,
+    transparent 100%
+  );
+  transform: translateY(100%);
+  pointer-events: none;
+  z-index: 1049;
+}
+
+/* Mobile tab select - remove highlight on focus/active */
+#mobileTabSelect:focus,
+#mobileTabSelect:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: #fff !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+#mobileTabSelect option:checked,
+#mobileTabSelect option:hover {
+  background-color: rgb(5, 45, 63) !important;
+  color: white !important;
 }
 
 /* Dashboard Home Button (matches Appointments/Login page style) */
@@ -407,7 +441,7 @@ a:focus:not(:focus-visible) {
 /* Dashboard Styles */
 .employee-dashboard {
   min-height: 100vh;
-  padding-top: 2rem;
+  padding-top: 0;
   padding-bottom: 2rem;
   margin: 0 !important;
   max-width: 100% !important;
@@ -420,9 +454,11 @@ a:focus:not(:focus-visible) {
   align-items: center;
   margin-bottom: 2rem;
   padding: 1rem;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 18px 0 rgba(5, 45, 63, 0.22), 0 1.5px 4px 0 rgba(0,0,0,0.10) !important;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none !important;
+  border: none;
+  outline: none;
   gap: 1rem;
   max-width: 1200px;
   margin-left: auto;
@@ -775,7 +811,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
   /* Employee Dashboard */
   .employee-dashboard {
-    padding-top: 10px !important;
+    padding-top: 0 !important;
   }
 
   .container.pt-3.pb-3 {
