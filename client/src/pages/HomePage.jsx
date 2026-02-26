@@ -17,7 +17,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [services, setServices] = useState([]);
   const [translatedServices, setTranslatedServices] = useState([]);
-  const [serviceDisplayCount, setServiceDisplayCount] = useState(3);
+  const getDefaultServiceCount = () => window.innerWidth < 768 ? 4 : 3;
+  const [serviceDisplayCount, setServiceDisplayCount] = useState(getDefaultServiceCount);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
   const serviceCardsRef = useRef([]);
 
@@ -146,7 +147,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   };
 
   const handleHideServices = () => {
-    setServiceDisplayCount(3);
+    setServiceDisplayCount(getDefaultServiceCount());
     setTimeout(() => {
       servicesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
@@ -288,7 +289,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
           ) : (
           <div className="row g-3 justify-content-center">
             {displayedServices.map((service, idx) => (
-              <div key={service.id} className="col-6 col-md-4">
+              <div key={service.id} className={displayedServices.length === 1 ? 'col-10 col-md-6' : 'col-6 col-md-4'}>
                 <div
                   className={`card h-100 ${styles.card} ${styles.cursorPointer}`}
                   onClick={() => handleServiceClick(service.id)}
@@ -341,7 +342,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
           </div>
           )}
 
-          {translatedServices.length > 0 && services.length > 3 && (
+          {translatedServices.length > 0 && services.length > getDefaultServiceCount() && (
             <div className="text-center mt-5">
               {hasMoreServices ? (
                 <button 
