@@ -109,7 +109,7 @@ export const AvailabilityManager = () => {
       setAvailabilities(response?.data?.data || []);
     } catch (err) {
       console.error('Error fetching availabilities:', err);
-      setError('Failed to fetch availabilities');
+      setError(t('failedToFetchAvailabilities'));
       setAvailabilities([]);
     } finally {
       setLoading(false);
@@ -152,7 +152,7 @@ export const AvailabilityManager = () => {
       fetchBlockedDates();
     } catch (error) {
       console.error('Error initializing AvailabilityManager:', error);
-      setError('An error occurred');
+      setError(t('anErrorOccurred'));
     }
   }, [fetchEmployees, fetchAvailabilities, fetchBlockedDates]);
 

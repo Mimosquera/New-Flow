@@ -6,6 +6,7 @@ import { serviceService, availabilityService, appointmentService, dataService } 
 import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { detectLang } from '../utils/languageDetection.js';
 import styles from './AppointmentsPage.module.css';
 
@@ -455,6 +456,7 @@ export const AppointmentsPage = () => {
           />
         </div>
       </div>
+      <ScrollToTop />
     </div>
   );
 };

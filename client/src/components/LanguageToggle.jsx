@@ -2,12 +2,12 @@ import { useLanguage } from '../contexts/LanguageContext.jsx';
 import PropTypes from 'prop-types';
 import styles from './LanguageToggle.module.css';
 
-export const LanguageToggle = ({ inverse = false }) => {
+export const LanguageToggle = ({ inverse = false, darkText = false }) => {
   const { language, toggleLanguage } = useLanguage();
 
   return (
     <div
-      className={`${styles.toggleContainer} ${inverse ? styles.inverse : ''}`}
+      className={`${styles.toggleContainer} ${inverse ? styles.inverse : ''} ${darkText ? styles.darkText : ''}`}
       onClick={() => toggleLanguage()}
       title={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
       role="button"
@@ -36,4 +36,5 @@ export const LanguageToggle = ({ inverse = false }) => {
 
 LanguageToggle.propTypes = {
   inverse: PropTypes.bool,
+  darkText: PropTypes.bool,
 };

@@ -77,7 +77,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       setTranslatedAppointments(data);
     } catch (err) {
       console.error('Error fetching appointments:', err);
-      setError('Failed to load appointments');
+      setError(t('failedToLoadAppointments'));
       setAppointments([]);
       setTranslatedAppointments([]);
     } finally {
@@ -100,7 +100,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       fetchAppointments();
     } catch (error) {
       console.error('Error initializing AppointmentsManager:', error);
-      setError('Initialization error');
+      setError(t('initializationError'));
     }
   }, [fetchAppointments]);
 
@@ -253,7 +253,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       await fetchAppointments();
     } catch (err) {
       console.error('Error updating appointment:', err);
-      setError(err?.response?.data?.message || t('failedToUpdateAppointment') || 'Failed to update appointment');
+      setError(err?.response?.data?.message || t('failedToUpdateAppointment'));
     }
   }, [currentAppointment, modalAction, employeeNote, fetchAppointments, t]);
 
