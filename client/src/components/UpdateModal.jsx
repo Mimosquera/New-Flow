@@ -76,7 +76,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
       >
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
           <div className="modal-content" style={{ 
-            borderRadius: '20px', 
+            borderRadius: '24px', 
             overflow: 'hidden', 
             border: 'none',
             boxShadow: '0 20px 60px rgba(5, 45, 63, 0.5), 0 0 0 1px rgba(70, 161, 161, 0.2)'

@@ -324,6 +324,25 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   }, [isUpcoming]);
 
   /**
+   * Get themed inline style for status badge
+   * @param {Object} apt - Appointment object
+   * @returns {Object} React style object
+   */
+  const getStatusBadgeStyle = useCallback((apt) => {
+    const base = { fontWeight: '500', letterSpacing: '0.3px', padding: '0.35em 0.75em', borderRadius: '8px', fontSize: '0.78rem' };
+    const status = apt?.status;
+    switch (status) {
+      case STATUS_PENDING: return { ...base, background: 'linear-gradient(135deg, #f9a825, #fbc02d)', color: '#3e2723' };
+      case STATUS_ACCEPTED: return isUpcoming(apt)
+        ? { ...base, background: 'linear-gradient(135deg, #0288d1, #03a9f4)', color: '#fff' }
+        : { ...base, background: 'linear-gradient(135deg, #2e7d6f, #46a1a1)', color: '#fff' };
+      case STATUS_DECLINED: return { ...base, background: 'linear-gradient(135deg, #c62828, #e53935)', color: '#fff' };
+      case STATUS_CANCELLED: return { ...base, background: 'linear-gradient(135deg, #546e7a, #78909c)', color: '#fff' };
+      default: return { ...base, background: '#78909c', color: '#fff' };
+    }
+  }, [isUpcoming]);
+
+  /**
    * Get badge text based on appointment status and context
    * @param {Object} apt - Appointment object
    * @returns {string} Badge text
@@ -378,7 +397,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     return (
       <div className="container py-4">
         <div className="text-center">
-          <div className="spinner-border" role="status">
+          <div className="spinner-border" role="status" style={{ color: '#46a1a1' }}>
             <span className="visually-hidden">{t('loading')}</span>
           </div>
         </div>
@@ -388,49 +407,34 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
   return (
     <div className="container py-4">
-      {error && (
-        <Alert 
-          message={error} 
-          type="danger"
-          onClose={() => setError(null)}
-        />
-      )}
-      
-      {success && (
-        <Alert 
-          message={success} 
-          type="success"
-          onClose={() => setSuccess(null)}
-        />
-      )}
-
-      {/* Filter Dropdown - Mobile only (desktop version is in header) */}
-      {/* Filter Dropdown - Mobile only */}
-      <div className="mb-3 d-md-none">
-        <label htmlFor="statusFilter" className="form-label me-2">{t('filter')}:</label>
-        <select
-          id="statusFilter"
-          className="form-select d-inline-block w-auto"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option value="all">{t('allAppointments')}</option>
-          <option value="upcoming">{t('upcoming')}</option>
-          <option value="pending">{t('pending')}</option>
-          <option value="accepted">{t('accepted')}</option>
-          <option value="declined">{t('declined')}</option>
-          <option value="cancelled">{t('cancelled')}</option>
-        </select>
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-8 col-xl-6">
+          {error && (
+            <Alert 
+              message={error} 
+              type="danger"
+              onClose={() => setError(null)}
+            />
+          )}
+          
+          {success && (
+            <Alert 
+              message={success} 
+              type="success"
+              onClose={() => setSuccess(null)}
+            />
+          )}
+        </div>
       </div>
 
-      {filteredAppointments.length === 0 ? (
-        <div className="d-flex align-items-center mb-3">
-          {/* Desktop filter dropdown on left */}
-          <div className="me-3 d-none d-md-block">
-            <label htmlFor="statusFilterDesktop" className="form-label me-2">{t('filter')}:</label>
+      {/* Filter Dropdown - always above cards, aligned with card columns */}
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-8 col-xl-6">
+          <div className="mb-3">
+            <label htmlFor="statusFilter" className="form-label me-2 appointments-filter-label">{t('filter')}:</label>
             <select
-              id="statusFilterDesktop"
-              className="form-select d-inline-block w-auto"
+              id="statusFilter"
+              className="form-select d-inline-block w-auto appointments-filter-select"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
@@ -442,46 +446,41 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
               <option value="cancelled">{t('cancelled')}</option>
             </select>
           </div>
-          <div className="alert alert-info mb-0 no-appointments-message">
-            {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+        </div>
+      </div>
+
+      {filteredAppointments.length === 0 ? (
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-8 col-xl-6">
+            <div className="alert mb-0 no-appointments-message appointments-no-results">
+              {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+            </div>
           </div>
         </div>
       ) : (
         <div className="row g-3 justify-content-center">
-          {/* Desktop filter dropdown on left next to top card */}
-          {filteredAppointments.length > 0 && (
-            <div className="d-none d-md-flex align-items-center mb-2">
-              <div className="me-3">
-                <label htmlFor="statusFilterDesktop" className="form-label me-2">{t('filter')}:</label>
-                <select
-                  id="statusFilterDesktop"
-                  className="form-select d-inline-block w-auto"
-                  value={filter}
-                  onChange={(e) => setFilter(e.target.value)}
-                >
-                  <option value="all">{t('allAppointments')}</option>
-                  <option value="upcoming">{t('upcoming')}</option>
-                  <option value="pending">{t('pending')}</option>
-                  <option value="accepted">{t('accepted')}</option>
-                  <option value="declined">{t('declined')}</option>
-                  <option value="cancelled">{t('cancelled')}</option>
-                </select>
-              </div>
-            </div>
-          )}
           {filteredAppointments.map((apt) => (
-            <div key={apt.id} className="col-12 col-lg-10 col-xl-8">
-              <div className="card shadow-sm">
+            <div key={apt.id} className="col-12 col-lg-8 col-xl-6">
+              <div className="card appointment-card">
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
                       <h5 className="card-title mb-1">{apt.customerName}</h5>
-                      <span className={`badge ${getStatusBadgeClass(apt)}`}>
+                      <span style={getStatusBadgeStyle(apt)}>
                         {getStatusBadgeText(apt)}
                       </span>
                     </div>
                     <button
-                      className="btn btn-sm btn-outline-secondary"
+                      className="btn btn-sm"
+                      style={{ 
+                        background: 'transparent', 
+                        border: '1.5px solid #46a1a1', 
+                        color: '#46a1a1', 
+                        borderRadius: '8px', 
+                        fontWeight: '500', 
+                        fontSize: '0.8rem', 
+                        padding: '0.25rem 0.6rem' 
+                      }}
                       onClick={() => toggleExpand(apt.id)}
                     >
                       {expandedIds.has(apt.id) ? `▲ ${t('less')}` : `▼ ${t('more')}`}
@@ -542,14 +541,32 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                     <div className="d-flex gap-2 mt-3">
                       <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
                         <button
-                          className="btn btn-outline-success"
-                          style={{ color: THEME_COLOR, borderColor: THEME_COLOR }}
+                          className="btn"
+                          style={{ 
+                            background: 'linear-gradient(135deg, rgb(5, 45, 63), rgb(10, 65, 90))', 
+                            color: '#fff', 
+                            border: '1.5px solid #46a1a1', 
+                            borderRadius: '8px', 
+                            fontWeight: '500', 
+                            fontSize: '0.85rem',
+                            padding: '0.35rem 0.85rem',
+                            boxShadow: '0 2px 8px rgba(70, 161, 161, 0.3)' 
+                          }}
                           onClick={() => handleAccept(apt)}
                         >
                           {t('accept')}
                         </button>
                         <button
-                          className="btn btn-outline-danger"
+                          className="btn"
+                          style={{ 
+                            background: 'transparent', 
+                            color: '#dc3545', 
+                            border: '1.5px solid #dc3545', 
+                            borderRadius: '8px', 
+                            fontWeight: '500', 
+                            fontSize: '0.85rem',
+                            padding: '0.35rem 0.85rem'
+                          }}
                           onClick={() => handleDecline(apt)}
                         >
                           {t('decline')}
@@ -561,7 +578,16 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                   {apt.status === 'accepted' && (isAdmin || apt.acceptedBy?.id === currentUser?.id) && (
                     <div className="d-flex gap-2 mt-3">
                       <button
-                        className="btn btn-outline-danger btn-sm"
+                        className="btn btn-sm"
+                        style={{ 
+                          background: 'transparent', 
+                          color: '#dc3545', 
+                          border: '1.5px solid #dc3545', 
+                          borderRadius: '8px', 
+                          fontWeight: '500', 
+                          fontSize: '0.85rem',
+                          padding: '0.3rem 0.75rem'
+                        }}
                         onClick={() => handleCancel(apt)}
                       >
                         {t('cancelAppointment')}
@@ -578,7 +604,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       {/* Note Modal */}
       {showNoteModal && (
         <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
+          <div className="modal-dialog appointment-modal">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
@@ -586,7 +612,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                 </h5>
                 <button 
                   type="button" 
-                  className="btn-close" 
+                  className="btn-close btn-close-white" 
                   onClick={() => setShowNoteModal(false)}
                 ></button>
               </div>
@@ -616,7 +642,16 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
               <div className="modal-footer">
                 <button 
                   type="button" 
-                  className="btn btn-secondary" 
+                  className="btn" 
+                  style={{ 
+                    background: 'rgba(255, 255, 255, 0.1)', 
+                    backdropFilter: 'blur(10px)', 
+                    color: '#b0bec5', 
+                    border: '1px solid rgba(255, 255, 255, 0.15)', 
+                    borderRadius: '10px', 
+                    fontWeight: '500',
+                    padding: '0.4rem 1rem'
+                  }}
                   onClick={() => setShowNoteModal(false)}
                 >
                   {t('close')}
@@ -624,7 +659,17 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                 <button 
                   type="button" 
                   className="btn"
-                  style={{ backgroundColor: modalAction === ACTION_ACCEPT ? THEME_COLOR : DANGER_COLOR, color: 'white', border: 'none', fontWeight: '300' }}
+                  style={{ 
+                    backgroundColor: modalAction === ACTION_ACCEPT ? '#46a1a1' : DANGER_COLOR, 
+                    color: 'white', 
+                    border: 'none', 
+                    fontWeight: '500', 
+                    borderRadius: '10px',
+                    padding: '0.4rem 1rem',
+                    boxShadow: modalAction === ACTION_ACCEPT 
+                      ? '0 2px 12px rgba(70, 161, 161, 0.4)' 
+                      : '0 2px 12px rgba(220, 53, 69, 0.3)'
+                  }}
                   onClick={handleSubmitNote}
                 >
                   {modalAction === ACTION_ACCEPT ? t('accept') : modalAction === ACTION_DECLINE ? t('decline') : t('cancelAppointment')}

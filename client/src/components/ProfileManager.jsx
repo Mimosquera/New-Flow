@@ -749,7 +749,7 @@ export const ProfileManager = ({ onLogout }) => {
                 style={{
                   backgroundColor: 'white',
                   padding: '2rem',
-                  borderRadius: '10px',
+                  borderRadius: '24px',
                   maxWidth: '500px',
                   width: '90%',
                   boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
@@ -801,7 +801,7 @@ export const ProfileManager = ({ onLogout }) => {
 
           {/* Logout Button */}
           {onLogout && (
-            <div className="text-center mt-5 pt-4" style={{ borderTop: '2px solid rgba(70, 161, 161, 0.2)' }}>
+            <div className="text-center mt-5 pt-4">
               <button
                 onClick={() => {
                   if (window.confirm(t('logoutConfirm'))) {
