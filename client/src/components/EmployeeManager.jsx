@@ -220,9 +220,12 @@ export const EmployeeManager = () => {
     </div>
   );
 
-  const renderEmployeeList = () => (
+  const renderEmployeeList = () => {
+    const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
+    const filteredEmployees = employees.filter(emp => emp.email !== adminEmail);
+    return (
     <div className="list-group">
-      {employees.map((employee) => (
+      {filteredEmployees.map((employee) => (
         <div
           key={employee.id}
           className={`list-group-item p-0${expandedEmployeeId === employee.id ? ' expanded-employee-card' : ''}`}
@@ -343,7 +346,8 @@ export const EmployeeManager = () => {
         </div>
       ))}
     </div>
-  );
+    );
+  };
 
   return (
     <div className="container py-4">
@@ -377,7 +381,7 @@ export const EmployeeManager = () => {
               )}
             </div>
           </div>
-          <div className="alert alert-info mt-4">
+          <div className="alert alert-info mt-4" style={{ borderRadius: '16px' }}>
             <strong>{t('note')}</strong> {t('employeeAccountNote')}
           </div>
         </div>

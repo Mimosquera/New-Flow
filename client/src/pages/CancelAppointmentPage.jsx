@@ -84,7 +84,7 @@ export function CancelAppointmentPage() {
     }}>
       <div style={{
         background: 'white',
-        borderRadius: '0.5rem',
+        borderRadius: '24px',
         padding: '2rem',
         maxWidth: '500px',
         width: '100%',
@@ -108,7 +108,7 @@ export function CancelAppointmentPage() {
               <div style={{
                 background: '#f8f9fa',
                 padding: '1rem',
-                borderRadius: '0.5rem',
+                borderRadius: '12px',
                 marginBottom: '1rem',
                 textAlign: 'center',
               }}>
@@ -141,7 +141,7 @@ export function CancelAppointmentPage() {
                 backgroundColor: '#fee',
                 color: '#c33',
                 padding: '0.75rem',
-                borderRadius: '0.5rem',
+                borderRadius: '12px',
                 marginBottom: '1rem',
                 border: '1px solid #fcc',
               }}>
@@ -160,7 +160,7 @@ export function CancelAppointmentPage() {
                 style={{
                   flex: 1,
                   padding: '0.75rem',
-                  borderRadius: '0.5rem',
+                  borderRadius: '12px',
                   border: '2px solid rgb(5, 45, 63)',
                   background: 'white',
                   color: 'rgb(5, 45, 63)',
@@ -187,7 +187,7 @@ export function CancelAppointmentPage() {
                 style={{
                   flex: 1,
                   padding: '0.75rem',
-                  borderRadius: '0.5rem',
+                  borderRadius: '12px',
                   border: 'none',
                   background: loading ? '#ccc' : '#dc3545',
                   color: 'white',
@@ -254,7 +254,7 @@ export function CancelAppointmentPage() {
               style={{
                 width: '100%',
                 padding: '0.75rem',
-                borderRadius: '0.5rem',
+                borderRadius: '12px',
                 border: 'none',
                 background: 'rgb(5, 45, 63)',
                 color: 'white',

@@ -44,13 +44,13 @@ export const AvailabilityManager = () => {
   
   // Days of week configuration with translated labels
   const DAYS_OF_WEEK = useMemo(() => [
-    { value: 0, label: t('sundays') || 'Sundays' },
-    { value: 1, label: t('mondays') || 'Mondays' },
-    { value: 2, label: t('tuesdays') || 'Tuesdays' },
-    { value: 3, label: t('wednesdays') || 'Wednesdays' },
-    { value: 4, label: t('thursdays') || 'Thursdays' },
-    { value: 5, label: t('fridays') || 'Fridays' },
-    { value: 6, label: t('saturdays') || 'Saturdays' },
+    { value: 0, label: t('sundays') || 'Sundays', short: (t('sundays') || 'S')[0].toUpperCase() },
+    { value: 1, label: t('mondays') || 'Mondays', short: (t('mondays') || 'M')[0].toUpperCase() },
+    { value: 2, label: t('tuesdays') || 'Tuesdays', short: (t('tuesdays') || 'T')[0].toUpperCase() },
+    { value: 3, label: t('wednesdays') || 'Wednesdays', short: (t('wednesdays') || 'W')[0].toUpperCase() },
+    { value: 4, label: t('thursdays') || 'Thursdays', short: (t('thursdays') || 'T')[0].toUpperCase() },
+    { value: 5, label: t('fridays') || 'Fridays', short: (t('fridays') || 'F')[0].toUpperCase() },
+    { value: 6, label: t('saturdays') || 'Saturdays', short: (t('saturdays') || 'S')[0].toUpperCase() },
   ], [t]);
   
   // State management
@@ -442,27 +442,45 @@ export const AvailabilityManager = () => {
                     <form onSubmit={handleSubmit} noValidate>
                     <div className="mb-3">
                       <div className="form-label fw-semibold days-of-week-header">{t('daysOfWeek')} *</div>
-                      <div className="border rounded p-3">
-                        <div className="row row-cols-1 row-cols-md-2 g-2">
-                          {DAYS_OF_WEEK.map(day => (
-                            <div key={day.value} className="col">
-                              <div className="form-check">
-                                <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  id={`day-${day.value}`}
-                                  name={`day-${day.value}`}
-                                  value={day.value}
-                                  checked={formData.selectedDays.includes(day.value)}
-                                  onChange={handleChange}
-                                />
-                                <label className="form-check-label" htmlFor={`day-${day.value}`}>
-                                  {day.label}
-                                </label>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '0.35rem' }}>
+                        {DAYS_OF_WEEK.map(day => {
+                          const isSelected = formData.selectedDays.includes(day.value);
+                          return (
+                            <label
+                              key={day.value}
+                              htmlFor={`day-${day.value}`}
+                              title={day.label}
+                              style={{
+                                flex: '1 1 0',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: '36px',
+                                borderRadius: '8px',
+                                fontSize: '0.85rem',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s ease',
+                                border: isSelected ? '2px solid #46a1a1' : '2px solid #b0bec5',
+                                background: isSelected ? 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%)' : '#f5f5f5',
+                                color: isSelected ? '#fff' : 'rgb(5, 45, 63)',
+                                boxShadow: isSelected ? '0 2px 8px rgba(70, 161, 161, 0.3)' : 'none',
+                                userSelect: 'none'
+                              }}
+                            >
+                              <input
+                                type="checkbox"
+                                id={`day-${day.value}`}
+                                name={`day-${day.value}`}
+                                value={day.value}
+                                checked={isSelected}
+                                onChange={handleChange}
+                                style={{ display: 'none' }}
+                              />
+                              {day.short}
+                            </label>
+                          );
+                        })}
                       </div>
                       <small className="text-muted">{t('selectDays')}</small>
                     </div>
@@ -577,26 +595,28 @@ export const AvailabilityManager = () => {
               <div className={`d-md-block ${showAvailabilityList ? 'd-block' : 'd-none'}`}>
                 <div className="card-body p-4">
                   <div className="d-flex justify-content-between align-items-start mb-3">
-                    <div className="flex-grow-1">
-                      <h5 className="card-title mb-2 d-none d-md-block" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
+                    <div className="flex-grow-1 d-none d-md-block">
+                      <h5 className="card-title mb-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
                     </div>
 
                     {/* Admin Employee Filter */}
                     {isAdmin && employees.length > 0 && (
-                      <select
-                        id="availabilityEmployeeFilter"
-                        name="availabilityEmployeeFilter"
-                        className="form-select"
-                        style={{ width: 'auto', minWidth: '200px' }}
-                        value={selectedEmployeeFilter}
-                        onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
-                        autoComplete="off"
-                      >
-                        <option value="all">{t('allEmployees')}</option>
-                        {employees.map(emp => (
-                          <option key={emp.id} value={emp.id}>{emp.name}</option>
-                        ))}
-                      </select>
+                      <div>
+                        <label id="availabilityFilterLabel" htmlFor="availabilityEmployeeFilter" className="form-label me-2">{t('filter')}:</label>
+                        <select
+                          id="availabilityEmployeeFilter"
+                          name="availabilityEmployeeFilter"
+                          className="form-select d-inline-block w-auto appointments-filter-select"
+                          value={selectedEmployeeFilter}
+                          onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                          autoComplete="off"
+                        >
+                          <option value="all">{t('allEmployees')}</option>
+                          {employees.map(emp => (
+                            <option key={emp.id} value={emp.id}>{emp.name}</option>
+                          ))}
+                        </select>
+                      </div>
                     )}
                   </div>
 
@@ -615,7 +635,13 @@ export const AvailabilityManager = () => {
                       .map(dayNum => {
                         const dayName = DAYS_OF_WEEK.find(d => d.value === parseInt(dayNum))?.label || 'Unknown';
                         return (
-                          <div key={dayNum} className="mb-4">
+                          <div key={dayNum} className="mb-4" style={{ 
+                            background: '#fff', 
+                            borderRadius: '16px', 
+                            border: '1px solid rgba(70, 161, 161, 0.2)', 
+                            padding: '1rem 1.25rem',
+                            boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+                          }}>
                             <h6 className="fw-bold mb-3" style={{ color: '#000', fontSize: '1.1rem' }}>{dayName}</h6>
                             
                             {/* Desktop Table View */}

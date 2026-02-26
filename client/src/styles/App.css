@@ -783,6 +783,126 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   }
 }
 
+/* ============================================
+   Global Modal Rounding
+   ============================================ */
+.modal-content {
+  border-radius: 24px !important;
+  overflow: hidden;
+}
+
+/* ============================================
+   Appointments Manager Themed Styles
+   ============================================ */
+
+/* Appointment card */
+.appointment-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f0fafa 50%, #e3f3f3 100%) !important;
+  border: none !important;
+  border-left: 4px solid #46a1a1 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 12px rgba(70, 161, 161, 0.15), 0 4px 24px rgba(70, 161, 161, 0.08) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden;
+}
+.appointment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.25), 0 8px 32px rgba(70, 161, 161, 0.12) !important;
+}
+.appointment-card .card-title {
+  color: rgb(5, 45, 63) !important;
+  font-weight: 600 !important;
+  font-size: 1.05rem !important;
+}
+.appointment-card .card-body {
+  color: rgb(5, 45, 63);
+}
+.appointment-card hr {
+  border-color: rgba(70, 161, 161, 0.3);
+  opacity: 0.6;
+}
+.appointment-card strong {
+  color: rgb(5, 45, 63);
+}
+
+/* Appointment filter dropdown */
+.appointments-filter-select {
+  border-color: #46a1a1 !important;
+  border-radius: 8px !important;
+  color: rgb(5, 45, 63) !important;
+  font-weight: 500 !important;
+  background-color: rgba(240, 250, 250, 0.5) !important;
+}
+.appointments-filter-select:focus {
+  border-color: #46a1a1 !important;
+  box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.25) !important;
+}
+.appointments-filter-label {
+  color: rgb(5, 45, 63) !important;
+  font-weight: 600 !important;
+}
+.availability-filter-label {
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+#availabilityFilterLabel {
+  color: #fff !important;
+  font-weight: 600 !important;
+}
+
+/* Appointment no-results alert */
+.appointments-no-results {
+  background: linear-gradient(135deg, #f0fafa 0%, #e3f3f3 100%) !important;
+  color: rgb(5, 45, 63) !important;
+  border: 1.5px solid rgba(70, 161, 161, 0.3) !important;
+  border-radius: 12px !important;
+  font-weight: 500 !important;
+}
+
+/* Appointment note modal */
+.appointment-modal .modal-content {
+  border-radius: 24px !important;
+  overflow: hidden;
+  border: none !important;
+  box-shadow: 0 0 30px rgba(70, 161, 161, 0.15), 0 0 60px rgba(5, 45, 63, 0.1) !important;
+}
+.appointment-modal .modal-header {
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(10, 65, 90) 100%) !important;
+  border-bottom: 3px solid #46a1a1 !important;
+  padding: 1rem 1.25rem !important;
+}
+.appointment-modal .modal-title {
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 1.05rem !important;
+}
+.appointment-modal .modal-body {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fafa 100%) !important;
+  color: rgb(5, 45, 63) !important;
+  padding: 1.25rem !important;
+}
+.appointment-modal .modal-body strong {
+  color: rgb(5, 45, 63);
+}
+.appointment-modal .modal-body .form-control {
+  border-color: rgba(70, 161, 161, 0.4) !important;
+  border-radius: 10px !important;
+  color: rgb(5, 45, 63) !important;
+}
+.appointment-modal .modal-body .form-control:focus {
+  border-color: #46a1a1 !important;
+  box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.2) !important;
+}
+.appointment-modal .modal-body .form-label {
+  color: rgb(5, 45, 63) !important;
+  font-weight: 500 !important;
+}
+.appointment-modal .modal-footer {
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(10, 65, 90) 100%) !important;
+  border-top: 3px solid #46a1a1 !important;
+  padding: 0.85rem 1.25rem !important;
+}
+
 /* Extra-small screens */
 @media (max-width: 400px) {
   .dashboard-header h1 {
