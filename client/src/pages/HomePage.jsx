@@ -383,6 +383,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
               )}
             </div>
           )}
+          {translatedServices.length > 0 && services.length <= getDefaultServiceCount() && (
+            <div style={{ marginTop: '2.5rem' }} />
+          )}
           <div ref={servicesEndRef} />
         </div>
       </section>
