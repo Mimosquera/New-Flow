@@ -5,21 +5,16 @@ import { updateService, SERVER_BASE_URL } from '../services/api.js';
 import { UpdateModal } from './UpdateModal.jsx';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
-import { translateObject } from '../services/translationService.js';
-import { detectLang } from '../utils/languageDetection.js';
+import { useTranslateItems } from '../hooks/useTranslateItems.js';
 
-/** Pagination constants */
 const INITIAL_FETCH = 5;
 const INITIAL_DISPLAY = 4;
 const LOAD_MORE_BATCH = 8;
 
-/**
- * Update Posting Component for Employees
- */
 export const UpdatePoster = () => {
   const { t, language } = useTranslation();
-  const [updates, setUpdates] = useState([]); // Original updates
-  const [translatedUpdates, setTranslatedUpdates] = useState([]); // Translated updates
+  const [updates, setUpdates] = useState([]);
+  const [translatedUpdates] = useTranslateItems(updates, ['title', 'content', 'author'], language);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -94,33 +89,6 @@ export const UpdatePoster = () => {
     fetchUpdates();
   }, [fetchUpdates]);
 
-  // Auto-translate updates when language changes
-  useEffect(() => {
-    const translateUpdates = async () => {
-      if (updates.length === 0) return;
-      try {
-        const translated = await Promise.all(
-          updates.map(update => {
-            // Prefer update.language if present
-            const sourceLang = update.language || detectLang(update.title + ' ' + update.content);
-            // Translate to current UI language
-            const targetLang = language === 'es' ? 'es' : 'en';
-            // Only translate if source language differs from target language
-            if (sourceLang !== targetLang) {
-              return translateObject(update, ['title', 'content', 'author'], targetLang, sourceLang);
-            } else {
-              return Promise.resolve(update);
-            }
-          })
-        );
-        setTranslatedUpdates(await Promise.all(translated));
-      } catch (error) {
-        console.error('Error translating updates:', error);
-        setTranslatedUpdates(updates);
-      }
-    };
-    translateUpdates();
-  }, [language, updates]);
 
   const { formData, handleChange, handleSubmit: handleFormSubmit, error: formError, setError: setFormError, resetForm } = useForm(
     {
@@ -152,7 +120,6 @@ export const UpdatePoster = () => {
       resetForm();
       setMediaFile(null);
       setMediaPreview(null);
-      // Do not setTranslatedUpdates here; translation effect will handle it
     }
   );
 
@@ -199,22 +166,7 @@ export const UpdatePoster = () => {
   };
 
   useEffect(() => {
-    // Always start with solid black background
     document.body.style.background = '#000000';
-    const handleScroll = () => {
-      // Trigger black background when sticky post update card is near or at the top of the screen
-      const stickyCard = document.querySelector('.card.shadow-sm.border-0.sticky-top');
-      if (stickyCard) {
-        const rect = stickyCard.getBoundingClientRect();
-        if (rect.top <= 10) {
-          document.body.style.background = '#000000';
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
   }, []);
 
   return (

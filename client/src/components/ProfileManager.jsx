@@ -1,15 +1,3 @@
-/**
- * ProfileManager Component
- * Allows employees to view and edit their profile
- *
- * Features:
- * - Account Login card: Edit name, email, password
- * - About Me card: Upload profile image and write bio
- * - Forgot password functionality
- * - Form validation
- * - Auto-update JWT token after profile changes
- */
-
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from './Common/index.jsx';
@@ -799,7 +787,6 @@ export const ProfileManager = ({ onLogout }) => {
             </div>
           )}
 
-          {/* Logout Button */}
           {onLogout && (
             <div className="text-center mt-5 pt-4">
               <button
@@ -808,28 +795,7 @@ export const ProfileManager = ({ onLogout }) => {
                     onLogout();
                   }
                 }}
-                className="btn btn-lg"
-                style={{
-                  backgroundColor: '#dc3545',
-                  color: 'white',
-                  border: 'none',
-                  padding: '0.75rem 3rem',
-                  fontSize: '1rem',
-                  fontWeight: '600',
-                  borderRadius: '12px',
-                  boxShadow: '0 4px 12px rgba(220, 53, 69, 0.5), 0 0 20px rgba(220, 53, 69, 0.4), 0 0 40px rgba(220, 53, 69, 0.3), 0 0 60px rgba(220, 53, 69, 0.15)',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = '#c82333';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(220, 53, 69, 0.6), 0 0 30px rgba(220, 53, 69, 0.55), 0 0 60px rgba(220, 53, 69, 0.4), 0 0 90px rgba(220, 53, 69, 0.2)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc3545';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(220, 53, 69, 0.5), 0 0 20px rgba(220, 53, 69, 0.4), 0 0 40px rgba(220, 53, 69, 0.3), 0 0 60px rgba(220, 53, 69, 0.15)';
-                }}
+                className="btn btn-lg logout-btn"
               >
                 {t('logout')}
               </button>

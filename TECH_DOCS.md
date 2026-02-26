@@ -4,7 +4,7 @@
 
 **Frontend:** React 18.3.1, Vite 6.4.1, React Router 7.12.0, Bootstrap 5.3.8, Axios 1.13.2
 **Backend:** Node.js, Express 4.22.1, PostgreSQL 12+, Sequelize 6.37.7
-**Services:** Cloudinary (media), LibreTranslate (translation), Nodemailer (email), Twilio (SMS)
+**Services:** Cloudinary (media), MyMemory API (translation), Nodemailer (email), Twilio (SMS)
 
 ---
 
@@ -72,13 +72,9 @@ Detects language using Spanish word patterns and special characters (áéíóú�
 
 1. Backend detects and stores language when creating services/updates
 2. Frontend fetches content with language field
-3. If UI language differs from content language, translates via LibreTranslate API
-4. Translation cached on frontend for performance
-
-Implementation:
-- `UpdatePoster.jsx` - Lines 58-84 (translation effect)
-- `ServiceManager.jsx` - Lines 73-98 (translation effect)
-- Language field stored in database for services and updates tables
+3. If UI language differs from content language, translates via MyMemory API
+4. Translation is handled by the `useTranslateItems` hook (`client/src/hooks/useTranslateItems.js`)
+5. Language field stored in database for services and updates tables
 
 ---
 
@@ -189,4 +185,4 @@ All package versions locked to prevent breaking changes. Key dependencies:
 
 ---
 
-**Last Updated:** February 17, 2026
+**Last Updated:** February 2026

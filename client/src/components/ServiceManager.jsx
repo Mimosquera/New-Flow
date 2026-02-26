@@ -1,40 +1,16 @@
-/**
- * ServiceManager Component Module
- * Manages salon services CRUD operations (Create, Read, Update, Delete)
- * 
- * Features:
- * - Add/Edit/Delete services
- * - Price formatting with currency display
- * - Auto-translation for Spanish language
- * - Form validation
- * - Responsive design with mobile-optimized form scrolling
- * - Edit mode with cancel functionality
- */
-
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { serviceService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
-import { translateObject } from '../services/translationService.js';
-import { detectLang } from '../utils/languageDetection.js';
+import { useTranslateItems } from '../hooks/useTranslateItems.js';
 
-// Constants
-const MOBILE_BREAKPOINT = 992;
 const THEME_COLOR = 'rgb(5, 45, 63)';
-const SCROLL_DELAY_MS = 100;
-const DEFAULT_PRICE_PRECISION = 2;
 
-/**
- * Service Management Component for Employees
- * Provides interface for managing salon services
- */
 export const ServiceManager = () => {
   const { t, language } = useTranslation();
-  
-  // State management
   const [services, setServices] = useState([]);
-  const [translatedServices, setTranslatedServices] = useState([]);
+  const [translatedServices] = useTranslateItems(services, ['name', 'description'], language);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editingService, setEditingService] = useState(null);
@@ -42,65 +18,23 @@ export const ServiceManager = () => {
   const [showForm, setShowForm] = useState(false);
   const formRef = useRef(null);
 
-  /**
-   * Fetch all services from API
-   */
   const fetchServices = useCallback(async () => {
     try {
       setLoading(true);
       const response = await serviceService.getAll();
-      const serviceData = response?.data || [];
-      setServices(serviceData);
-      setTranslatedServices(serviceData); // Initially use original data
+      setServices(response?.data || []);
     } catch (error) {
       console.error('Error fetching services:', error);
       setServices([]);
-      setTranslatedServices([]);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  /**
-   * Initialize component - fetch services
-   */
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
 
-  /**
-   * Auto-translate services when language changes
-   */
-  useEffect(() => {
-    const translateServices = async () => {
-      try {
-        if (services.length === 0) {
-          setTranslatedServices([]);
-          return;
-        }
-        const translated = await Promise.all(
-          services.map(service => {
-            const sourceLang = service.language || detectLang((service.name || '') + ' ' + (service.description || ''));
-            const targetLang = language === 'es' ? 'es' : 'en';
-            if (sourceLang !== targetLang) {
-              return translateObject(service, ['name', 'description'], targetLang, sourceLang);
-            } else {
-              return Promise.resolve(service);
-            }
-          })
-        );
-        setTranslatedServices(await Promise.all(translated));
-      } catch (error) {
-        console.error('Error translating services:', error);
-        setTranslatedServices(services);
-      }
-    };
-    translateServices();
-  }, [language, services]);
-
-  /**
-   * Form handling with validation
-   */
   const { formData, setFormData, handleChange, handleSubmit: handleFormSubmit, error, setError, resetForm } = useForm(
     {
       name: '',
@@ -158,140 +92,67 @@ export const ServiceManager = () => {
     }
   );
 
-  /**
-   * Handle form submission
-   * @param {Event} e - Form submit event
-   */
-  const handleSubmit = useCallback((e) => {
-    try {
-      if (e && e.preventDefault) {
-        e.preventDefault();
-      }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSuccess(null);
+    handleFormSubmit(e);
+  };
 
-      setSuccess(null);
-      handleFormSubmit(e);
-    } catch (error) {
-      console.error('Error in handleSubmit:', error);
+  const handleEdit = (service) => {
+    setEditingService(service);
+    setShowForm(true);
+    setFormData({
+      name: service.name || '',
+      description: service.description || '',
+      price: service.price || '',
+      price_max: service.price_max || '',
+    });
+    setIsPriceRange(!!service.price_max);
+    setSuccess(null);
+    setTimeout(() => {
+      if (formRef.current && window.innerWidth < 992) {
+        formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingService(null);
+    resetForm();
+    setIsPriceRange(false);
+    setSuccess(null);
+  };
+
+  const handlePriceRangeToggle = (e) => {
+    setIsPriceRange(e.target.checked);
+    if (!e.target.checked) {
+      setFormData(prev => ({ ...prev, price_max: '' }));
     }
-  }, [handleFormSubmit]);
+  };
 
-  /**
-   * Enter edit mode for a service
-   * @param {Object} service - Service to edit
-   */
-  const handleEdit = useCallback((service) => {
+  const handleDelete = async (id) => {
+    if (!window.confirm(t('confirmDeleteService') || 'Are you sure you want to delete this service?')) return;
     try {
-      if (!service || !service.id) {
-        console.error('Invalid service object for editing');
-        return;
-      }
-
-      setEditingService(service);
-      setShowForm(true);
-      setFormData({
-        name: service.name || '',
-        description: service.description || '',
-        price: service.price || '',
-        price_max: service.price_max || '',
-      });
-      setIsPriceRange(!!service.price_max);
-      setSuccess(null);
-      
-      // Scroll to form on mobile for better UX
-      setTimeout(() => {
-        if (formRef.current && window.innerWidth < MOBILE_BREAKPOINT) {
-          formRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, SCROLL_DELAY_MS);
-    } catch (error) {
-      console.error('Error entering edit mode:', error);
-    }
-  }, [setFormData]);
-
-  /**
-   * Cancel edit mode and reset form
-   */
-  const handleCancelEdit = useCallback(() => {
-    try {
-      setEditingService(null);
-      resetForm();
-      setIsPriceRange(false);
-      setSuccess(null);
-    } catch (error) {
-      console.error('Error canceling edit:', error);
-    }
-  }, [resetForm]);
-
-  const handlePriceRangeToggle = useCallback((e) => {
-    try {
-      const checked = e.target.checked;
-      setIsPriceRange(checked);
-      if (!checked) {
-        setFormData(prev => ({ ...prev, price_max: '' }));
-      }
-    } catch (error) {
-      console.error('Error toggling price range:', error);
-    }
-  }, [setFormData]);
-
-  /**
-   * Delete a service with confirmation
-   * @param {string} id - Service ID to delete
-   */
-  const handleDelete = useCallback(async (id) => {
-    try {
-      if (!id) {
-        console.error('No ID provided for deletion');
-        return;
-      }
-
-      const confirmMessage = t('confirmDeleteService') || 'Are you sure you want to delete this service?';
-      if (!window.confirm(confirmMessage)) {
-        return;
-      }
-
       await serviceService.delete(id);
       setServices(services.filter(s => s.id !== id));
       setSuccess(t('serviceDeleted') || 'Service deleted successfully!');
     } catch (error) {
-      console.error('Error deleting service:', error);
-      let errorMessage = t('deleteServiceFailed') || 'Failed to delete service';
-      if (error?.response?.data?.message) {
-        errorMessage = error.response.data.message;
-      }
-      alert(errorMessage);
+      const msg = error?.response?.data?.message || t('deleteServiceFailed') || 'Failed to delete service';
+      alert(msg);
     }
-  }, [services, t]);
+  };
 
-  /**
-   * Format price for display
-   * @param {string|number} price - Price value
-   * @returns {string} Formatted price
-   */
-  const formatPrice = useCallback((price) => {
-    try {
-      const priceNum = parseFloat(price);
-      if (isNaN(priceNum)) {
-        return '0.00';
-      }
-      return priceNum.toFixed(DEFAULT_PRICE_PRECISION);
-    } catch (error) {
-      console.error('Error formatting price:', error);
-      return '0.00';
-    }
-  }, []);
+  const formatPrice = (price) => {
+    const num = parseFloat(price);
+    return isNaN(num) ? '0.00' : num.toFixed(2);
+  };
 
-  const formatPriceDisplay = useCallback((price, priceMax) => {
-    try {
-      if (priceMax && priceMax !== '' && priceMax !== null) {
-        return `$${formatPrice(price)} - $${formatPrice(priceMax)}`;
-      }
-      return `$${formatPrice(price)}`;
-    } catch (error) {
-      console.error('Error formatting price display:', error);
-      return `$${formatPrice(price)}`;
+  const formatPriceDisplay = (price, priceMax) => {
+    if (priceMax && priceMax !== '' && priceMax !== null) {
+      return `$${formatPrice(price)} - $${formatPrice(priceMax)}`;
     }
-  }, [formatPrice]);
+    return `$${formatPrice(price)}`;
+  };
 
   return (
     <div className="service-manager">

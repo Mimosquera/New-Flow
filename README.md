@@ -27,7 +27,7 @@ Full-stack web application for managing barbershop appointments, employee schedu
 
 **Frontend:** React 18.3.1, Vite, Bootstrap, Axios
 **Backend:** Node.js, Express 4.22.1, PostgreSQL, Sequelize
-**Services:** Cloudinary (media), LibreTranslate (translation), Nodemailer (email), Twilio (SMS)
+**Services:** Cloudinary (media), MyMemory API (translation), Nodemailer (email), Twilio (SMS)
 
 All dependencies locked to exact versions for stability.
 
@@ -85,7 +85,7 @@ All models include language fields (`'en'` or `'es'`) for auto-translation.
 
 - Detects language of user-generated content (services, updates)
 - Stores original language in database
-- Auto-translates to UI language via LibreTranslate API
+- Auto-translates to UI language via MyMemory API
 - Language detection uses word patterns and special characters
 - See `client/src/utils/languageDetection.js`
 
@@ -102,27 +102,8 @@ All models include language fields (`'en'` or `'es'`) for auto-translation.
 
 ---
 
-## Code Quality
-
-- No duplicate code
-- Centralized utilities
-- No unused dependencies
-- Clean CSS (no duplicates)
-- No debug logging
-- Professional code organization
-
----
-
-## Recent Updates (Feb 2026)
-
-- Code cleanup and deduplication
-- Fixed translation system bugs
-- Added Cloudinary media support
-- Security audit completed
-- Documentation updated
-
 **Version:** 1.0.0
-**Last Updated:** February 17, 2026
+**Last Updated:** February 2026
 
 ---
 
