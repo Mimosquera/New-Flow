@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 
-/**
- * Scroll-to-top floating button.
- * Appears after scrolling down past a threshold and smoothly scrolls to top on click.
- */
-export const ScrollToTop = () => {
+export const ScrollToTop = ({ hidden = false }) => {
   const [visible, setVisible] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -20,12 +17,14 @@ export const ScrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const show = visible && !hidden;
+
   return (
     <button
-      className={`scroll-to-top-btn${visible ? ' visible' : ''}`}
+      className={`scroll-to-top-btn${show ? ' visible' : ''}`}
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      tabIndex={visible ? 0 : -1}
+      tabIndex={show ? 0 : -1}
     >
       <svg
         width="20"
@@ -41,4 +40,8 @@ export const ScrollToTop = () => {
       </svg>
     </button>
   );
+};
+
+ScrollToTop.propTypes = {
+  hidden: PropTypes.bool,
 };

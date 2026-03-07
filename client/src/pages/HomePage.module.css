@@ -41,7 +41,7 @@
   flex-direction: column;
   justify-content: center;
   position: relative;
-  padding: 5rem 0 5rem;
+  padding: 5rem 0 4rem;
 }
 
 @supports (min-height: 100dvh) {
@@ -50,31 +50,59 @@
   }
 }
 
-.heroTextCol {
-  text-align: center;
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
-.heroTitle {
-  font-size: clamp(2.2rem, 7vw, 3.8rem);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  color: #fff;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+.heroVideoWrap {
+  width: 100%;
+  max-width: 960px;
+}
+
+.heroVideo {
+  width: 100%;
+  display: block;
+  min-height: 280px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(70, 161, 161, 0.18);
+}
+
+@media (min-width: 768px) {
+  .heroVideo {
+    min-height: 420px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .heroVideo {
+    min-height: 500px;
+  }
+}
+
+.heroTextBlock {
+  text-align: center;
+  max-width: 580px;
 }
 
 .heroSubtitle {
-  font-size: clamp(1rem, 3vw, 1.35rem);
-  color: rgba(255, 255, 255, 0.72);
-  font-weight: 400;
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+  margin-bottom: 0.6rem;
 }
 
 .heroDesc {
-  font-size: clamp(0.85rem, 2.5vw, 1rem);
-  color: rgba(255, 255, 255, 0.55);
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  color: rgba(255, 255, 255, 0.6);
   line-height: 1.65;
-  max-width: 440px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 1.75rem;
 }
 
 .heroCta {
@@ -91,26 +119,22 @@
   pointer-events: none;
 }
 
-@media (min-width: 768px) {
-  .heroTextCol {
-    text-align: left;
+@media (max-width: 767px) {
+  .heroSection {
+    padding: 3.5rem 0 3rem;
   }
 
-  .heroDesc {
-    margin-left: 0;
-    margin-right: 0;
+  .heroInner {
+    gap: 1.5rem;
   }
 
-  .heroCta {
-    justify-content: flex-start;
+  .heroVideo {
+    border-radius: 14px;
   }
-}
 
-.heroVideo {
-  min-height: 300px;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(70, 161, 161, 0.15);
+  .heroSubtitle {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+  }
 }
 
 
@@ -371,43 +395,80 @@
   overflow-wrap: break-word;
 }
 
-/* ─── Ghost Buttons ─────────────────────────────────────────────────────────── */
-.ghostButton {
-  background: linear-gradient(135deg, #46a1a1 0%, #3a8f8f 100%);
+/* ─── Fancy Expand Buttons ───────────────────────────────────────────────────── */
+.fancyButton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(70, 161, 161, 0.2) 0%, rgba(5, 45, 63, 0.6) 100%);
   color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  border-radius: 10px;
-  padding: 0.45rem 1.35rem;
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  border: 1.5px solid rgba(70, 161, 161, 0.7);
+  border-radius: 50px;
+  padding: 0.6rem 2.2rem;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
-.ghostButtonOutline {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  border-radius: 10px;
-  padding: 0.45rem 1.35rem;
-  font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+.fancyButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  transition: left 0.55s ease;
 }
 
 @media (hover: hover) {
-  .ghostButton:hover {
+  .fancyButton:hover {
+    border-color: #46a1a1;
+    box-shadow: 0 0 18px rgba(70, 161, 161, 0.45), 0 6px 20px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(70, 161, 161, 0.45);
   }
 
-  .ghostButtonOutline:hover {
-    background: rgba(255, 255, 255, 0.08);
+  .fancyButton:hover::after {
+    left: 150%;
+  }
+}
+
+.fancyButton:active {
+  transform: translateY(0);
+}
+
+.fancyButtonOutline {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: 0.6rem 2.2rem;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+
+@media (hover: hover) {
+  .fancyButtonOutline:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
   }
+}
+
+.fancyButtonOutline:active {
+  transform: translateY(0);
 }
 
 /* ─── Request / Glow Button ─────────────────────────────────────────────────── */

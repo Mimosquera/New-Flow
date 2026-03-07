@@ -4,10 +4,6 @@ import { appointmentService } from '../services/api';
 import apiClient from '../services/api';
 import { useTranslation } from '../hooks/useTranslation.js';
 
-/**
- * Public page for customers to cancel their appointments
- * Accessible via link in email/SMS notifications
- */
 export function CancelAppointmentPage() {
   const { t } = useTranslation();
   const { id } = useParams();
@@ -170,14 +166,6 @@ export function CancelAppointmentPage() {
                   opacity: loading ? 0.6 : 1,
                   transition: 'all 0.2s',
                 }}
-                onMouseOver={(e) => {
-                  if (!loading) {
-                    e.target.style.background = '#f0f0f0';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  e.target.style.background = 'white';
-                }}
               >
                 {t('keepAppointment')}
               </button>
@@ -195,16 +183,6 @@ export function CancelAppointmentPage() {
                   fontWeight: '300',
                   cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s',
-                }}
-                onMouseOver={(e) => {
-                  if (!loading) {
-                    e.target.style.background = '#c82333';
-                  }
-                }}
-                onMouseOut={(e) => {
-                  if (!loading) {
-                    e.target.style.background = '#dc3545';
-                  }
                 }}
               >
                 {loading ? t('cancelling') : t('yesCancel')}
@@ -262,12 +240,6 @@ export function CancelAppointmentPage() {
                 fontWeight: '300',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-              }}
-              onMouseOver={(e) => {
-                e.target.style.background = 'rgb(4, 36, 50)';
-              }}
-              onMouseOut={(e) => {
-                e.target.style.background = 'rgb(5, 45, 63)';
               }}
             >
               ⌂ {t('backToHome')}

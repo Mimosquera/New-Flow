@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
 
-/**
- * Modal component for viewing full update details with large media
- */
 export const UpdateModal = ({ update, show, onClose }) => {
   const [fullscreen, setFullscreen] = useState(false);
   const { t, language } = useTranslation();

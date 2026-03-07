@@ -30,48 +30,18 @@ const TIME_FORMAT_OPTIONS = {
   hour12: true,
 };
 
-/**
- * Safely format a date string to a readable format
- * @param {string} dateStr - Date string in YYYY-MM-DD format
- * @param {string} locale - Locale for formatting (e.g., 'en-US', 'es-ES')
- * @returns {string} Formatted date string
- */
 const formatDate = (dateStr, locale = 'en-US') => {
-  try {
-    if (!dateStr) return '';
-    const dateObj = new Date(dateStr + 'T00:00:00');
-    if (isNaN(dateObj.getTime())) return dateStr;
-    return dateObj.toLocaleDateString(locale, DATE_FORMAT_OPTIONS);
-  } catch (error) {
-    console.error('Error formatting date:', error);
-    return dateStr;
-  }
+  if (!dateStr) return '';
+  const dateObj = new Date(dateStr + 'T00:00:00');
+  return isNaN(dateObj.getTime()) ? dateStr : dateObj.toLocaleDateString(locale, DATE_FORMAT_OPTIONS);
 };
 
-/**
- * Safely format a time string to a readable format
- * @param {string} timeStr - Time string in HH:MM format
- * @param {string} locale - Locale for formatting (e.g., 'en-US', 'es-ES')
- * @returns {string} Formatted time string
- */
 const formatTime = (timeStr, locale = 'en-US') => {
-  try {
-    if (!timeStr) return '';
-    const timeObj = new Date(DATE_TIME_REFERENCE + timeStr);
-    if (isNaN(timeObj.getTime())) return timeStr;
-    return timeObj.toLocaleTimeString(locale, TIME_FORMAT_OPTIONS);
-  } catch (error) {
-    console.error('Error formatting time:', error);
-    return timeStr;
-  }
+  if (!timeStr) return '';
+  const timeObj = new Date(DATE_TIME_REFERENCE + timeStr);
+  return isNaN(timeObj.getTime()) ? timeStr : timeObj.toLocaleTimeString(locale, TIME_FORMAT_OPTIONS);
 };
 
-/**
- * Calculate the difference in days between two dates
- * @param {Date} date1 - First date
- * @param {Date} date2 - Second date
- * @returns {number} Number of days between dates
- */
 const getDayDifference = (date1, date2) => {
   // Normalize to UTC midnight to avoid timezone issues
   const d1 = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()));
@@ -79,13 +49,6 @@ const getDayDifference = (date1, date2) => {
   return Math.round((d2 - d1) / MILLISECONDS_PER_DAY);
 };
 
-/**
- * Check if two blocked date entries can be grouped together
- * @param {Object} current - Current blocked date entry
- * @param {Object} group - Current group being built
- * @param {number} dayDiff - Difference in days
- * @returns {boolean} Whether entries can be grouped
- */
 const canGroupEntries = (current, group, dayDiff) => {
   if (dayDiff !== 1) return false;
   if (current?.startTime !== group?.startTime) return false;
@@ -101,22 +64,16 @@ const canGroupEntries = (current, group, dayDiff) => {
   return currentReason === groupReason;
 };
 
-/**
- * Group consecutive blocked dates with the same time range and reason
- * @param {Array} blockedDates - Array of blocked date objects
- * @returns {Array} Array of grouped blocked date ranges
- */
 const groupConsecutiveBlocks = (blockedDates) => {
   if (!Array.isArray(blockedDates) || blockedDates.length === 0) {
     return [];
   }
 
-  try {
-    const sorted = [...blockedDates].sort((a, b) => {
-      const dateCompare = new Date(a.date) - new Date(b.date);
-      if (dateCompare !== 0) return dateCompare;
-      return (a.startTime || '').localeCompare(b.startTime || '');
-    });
+  const sorted = [...blockedDates].sort((a, b) => {
+    const dateCompare = new Date(a.date) - new Date(b.date);
+    if (dateCompare !== 0) return dateCompare;
+    return (a.startTime || '').localeCompare(b.startTime || '');
+  });
 
     const groups = [];
     let currentGroup = {
@@ -154,23 +111,9 @@ const groupConsecutiveBlocks = (blockedDates) => {
       }
     }
     
-    groups.push(currentGroup);
-    return groups;
-  } catch (error) {
-    console.error('Error grouping consecutive blocks:', error);
-    return [];
-  }
+  groups.push(currentGroup);
+  return groups;
 };
-
-/**
- * BlockedDatesManager Component
- * Manages blocking and unblocking date ranges for employee unavailability
- * @param {Object} props - Component props
- * @param {Array} props.blockedDates - Array of blocked date objects
- * @param {Function} props.onBlockedDateChange - Callback when blocked dates change
- * @param {boolean} props.isAdmin - Whether current user is admin
- * @param {Array} props.employees - Array of employee objects (for admin filtering)
- */
 
 export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, isAdmin = false, employees = [] }) => {
   const { t, language } = useTranslation();
@@ -179,9 +122,6 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
   const [showBlockedDates, setShowBlockedDates] = useState(false);
   const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState('all');
 
-  /**
-   * Handle form submission to create blocked date range
-   */
   const handleFormSubmit = async (data) => {
     try {
       await blockedDateService.create(data);
