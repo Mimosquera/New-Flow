@@ -169,25 +169,64 @@ export const UpdatePoster = () => {
     document.body.style.background = '#000000';
   }, []);
 
+  const cardStyle = {
+    background: 'rgba(5, 45, 63, 0.55)',
+    backdropFilter: 'blur(18px)',
+    WebkitBackdropFilter: 'blur(18px)',
+    border: '1px solid rgba(70, 161, 161, 0.2)',
+    borderRadius: '18px',
+    overflow: 'hidden',
+    marginBottom: '0.75rem',
+  };
+
+  const cardTitleStyle = {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: '0.9rem',
+    letterSpacing: '-0.01em',
+    cursor: 'pointer',
+    flex: 1,
+    margin: 0,
+  };
+
+  const cardTextStyle = {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: '0.82rem',
+    lineHeight: '1.45',
+    cursor: 'pointer',
+    margin: 0,
+  };
+
+  const cardMetaStyle = {
+    fontSize: '0.7rem',
+    color: '#46a1a1',
+    fontWeight: '500',
+    letterSpacing: '0.025em',
+    borderTop: '1px solid rgba(70,161,161,0.12)',
+    paddingTop: '0.4rem',
+    marginTop: '0.25rem',
+  };
+
   return (
     <div className="update-poster">
       <div className="container pt-3 pb-5">
         <div className="row justify-content-center">
           {/* Post New Update Form */}
           <div className="col-lg-4 mb-4">
-            <div className="card post-update-card shadow-sm border-0">
+            <div style={{ ...cardStyle, marginBottom: '0' }}>
               <div
-                className="card-header d-flex justify-content-between align-items-center collapsible-header"
+                className="d-flex justify-content-between align-items-center collapsible-header"
                 style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
+                  background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
+                  borderBottom: '1px solid rgba(70,161,161,0.25)',
                   color: 'white',
                   cursor: 'pointer',
                   padding: '0.75rem 1rem'
                 }}
                 onClick={() => setShowForm(!showForm)}
               >
-                <h5 className="mb-0" style={{ fontSize: '1rem' }}>{t('postUpdate')}</h5>
-                <span className="d-lg-none" style={{ fontSize: '1.2rem' }}>
+                <h5 className="mb-0" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>{t('postUpdate')}</h5>
+                <span className="d-lg-none" style={{ fontSize: '1.2rem', color: '#46a1a1' }}>
                   {showForm ? '\u2212' : '+'}
                 </span>
               </div>
@@ -306,25 +345,23 @@ export const UpdatePoster = () => {
             <div style={{ maxWidth: '500px', margin: '0 auto' }}>
             <h4 className="mb-4 recent-updates-header">{t('recentUpdates')}</h4>
             {loading ? (
-              <p className="text-muted">{t('loading')}</p>
+              <p style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</p>
             ) : translatedUpdates.length === 0 ? (
-              <p className="text-muted">{t('noUpdates')}</p>
+              <p style={{ color: 'rgba(255,255,255,0.5)' }}>{t('noUpdates')}</p>
             ) : (
               <>
               <div className="updates-list">
                 {translatedUpdates.slice(0, displayCount).map(update => {
-                  // Check if user can delete this update
                   const isAdmin = currentUser?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
                   const isOwner = currentUser?.id === update.user_id;
                   const canDelete = isAdmin || isOwner;
 
                   return (
-                  <div key={update.id} className="card shadow-sm border-0 mb-3" style={{ boxShadow: '0 12px 48px 0 rgba(5,45,63,0.45), 0 4px 16px 0 rgba(0,0,0,0.25)' }}>
-                    <div className="card-body" style={{ padding: '0.75rem 1rem' }}>
+                  <div key={update.id} style={cardStyle}>
+                    <div style={{ padding: '0.75rem 1rem' }}>
                       <div className="d-flex justify-content-between align-items-start mb-1">
-                        <h6 
-                          className="card-title mb-0"
-                          style={{ cursor: 'pointer', flex: 1 }}
+                        <h6
+                          style={cardTitleStyle}
                           onClick={() => handleUpdateClick(update)}
                         >
                           {update.title}
@@ -333,13 +370,15 @@ export const UpdatePoster = () => {
                         <button
                           className="btn btn-sm"
                           style={{
-                            backgroundColor: 'rgb(5, 45, 63)',
-                            color: 'white',
-                            fontWeight: '600',
-                            boxShadow: '0 2px 8px rgba(5,45,63,0.18), 0 1px 1px rgba(0,0,0,0.12)',
-                            border: 'none',
+                            background: 'rgba(220, 53, 69, 0.2)',
+                            color: '#ff7b7b',
+                            border: '1px solid rgba(220, 53, 69, 0.4)',
+                            borderRadius: '8px',
                             padding: '0.15rem 0.5rem',
                             fontSize: '0.7rem',
+                            fontWeight: '600',
+                            flexShrink: 0,
+                            marginLeft: '0.5rem',
                           }}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -350,11 +389,10 @@ export const UpdatePoster = () => {
                         </button>
                         )}
                       </div>
-                      
-                      {/* Display media if available */}
+
                       {update.media_url && (
                         <div
-                          className="mt-1 mb-1"
+                          className="mt-1 mb-2"
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleUpdateClick(update)}
                         >
@@ -363,28 +401,27 @@ export const UpdatePoster = () => {
                               src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
                               alt={update.title}
                               className="img-fluid rounded"
-                              style={{ maxHeight: '200px', width: '100%', objectFit: 'cover' }}
+                              style={{ maxHeight: '200px', width: '100%', objectFit: 'cover', borderRadius: '12px' }}
                             />
                           ) : (
                             <video
                               src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                              className="w-100 rounded"
-                              style={{ maxHeight: '200px', objectFit: 'cover' }}
+                              className="w-100"
+                              style={{ maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
                             />
                           )}
                         </div>
                       )}
-                      
-                      <p 
-                        className="card-text mb-1"
-                        style={{ cursor: 'pointer' }}
+
+                      <p
+                        style={cardTextStyle}
                         onClick={() => handleUpdateClick(update)}
                       >
                         {update.content.length > 150 ? update.content.substring(0, 150) + '...' : update.content}
                       </p>
-                      <small className="text-muted">
-                        {new Date(update.date).toLocaleDateString()} • {update.author}
-                      </small>
+                      <div style={cardMetaStyle}>
+                        {new Date(update.date).toLocaleDateString()} · {update.author}
+                      </div>
                     </div>
                   </div>
                   );

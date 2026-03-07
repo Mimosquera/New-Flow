@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/tokenUtils.js';
+import { hapticLight, hapticMedium, hapticSuccess } from '../utils/haptics.js';
 import { updateService, serviceService, SERVER_BASE_URL } from '../services/api.js';
 import { UpdateModal } from '../components/UpdateModal.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
@@ -9,6 +11,21 @@ import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import styles from './HomePage.module.css';
+
+const sectionVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
+};
+
+const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } },
+};
 
 export const HomePage = ({ onNavigateToBooking }) => {
   const navigate = useNavigate();
@@ -33,6 +50,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const updatesEndRef = useRef(null);
 
   const handleUpdateClick = (update) => {
+    hapticLight();
     setSelectedUpdate(update);
     setShowModal(true);
   };
@@ -75,9 +93,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     fetchServices();
   }, [fetchUpdates, fetchServices]);
 
-  const handleViewMore = () => {
-    setDisplayCount(prev => prev + 4);
-  };
+  const handleViewMore = () => setDisplayCount(prev => prev + 4);
 
   const handleShowLess = () => {
     setDisplayCount(4);
@@ -86,9 +102,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     }, 100);
   };
 
-  const handleShowAllServices = () => {
-    setServiceDisplayCount(services.length);
-  };
+  const handleShowAllServices = () => setServiceDisplayCount(services.length);
 
   const handleHideServices = () => {
     setServiceDisplayCount(getDefaultServiceCount());
@@ -98,14 +112,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
   };
 
   const handleServiceClick = (serviceId) => {
+    hapticMedium();
     setExpandedServiceId(expandedServiceId === serviceId ? null : serviceId);
   };
 
-  // Collapse expanded service card when clicking outside
   useEffect(() => {
     if (expandedServiceId === null) return;
     const handleClickOutside = (event) => {
-      // Check if click is inside any service card
       if (
         serviceCardsRef.current &&
         !serviceCardsRef.current.some(ref => ref && ref.contains(event.target))
@@ -114,9 +127,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [expandedServiceId]);
 
   const handleRequestAppointment = (service) => {
@@ -133,61 +144,47 @@ export const HomePage = ({ onNavigateToBooking }) => {
   }, []);
 
   return (
-    <div className="homepage" style={{ background: '#f5f5f5', minHeight: '100vh' }}>
+    <div className={styles.homePage}>
       {/* Navigation Bar */}
-      <nav className="navbar navbar-light bg-light shadow-sm">
+      <nav className={styles.navbar}>
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
-          <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0, fontSize: 'clamp(1rem, 4vw, 1.5rem)' }}>
-            <img 
+          <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0 }}>
+            <img
               src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
               alt="New Flow Logo"
-              style={{ height: 'clamp(20px, 5vw, 30px)', marginRight: '5px', flexShrink: 0 }}
+              style={{ height: 'clamp(22px, 5vw, 32px)', flexShrink: 0 }}
             />
-            <span style={{ whiteSpace: 'nowrap' }}>NEW FLOW</span>
           </div>
           <div className="d-flex flex-nowrap gap-1 align-items-center" style={{ flexShrink: 0 }}>
-            <button 
-              className="btn btn-sm"
-              style={{ 
-                backgroundColor: 'transparent', 
-                color: 'rgb(5, 45, 63)', 
-                border: 'none', 
-                fontWeight: '300', 
-                whiteSpace: 'nowrap',
-                padding: '0.25rem 0.5rem',
-                fontSize: 'clamp(0.75rem, 2.5vw, 1rem)',
-                textShadow: '0 0 10px rgba(70, 161, 161, 0.8), 0 0 20px rgba(70, 161, 161, 0.5), 0 0 40px rgba(70, 161, 161, 0.25)'
-              }}
+            <button
+              className={styles.navButton}
               onClick={() => navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login')}
             >
               {t(isLoggedIn ? 'employeeDashboard' : 'employeeLogin')}
             </button>
-            <LanguageToggle darkText />
+            <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
+              <LanguageToggle darkText />
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className={`hero-section bg-dark text-white pt-5 ${styles.heroSection}`}>
+      <motion.section
+        className={`text-white ${styles.heroSection}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.7 }}
+      >
         <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-6 mb-4 mb-md-0">
-              <h1 className="display-4 fw-bold mb-3">{t('heroTitle')}</h1>
-              <p className="lead mb-4">{t('heroSubtitle')}</p>
-              <p className="mb-4">{t('heroDescription')}</p>
-              <div style={{ whiteSpace: 'nowrap' }}>
-                <button 
-                  className={styles.requestButton}
-                  onClick={(e) => {
-                    e.currentTarget.blur();
-                    onNavigateToBooking();
-                  }}
-                >
-                  {t('requestAppointment')}
-                </button>
-              </div>
-            </div>
-            <div className="col-md-6">
+          <div className="row align-items-center g-3 g-md-4">
+            {/* Video — top on mobile (animated brand header), right on desktop */}
+            <motion.div
+              className={`col-12 col-md-6 order-1 order-md-2 ${styles.heroVideoCol}`}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
               <video
                 className={`w-100 ${styles.heroVideo}`}
                 autoPlay
@@ -197,100 +194,140 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 disablePictureInPicture
               >
                 <source src={new URL('../assets/videos/hero-banner-video.mp4', import.meta.url).href} type="video/mp4" />
-                Your browser does not support the video tag.
               </video>
-            </div>
+            </motion.div>
+
+            {/* Text + CTA — below video on mobile, left on desktop */}
+            <motion.div
+              className={`col-12 col-md-6 order-2 order-md-1 ${styles.heroTextCol}`}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+            >
+              <p className={`lead mb-2 ${styles.heroSubtitle}`}>{t('heroSubtitle')}</p>
+              <p className={`mb-3 ${styles.heroDesc}`}>{t('heroDescription')}</p>
+              <div className={styles.heroCta}>
+                <button
+                  className={styles.requestButton}
+                  onClick={(e) => {
+                    e.currentTarget.blur();
+                    hapticSuccess();
+                    onNavigateToBooking();
+                  }}
+                >
+                  {t('requestAppointment')}
+                </button>
+              </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className={styles.scrollIndicator}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.6 }}
+        >
+          <motion.div
+            animate={{ y: [0, 9, 0] }}
+            transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut' }}
+          >
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </motion.div>
+        </motion.div>
+      </motion.section>
 
       {/* Services Section */}
-      <section className="services-section py-3">
+      <motion.section
+        className={styles.servicesSection}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.08 }}
+      >
         <div className="container">
-          <div 
-            className={`${styles.servicesHeading} mb-4`}
-          >
-            {t('servicesTitle')}
-          </div>
+          <div className={`${styles.sectionHeading} mb-4`}>{t('servicesTitle')}</div>
           {translatedServices.length === 0 ? (
             <div className="text-center py-3">
-              <h4 className="text-muted">{language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}</h4>
+              <p style={{ color: 'rgba(255,255,255,0.5)' }}>
+                {language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}
+              </p>
             </div>
           ) : (
-          <div className="row g-3 justify-content-center">
-            {displayedServices.map((service, idx) => (
-              <div key={service.id} className={displayedServices.length === 1 ? 'col-10 col-md-6' : 'col-6 col-md-4'}>
-                <div
-                  className={`card h-100 ${styles.card} ${styles.cursorPointer}`}
-                  onClick={() => handleServiceClick(service.id)}
-                  ref={el => serviceCardsRef.current[idx] = el}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">{service.name}</h5>
-                    <p className="card-text">{service.description}</p>
-                    <h6 className="card-subtitle fw-bold">
-                      {service.price_max
-                        ? `$${parseFloat(service.price).toFixed(2)} - $${parseFloat(service.price_max).toFixed(2)}`
-                        : `$${parseFloat(service.price).toFixed(2)}`
-                      }
-                    </h6>
-                    {expandedServiceId === service.id && (
-                      <div className="mt-3">
-                        <button
-                          className={`btn btn-sm w-100 ${styles.serviceBookBtn}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            e.currentTarget.blur();
-                            handleRequestAppointment(service);
-                          }}
-                        >
-                          {t('requestAppointment')}
-                        </button>
+            <motion.div
+              className="row g-3 justify-content-center"
+              style={{ maxWidth: '860px', margin: '0 auto' }}
+              layout
+              transition={{ layout: { duration: 0.42, ease: [0.4, 0, 0.2, 1] } }}
+            >
+              <AnimatePresence>
+                {displayedServices.map((service, idx) => (
+                  <motion.div
+                    key={service.id}
+                    className={displayedServices.length === 1 ? 'col-10 col-md-5' : 'col-6 col-md-4 col-lg-3'}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <motion.div
+                      className={styles.serviceCard}
+                      style={{ height: '100%' }}
+                      whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => handleServiceClick(service.id)}
+                      ref={el => serviceCardsRef.current[idx] = el}
+                    >
+                      <div className={styles.serviceCardBody}>
+                        <h5 className={styles.serviceCardTitle}>{service.name}</h5>
+                        <p className={styles.serviceCardDesc}>{service.description}</p>
+                        <span className={styles.serviceCardPrice}>
+                          {service.price_max
+                            ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
+                            : `$${parseFloat(service.price).toFixed(2)}`}
+                        </span>
+                        <AnimatePresence>
+                          {expandedServiceId === service.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.22 }}
+                              style={{ overflow: 'hidden' }}
+                            >
+                              <button
+                                className={styles.serviceBookBtn}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.currentTarget.blur();
+                                  hapticSuccess();
+                                  handleRequestAppointment(service);
+                                }}
+                              >
+                                {t('requestAppointment')}
+                              </button>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                    </motion.div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
           )}
 
           {translatedServices.length > 0 && services.length > getDefaultServiceCount() && (
             <div className="text-center mt-5">
               {hasMoreServices ? (
-                <button 
-                  className="btn btn-sm"
-                  style={{ 
-                    background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%)',
-                    color: '#fff',
-                    border: '1.5px solid #46a1a1',
-                    borderRadius: '0.5rem',
-                    padding: '0.4rem 1.25rem',
-                    fontWeight: '600',
-                    fontSize: '0.85rem',
-                    letterSpacing: '0.02em',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onClick={handleShowAllServices}
-                >
+                <button className={styles.ghostButton} onClick={handleShowAllServices}>
                   {t('showAllServices')}
                 </button>
               ) : (
-                <button 
-                  className="btn btn-sm"
-                  style={{ 
-                    background: 'transparent',
-                    color: 'rgb(5, 45, 63)',
-                    border: '1.5px solid rgb(5, 45, 63)',
-                    borderRadius: '0.5rem',
-                    padding: '0.4rem 1.25rem',
-                    fontWeight: '600',
-                    fontSize: '0.85rem',
-                    letterSpacing: '0.02em',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onClick={handleHideServices}
-                >
+                <button className={styles.ghostButtonOutline} onClick={handleHideServices}>
                   {t('hideServices')}
                 </button>
               )}
@@ -301,103 +338,94 @@ export const HomePage = ({ onNavigateToBooking }) => {
           )}
           <div ref={servicesEndRef} />
         </div>
-      </section>
+      </motion.section>
 
       {/* News Section */}
-      <section className="news-section py-4">
+      <motion.section
+        className={styles.newsSection}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.05 }}
+      >
         <div className="container">
-          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>{t('updatesTitle')}</h2>
+          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>
+            {t('updatesTitle')}
+          </h2>
           {loading || translating ? (
-            <div className="text-center text-white">
+            <div className="text-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
               <p>{translating ? t('translating') : t('loading')}</p>
             </div>
           ) : displayedNews.length === 0 ? (
-            <div className="text-center text-white">
+            <div className="text-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
               <p>{t('noUpdates')}</p>
             </div>
           ) : (
             <>
-              <div className="row">
+              <motion.div
+                className="row g-3"
+                layout
+                transition={{ layout: { duration: 0.42, ease: [0.4, 0, 0.2, 1] } }}
+              >
+                <AnimatePresence>
                 {displayedNews.map(article => (
-                  <div key={article.id} className="col-6 col-lg-3 mb-3">
-                    <div 
-                      className="card shadow-sm border-0 h-100 update-card-desktop"
+                  <motion.div
+                    key={article.id}
+                    className="col-6 col-lg-3 mb-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+                  >
+                    <motion.div
+                      className={styles.updateCard}
+                      whileHover={{ scale: 1.025 }}
+                      whileTap={{ scale: 0.975 }}
                       onClick={() => handleUpdateClick(article)}
-                      style={{ cursor: 'pointer' }}
                     >
-                      <div className="card-body d-flex flex-column justify-content-between">
-                        <h5 className="card-title mb-1" style={{ fontWeight: '600', color: 'rgb(5,45,63)' }}>{article.title}</h5>
-                        {article.media_url && (
-                          <div className="mt-1 mb-1">
-                            {article.media_type === 'image' ? (
-                              <img
-                                src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
-                                alt={article.title}
-                                className="img-fluid rounded"
-                                style={{ maxHeight: '150px', width: '100%', objectFit: 'cover' }}
-                              />
-                            ) : (
-                              <video
-                                src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
-                                className="w-100 rounded"
-                                style={{ maxHeight: '150px', objectFit: 'cover' }}
-                                playsInline
-                                disablePictureInPicture
-                                controls={false}
-                              />
-                            )}
-                          </div>
-                        )}
-                        <p className="card-text mb-0" style={{ color: '#333', fontWeight: '400', fontSize: '1rem' }}>
-                          {article.content.length > 100 ? article.content.substring(0, 100) + '...' : article.content}
+                      {article.media_url && (
+                        <div className={styles.updateCardMedia}>
+                          {article.media_type === 'image' ? (
+                            <img
+                              src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
+                              alt={article.title}
+                              className={styles.updateCardImage}
+                            />
+                          ) : (
+                            <video
+                              src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
+                              className={styles.updateCardImage}
+                              playsInline
+                              disablePictureInPicture
+                              controls={false}
+                            />
+                          )}
+                          <div className={styles.updateCardMediaOverlay} />
+                        </div>
+                      )}
+                      <div className={styles.updateCardBody}>
+                        <h5 className={styles.updateCardTitle}>{article.title}</h5>
+                        <p className={styles.updateCardContent}>
+                          {article.content.length > 80 ? article.content.substring(0, 80) + '…' : article.content}
                         </p>
-                        <small className="text-muted" style={{ fontSize: '0.9rem' }}>
-                          • {article.author}
-                        </small>
-                        <small style={{ fontSize: '0.75rem', color: '#78909c', fontWeight: '500', letterSpacing: '0.03em', fontStyle: 'italic' }}>
-                          {new Date(article.date).toLocaleDateString()}
-                        </small>
+                        <div className={styles.updateCardMeta}>
+                          <span>{article.author}</span>
+                          <span>{new Date(article.date).toLocaleDateString()}</span>
+                        </div>
                       </div>
-                    </div>
-                  </div>
+                    </motion.div>
+                  </motion.div>
                 ))}
-              </div>
+                </AnimatePresence>
+              </motion.div>
               <div className="text-center mt-4">
                 {hasMore && (
-                  <button 
-                    className="btn btn-sm me-2"
-                    style={{
-                      background: 'linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%)',
-                      color: '#fff',
-                      border: '1.5px solid rgba(255,255,255,0.4)',
-                      borderRadius: '0.5rem',
-                      padding: '0.4rem 1.25rem',
-                      fontWeight: '600',
-                      fontSize: '0.85rem',
-                      letterSpacing: '0.02em',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onClick={handleViewMore}
-                  >
+                  <button className={`${styles.ghostButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
                   </button>
                 )}
                 {displayCount > 4 && (
-                  <button 
-                    className="btn btn-sm"
-                    style={{
-                      background: 'transparent',
-                      color: '#fff',
-                      border: '1.5px solid rgba(255,255,255,0.5)',
-                      borderRadius: '0.5rem',
-                      padding: '0.4rem 1.25rem',
-                      fontWeight: '600',
-                      fontSize: '0.85rem',
-                      letterSpacing: '0.02em',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onClick={handleShowLess}
-                  >
+                  <button className={styles.ghostButtonOutline} onClick={handleShowLess}>
                     {t('showLess')}
                   </button>
                 )}
@@ -406,99 +434,132 @@ export const HomePage = ({ onNavigateToBooking }) => {
           )}
           <div ref={updatesEndRef} />
         </div>
-      </section>
+      </motion.section>
 
       {/* About Section */}
-      <section className="about-section py-5">
+      <motion.section
+        className={styles.aboutSection}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-md-6 mb-5 mb-md-0">
-              <img 
+            <motion.div
+              className="col-md-6 mb-5 mb-md-0"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <img
                 src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
                 alt="New Flow Team"
                 className={`img-fluid rounded ${styles.aboutLogo}`}
               />
-            </div>
-            <div className="col-md-6 ps-md-4">
-              <h2 className="fw-bold mb-3">{t('aboutTitle')}</h2>
-              <p className="mb-3">
-                {t('aboutParagraph1')}
-              </p>
-              <p className="mb-3">
-                {t('aboutParagraph2')}
-              </p>
-              <p>
-                {t('aboutParagraph3')}
-              </p>
-            </div>
+            </motion.div>
+            <motion.div
+              className="col-md-6 ps-md-4"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <h2 className="fw-bold mb-3" style={{ color: '#fff' }}>{t('aboutTitle')}</h2>
+              <p className="mb-3" style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph1')}</p>
+              <p className="mb-3" style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph2')}</p>
+              <p style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph3')}</p>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact Section */}
-      <section className="contact-section py-5 bg-dark text-white">
+      <motion.section
+        className={`py-5 ${styles.contactSection}`}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+      >
         <div className="container">
-          <h2 className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}>{t('contactTitle')}</h2>
-          <div className="row text-center">
-            <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>⏰ {t('hours')}</h5>
-              <p className={styles.contactText}>{t('monSun')}: 9am - 7pm</p>
-            </div>
-            <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>📞 {t('phone')}</h5>
-              <p className={styles.contactText}>
-                <a 
-                  href="tel:+18047452525"
-                  className="text-white text-decoration-none"
-                >
-                  (804) 745-2525
-                </a>
-              </p>
-            </div>
-            <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>📱 {t('followUs')}</h5>
-              <a 
-                href="https://www.instagram.com/newflowsalon/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`d-inline-flex align-items-center justify-content-center text-decoration-none text-white ${styles.contactText}`}
-              >
-                <img 
-                  src={new URL('../assets/images/instagram-logo.png', import.meta.url).href}
-                  alt="Instagram"
-                  className={styles.instagramIcon}
-                />
-                <span>@newflowsalon</span>
-              </a>
-            </div>
-            <div className="col-md-3 mb-3">
-              <h5 className={styles.contactHeading}>📍 {t('address')}</h5>
-              <p className={`${styles.addressText} ${styles.contactText}`}>
-                <a 
-                  href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
+          <motion.h2
+            className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}
+            variants={cardVariants}
+          >
+            {t('contactTitle')}
+          </motion.h2>
+          <motion.div
+            className="row text-center"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+              <div className={styles.contactCard}>
+                <span className={styles.contactIcon}>⏰</span>
+                <h5 className={styles.contactHeading}>{t('hours')}</h5>
+                <p className={styles.contactText}>{t('monSun')}: 9am – 7pm</p>
+              </div>
+            </motion.div>
+            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+              <div className={styles.contactCard}>
+                <span className={styles.contactIcon}>📞</span>
+                <h5 className={styles.contactHeading}>{t('phone')}</h5>
+                <p className={styles.contactText}>
+                  <a href="tel:+18047452525" className="text-white text-decoration-none">
+                    (804) 745-2525
+                  </a>
+                </p>
+              </div>
+            </motion.div>
+            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+              <div className={styles.contactCard}>
+                <span className={styles.contactIcon}>📱</span>
+                <h5 className={styles.contactHeading}>{t('followUs')}</h5>
+                <a
+                  href="https://www.instagram.com/newflowsalon/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white text-decoration-none"
+                  className={`d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-white ${styles.contactText}`}
                 >
-                  7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
+                  <img
+                    src={new URL('../assets/images/instagram-logo.png', import.meta.url).href}
+                    alt="Instagram"
+                    className={styles.instagramIcon}
+                  />
+                  <span>@newflowsalon</span>
                 </a>
-              </p>
-            </div>
-          </div>
+              </div>
+            </motion.div>
+            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+              <div className={styles.contactCard}>
+                <span className={styles.contactIcon}>📍</span>
+                <h5 className={styles.contactHeading}>{t('address')}</h5>
+                <p className={`${styles.addressText} ${styles.contactText}`}>
+                  <a
+                    href="https://maps.google.com/?q=7102+Hull+Street+Rd+N+Suite+F,+North+Chesterfield,+VA+23235"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-decoration-none"
+                  >
+                    7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
+                  </a>
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Update Modal */}
-      <UpdateModal 
-        update={selectedUpdate}
-        show={showModal}
-        onClose={handleCloseModal}
-      />
+      <UpdateModal update={selectedUpdate} show={showModal} onClose={handleCloseModal} />
       <ScrollToTop />
     </div>
   );
 };
 
 HomePage.propTypes = {
-  onNavigateToBooking: PropTypes.func.isRequired
+  onNavigateToBooking: PropTypes.func.isRequired,
 };
