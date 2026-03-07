@@ -14,7 +14,10 @@
       "Bash(node scripts/run-migration.js:*)",
       "Bash(timeout 10 node:*)",
       "Bash(npm run build:*)",
-      "Bash(npm run migrate:*)"
+      "Bash(npm run migrate:*)",
+      "Bash(npm install framer-motion --save)",
+      "Bash(npm install web-haptics --save)",
+      "Bash(npm install lenis)"
     ]
   }
 }

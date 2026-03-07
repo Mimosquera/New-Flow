@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { removeToken, decodeToken, getToken } from '../utils/tokenUtils.js';
+import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
 import { UpdatePoster } from '../components/UpdatePoster.jsx';
 import { ServiceManager } from '../components/ServiceManager.jsx';
@@ -178,7 +180,7 @@ export default function EmployeeDashboard() {
               <li className="nav-item">
                 <button
                   className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('profile')}
+                  onClick={() => { hapticLight(); setActiveTab('profile'); }}
                 >
                   {t('profile')}
                 </button>
@@ -186,7 +188,7 @@ export default function EmployeeDashboard() {
               <li className="nav-item">
                 <button 
                   className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('appointments')}
+                  onClick={() => { hapticLight(); setActiveTab('appointments'); }}
                 >
                   {t('appointments')}
                 </button>
@@ -194,7 +196,7 @@ export default function EmployeeDashboard() {
               <li className="nav-item">
                 <button 
                   className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('availability')}
+                  onClick={() => { hapticLight(); setActiveTab('availability'); }}
                 >
                   {t('availability')}
                 </button>
@@ -202,7 +204,7 @@ export default function EmployeeDashboard() {
               <li className="nav-item">
                 <button 
                   className={`nav-link ${activeTab === 'updates' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('updates')}
+                  onClick={() => { hapticLight(); setActiveTab('updates'); }}
                 >
                   {t('postsTab')}
                 </button>
@@ -210,7 +212,7 @@ export default function EmployeeDashboard() {
               <li className="nav-item">
                 <button 
                   className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('services')}
+                  onClick={() => { hapticLight(); setActiveTab('services'); }}
                 >
                   {t('services')}
                 </button>
@@ -219,7 +221,7 @@ export default function EmployeeDashboard() {
                 <li className="nav-item">
                   <button
                     className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('team')}
+                    onClick={() => { hapticLight(); setActiveTab('team'); }}
                   >
                     {t('team') || 'Team'}
                   </button>
@@ -234,7 +236,7 @@ export default function EmployeeDashboard() {
               id="mobileTabSelect"
               name="mobileTabSelect"
               value={activeTab}
-              onChange={(e) => setActiveTab(e.target.value)}
+              onChange={(e) => { hapticLight(); setActiveTab(e.target.value); }}
               autoComplete="off"
               style={{
                 backgroundColor: 'rgb(5, 45, 63)',
@@ -268,19 +270,29 @@ export default function EmployeeDashboard() {
         </div>
       </div>
 
-      {activeTab === 'appointments' && <AppointmentsManager filter={appointmentFilter} setFilter={setAppointmentFilter} />}
-      {activeTab === 'updates' && <UpdatePoster />}
-      {activeTab === 'services' && <ServiceManager />}
-      {activeTab === 'availability' && <AvailabilityManager />}
-      {activeTab === 'profile' && (
-        <ProfileManager
-          onLogout={() => {
-            removeToken();
-            navigate('/');
-          }}
-        />
-      )}
-      {activeTab === 'team' && isAdmin && <EmployeeManager />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+        >
+          {activeTab === 'appointments' && <AppointmentsManager filter={appointmentFilter} setFilter={setAppointmentFilter} />}
+          {activeTab === 'updates' && <UpdatePoster />}
+          {activeTab === 'services' && <ServiceManager />}
+          {activeTab === 'availability' && <AvailabilityManager />}
+          {activeTab === 'profile' && (
+            <ProfileManager
+              onLogout={() => {
+                removeToken();
+                navigate('/');
+              }}
+            />
+          )}
+          {activeTab === 'team' && isAdmin && <EmployeeManager />}
+        </motion.div>
+      </AnimatePresence>
 
       <div className="container pt-5 pb-4" style={{ marginTop: '4rem' }}>
         <div className="text-center">

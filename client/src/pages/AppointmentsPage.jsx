@@ -8,6 +8,7 @@ import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import styles from './AppointmentsPage.module.css';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 export const AppointmentsPage = () => {
   const navigate = useNavigate();
@@ -61,11 +62,13 @@ export const AppointmentsPage = () => {
     async (data) => {
       // Validate required fields
       if (!data.name || !data.email || !data.phone || !data.service || !data.date || !data.time) {
+        hapticWarning();
         throw new Error(t('pleaseFillRequired'));
       }
 
       // Validate that selected time is available
       if (!availableTimes.includes(data.time)) {
+        hapticWarning();
         throw new Error(t('timeNotAvailable'));
       }
 
@@ -85,6 +88,7 @@ export const AppointmentsPage = () => {
       });
 
       // Show success message
+      hapticSuccess();
       setSuccess(t('appointmentRequested'));
       
       // Scroll to top so user can see the success modal

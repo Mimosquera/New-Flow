@@ -5,6 +5,10 @@ html, body {
 }
 
 /* Scroll to Top Button */
+.scroll-to-top-btn svg {
+  pointer-events: none;
+}
+
 .scroll-to-top-btn {
   position: fixed;
   bottom: 2rem;

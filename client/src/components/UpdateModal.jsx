@@ -111,9 +111,9 @@ export const UpdateModal = ({ update, show, onClose }) => {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body" style={{ 
+            <div className="modal-body" style={{
               padding: '1.75rem',
-              background: 'linear-gradient(180deg, #ffffff 0%, #eaf6f6 100%)'
+              background: 'linear-gradient(180deg, rgba(5, 45, 63, 0.97) 0%, rgba(3, 28, 40, 0.99) 100%)'
             }}>
               {/* Large media display */}
               {update.media_url && (
@@ -153,18 +153,18 @@ export const UpdateModal = ({ update, show, onClose }) => {
               )}
               
               {/* Content */}
-              <p className="mb-3" style={{ 
-                whiteSpace: 'pre-wrap', 
-                fontSize: '1rem', 
-                color: 'rgb(5, 45, 63)',
+              <p className="mb-3" style={{
+                whiteSpace: 'pre-wrap',
+                fontSize: '1rem',
+                color: 'rgba(255, 255, 255, 0.88)',
                 lineHeight: '1.6'
               }}>
                 {update.content}
               </p>
               
               {/* Metadata */}
-              <div style={{ 
-                borderTop: '1px solid rgba(70, 161, 161, 0.2)', 
+              <div style={{
+                borderTop: '1px solid rgba(70, 161, 161, 0.25)',
                 paddingTop: '0.75rem',
                 marginTop: '0.5rem'
               }}>
