@@ -44,43 +44,38 @@ export const ServiceManager = () => {
     },
     async (data) => {
       try {
-        // Validate required fields
         if (!data.name || !data.description || !data.price) {
           throw new Error(t('pleaseFillRequired'));
         }
 
-        // Validate price is a valid number
         const priceNum = parseFloat(data.price);
         if (isNaN(priceNum) || priceNum < 0) {
           throw new Error(t('invalidPrice'));
         }
 
-        // Validate price_max if provided
         if (data.price_max) {
           const priceMaxNum = parseFloat(data.price_max);
           if (isNaN(priceMaxNum) || priceMaxNum < 0) {
-            throw new Error(t('invalidMaxPrice') || 'Invalid maximum price value');
+            throw new Error(t('invalidMaxPrice'));
           }
           if (priceMaxNum <= priceNum) {
-            throw new Error(t('maxPriceMustBeGreater') || 'Maximum price must be greater than minimum price');
+            throw new Error(t('maxPriceMustBeGreater'));
           }
         }
 
         if (editingService) {
-          // Update existing service
           if (!editingService.id) {
             throw new Error(t('serviceIdMissing'));
           }
 
           const response = await serviceService.update(editingService.id, data);
           setServices(services.map(s => s.id === editingService.id ? response.data : s));
-          setSuccess(t('serviceUpdated') || 'Service updated successfully!');
+          setSuccess(t('serviceUpdated'));
           setEditingService(null);
         } else {
-          // Create new service
           const response = await serviceService.create(data);
           setServices([...services, response.data]);
-          setSuccess(t('serviceAdded') || 'Service created successfully!');
+          setSuccess(t('serviceAdded'));
         }
 
         resetForm();
@@ -131,13 +126,13 @@ export const ServiceManager = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm(t('confirmDeleteService') || 'Are you sure you want to delete this service?')) return;
+    if (!window.confirm(t('confirmDeleteService'))) return;
     try {
       await serviceService.delete(id);
       setServices(services.filter(s => s.id !== id));
-      setSuccess(t('serviceDeleted') || 'Service deleted successfully!');
+      setSuccess(t('serviceDeleted'));
     } catch (error) {
-      const msg = error?.response?.data?.message || t('deleteServiceFailed') || 'Failed to delete service';
+      const msg = error?.response?.data?.message || t('deleteServiceFailed');
       alert(msg);
     }
   };

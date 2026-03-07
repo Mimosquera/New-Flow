@@ -7,7 +7,6 @@ const THEME_COLOR = 'rgb(5, 45, 63)';
 
 export const EmployeeManager = () => {
   const { t } = useTranslation();
-  // State grouping
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,6 @@ export const EmployeeManager = () => {
 
   useEffect(() => { fetchEmployees(); }, []);
 
-  // Utility functions
   const clearAlerts = () => setAlerts({ error: null, success: null, editError: null, editSuccess: null });
   const setAlert = (type, value) => setAlerts(prev => ({ ...prev, [type]: value }));
 
@@ -38,7 +36,6 @@ export const EmployeeManager = () => {
     return t(errorMap[errorMsg] || defaultKey);
   };
 
-  // API calls
   const fetchEmployees = async () => {
     try {
       setLoadingEmployees(true);
@@ -51,7 +48,6 @@ export const EmployeeManager = () => {
     }
   };
 
-  // Form handlers
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -91,7 +87,6 @@ export const EmployeeManager = () => {
     clearAlerts();
   };
 
-  // Edit password handlers
   const handleEditPasswordChange = (e) => {
     const { name, value } = e.target;
     setEditPasswordData(prev => ({ ...prev, [name]: value }));
@@ -124,7 +119,6 @@ export const EmployeeManager = () => {
     }
   };
 
-  // Delete employee handlers
   const handleDeleteEmployee = async (employeeId) => {
     clearAlerts();
     const adminPassword = deletePasswordData[employeeId];
@@ -159,7 +153,6 @@ export const EmployeeManager = () => {
     });
   };
 
-  // Render helpers
   const renderCreateForm = () => (
     <div className="p-3 border-top">
       <p className="file-info-text mb-4 employee-info-black">{t('createEmployeeDescription')}</p>

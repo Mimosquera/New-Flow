@@ -1,10 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.js';
 
-/**
- * Update/Post Model
- * Represents news updates and announcements posted by employees
- */
 export const Update = sequelize.define('Update', {
   id: {
     type: DataTypes.INTEGER,

@@ -66,16 +66,10 @@ export const User = sequelize.define(
   }
 );
 
-/**
- * Verify password
- */
 User.prototype.verifyPassword = async function (password) {
   return bcryptjs.compare(password, this.password);
 };
 
-/**
- * Get user without sensitive fields
- */
 User.prototype.toJSON = function () {
   const { password, resetPasswordToken, resetPasswordExpires, ...user } = this.get();
   return user;

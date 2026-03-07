@@ -51,18 +51,16 @@ export const UpdatePoster = () => {
     }
   }, []);
 
-  /** Load next batch of posts from the server (only fetches what's needed) */
   const handleLoadMore = async () => {
     const newDisplayCount = Math.min(displayCount + LOAD_MORE_BATCH, totalUpdates);
 
-    // Only hit the server if we don't already have enough cached
     if (newDisplayCount > updates.length && updates.length < totalUpdates) {
       try {
         setLoadingMore(true);
         const needed = newDisplayCount - updates.length;
         const response = await updateService.getAll(needed, updates.length);
         setUpdates(prev => [...prev, ...response.data.updates]);
-        setTotalUpdates(response.data.total); // refresh in case total changed
+        setTotalUpdates(response.data.total);
       } catch (error) {
         console.error('Error loading more updates:', error);
         return;
@@ -74,12 +72,10 @@ export const UpdatePoster = () => {
     setDisplayCount(newDisplayCount);
   };
 
-  /** Collapse list back to the initial display count */
   const handleHidePosts = () => {
     setDisplayCount(INITIAL_DISPLAY);
   };
 
-  // Fetch user info and updates on mount
   useEffect(() => {
     const token = getToken();
     if (token) {
@@ -100,7 +96,6 @@ export const UpdatePoster = () => {
         throw new Error(t('pleaseFillRequired'));
       }
 
-      // Create FormData for multipart upload
       const formDataToSend = new FormData();
       formDataToSend.append('title', data.title);
       formDataToSend.append('content', data.content);
@@ -109,13 +104,10 @@ export const UpdatePoster = () => {
         formDataToSend.append('media', mediaFile);
       }
 
-      // Call API to create update
       const response = await updateService.create(formDataToSend);
-
-      // Add new update to the top of the list
       setUpdates([response.data, ...updates]);
       setTotalUpdates(prev => prev + 1);
-      setDisplayCount(prev => prev + 1); // keep new post visible
+      setDisplayCount(prev => prev + 1);
       setSuccess(t('updatePosted'));
       resetForm();
       setMediaFile(null);
@@ -128,7 +120,6 @@ export const UpdatePoster = () => {
     if (file) {
       setMediaFile(file);
       
-      // Create preview URL
       const previewUrl = URL.createObjectURL(file);
       setMediaPreview({
         url: previewUrl,

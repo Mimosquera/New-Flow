@@ -12,7 +12,6 @@ export const ProfileManager = ({ onLogout }) => {
   const { t } = useTranslation();
   const fileInputRef = useRef(null);
 
-  // State
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -40,7 +39,6 @@ export const ProfileManager = ({ onLogout }) => {
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
 
-  // Fetch profile on mount
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -71,7 +69,6 @@ export const ProfileManager = ({ onLogout }) => {
     }
   };
 
-  // Account Login handlers
   const handleEditLogin = () => {
     setIsEditingLogin(true);
     setAlerts({ error: null, success: null });
@@ -99,7 +96,6 @@ export const ProfileManager = ({ onLogout }) => {
     e.preventDefault();
     setAlerts({ error: null, success: null });
 
-    // Validation
     if (!loginFormData.currentPassword) {
       setAlerts({ error: t('currentPasswordRequired'), success: null });
       return;
@@ -129,7 +125,6 @@ export const ProfileManager = ({ onLogout }) => {
 
       const response = await authService.updateProfile(updateData);
 
-      // Update token with new user data
       if (response.data.token) {
         setToken(response.data.token);
       }
@@ -143,7 +138,6 @@ export const ProfileManager = ({ onLogout }) => {
       setAlerts({ error: null, success: t('profileUpdatedSuccess') });
       setIsEditingLogin(false);
 
-      // Reset password fields
       setLoginFormData(prev => ({
         ...prev,
         currentPassword: '',
@@ -158,7 +152,6 @@ export const ProfileManager = ({ onLogout }) => {
     }
   };
 
-  // About Me handlers
   const handleEditAboutMe = () => {
     setIsEditingAboutMe(true);
     setAlerts({ error: null, success: null });
@@ -182,14 +175,12 @@ export const ProfileManager = ({ onLogout }) => {
   const handleImageSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
       if (!validTypes.includes(file.type)) {
         setAlerts({ error: t('onlyImageFilesAllowed'), success: null });
         return;
       }
 
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         setAlerts({ error: t('imageSizeTooLarge'), success: null });
         return;
@@ -197,7 +188,6 @@ export const ProfileManager = ({ onLogout }) => {
 
       setSelectedFile(file);
 
-      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -258,12 +248,10 @@ export const ProfileManager = ({ onLogout }) => {
     e.preventDefault();
     setAlerts({ error: null, success: null });
 
-    // Upload image if a new one was selected
     if (selectedFile) {
       await handleImageUpload();
     }
 
-    // Update bio
     setLoading(true);
     try {
       await authService.updateProfile({
@@ -285,7 +273,6 @@ export const ProfileManager = ({ onLogout }) => {
     }
   };
 
-  // Forgot password handlers
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!resetEmail) {
@@ -310,7 +297,6 @@ export const ProfileManager = ({ onLogout }) => {
     <div className="container py-4">
       <div className="row justify-content-center">
         <div className="col-12 col-lg-10">
-          {/* Alerts */}
           {alerts.error && (
             <Alert
               type="error"
@@ -326,7 +312,6 @@ export const ProfileManager = ({ onLogout }) => {
             />
           )}
 
-          {/* About Me Card */}
           <div className="card post-update-card shadow-sm mb-4">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -345,10 +330,8 @@ export const ProfileManager = ({ onLogout }) => {
                 )}
               </div>
 
-              {/* Display Mode */}
               {!isEditingAboutMe && (
                 <div>
-                  {/* Profile Image */}
                   <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     {imagePreview ? (
                       <img
@@ -382,7 +365,6 @@ export const ProfileManager = ({ onLogout }) => {
                     )}
                   </div>
 
-                  {/* Bio */}
                   <div>
                     <label style={{
                       fontWeight: '600',
@@ -407,10 +389,8 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
               )}
 
-              {/* Edit Mode */}
               {isEditingAboutMe && (
                 <form onSubmit={handleAboutMeSubmit}>
-                  {/* Profile Image Upload */}
                   <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <input
                       type="file"
@@ -486,7 +466,6 @@ export const ProfileManager = ({ onLogout }) => {
                     </div>
                   </div>
 
-                  {/* Bio Textarea */}
                   <div className="mb-3">
                     <label htmlFor="bio" className="form-label">{t('aboutMe')}</label>
                     <textarea
@@ -525,7 +504,6 @@ export const ProfileManager = ({ onLogout }) => {
             </div>
           </div>
 
-          {/* Account Login Card */}
           <div className="card post-update-card shadow-sm">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -544,7 +522,6 @@ export const ProfileManager = ({ onLogout }) => {
                 )}
               </div>
 
-              {/* Display Mode */}
               {!isEditingLogin && (
                 <div style={{ padding: '0 0 1rem 0' }}>
                   <div style={{ marginBottom: '1.5rem' }}>
@@ -606,7 +583,6 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
               )}
 
-              {/* Edit Mode */}
               {isEditingLogin && (
                 <form onSubmit={handleLoginSubmit}>
                   <div className="alert alert-info" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
@@ -716,7 +692,6 @@ export const ProfileManager = ({ onLogout }) => {
             </div>
           </div>
 
-          {/* Forgot Password Modal */}
           {showForgotPassword && (
             <div
               style={{

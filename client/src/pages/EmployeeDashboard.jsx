@@ -61,7 +61,6 @@ export default function EmployeeDashboard() {
     document.body.style.background = '#000000';
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      document.body.style.background = '#000000';
       if (scrollY <= 50 || scrollY < lastScrollYRef.current) {
         setShowHeader(true);
       } else {

@@ -132,7 +132,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       }
 
       if (modalAction === ACTION_DECLINE && !employeeNote.trim()) {
-        setError(t('noteRequiredForDecline') || 'A note is required when declining an appointment');
+        setError(t('noteRequiredForDecline'));
         return;
       }
 
@@ -140,13 +140,13 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
       if (modalAction === ACTION_ACCEPT) {
         await appointmentService.accept(currentAppointment.id, noteValue);
-        setSuccess(t('appointmentAcceptedSuccess') || 'Appointment accepted successfully');
+        setSuccess(t('appointmentAcceptedSuccess'));
       } else if (modalAction === ACTION_DECLINE) {
         await appointmentService.decline(currentAppointment.id, noteValue);
-        setSuccess(t('appointmentDeclinedSuccess') || 'Appointment declined');
+        setSuccess(t('appointmentDeclinedSuccess'));
       } else if (modalAction === ACTION_CANCEL) {
         await appointmentService.cancelByEmployee(currentAppointment.id, noteValue);
-        setSuccess(t('appointmentCancelledSuccess') || 'Appointment cancelled');
+        setSuccess(t('appointmentCancelledSuccess'));
       }
 
       setShowNoteModal(false);

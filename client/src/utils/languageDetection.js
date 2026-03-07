@@ -1,8 +1,3 @@
-/**
- * Detects if text is in Spanish or English based on word patterns and special characters
- * @param {string} text - The text to analyze
- * @returns {string} 'es' for Spanish, 'en' for English
- */
 export const detectLang = (text) => {
   if (!text) return 'en';
 

@@ -59,39 +59,22 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
 };
 
 export const translateObject = async (obj, fields, targetLang, sourceLang = DEFAULT_SOURCE_LANG) => {
+  if (!obj || typeof obj !== 'object') return obj || {};
+  if (!Array.isArray(fields) || fields.length === 0) return obj;
+  if (!targetLang || typeof targetLang !== 'string') return obj;
+  if (targetLang === sourceLang) return obj;
+
   try {
-    if (!obj || typeof obj !== 'object') {
-      return obj || {};
-    }
-
-    if (!Array.isArray(fields) || fields.length === 0) {
-      return obj;
-    }
-
-    if (!targetLang || typeof targetLang !== 'string') {
-      return obj;
-    }
-
-    if (targetLang === sourceLang) {
-      return obj;
-    }
 
     const translations = await Promise.all(
       fields.map(field => {
-        try {
-          if (field === 'author' && obj[field] !== ADMIN_AUTHOR) {
-            return Promise.resolve(obj[field]);
-          }
-          
-          if (!Object.prototype.hasOwnProperty.call(obj, field)) {
-            return Promise.resolve('');
-          }
-
-          return translateText(obj[field], targetLang, sourceLang);
-        } catch (error) {
-          console.error(`Error translating field '${field}':`, error);
+        if (field === 'author' && obj[field] !== ADMIN_AUTHOR) {
           return Promise.resolve(obj[field]);
         }
+        if (!Object.prototype.hasOwnProperty.call(obj, field)) {
+          return Promise.resolve('');
+        }
+        return translateText(obj[field], targetLang, sourceLang);
       })
     );
 
@@ -108,31 +91,12 @@ export const translateObject = async (obj, fields, targetLang, sourceLang = DEFA
 };
 
 export const clearTranslationCache = () => {
-  try {
-    translationCache.clear();
-    return true;
-  } catch (error) {
-    console.error('Error clearing translation cache:', error);
-    return false;
-  }
+  translationCache.clear();
 };
 
-export const getCacheSize = () => {
-  try {
-    return translationCache.size;
-  } catch (error) {
-    return 0;
-  }
-};
+export const getCacheSize = () => translationCache.size;
 
 export const isCached = (text, targetLang, sourceLang = DEFAULT_SOURCE_LANG) => {
-  try {
-    if (!text || !targetLang) {
-      return false;
-    }
-    const cacheKey = `${sourceLang}-${targetLang}-${text}`;
-    return translationCache.has(cacheKey);
-  } catch (error) {
-    return false;
-  }
+  if (!text || !targetLang) return false;
+  return translationCache.has(`${sourceLang}-${targetLang}-${text}`);
 };

@@ -17,25 +17,10 @@ const STATUS_DECLINED = 'declined';
 const STATUS_CANCELLED = 'cancelled';
 const FILTER_UPCOMING = 'upcoming';
 
-const isAdmin = (user) => {
-  try {
-    if (!user || !user.email) {
-      return false;
-    }
-    return user.email === process.env.SEED_EMPLOYEE_EMAIL;
-  } catch (error) {
-    console.error('Error checking admin status:', error);
-    return false;
-  }
-};
+const isAdmin = (user) => user?.email === process.env.SEED_EMPLOYEE_EMAIL;
 
-// GET /api/appointments
 router.get('/', verifyToken, requireEmployee, async (req, res) => {
   try {
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
-
     const userId = req.user.id;
     const userIsAdmin = isAdmin(req.user);
     const { filter } = req.query;
@@ -206,10 +191,6 @@ router.put('/:id/accept', verifyToken, requireEmployee, async (req, res) => {
     const { id } = req.params;
     const { employeeNote } = req.body;
 
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
-
     const employeeId = req.user.id;
 
     if (!id) {
@@ -270,10 +251,6 @@ router.put('/:id/decline', verifyToken, requireEmployee, async (req, res) => {
   try {
     const { id } = req.params;
     const { employeeNote } = req.body;
-
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
 
     const employeeId = req.user.id;
 
@@ -367,10 +344,6 @@ router.put('/:id/cancel-by-employee', verifyToken, requireEmployee, async (req, 
   try {
     const { id } = req.params;
     const { reason } = req.body;
-
-    if (!req.user || !req.user.id) {
-      return res.status(401).json({ error: 'User not authenticated' });
-    }
 
     if (!id) {
       return res.status(400).json({ error: 'Appointment ID is required' });
