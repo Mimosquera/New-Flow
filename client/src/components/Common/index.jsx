@@ -1,8 +1,5 @@
 import PropTypes from 'prop-types';
 
-/**
- * Loading Spinner Component
- */
 export const LoadingSpinner = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
     <div className="spinner-border" role="status">
@@ -11,9 +8,6 @@ export const LoadingSpinner = () => (
   </div>
 );
 
-/**
- * Alert Component
- */
 export const Alert = ({ message, type = 'danger', onClose }) => (
   <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
     {message}
@@ -32,9 +26,6 @@ Alert.propTypes = {
   onClose: PropTypes.func.isRequired
 };
 
-/**
- * Form Input Component
- */
 export const FormInput = ({ 
   label, 
   name, 
@@ -84,9 +75,6 @@ FormInput.propTypes = {
   placeholder: PropTypes.string
 };
 
-/**
- * Loading State Component
- */
 export const LoadingState = ({ message = 'Loading...' }) => (
   <div className="text-center py-5">
     <div className="spinner-border mb-3" role="status">

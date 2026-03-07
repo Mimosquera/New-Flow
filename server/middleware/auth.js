@@ -2,9 +2,6 @@ import jwt from 'jwt-simple';
 import { jwtConfig } from '../config/constants.js';
 import { User } from '../models/User.js';
 
-/**
- * Middleware to verify JWT token
- */
 export async function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
@@ -16,12 +13,10 @@ export async function verifyToken(req, res, next) {
   try {
     const decoded = jwt.decode(token, jwtConfig.secret);
     
-    // Check token expiration
     if (decoded.exp && decoded.exp < Math.floor(Date.now() / 1000)) {
       return res.status(401).json({ message: 'Token expired' });
     }
     
-    // Verify that the user still exists in the database
     const user = await User.findByPk(decoded.id);
     if (!user) {
       return res.status(401).json({ message: 'User no longer exists. Please log in again.' });

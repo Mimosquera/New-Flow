@@ -1,10 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database.js';
 
-/**
- * Service Model
- * Represents services offered by the salon
- */
 export const Service = sequelize.define('Service', {
   id: {
     type: DataTypes.INTEGER,

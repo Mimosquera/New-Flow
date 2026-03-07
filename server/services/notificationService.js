@@ -84,7 +84,6 @@ export const sendAppointmentRequestConfirmation = async (appointment, service) =
   const formattedDate = formatDate(date);
   const formattedTime = formatTime(time);
 
-  // Email
   const emailSubject = 'Appointment Request Received';
   const emailHtml = `
     <h2>Thank you for your appointment request!</h2>
