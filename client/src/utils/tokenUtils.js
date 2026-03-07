@@ -63,22 +63,10 @@ export const decodeToken = (token) => {
 };
 
 export const getUserIdFromToken = () => {
-  try {
-    const token = getToken();
-    if (!token) return null;
-
-    const decoded = decodeToken(token);
-    return decoded?.id || decoded?.userId || null;
-  } catch (error) {
-    return null;
-  }
+  const token = getToken();
+  if (!token) return null;
+  const decoded = decodeToken(token);
+  return decoded?.id || decoded?.userId || null;
 };
 
-export const isAuthenticated = () => {
-  try {
-    const token = getToken();
-    return isTokenValid(token);
-  } catch (error) {
-    return false;
-  }
-};
+export const isAuthenticated = () => isTokenValid(getToken());

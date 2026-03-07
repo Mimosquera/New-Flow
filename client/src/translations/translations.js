@@ -7,7 +7,7 @@ export const translations = {
     // Hero Section
     heroTitle: 'NEW FLOW',
     heroSubtitle: 'Premium Barber & Hair Salon',
-    heroDescription: 'Experience excellence in grooming. Your style, our passion.',
+    heroDescription: 'Experience excellence in grooming. Your style, our craft.',
     requestAppointment: 'Request Appointment',
     
     // Services Section
@@ -33,10 +33,10 @@ export const translations = {
     footerRights: 'All rights reserved.',
     
     // About Section
-    aboutTitle: 'About New Flow',
-    aboutParagraph1: 'With over 18 years of experience in professional grooming, New Flow brings expertise and style to every client.',
-    aboutParagraph2: 'Our team of skilled barbers and stylists are dedicated to providing exceptional service and creating the perfect look for you.',
-    aboutParagraph3: 'Whether you\'re looking for a classic cut or a modern style, we\'ve got you covered.',
+    aboutTitle: 'New Flow. New You.',
+    aboutParagraph1: 'With over 18 years of experience in professional grooming, New Flow brings expertise, passion, and precision to every client.',
+    aboutParagraph2: 'Our team of skilled barbers and stylists are dedicated to providing exceptional service, crafting the look that defines your next chapter.',
+    aboutParagraph3: 'Classic cuts, modern styles, or something entirely your own. We\'ve got you covered.',
     
     // Contact Section
     contactTitle: 'Get in Touch',

@@ -1,17 +1,3 @@
-/**
- * AvailabilityManager Component Module
- * Manages employee recurring availability schedules and blocked dates
- * 
- * Features:
- * - Add/Edit/Delete recurring weekly availability
- * - Group availability by day of week
- * - Admin view with employee filtering
- * - Integrated blocked dates management
- * - Responsive collapsible mobile UI
- * - Time validation (end time after start time)
- * - Multi-day selection for availability
- */
-
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Alert } from './Common/index.jsx';
 import { availabilityService, dataService, blockedDateService } from '../services/api.js';
@@ -35,10 +21,6 @@ const TIME_FORMAT_OPTIONS = {
   hour12: true
 };
 
-/**
- * Availability Management Component for Employees
- * Allows employees to set recurring weekly availability and block specific dates
- */
 export const AvailabilityManager = () => {
   const { t } = useTranslation();
   
@@ -70,25 +52,12 @@ export const AvailabilityManager = () => {
   const [showBlockedDates, setShowBlockedDates] = useState(false);
   const [showAvailabilityList, setShowAvailabilityList] = useState(false);
 
-  /**
-   * Handle window resize to update mobile state
-   */
   useEffect(() => {
-    const handleResize = () => {
-      try {
-        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-      } catch (error) {
-        console.error('Error handling resize:', error);
-      }
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  /**
-   * Fetch all employees (admin only)
-   */
   const fetchEmployees = useCallback(async () => {
     try {
       const response = await dataService.getEmployees();
@@ -99,9 +68,6 @@ export const AvailabilityManager = () => {
     }
   }, []);
 
-  /**
-   * Fetch all availabilities
-   */
   const fetchAvailabilities = useCallback(async () => {
     try {
       setLoading(true);
@@ -116,9 +82,6 @@ export const AvailabilityManager = () => {
     }
   }, []);
 
-  /**
-   * Fetch all blocked dates
-   */
   const fetchBlockedDates = useCallback(async () => {
     try {
       const response = await blockedDateService.getAll();
@@ -129,271 +92,128 @@ export const AvailabilityManager = () => {
     }
   }, []);
 
-  /**
-   * Initialize component - check admin status and fetch data
-   */
   useEffect(() => {
-    try {
-      const token = getToken();
-      
-      if (token) {
-        const decoded = decodeToken(token);
-        const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
-        const adminStatus = decoded?.email === adminEmail;
-        setIsAdmin(adminStatus);
-        
-        // If admin, fetch all employees for filtering
-        if (adminStatus) {
-          fetchEmployees();
-        }
-      }
-      
-      fetchAvailabilities();
-      fetchBlockedDates();
-    } catch (error) {
-      console.error('Error initializing AvailabilityManager:', error);
-      setError(t('anErrorOccurred'));
+    const token = getToken();
+
+    if (token) {
+      const decoded = decodeToken(token);
+      const adminStatus = decoded?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
+      setIsAdmin(adminStatus);
+      if (adminStatus) fetchEmployees();
     }
+
+    fetchAvailabilities();
+    fetchBlockedDates();
   }, [fetchEmployees, fetchAvailabilities, fetchBlockedDates]);
 
-  /**
-   * Handle form input changes (checkboxes and text inputs)
-   * @param {Event} e - Input change event
-   */
   const handleChange = useCallback((e) => {
-    try {
-      if (!e || !e.target) {
-        console.error('Invalid event in handleChange');
-        return;
-      }
+    const { name, value, type, checked } = e.target;
 
-      const { name, value, type, checked } = e.target;
-      
-      if (type === 'checkbox') {
-        const dayValue = parseInt(value, 10);
-        
-        if (isNaN(dayValue)) {
-          console.error('Invalid day value');
-          return;
-        }
-
-        setFormData(prev => ({
-          ...prev,
-          selectedDays: checked 
-            ? [...prev.selectedDays, dayValue]
-            : prev.selectedDays.filter(d => d !== dayValue)
-        }));
-      } else {
-        setFormData(prev => ({
-          ...prev,
-          [name]: value
-        }));
-      }
-    } catch (error) {
-      console.error('Error handling change:', error);
+    if (type === 'checkbox') {
+      const dayValue = parseInt(value, 10);
+      setFormData(prev => ({
+        ...prev,
+        selectedDays: checked
+          ? [...prev.selectedDays, dayValue]
+          : prev.selectedDays.filter(d => d !== dayValue)
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
     }
   }, []);
 
-  /**
-   * Validate availability form data
-   * @param {Object} data - Form data to validate
-   * @returns {Object} { valid: boolean, error: string }
-   */
   const validateAvailability = useCallback((data) => {
-    try {
-      if (!data || typeof data !== 'object') {
-        return { valid: false, error: t('error') || 'Invalid data' };
-      }
-
-      // Check if at least one day is selected
-      if (!data.selectedDays || data.selectedDays.length === 0) {
-        return { valid: false, error: t('selectOneDay') || 'Select at least one day' };
-      }
-
-      // Validate that end time is after start time
-      if (data.startTime >= data.endTime) {
-        return { valid: false, error: t('endTimeAfterStart') || 'End time must be after start time' };
-      }
-
-      return { valid: true, error: null };
-    } catch (error) {
-      console.error('Error validating availability:', error);
-      return { valid: false, error: t('error') || 'Validation error' };
+    if (!data.selectedDays?.length) {
+      return { valid: false, error: t('selectOneDay') };
     }
+    if (data.startTime >= data.endTime) {
+      return { valid: false, error: t('endTimeAfterStart') };
+    }
+    return { valid: true, error: null };
   }, [t]);
 
-  /**
-   * Handle availability form submission
-   * @param {Event} e - Form submit event
-   */
   const handleSubmit = useCallback(async (e) => {
+    e.preventDefault();
+    setSuccess(null);
+    setError(null);
+
+    const validation = validateAvailability(formData);
+    if (!validation.valid) {
+      setError(validation.error);
+      return;
+    }
+
     try {
-      if (e && e.preventDefault) {
-        e.preventDefault();
-      }
-
-      setSuccess(null);
-      setError(null);
-
-      // Validate form data
-      const validation = validateAvailability(formData);
-      if (!validation.valid) {
-        setError(validation.error);
-        return;
-      }
-
-      // Create availability for each selected day
-      const createPromises = formData.selectedDays.map(dayOfWeek =>
-        availabilityService.create({
-          dayOfWeek,
-          startTime: formData.startTime,
-          endTime: formData.endTime,
-        })
+      await Promise.all(
+        formData.selectedDays.map(dayOfWeek =>
+          availabilityService.create({ dayOfWeek, startTime: formData.startTime, endTime: formData.endTime })
+        )
       );
-
-      await Promise.all(createPromises);
-      
-      setSuccess(t('availabilityAdded') || 'Availability added successfully');
+      setSuccess(t('availabilityAdded'));
       setFormData(DEFAULT_FORM_DATA);
       await fetchAvailabilities();
     } catch (err) {
-      console.error('Error creating availability:', err);
-      setError(err?.response?.data?.error || t('error') || 'Failed to add availability');
+      setError(err?.response?.data?.error || t('error'));
     }
   }, [formData, validateAvailability, fetchAvailabilities, t]);
 
-  /**
-   * Handle deleting an availability entry
-   * @param {number} id - Availability ID to delete
-   */
   const handleDelete = useCallback(async (id) => {
+    if (!window.confirm(t('confirmDeleteAvailability'))) return;
     try {
-      if (!id) {
-        console.error('No ID provided for deletion');
-        return;
-      }
-
-      const confirmMessage = t('confirmDeleteAvailability') || 'Are you sure you want to delete this availability?';
-      if (!window.confirm(confirmMessage)) {
-        return;
-      }
-
       await availabilityService.delete(id);
-      setSuccess(t('availabilityDeleted') || 'Availability deleted successfully');
+      setSuccess(t('availabilityDeleted'));
       await fetchAvailabilities();
-    } catch (err) {
-      console.error('Error deleting availability:', err);
-      setError(t('error') || 'Failed to delete availability');
+    } catch {
+      setError(t('error'));
     }
   }, [fetchAvailabilities, t]);
 
-  /**
-   * Start editing an availability entry
-   * @param {Object} avail - Availability object to edit
-   */
   const handleEdit = useCallback((avail) => {
-    try {
-      if (!avail || !avail.id) {
-        console.error('Invalid availability object for editing');
-        return;
-      }
-
-      setEditingId(avail.id);
-      setEditFormData({
-        startTime: avail.startTime?.substring(0, 5) || '',
-        endTime: avail.endTime?.substring(0, 5) || ''
-      });
-    } catch (error) {
-      console.error('Error starting edit:', error);
-    }
+    setEditingId(avail.id);
+    setEditFormData({
+      startTime: avail.startTime?.substring(0, 5) || '',
+      endTime: avail.endTime?.substring(0, 5) || ''
+    });
   }, []);
 
-  /**
-   * Cancel editing mode
-   */
   const handleCancelEdit = useCallback(() => {
     setEditingId(null);
     setEditFormData({ startTime: '', endTime: '' });
   }, []);
 
-  /**
-   * Submit availability update
-   * @param {number} id - Availability ID to update
-   */
   const handleUpdateSubmit = useCallback(async (id) => {
+    if (editFormData.startTime >= editFormData.endTime) {
+      setError(t('endTimeAfterStart'));
+      return;
+    }
     try {
-      if (!id) {
-        console.error('No ID provided for update');
-        return;
-      }
-
-      // Validate edit form data
-      if (editFormData.startTime >= editFormData.endTime) {
-        setError(t('endTimeAfterStart') || 'End time must be after start time');
-        return;
-      }
-
       await availabilityService.update(id, editFormData);
-      setSuccess(t('availabilityUpdated') || 'Availability updated successfully');
+      setSuccess(t('availabilityUpdated'));
       setEditingId(null);
       setEditFormData({ startTime: '', endTime: '' });
       await fetchAvailabilities();
-    } catch (err) {
-      console.error('Error updating availability:', err);
-      setError(t('error') || 'Failed to update availability');
+    } catch {
+      setError(t('error'));
     }
   }, [editFormData, fetchAvailabilities, t]);
 
-  /**
-   * Filter and group availabilities by day of week
-   * Applies employee filter if admin
-   */
   const groupedAvailabilities = useMemo(() => {
-    try {
-      // Filter by employee if admin and filter is set
-      const filteredAvailabilities = (isAdmin && selectedEmployeeFilter !== FILTER_ALL_VALUE)
-        ? availabilities.filter(a => a?.user?.id === selectedEmployeeFilter)
-        : availabilities;
-      
-      // Group by day of week
-      return filteredAvailabilities.reduce((acc, avail) => {
-        if (!avail || typeof avail.dayOfWeek !== 'number') {
-          return acc;
-        }
+    const filtered = (isAdmin && selectedEmployeeFilter !== FILTER_ALL_VALUE)
+      ? availabilities.filter(a => a?.user?.id === selectedEmployeeFilter)
+      : availabilities;
 
-        const day = avail.dayOfWeek;
-        if (!acc[day]) {
-          acc[day] = [];
-        }
-        acc[day].push(avail);
-        return acc;
-      }, {});
-    } catch (error) {
-      console.error('Error grouping availabilities:', error);
-      return {};
-    }
+    return filtered.reduce((acc, avail) => {
+      if (typeof avail?.dayOfWeek !== 'number') return acc;
+      if (!acc[avail.dayOfWeek]) acc[avail.dayOfWeek] = [];
+      acc[avail.dayOfWeek].push(avail);
+      return acc;
+    }, {});
   }, [availabilities, isAdmin, selectedEmployeeFilter]);
 
-  /**
-   * Format time string to 12-hour format
-   * @param {string} timeString - Time in HH:MM:SS format
-   * @returns {string} Formatted time
-   */
   const formatTime = useCallback((timeString) => {
-    try {
-      if (!timeString) return '';
-      
-      const date = new Date(`2000-01-01T${timeString}`);
-      
-      if (isNaN(date.getTime())) {
-        return timeString;
-      }
-
-      return date.toLocaleTimeString('en-US', TIME_FORMAT_OPTIONS);
-    } catch (error) {
-      console.error('Error formatting time:', error);
-      return timeString;
-    }
+    if (!timeString) return '';
+    const date = new Date(`2000-01-01T${timeString}`);
+    return isNaN(date.getTime()) ? timeString : date.toLocaleTimeString('en-US', TIME_FORMAT_OPTIONS);
   }, []);
 
   return (

@@ -1,16 +1,3 @@
-/**
- * EmployeeLoginPage Component Module
- * Provides authentication interface for employees to access the dashboard
- * 
- * Features:
- * - Email and password authentication
- * - JWT token storage on successful login
- * - Error handling with user feedback
- * - Loading state during authentication
- * - Language toggle support
- * - Navigation back to home page
- */
-
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from '../components/Common/index.jsx';
@@ -21,19 +8,12 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import styles from './EmployeeLoginPage.module.css';
 
-/**
- * Employee Login Page Component
- * Handles employee authentication and redirects to dashboard on success
- */
 export const EmployeeLoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [globalError, setGlobalError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  /**
-   * Form handling with authentication logic
-   */
   const { formData, handleChange, handleSubmit: handleFormSubmit, error, setError } = useForm(
     { email: '', password: '' },
     async (data) => {
@@ -68,50 +48,18 @@ export const EmployeeLoginPage = () => {
     }
   );
 
-  /**
-   * Handle form submission
-   * @param {Event} e - Form submit event
-   */
   const handleSubmit = useCallback((e) => {
-    try {
-      if (e && e.preventDefault) {
-        e.preventDefault();
-      }
-      setGlobalError(null);
-      handleFormSubmit(e);
-    } catch (error) {
-      console.error('Error in handleSubmit:', error);
-      setGlobalError(t('unexpectedError') || 'An unexpected error occurred');
-    }
-  }, [handleFormSubmit, t]);
+    e.preventDefault();
+    setGlobalError(null);
+    handleFormSubmit(e);
+  }, [handleFormSubmit]);
 
-  /**
-   * Navigate back to home page
-   */
   const handleBackToHome = useCallback(() => {
-    try {
-      navigate('/');
-    } catch (error) {
-      console.error('Error navigating home:', error);
-    }
+    navigate('/');
   }, [navigate]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY <= 1) {
-        document.body.style.background = '#000000';
-      } else {
-        document.body.style.background = '#000000';
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = '#000000';
-    };
+    document.body.style.background = '#000000';
   }, []);
 
   return (

@@ -113,7 +113,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const handleServiceClick = (serviceId) => {
     hapticMedium();
-    setExpandedServiceId(expandedServiceId === serviceId ? null : serviceId);
+    setExpandedServiceId(prev => prev === serviceId ? null : serviceId);
   };
 
   useEffect(() => {
@@ -139,14 +139,18 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const displayedServices = translatedServices.slice(0, serviceDisplayCount);
   const hasMoreServices = serviceDisplayCount < translatedServices.length;
 
+  const navbarRef = useRef(null);
+
   useEffect(() => {
     document.body.style.background = '#000000';
+    const navH = navbarRef.current ? navbarRef.current.offsetHeight : 0;
+    window.scrollTo(0, navH);
   }, []);
 
   return (
     <div className={styles.homePage}>
       {/* Navigation Bar */}
-      <nav className={styles.navbar}>
+      <nav className={styles.navbar} ref={navbarRef}>
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
           <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0 }}>
             <img
@@ -177,16 +181,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
         transition={{ duration: 0.7 }}
       >
         <div className="container">
-          <div className="row align-items-center g-3 g-md-4">
-            {/* Video — top on mobile (animated brand header), right on desktop */}
+          <div className={styles.heroInner}>
+            {/* Video — animated brand header, centered */}
             <motion.div
-              className={`col-12 col-md-6 order-1 order-md-2 ${styles.heroVideoCol}`}
-              initial={{ opacity: 0, scale: 0.94 }}
+              className={styles.heroVideoWrap}
+              initial={{ opacity: 0, scale: 0.92 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
             >
               <video
-                className={`w-100 ${styles.heroVideo}`}
+                className={styles.heroVideo}
                 autoPlay
                 muted
                 loop
@@ -197,15 +201,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </video>
             </motion.div>
 
-            {/* Text + CTA — below video on mobile, left on desktop */}
+            {/* Text + CTA — centered below video */}
             <motion.div
-              className={`col-12 col-md-6 order-2 order-md-1 ${styles.heroTextCol}`}
-              initial={{ opacity: 0, y: 30 }}
+              className={styles.heroTextBlock}
+              initial={{ opacity: 0, y: 28 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
+              transition={{ duration: 0.7, delay: 0.35 }}
             >
-              <p className={`lead mb-2 ${styles.heroSubtitle}`}>{t('heroSubtitle')}</p>
-              <p className={`mb-3 ${styles.heroDesc}`}>{t('heroDescription')}</p>
+              <p className={styles.heroSubtitle}>{t('heroSubtitle')}</p>
+              <p className={styles.heroDesc}>{t('heroDescription')}</p>
               <div className={styles.heroCta}>
                 <button
                   className={styles.requestButton}
@@ -268,10 +272,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   <motion.div
                     key={service.id}
                     className={displayedServices.length === 1 ? 'col-10 col-md-5' : 'col-6 col-md-4 col-lg-3'}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+                    initial={{ opacity: 0, y: 32, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92, y: -8 }}
+                    transition={{ duration: 0.42, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.07 }}
                   >
                     <motion.div
                       className={styles.serviceCard}
@@ -295,7 +299,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                               initial={{ opacity: 0, height: 0 }}
                               animate={{ opacity: 1, height: 'auto' }}
                               exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.22 }}
+                              transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
                               style={{ overflow: 'hidden' }}
                             >
                               <button
@@ -323,11 +327,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
           {translatedServices.length > 0 && services.length > getDefaultServiceCount() && (
             <div className="text-center mt-5">
               {hasMoreServices ? (
-                <button className={styles.ghostButton} onClick={handleShowAllServices}>
+                <button className={styles.fancyButton} onClick={handleShowAllServices}>
                   {t('showAllServices')}
                 </button>
               ) : (
-                <button className={styles.ghostButtonOutline} onClick={handleHideServices}>
+                <button className={styles.fancyButtonOutline} onClick={handleHideServices}>
                   {t('hideServices')}
                 </button>
               )}
@@ -368,14 +372,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 transition={{ layout: { duration: 0.42, ease: [0.4, 0, 0.2, 1] } }}
               >
                 <AnimatePresence>
-                {displayedNews.map(article => (
+                {displayedNews.map((article, idx) => (
                   <motion.div
                     key={article.id}
                     className="col-6 col-lg-3 mb-2"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+                    initial={{ opacity: 0, y: 32, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92, y: -8 }}
+                    transition={{ duration: 0.42, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.08 }}
                   >
                     <motion.div
                       className={styles.updateCard}
@@ -420,12 +424,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </motion.div>
               <div className="text-center mt-4">
                 {hasMore && (
-                  <button className={`${styles.ghostButton} me-2`} onClick={handleViewMore}>
+                  <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
                   </button>
                 )}
                 {displayCount > 4 && (
-                  <button className={styles.ghostButtonOutline} onClick={handleShowLess}>
+                  <button className={styles.fancyButtonOutline} onClick={handleShowLess}>
                     {t('showLess')}
                   </button>
                 )}
@@ -555,7 +559,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       <UpdateModal update={selectedUpdate} show={showModal} onClose={handleCloseModal} />
-      <ScrollToTop />
+      <ScrollToTop hidden={showModal} />
     </div>
   );
 };

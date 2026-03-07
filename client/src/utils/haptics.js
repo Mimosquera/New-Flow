@@ -1,6 +1,6 @@
 import { WebHaptics } from 'web-haptics';
 
-const h = WebHaptics.isSupported ? new WebHaptics() : null;
+const h = new WebHaptics();
 
 // Light tick — nav buttons, card taps
 export const hapticLight = () => h?.trigger(12);

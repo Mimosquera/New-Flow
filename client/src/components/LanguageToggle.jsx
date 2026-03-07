@@ -9,8 +9,10 @@ export const LanguageToggle = ({ inverse = false, darkText = false }) => {
     <div
       className={`${styles.toggleContainer} ${inverse ? styles.inverse : ''} ${darkText ? styles.darkText : ''}`}
       onClick={() => toggleLanguage()}
+      aria-label={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
       title={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
       role="button"
+      aria-pressed={language === 'es'}
       tabIndex={0}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

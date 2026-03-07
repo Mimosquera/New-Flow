@@ -1,16 +1,3 @@
-/**
- * PasswordResetPage Component
- * Allows users to reset their password using a token from email link
- *
- * Features:
- * - Token verification on page load
- * - Password reset form if token is valid
- * - Error handling for invalid/expired tokens
- * - Password validation
- * - Redirect to login after successful reset
- * - Language toggle support
- */
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Alert, FormInput } from '../components/Common/index.jsx';
@@ -22,10 +9,6 @@ import { LanguageToggle } from '../components/LanguageToggle.jsx';
 const THEME_COLOR = 'rgb(5, 45, 63)';
 const MAX_FORM_WIDTH = '450px';
 
-/**
- * Password Reset Page Component
- * Handles password reset via email token
- */
 export const PasswordResetPage = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -45,23 +28,8 @@ export const PasswordResetPage = () => {
     verifyToken();
   }, [token]);
 
-  // Background scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY <= 1) {
-        document.body.style.background = '#000000';
-      } else {
-        document.body.style.background = '#000000';
-      }
-    };
-
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      document.body.style.background = '#000000';
-    };
+    document.body.style.background = '#000000';
   }, []);
 
   const verifyToken = async () => {
