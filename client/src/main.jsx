@@ -1,4 +1,6 @@
 import ReactDOM from "react-dom/client";
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
