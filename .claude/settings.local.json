@@ -21,7 +21,9 @@
       "Bash(node -e \"const pkg = require\\(''./node_modules/web-haptics/package.json''\\); console.log\\(pkg.version, pkg.main, pkg.module, pkg.exports\\)\")",
       "Bash(node -e \"const m = require\\(''./node_modules/web-haptics/dist/index.js''\\); console.log\\(Object.keys\\(m\\)\\)\")",
       "Bash(node -e \"const { WebHaptics } = require\\(''./node_modules/web-haptics/dist/index.js''\\); console.log\\(''isSupported:'', WebHaptics.isSupported\\); const inst = new WebHaptics\\(\\); console.log\\(''instance keys:'', Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(inst\\)\\)\\); console.log\\(''trigger:'', typeof inst.trigger\\)\")",
-      "Bash(npm install embla-carousel-react)"
+      "Bash(npm install embla-carousel-react)",
+      "Bash(npm install embla-carousel-react --save)",
+      "Bash(node -e \"require\\(''./node_modules/embla-carousel-react/package.json''\\); console.log\\(''ok''\\)\")"
     ]
   }
 }
