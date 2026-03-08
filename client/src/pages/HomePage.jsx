@@ -32,6 +32,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const { t, language } = useTranslation();
 
   const [services, setServices] = useState([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
   const getDefaultServiceCount = () => window.innerWidth < 768 ? 4 : 3;
   const [serviceDisplayCount, setServiceDisplayCount] = useState(getDefaultServiceCount);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
@@ -70,6 +71,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
       setServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);
+    } finally {
+      setServicesLoading(false);
     }
   }, []);
 
@@ -254,7 +257,22 @@ export const HomePage = ({ onNavigateToBooking }) => {
       >
         <div className="container">
           <div className={`${styles.sectionHeading} mb-4`}>{t('servicesTitle')}</div>
-          {translatedServices.length === 0 ? (
+          {servicesLoading ? (
+            <div className="row g-3 justify-content-center" style={{ maxWidth: '860px', margin: '0 auto' }}>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="col-6 col-md-4 col-lg-3">
+                  <div className={styles.skeletonCard}>
+                    <div className={styles.skeletonServiceBody}>
+                      <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                      <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
+                      <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
+                      <div className={`${styles.skeleton} ${styles.skeletonPrice}`} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : translatedServices.length === 0 ? (
             <div className="text-center py-3">
               <p style={{ color: 'rgba(255,255,255,0.5)' }}>
                 {language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}
@@ -357,8 +375,19 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {t('updatesTitle')}
           </h2>
           {loading || translating ? (
-            <div className="text-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              <p>{translating ? t('translating') : t('loading')}</p>
+            <div className="row g-3">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="col-6 col-lg-3 mb-2">
+                  <div className={styles.skeletonCard}>
+                    <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
+                    <div className={styles.skeletonNewsBody}>
+                      <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                      <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
+                      <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           ) : displayedNews.length === 0 ? (
             <div className="text-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
