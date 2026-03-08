@@ -4,6 +4,7 @@ import { useForm } from '../hooks/useForm.js';
 import { serviceService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 45, 63)';
 
@@ -70,11 +71,13 @@ export const ServiceManager = () => {
 
           const response = await serviceService.update(editingService.id, data);
           setServices(services.map(s => s.id === editingService.id ? response.data : s));
+          hapticSuccess();
           setSuccess(t('serviceUpdated'));
           setEditingService(null);
         } else {
           const response = await serviceService.create(data);
           setServices([...services, response.data]);
+          hapticSuccess();
           setSuccess(t('serviceAdded'));
         }
 
@@ -130,8 +133,10 @@ export const ServiceManager = () => {
     try {
       await serviceService.delete(id);
       setServices(services.filter(s => s.id !== id));
+      hapticSuccess();
       setSuccess(t('serviceDeleted'));
     } catch (error) {
+      hapticWarning();
       const msg = error?.response?.data?.message || t('deleteServiceFailed');
       alert(msg);
     }

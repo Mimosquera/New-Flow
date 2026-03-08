@@ -587,8 +587,13 @@
   );
   background-size: 400%;
   filter: blur(7px);
+  -webkit-filter: blur(7px);
   animation: glowingButton 30s linear infinite;
   opacity: 1;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   will-change: background-position;
 }
 

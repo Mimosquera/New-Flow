@@ -6,6 +6,7 @@ import { decodeToken, getToken } from '../utils/tokenUtils.js';
 import { isAppointmentUpcoming, formatDateDisplay, formatTimeDisplay } from '../utils/dateUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
+import { hapticSuccess, hapticWarning, hapticMedium } from '../utils/haptics.js';
 
 // Constants
 const THEME_COLOR = 'rgb(5, 45, 63)';
@@ -132,6 +133,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       }
 
       if (modalAction === ACTION_DECLINE && !employeeNote.trim()) {
+        hapticWarning();
         setError(t('noteRequiredForDecline'));
         return;
       }
@@ -140,12 +142,15 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
       if (modalAction === ACTION_ACCEPT) {
         await appointmentService.accept(currentAppointment.id, noteValue);
+        hapticSuccess();
         setSuccess(t('appointmentAcceptedSuccess'));
       } else if (modalAction === ACTION_DECLINE) {
         await appointmentService.decline(currentAppointment.id, noteValue);
+        hapticWarning();
         setSuccess(t('appointmentDeclinedSuccess'));
       } else if (modalAction === ACTION_CANCEL) {
         await appointmentService.cancelByEmployee(currentAppointment.id, noteValue);
+        hapticMedium();
         setSuccess(t('appointmentCancelledSuccess'));
       }
 
@@ -154,6 +159,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       setEmployeeNote('');
       await fetchAppointments();
     } catch (err) {
+      hapticWarning();
       console.error('Error updating appointment:', err);
       setError(err?.response?.data?.message || t('failedToUpdateAppointment'));
     }

@@ -1,6 +1,7 @@
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import PropTypes from 'prop-types';
 import styles from './LanguageToggle.module.css';
+import { hapticLight } from '../utils/haptics.js';
 
 export const LanguageToggle = ({ inverse = false, darkText = false }) => {
   const { language, toggleLanguage } = useLanguage();
@@ -8,7 +9,7 @@ export const LanguageToggle = ({ inverse = false, darkText = false }) => {
   return (
     <div
       className={`${styles.toggleContainer} ${inverse ? styles.inverse : ''} ${darkText ? styles.darkText : ''}`}
-      onClick={() => toggleLanguage()}
+      onClick={() => { hapticLight(); toggleLanguage(); }}
       aria-label={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
       title={language === 'en' ? 'Switch to Spanish' : 'Cambiar a Inglés'}
       role="button"

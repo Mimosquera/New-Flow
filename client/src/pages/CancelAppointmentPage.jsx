@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { appointmentService } from '../services/api';
 import apiClient from '../services/api';
 import { useTranslation } from '../hooks/useTranslation.js';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 export function CancelAppointmentPage() {
   const { t } = useTranslation();
@@ -49,9 +50,11 @@ export function CancelAppointmentPage() {
 
     try {
       await appointmentService.cancel(id);
+      hapticSuccess();
       setSuccess(true);
       setShowConfirm(false);
     } catch (err) {
+      hapticWarning();
       console.error('Error cancelling appointment:', err);
       if (err.response?.status === 404) {
         setError(t('appointmentNotFoundMayBeCancelled'));
