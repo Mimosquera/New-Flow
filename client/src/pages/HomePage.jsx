@@ -297,7 +297,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <div className={styles.carouselViewport}>
               <div className={styles.carouselContainer}>
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <div key={i} className={styles.carouselSlide}>
+                  <div key={i} className={styles.carouselSlide} style={{ '--sk-delay': `${i * 0.15}s` }}>
                     <div className={styles.skeletonCard} style={{ height: '100%' }}>
                       <div className={styles.skeletonServiceBody}>
                         <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
@@ -413,13 +413,17 @@ export const HomePage = ({ onNavigateToBooking }) => {
           {loading || translating ? (
             <div className="row g-3">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="col-6 col-lg-3 mb-2">
+                <div key={i} className="col-6 col-lg-3 mb-2" style={{ '--sk-delay': `${i * 0.18}s` }}>
                   <div className={styles.skeletonCard}>
                     <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
                     <div className={styles.skeletonNewsBody}>
                       <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
                       <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
                       <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
+                      <div className={styles.skeletonMeta}>
+                        <div className={`${styles.skeleton} ${styles.skeletonMetaLeft}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonMetaRight}`} />
+                      </div>
                     </div>
                   </div>
                 </div>
