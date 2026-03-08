@@ -282,18 +282,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <motion.div
               className="row g-3 justify-content-center"
               style={{ maxWidth: '860px', margin: '0 auto' }}
-              layout
-              transition={{ layout: { duration: 0.42, ease: [0.4, 0, 0.2, 1] } }}
             >
               <AnimatePresence>
                 {displayedServices.map((service, idx) => (
                   <motion.div
                     key={service.id}
                     className={displayedServices.length === 1 ? 'col-10 col-md-5' : 'col-6 col-md-4 col-lg-3'}
-                    initial={{ opacity: 0, y: 32, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.92, y: -8 }}
-                    transition={{ duration: 0.42, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.07 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.07 }}
                   >
                     <motion.div
                       className={styles.serviceCard}
@@ -345,11 +343,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
           {translatedServices.length > 0 && services.length > getDefaultServiceCount() && (
             <div className="text-center mt-5">
               {hasMoreServices ? (
-                <button className={styles.fancyButton} onClick={handleShowAllServices}>
+                <button className={styles.fancyButton} onClick={() => { hapticLight(); handleShowAllServices(); }}>
                   {t('showAllServices')}
                 </button>
               ) : (
-                <button className={styles.fancyButtonOutline} onClick={handleHideServices}>
+                <button className={styles.fancyButtonOutline} onClick={() => { hapticLight(); handleHideServices(); }}>
                   {t('hideServices')}
                 </button>
               )}
@@ -395,20 +393,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
           ) : (
             <>
-              <motion.div
-                className="row g-3"
-                layout
-                transition={{ layout: { duration: 0.42, ease: [0.4, 0, 0.2, 1] } }}
-              >
+              <div className="row g-3">
                 <AnimatePresence>
                 {displayedNews.map((article, idx) => (
                   <motion.div
                     key={article.id}
                     className="col-6 col-lg-3 mb-2"
-                    initial={{ opacity: 0, y: 32, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.92, y: -8 }}
-                    transition={{ duration: 0.42, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.08 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.08 }}
                   >
                     <motion.div
                       className={styles.updateCard}
@@ -450,15 +444,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
                 </AnimatePresence>
-              </motion.div>
+              </div>
               <div className="text-center mt-4">
                 {hasMore && (
-                  <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
+                  <button className={`${styles.fancyButton} me-2`} onClick={() => { hapticLight(); handleViewMore(); }}>
                     {t('viewMore')}
                   </button>
                 )}
                 {displayCount > 4 && (
-                  <button className={styles.fancyButtonOutline} onClick={handleShowLess}>
+                  <button className={styles.fancyButtonOutline} onClick={() => { hapticLight(); handleShowLess(); }}>
                     {t('showLess')}
                   </button>
                 )}
@@ -588,7 +582,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       <UpdateModal update={selectedUpdate} show={showModal} onClose={handleCloseModal} />
-      <ScrollToTop hidden={showModal} />
+      <ScrollToTop hidden={showModal} offset={navbarRef.current?.offsetHeight ?? 0} />
     </div>
   );
 };

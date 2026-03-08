@@ -4,6 +4,7 @@ import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { setToken } from '../utils/tokenUtils.js';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 45, 63)';
 const SECONDARY_COLOR = '#46a1a1';
@@ -97,16 +98,19 @@ export const ProfileManager = ({ onLogout }) => {
     setAlerts({ error: null, success: null });
 
     if (!loginFormData.currentPassword) {
+      hapticWarning();
       setAlerts({ error: t('currentPasswordRequired'), success: null });
       return;
     }
 
     if (loginFormData.newPassword && loginFormData.newPassword !== loginFormData.confirmPassword) {
+      hapticWarning();
       setAlerts({ error: t('passwordMismatch'), success: null });
       return;
     }
 
     if (loginFormData.newPassword && loginFormData.newPassword.length < 6) {
+      hapticWarning();
       setAlerts({ error: t('passwordMinLength'), success: null });
       return;
     }
@@ -135,6 +139,7 @@ export const ProfileManager = ({ onLogout }) => {
         email: response.data.user.email
       }));
 
+      hapticSuccess();
       setAlerts({ error: null, success: t('profileUpdatedSuccess') });
       setIsEditingLogin(false);
 
@@ -145,6 +150,7 @@ export const ProfileManager = ({ onLogout }) => {
         confirmPassword: ''
       }));
     } catch (error) {
+      hapticWarning();
       const errorMsg = error.response?.data?.message || t('failedToUpdateProfile');
       setAlerts({ error: errorMsg, success: null });
     } finally {
@@ -263,9 +269,11 @@ export const ProfileManager = ({ onLogout }) => {
         bio: aboutMeData.bio.trim()
       }));
 
+      hapticSuccess();
       setAlerts({ error: null, success: t('aboutMeUpdatedSuccess') });
       setIsEditingAboutMe(false);
     } catch (error) {
+      hapticWarning();
       const errorMsg = error.response?.data?.message || t('failedToUpdateAboutMe');
       setAlerts({ error: errorMsg, success: null });
     } finally {
@@ -276,6 +284,7 @@ export const ProfileManager = ({ onLogout }) => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     if (!resetEmail) {
+      hapticWarning();
       setAlerts({ error: t('emailRequired'), success: null });
       return;
     }
@@ -283,10 +292,12 @@ export const ProfileManager = ({ onLogout }) => {
     setResetLoading(true);
     try {
       await authService.forgotPassword({ email: resetEmail });
+      hapticSuccess();
       setAlerts({ error: null, success: t('resetLinkSent') });
       setShowForgotPassword(false);
       setResetEmail('');
     } catch (error) {
+      hapticWarning();
       setAlerts({ error: t('failedToSendResetLink'), success: null });
     } finally {
       setResetLoading(false);

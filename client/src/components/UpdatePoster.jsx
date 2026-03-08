@@ -6,6 +6,7 @@ import { UpdateModal } from './UpdateModal.jsx';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
+import { hapticSuccess, hapticWarning, hapticMedium } from '../utils/haptics.js';
 
 const INITIAL_FETCH = 5;
 const INITIAL_DISPLAY = 4;
@@ -108,6 +109,7 @@ export const UpdatePoster = () => {
       setUpdates([response.data, ...updates]);
       setTotalUpdates(prev => prev + 1);
       setDisplayCount(prev => prev + 1);
+      hapticSuccess();
       setSuccess(t('updatePosted'));
       resetForm();
       setMediaFile(null);
@@ -149,8 +151,10 @@ export const UpdatePoster = () => {
       setUpdates(remaining);
       setTotalUpdates(prev => prev - 1);
       setDisplayCount(prev => Math.min(prev, remaining.length));
+      hapticMedium();
       setSuccess(t('updateDeleted'));
     } catch (error) {
+      hapticWarning();
       console.error('Error deleting update:', error);
       alert(t('error'));
     }

@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { hapticLight } from '../utils/haptics.js';
 
-export const ScrollToTop = ({ hidden = false }) => {
+export const ScrollToTop = ({ hidden = false, offset = 0 }) => {
   const [visible, setVisible] = useState(false);
 
   const handleScroll = useCallback(() => {
@@ -14,7 +15,8 @@ export const ScrollToTop = ({ hidden = false }) => {
   }, [handleScroll]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    hapticLight();
+    window.scrollTo({ top: offset, behavior: 'smooth' });
   };
 
   const show = visible && !hidden;
@@ -44,4 +46,5 @@ export const ScrollToTop = ({ hidden = false }) => {
 
 ScrollToTop.propTypes = {
   hidden: PropTypes.bool,
+  offset: PropTypes.number,
 };

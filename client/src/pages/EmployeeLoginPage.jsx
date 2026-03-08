@@ -7,6 +7,7 @@ import { setToken } from '../utils/tokenUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import styles from './EmployeeLoginPage.module.css';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 export const EmployeeLoginPage = () => {
   const { t } = useTranslation();
@@ -34,11 +35,13 @@ export const EmployeeLoginPage = () => {
           if (!tokenSet) {
             throw new Error(t('tokenStorageError') || 'Failed to store authentication token');
           }
+          hapticSuccess();
           navigate('/employee-dashboard');
         } else {
           throw new Error(response.data?.message || t('loginFailed') || 'Login failed');
         }
       } catch (err) {
+        hapticWarning();
         console.error('Employee login error:', err);
         const errorMessage = err?.response?.data?.message || err?.message || t('loginError') || 'Employee login failed';
         throw new Error(errorMessage);

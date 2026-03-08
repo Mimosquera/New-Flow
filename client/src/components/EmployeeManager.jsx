@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
+import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 45, 63)';
 
@@ -71,10 +72,12 @@ export const EmployeeManager = () => {
         email: formData.email.trim().toLowerCase(),
         password: formData.password
       });
+      hapticSuccess();
       setAlert('success', t('employeeCreatedSuccess'));
       setFormData({ name: '', email: '', password: '' });
       fetchEmployees();
     } catch (err) {
+      hapticWarning();
       setAlert('error', handleError(err, 'errorCreatingEmployee'));
     } finally {
       setLoading(false);
@@ -110,9 +113,11 @@ export const EmployeeManager = () => {
         newPassword: editPasswordData.newPassword,
         adminPassword: editPasswordData.adminPassword
       });
+      hapticSuccess();
       setAlert('editSuccess', t('passwordUpdatedSuccess'));
       setEditPasswordData({ newPassword: '', adminPassword: '' });
     } catch (err) {
+      hapticWarning();
       setAlert('editError', handleError(err, 'errorUpdatingPassword'));
     } finally {
       setEditLoading(false);
@@ -129,12 +134,14 @@ export const EmployeeManager = () => {
     setDeleteLoading(employeeId);
     try {
       await authService.deleteEmployee(employeeId, adminPassword);
+      hapticSuccess();
       setAlert('editSuccess', t('employeeDeletedSuccess'));
       setShowDeleteConfirm(null);
       setDeletePasswordData({});
       setExpandedEmployeeId(null);
       fetchEmployees();
     } catch (err) {
+      hapticWarning();
       setAlert('editError', handleError(err, 'errorDeletingEmployee'));
     } finally {
       setDeleteLoading(null);
