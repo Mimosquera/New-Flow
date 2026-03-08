@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import useEmblaCarousel from 'embla-carousel-react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/tokenUtils.js';
@@ -33,10 +34,52 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [services, setServices] = useState([]);
   const [servicesLoading, setServicesLoading] = useState(true);
-  const getDefaultServiceCount = () => window.innerWidth < 768 ? 4 : 3;
-  const [serviceDisplayCount, setServiceDisplayCount] = useState(getDefaultServiceCount);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
   const serviceCardsRef = useRef([]);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', containScroll: 'trimSnaps', dragFree: true });
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const scrollRafRef = useRef(null);
+
+  const onEmblaSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onEmblaSelect();
+    emblaApi.on('select', onEmblaSelect);
+    emblaApi.on('reInit', onEmblaSelect);
+    return () => {
+      emblaApi.off('select', onEmblaSelect);
+      emblaApi.off('reInit', onEmblaSelect);
+    };
+  }, [emblaApi, onEmblaSelect]);
+
+  const startAutoScroll = useCallback((direction) => {
+    if (!emblaApi) return;
+    const speed = direction === 'next' ? -3 : 3;
+    const step = () => {
+      const engine = emblaApi.internalEngine();
+      engine.target.add(speed);
+      engine.scrollBounds.constrain(engine.target);
+      engine.animation.start();
+      scrollRafRef.current = requestAnimationFrame(step);
+    };
+    scrollRafRef.current = requestAnimationFrame(step);
+  }, [emblaApi]);
+
+  const stopAutoScroll = useCallback(() => {
+    if (scrollRafRef.current) {
+      cancelAnimationFrame(scrollRafRef.current);
+      scrollRafRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => () => stopAutoScroll(), [stopAutoScroll]);
 
   const [news, setNews] = useState([]);
   const [displayCount, setDisplayCount] = useState(4);
@@ -47,7 +90,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const servicesEndRef = useRef(null);
   const updatesEndRef = useRef(null);
 
   const handleUpdateClick = (update) => {
@@ -105,15 +147,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
     }, 100);
   };
 
-  const handleShowAllServices = () => setServiceDisplayCount(services.length);
-
-  const handleHideServices = () => {
-    setServiceDisplayCount(getDefaultServiceCount());
-    setTimeout(() => {
-      servicesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
-  };
-
   const handleServiceClick = (serviceId) => {
     hapticMedium();
     setExpandedServiceId(prev => prev === serviceId ? null : serviceId);
@@ -139,8 +172,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const displayedNews = translatedNews.slice(0, displayCount);
   const hasMore = displayCount < totalUpdates;
-  const displayedServices = translatedServices.slice(0, serviceDisplayCount);
-  const hasMoreServices = serviceDisplayCount < translatedServices.length;
 
   const navbarRef = useRef(null);
 
@@ -258,19 +289,21 @@ export const HomePage = ({ onNavigateToBooking }) => {
         <div className="container">
           <div className={`${styles.sectionHeading} mb-4`}>{t('servicesTitle')}</div>
           {servicesLoading ? (
-            <div className="row g-3 justify-content-center" style={{ maxWidth: '860px', margin: '0 auto' }}>
-              {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="col-6 col-md-4 col-lg-3">
-                  <div className={styles.skeletonCard}>
-                    <div className={styles.skeletonServiceBody}>
-                      <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
-                      <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
-                      <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
-                      <div className={`${styles.skeleton} ${styles.skeletonPrice}`} />
+            <div className={styles.carouselViewport}>
+              <div className={styles.carouselContainer}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className={styles.carouselSlide}>
+                    <div className={styles.skeletonCard} style={{ height: '100%' }}>
+                      <div className={styles.skeletonServiceBody}>
+                        <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonPrice}`} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : translatedServices.length === 0 ? (
             <div className="text-center py-3">
@@ -279,84 +312,84 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </p>
             </div>
           ) : (
-            <motion.div
-              className="row g-3 justify-content-center"
-              style={{ maxWidth: '860px', margin: '0 auto' }}
-            >
-              <AnimatePresence>
-                {displayedServices.map((service, idx) => (
-                  <motion.div
-                    key={service.id}
-                    className={displayedServices.length === 1 ? 'col-10 col-md-5' : 'col-6 col-md-4 col-lg-3'}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.07 }}
-                  >
-                    <motion.div
-                      className={styles.serviceCard}
-                      style={{ height: '100%' }}
-                      whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
-                      whileTap={{ scale: 0.97 }}
-                      onClick={() => handleServiceClick(service.id)}
-                      ref={el => serviceCardsRef.current[idx] = el}
-                    >
-                      <div className={styles.serviceCardBody}>
-                        <h5 className={styles.serviceCardTitle}>{service.name}</h5>
-                        <p className={styles.serviceCardDesc}>{service.description}</p>
-                        <span className={styles.serviceCardPrice}>
-                          {service.price_max
-                            ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
-                            : `$${parseFloat(service.price).toFixed(2)}`}
-                        </span>
-                        <AnimatePresence>
-                          {expandedServiceId === service.id && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: 'auto' }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
-                              style={{ overflow: 'hidden' }}
-                            >
-                              <button
-                                className={styles.serviceBookBtn}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  e.currentTarget.blur();
-                                  hapticSuccess();
-                                  handleRequestAppointment(service);
-                                }}
-                              >
-                                {t('requestAppointment')}
-                              </button>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </motion.div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          )}
-
-          {translatedServices.length > 0 && services.length > getDefaultServiceCount() && (
-            <div className="text-center mt-5">
-              {hasMoreServices ? (
-                <button className={styles.fancyButton} onClick={() => { hapticLight(); handleShowAllServices(); }}>
-                  {t('showAllServices')}
+            <div className={styles.carouselWrap}>
+              {canScrollPrev && (
+                <button
+                  className={`${styles.carouselArrow} ${styles.carouselArrowPrev}`}
+                  onClick={() => emblaApi?.scrollPrev()}
+                  onMouseEnter={() => startAutoScroll('prev')}
+                  onMouseLeave={stopAutoScroll}
+                  aria-label="Previous services"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
                 </button>
-              ) : (
-                <button className={styles.fancyButtonOutline} onClick={() => { hapticLight(); handleHideServices(); }}>
-                  {t('hideServices')}
+              )}
+              <div className={styles.carouselViewport} ref={emblaRef}>
+                <div className={styles.carouselContainer}>
+                  {translatedServices.map((service, idx) => (
+                    <div key={service.id} className={styles.carouselSlide}>
+                      <motion.div
+                        className={styles.serviceCard}
+                        style={{ height: '100%' }}
+                        whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => handleServiceClick(service.id)}
+                        ref={el => serviceCardsRef.current[idx] = el}
+                      >
+                        <div className={styles.serviceCardBody}>
+                          <h5 className={styles.serviceCardTitle}>{service.name}</h5>
+                          <p className={styles.serviceCardDesc}>{service.description}</p>
+                          <span className={styles.serviceCardPrice}>
+                            {service.price_max
+                              ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
+                              : `$${parseFloat(service.price).toFixed(2)}`}
+                          </span>
+                          <AnimatePresence>
+                            {expandedServiceId === service.id && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
+                                style={{ overflow: 'hidden' }}
+                              >
+                                <button
+                                  className={styles.serviceBookBtn}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.currentTarget.blur();
+                                    hapticSuccess();
+                                    handleRequestAppointment(service);
+                                  }}
+                                >
+                                  {t('requestAppointment')}
+                                </button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      </motion.div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {canScrollNext && (
+                <button
+                  className={`${styles.carouselArrow} ${styles.carouselArrowNext}`}
+                  onClick={() => emblaApi?.scrollNext()}
+                  onMouseEnter={() => startAutoScroll('next')}
+                  onMouseLeave={stopAutoScroll}
+                  aria-label="Next services"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
                 </button>
               )}
             </div>
           )}
-          {translatedServices.length > 0 && services.length <= getDefaultServiceCount() && (
-            <div style={{ marginTop: '2.5rem' }} />
-          )}
-          <div ref={servicesEndRef} />
         </div>
       </motion.section>
 

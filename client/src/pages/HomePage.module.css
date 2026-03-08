@@ -210,6 +210,85 @@
   margin-bottom: 2.5rem;
 }
 
+/* ─── Services Carousel ─────────────────────────────────────────────────────── */
+.carouselWrap {
+  position: relative;
+  padding: 0 2.5rem;
+}
+
+.carouselViewport {
+  overflow: hidden;
+  cursor: grab;
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.carouselViewport:active {
+  cursor: grabbing;
+}
+
+.carouselContainer {
+  display: flex;
+  gap: 1rem;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 0.5rem 0 1.25rem;
+}
+
+.carouselSlide {
+  flex: 0 0 auto;
+  width: clamp(220px, 40vw, 280px);
+}
+
+.carouselArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(calc(-50% - 0.5rem));
+  z-index: 1;
+  background: rgba(5, 45, 63, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(70, 161, 161, 0.4);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.carouselArrowPrev { left: 0; }
+.carouselArrowNext { right: 0; }
+
+.carouselArrow svg {
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .carouselArrow:hover {
+    background: rgba(70, 161, 161, 0.35);
+    border-color: #46a1a1;
+  }
+}
+
+@media (max-width: 767px) {
+  .carouselWrap {
+    padding: 0;
+  }
+
+  .carouselArrow {
+    display: none;
+  }
+
+  .carouselSlide {
+    width: clamp(200px, 72vw, 260px);
+  }
+}
+
 /* ─── Services Section ──────────────────────────────────────────────────────── */
 .servicesSection {
   background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.35) 100%);
