@@ -37,7 +37,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [expandedServiceId, setExpandedServiceId] = useState(null);
   const serviceCardsRef = useRef([]);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ align: 'start', containScroll: 'trimSnaps', dragFree: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'start',
+    dragFree: true,
+    breakpoints: { '(max-width: 767px)': { align: 'center' } },
+  });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const scrollRafRef = useRef(null);

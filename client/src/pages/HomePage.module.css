@@ -229,7 +229,6 @@
 
 .carouselContainer {
   display: flex;
-  gap: 1rem;
   user-select: none;
   -webkit-user-select: none;
   padding: 0.5rem 0 1.25rem;
@@ -237,7 +236,8 @@
 
 .carouselSlide {
   flex: 0 0 auto;
-  width: clamp(220px, 40vw, 280px);
+  width: calc(33.33% - 1rem);
+  margin-right: 1rem;
 }
 
 .carouselArrow {
@@ -286,6 +286,7 @@
 
   .carouselSlide {
     width: clamp(200px, 72vw, 260px);
+    margin-right: 1rem;
   }
 }
 
@@ -613,7 +614,7 @@
 /* ─── Request / Glow Button ─────────────────────────────────────────────────── */
 .requestButton {
   position: relative;
-  z-index: 0;
+  z-index: 1;
   padding: 0.8rem 2.75rem;
   border: none;
   outline: none;
