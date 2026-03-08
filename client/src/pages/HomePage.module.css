@@ -1,41 +1,54 @@
 /* ─── Skeleton Loading ───────────────────────────────────────────────────────── */
 @keyframes shimmer {
-  0%   { background-position: -200% 0; }
-  100% { background-position:  200% 0; }
+  0%   { background-position: -300% 0; }
+  100% { background-position:  300% 0; }
 }
 
 .skeletonCard {
-  background: rgba(5, 45, 63, 0.42);
-  border: 1.5px solid rgba(70, 161, 161, 0.1);
+  background: rgba(5, 45, 63, 0.48);
+  border: 1.5px solid rgba(70, 161, 161, 0.12);
   border-radius: 20px;
   overflow: hidden;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .skeleton {
   background: linear-gradient(
-    90deg,
-    rgba(70, 161, 161, 0.05) 25%,
-    rgba(70, 161, 161, 0.14) 50%,
-    rgba(70, 161, 161, 0.05) 75%
+    105deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(70, 161, 161, 0.13) 38%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(70, 161, 161, 0.13) 62%,
+    rgba(255, 255, 255, 0.03) 100%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.8s ease-in-out infinite;
+  background-size: 300% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+  animation-delay: var(--sk-delay, 0s);
   border-radius: 6px;
 }
 
-.skeletonServiceBody,
-.skeletonNewsBody {
+.skeletonServiceBody {
   padding: 1.1rem;
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
 }
 
+.skeletonNewsBody {
+  padding: 0.85rem 0.95rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+  flex: 1;
+}
+
 .skeletonImage {
   width: 100%;
-  height: 120px;
+  height: 160px;
   border-radius: 0;
+  flex-shrink: 0;
 }
 
 .skeletonTitle {
@@ -49,13 +62,32 @@
 }
 
 .skeletonShort {
-  width: 48%;
+  width: 50%;
 }
 
 .skeletonPrice {
   height: 14px;
   width: 35%;
   margin-top: 0.2rem;
+}
+
+.skeletonMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(70, 161, 161, 0.1);
+}
+
+.skeletonMetaLeft {
+  height: 8px;
+  width: 32%;
+}
+
+.skeletonMetaRight {
+  height: 8px;
+  width: 26%;
 }
 
 /* ─── Page wrapper ─────────────────────────────────────────────────────────── */
@@ -216,11 +248,11 @@
   padding: 0 2.5rem;
 }
 
+
 .carouselViewport {
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   cursor: grab;
-  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
 }
 
 .carouselViewport:active {
@@ -231,7 +263,7 @@
   display: flex;
   user-select: none;
   -webkit-user-select: none;
-  padding: 0.5rem 0 1.25rem;
+  padding: 0.5rem 0;
 }
 
 .carouselSlide {
@@ -293,7 +325,7 @@
 /* ─── Services Section ──────────────────────────────────────────────────────── */
 .servicesSection {
   background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.35) 100%);
-  padding: 3.5rem 0;
+  padding: 5rem 0;
 }
 
 /* Service Card — glassmorphism */
@@ -317,17 +349,17 @@
 }
 
 .serviceCardBody {
-  padding: 1.2rem;
+  padding: 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.6rem;
   height: 100%;
 }
 
 .serviceCardTitle {
   color: #fff;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   letter-spacing: -0.01em;
   margin: 0;
   line-height: 1.25;
@@ -335,8 +367,8 @@
 
 .serviceCardDesc {
   color: rgba(255, 255, 255, 0.62);
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  line-height: 1.55;
   margin: 0;
   flex: 1;
 }
@@ -344,7 +376,7 @@
 .serviceCardPrice {
   color: #46a1a1;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 1.1rem;
   letter-spacing: -0.01em;
   display: block;
 }
@@ -352,30 +384,43 @@
 .serviceBookBtn {
   display: block;
   width: 100%;
-  background: linear-gradient(135deg, #46a1a1 0%, #3a8f8f 100%);
-  color: #fff;
-  border: none;
-  font-weight: 600;
-  border-radius: 20px;
-  padding: 0.45rem 0;
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
-  box-shadow: 0 3px 12px rgba(70, 161, 161, 0.4);
+  background: rgba(70, 161, 161, 0.12);
+  color: #46a1a1;
+  border: 1.5px solid rgba(70, 161, 161, 0.45);
+  border-radius: 50px;
+  padding: 0.5rem 0;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   cursor: pointer;
-  margin-top: 0.5rem;
-  transition: box-shadow 0.2s ease;
+  margin-top: 0.6rem;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.serviceBookBtn:focus,
+.serviceBookBtn:focus-visible,
+.serviceBookBtn:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 @media (hover: hover) {
   .serviceBookBtn:hover {
-    box-shadow: 0 6px 20px rgba(70, 161, 161, 0.6);
+    background: rgba(70, 161, 161, 0.22);
+    border-color: #46a1a1;
   }
 }
 
 /* ─── News / Updates Section ────────────────────────────────────────────────── */
 .newsSection {
   background: linear-gradient(180deg, rgba(5, 45, 63, 0.35) 0%, #000 100%);
-  padding: 3.5rem 0;
+  padding: 5rem 0;
 }
 
 .updatesHeading {
@@ -414,7 +459,7 @@
 
 .updateCardImage {
   width: 100%;
-  height: 120px;
+  height: 160px;
   object-fit: cover;
   display: block;
 }
@@ -427,17 +472,17 @@
 }
 
 .updateCardBody {
-  padding: 0.85rem 0.95rem 0.75rem;
+  padding: 1rem 1.1rem 0.9rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
   flex: 1;
 }
 
 .updateCardTitle {
   color: #fff;
   font-weight: 700;
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   letter-spacing: -0.01em;
   margin: 0;
   line-height: 1.3;
@@ -445,8 +490,8 @@
 
 .updateCardContent {
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.76rem;
-  line-height: 1.45;
+  font-size: 0.8rem;
+  line-height: 1.5;
   margin: 0;
   flex: 1;
 }
@@ -467,12 +512,12 @@
 /* ─── About Section ─────────────────────────────────────────────────────────── */
 .aboutSection {
   background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.4) 50%, #000 100%);
-  padding: 4rem 0;
+  padding: 6rem 0;
 }
 
 .aboutLogo {
-  width: 70%;
-  max-width: 350px;
+  width: 80%;
+  max-width: 460px;
   height: auto;
   display: block;
   margin: 0 auto;
