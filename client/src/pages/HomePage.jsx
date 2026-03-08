@@ -144,7 +144,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   useEffect(() => {
     document.body.style.background = '#000000';
     const navH = navbarRef.current ? navbarRef.current.offsetHeight : 0;
-    window.scrollTo(0, navH);
+    requestAnimationFrame(() => window.scrollTo(0, navH));
   }, []);
 
   return (

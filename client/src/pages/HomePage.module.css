@@ -473,90 +473,79 @@
 
 /* ─── Request / Glow Button ─────────────────────────────────────────────────── */
 .requestButton {
-  padding: 0.5em 1.5em;
-  margin: 0.25em 0;
+  position: relative;
+  z-index: 0;
+  padding: 0.8rem 2.75rem;
   border: none;
   outline: none;
   color: #fff;
-  background: rgb(5, 45, 63);
+  background: transparent;
   cursor: pointer;
-  position: relative;
-  z-index: 0;
-  border-radius: 10px;
+  border-radius: 50px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   user-select: none;
   touch-action: manipulation;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  -webkit-tap-highlight-color: transparent !important;
-  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
   appearance: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  -webkit-appearance: none;
+  transition: transform 0.2s ease;
+  will-change: transform;
 }
 
 .requestButton:focus,
-.requestButton:active,
 .requestButton:focus-visible {
   outline: none !important;
-  border: none !important;
   box-shadow: none !important;
 }
 
 .requestButton::before {
   content: '';
-  background: linear-gradient(
-    45deg,
-    rgb(5, 45, 63),
-    rgb(8, 65, 90),
-    rgb(13, 109, 143),
-    rgb(51, 135, 184),
-    rgb(24, 153, 214),
-    rgb(13, 109, 143),
-    rgb(8, 65, 90),
-    rgb(5, 45, 63)
-  );
   position: absolute;
   top: -2px;
   left: -2px;
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(5px);
-  -webkit-filter: blur(5px);
   width: calc(100% + 4px);
   height: calc(100% + 4px);
-  animation: glowingButton 20s linear infinite;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 14px;
+  border-radius: 54px;
+  z-index: -1;
+  background: linear-gradient(
+    45deg,
+    #46a1a1,
+    rgb(5, 45, 63),
+    #3dd6d6,
+    #46a1a1,
+    rgb(5, 65, 85),
+    #3a8f8f,
+    #46a1a1,
+    rgb(5, 45, 63)
+  );
+  background-size: 400%;
+  filter: blur(7px);
+  animation: glowingButton 30s linear infinite;
   opacity: 1;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
   will-change: background-position;
 }
 
 .requestButton::after {
-  z-index: -1;
   content: '';
   position: absolute;
-  width: 100%;
-  height: 100%;
-  background: rgb(5, 45, 63);
-  left: 0;
-  top: 0;
-  border-radius: 10px;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
+  inset: 0;
+  z-index: -1;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(5, 45, 63, 0.95) 0%, rgba(3, 28, 40, 0.98) 100%);
 }
 
-@media (max-width: 767px) {
-  .requestButton {
-    margin-left: 0.4rem;
+@media (hover: hover) {
+  .requestButton:hover {
+    transform: translateY(-3px);
   }
+}
+
+.requestButton:active {
+  transform: translateY(0);
 }
 
 @keyframes glowingButton {

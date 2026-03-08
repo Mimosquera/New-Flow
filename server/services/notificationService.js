@@ -111,7 +111,6 @@ export const sendAppointmentRequestConfirmation = async (appointment, service) =
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
   `;
 
-  // SMS
   const smsMessage = `${process.env.BUSINESS_NAME || 'New Flow Salon'}: Your appointment request for ${service.name} on ${formattedDate} at ${formattedTime} has been received. We'll contact you shortly!`;
 
   await sendEmail(customerEmail, emailSubject, emailHtml);
@@ -123,13 +122,11 @@ export const notifyEmployeesOfNewAppointment = async (appointment, service, requ
   const formattedDate = formatDate(date);
   const formattedTime = formatTime(time);
 
-  // Fetch all employees
   const employees = await User.findAll({
     where: { isEmployee: true },
     attributes: ['email', 'name'],
   });
 
-  // Prepare email content
   const emailSubject = 'New Appointment Request';
   const emailHtml = `
     <h2>New Appointment Request</h2>
@@ -159,15 +156,12 @@ export const notifyEmployeesOfNewAppointment = async (appointment, service, requ
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'} Sistema</p>
   `;
 
-  // Send to business email and all employees in parallel
   const emailPromises = [];
-  
-  // Business email
+
   if (process.env.EMAIL_USER) {
     emailPromises.push(sendEmail(process.env.EMAIL_USER, emailSubject, emailHtml));
   }
-  
-  // All employee emails
+
   employees.forEach(employee => {
     if (employee.email) {
       emailPromises.push(sendEmail(employee.email, emailSubject, emailHtml));
@@ -182,7 +176,6 @@ export const sendAppointmentAcceptedNotification = async (appointment, service, 
   const formattedDate = formatDate(date);
   const formattedTime = formatTime(time);
 
-  // Email
   const emailSubject = 'Appointment Confirmed!';
   const emailHtml = `
     <h2>Your appointment has been confirmed!</h2>
@@ -199,7 +192,6 @@ export const sendAppointmentAcceptedNotification = async (appointment, service, 
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
   `;
 
-  // SMS
   const smsMessage = `${process.env.BUSINESS_NAME || 'New Flow Salon'}: Your appointment on ${formattedDate} at ${formattedTime} is CONFIRMED with ${acceptedByEmployee.name}. See you soon!`;
 
   await sendEmail(customerEmail, emailSubject, emailHtml);
@@ -211,7 +203,6 @@ export const sendAppointmentDeclinedNotification = async (appointment, service, 
   const formattedDate = formatDate(date);
   const formattedTime = formatTime(time);
 
-  // Email
   const emailSubject = 'Appointment Update';
   const emailHtml = `
     <h2>Appointment Update</h2>
@@ -224,7 +215,6 @@ export const sendAppointmentDeclinedNotification = async (appointment, service, 
     <p>- ${process.env.BUSINESS_NAME || 'New Flow Salon'}</p>
   `;
 
-  // SMS
   const smsMessage = `${process.env.BUSINESS_NAME || 'New Flow Salon'}: We're unable to confirm your ${formattedDate} ${formattedTime} appointment. Please call us or book another time. Sorry for the inconvenience!`;
 
   await sendEmail(customerEmail, emailSubject, emailHtml);
