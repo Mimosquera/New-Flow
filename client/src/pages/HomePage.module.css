@@ -566,10 +566,11 @@
 }
 
 .contactIcon {
-  display: block;
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  color: #46a1a1;
 }
 
 .contactHeading {
@@ -582,11 +583,6 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.instagramIcon {
-  width: 32px;
-  height: 32px;
-  margin-right: 0.4rem;
-}
 
 .addressText {
   word-wrap: break-word;

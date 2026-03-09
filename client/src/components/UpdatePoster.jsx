@@ -340,7 +340,19 @@ export const UpdatePoster = () => {
             <div style={{ maxWidth: '500px', margin: '0 auto' }}>
             <h4 className="mb-4 recent-updates-header">{t('recentUpdates')}</h4>
             {loading ? (
-              <p style={{ color: 'rgba(255,255,255,0.5)' }}>{t('loading')}</p>
+              <div className="updates-list">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.14}s` }}>
+                    <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.14}s` }} />
+                    <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.14}s` }} />
+                    <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.14}s` }} />
+                    <div className="d-flex justify-content-between">
+                      <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.14}s` }} />
+                      <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.14}s` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             ) : translatedUpdates.length === 0 ? (
               <p style={{ color: 'rgba(255,255,255,0.5)' }}>{t('noUpdates')}</p>
             ) : (
@@ -422,6 +434,22 @@ export const UpdatePoster = () => {
                   );
                 })}
               </div>
+
+              {loadingMore && (
+                <div className="mt-2">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
+                      <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.12}s` }} />
+                      <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.12}s` }} />
+                      <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.12}s` }} />
+                      <div className="d-flex justify-content-between">
+                        <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.12}s` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Load More / Hide Posts buttons */}
               <div className="d-flex justify-content-center gap-2 mt-3">

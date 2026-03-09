@@ -369,10 +369,16 @@ export const EmployeeManager = () => {
             <div className="card-body">
               <h3 className="card-title mb-4 create-employee-title">{t('manageEmployees')}</h3>
               {loadingEmployees ? (
-                <div className="text-center py-4">
-                  <div className="spinner-border" role="status">
-                    <span className="visually-hidden">{t('loading')}</span>
-                  </div>
+                <div className="list-group">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="sk-card mb-2 p-3 d-flex justify-content-between align-items-center">
+                      <div style={{ flex: 1 }}>
+                        <span className="sk mb-2" style={{ height: '17px', width: '140px', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk" style={{ height: '12px', width: '190px', animationDelay: `${i * 0.12}s` }} />
+                      </div>
+                      <span className="sk" style={{ height: '22px', width: '22px', borderRadius: '50%', animationDelay: `${i * 0.12}s` }} />
+                    </div>
+                  ))}
                 </div>
               ) : employees.length === 0 ? (
                 <p className="employee-info-black text-center py-4">{t('noEmployeesYet')}</p>

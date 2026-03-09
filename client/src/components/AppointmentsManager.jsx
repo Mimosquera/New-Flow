@@ -213,9 +213,22 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   if (loading) {
     return (
       <div className="container py-4">
-        <div className="text-center">
-          <div className="spinner-border" role="status" style={{ color: '#46a1a1' }}>
-            <span className="visually-hidden">{t('loading')}</span>
+        <div className="row justify-content-center">
+          <div className="col-12 col-lg-8 col-xl-6">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <span className="sk" style={{ height: '22px', width: '90px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
+                  <span className="sk" style={{ height: '22px', width: '65px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
+                </div>
+                <span className="sk mb-2" style={{ height: '16px', width: '58%', animationDelay: `${i * 0.12}s` }} />
+                <span className="sk mb-3" style={{ height: '13px', width: '42%', animationDelay: `${i * 0.12}s` }} />
+                <div className="d-flex gap-2">
+                  <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
+                  <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

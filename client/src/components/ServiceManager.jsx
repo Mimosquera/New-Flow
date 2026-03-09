@@ -319,7 +319,33 @@ export const ServiceManager = () => {
               <div className="card-body">
                 <h5 className="card-title mb-4" style={{ color: '#fff' }}>{t('currentServices')}</h5>
                 {loading ? (
-                  <p className="text-muted">{t('loading')}</p>
+                  <div className="table-responsive">
+                    <table className="table current-services-table">
+                      <thead>
+                        <tr>
+                          <th>{t('name')}</th>
+                          <th className="d-none d-md-table-cell">{t('description')}</th>
+                          <th>{t('price')}</th>
+                          <th style={{ minWidth: '130px' }}>{t('actions')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <tr key={i} style={{ animationDelay: `${i * 0.1}s` }}>
+                            <td><span className="sk" style={{ height: '14px', width: '80%', animationDelay: `${i * 0.1}s` }} /></td>
+                            <td className="d-none d-md-table-cell"><span className="sk" style={{ height: '14px', width: '90%', animationDelay: `${i * 0.1}s` }} /></td>
+                            <td><span className="sk" style={{ height: '14px', width: '50px', animationDelay: `${i * 0.1}s` }} /></td>
+                            <td>
+                              <div className="d-flex gap-1">
+                                <span className="sk" style={{ height: '28px', width: '52px', borderRadius: '6px', animationDelay: `${i * 0.1}s` }} />
+                                <span className="sk" style={{ height: '28px', width: '52px', borderRadius: '6px', animationDelay: `${i * 0.1}s` }} />
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 ) : services.length === 0 ? (
                   <p className="text-muted">{t('noServices')}</p>
                 ) : (
