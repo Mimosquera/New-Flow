@@ -245,7 +245,7 @@
 /* ─── Services Carousel ─────────────────────────────────────────────────────── */
 .carouselWrap {
   position: relative;
-  padding: 0 2.5rem;
+  padding: 0 4rem;
 }
 
 
@@ -268,7 +268,7 @@
 
 .carouselSlide {
   flex: 0 0 auto;
-  width: calc(33.33% - 1rem);
+  width: clamp(220px, 22vw, 280px);
   margin-right: 1rem;
 }
 
@@ -320,6 +320,14 @@
     width: clamp(200px, 72vw, 260px);
     margin-right: 1rem;
   }
+}
+
+.centeredCards {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
 }
 
 /* ─── Services Section ──────────────────────────────────────────────────────── */
