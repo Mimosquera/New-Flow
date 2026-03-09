@@ -14,7 +14,7 @@ export const sequelize = databaseUrl
           rejectUnauthorized: false // Heroku uses self-signed certs
         }
       },
-      logging: process.env.NODE_ENV === 'development' ? console.log : false,
+      logging: false,
       define: {
         timestamps: true,
         underscored: true,
@@ -28,7 +28,7 @@ export const sequelize = databaseUrl
         host: process.env.DB_HOST || 'localhost',
         port: process.env.DB_PORT || 5432,
         dialect: 'postgres',
-        logging: process.env.NODE_ENV === 'development' ? console.log : false,
+        logging: false,
         define: {
           timestamps: true,
           underscored: true,

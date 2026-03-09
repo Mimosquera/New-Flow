@@ -39,9 +39,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    align: 'start',
-    dragFree: true,
-    breakpoints: { '(max-width: 767px)': { align: 'center' } },
+    align: 'center',
   });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -291,7 +289,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.08 }}
       >
-        <div className="container">
+        <div className="container-xxl px-3 px-md-4">
           <div className={`${styles.sectionHeading} mb-4`}>{t('servicesTitle')}</div>
           {servicesLoading ? (
             <div className={styles.carouselViewport}>
@@ -315,6 +313,53 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <p style={{ color: 'rgba(255,255,255,0.5)' }}>
                 {language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}
               </p>
+            </div>
+          ) : translatedServices.length <= 2 ? (
+            <div className={styles.centeredCards}>
+              {translatedServices.map((service, idx) => (
+                <motion.div
+                  key={service.id}
+                  className={styles.serviceCard}
+                  style={{ width: 'min(300px, 80vw)' }}
+                  whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => handleServiceClick(service.id)}
+                  ref={el => serviceCardsRef.current[idx] = el}
+                >
+                  <div className={styles.serviceCardBody}>
+                    <h5 className={styles.serviceCardTitle}>{service.name}</h5>
+                    <p className={styles.serviceCardDesc}>{service.description}</p>
+                    <span className={styles.serviceCardPrice}>
+                      {service.price_max
+                        ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
+                        : `$${parseFloat(service.price).toFixed(2)}`}
+                    </span>
+                    <AnimatePresence>
+                      {expandedServiceId === service.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
+                          style={{ overflow: 'hidden' }}
+                        >
+                          <button
+                            className={styles.serviceBookBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.currentTarget.blur();
+                              hapticSuccess();
+                              handleRequestAppointment(service);
+                            }}
+                          >
+                            {t('requestAppointment')}
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           ) : (
             <div className={styles.carouselWrap}>
