@@ -177,17 +177,34 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const hasMore = displayCount < totalUpdates;
 
   const navbarRef = useRef(null);
+  const [showNavbar, setShowNavbar] = useState(false);
+  const lastScrollYRef = useRef(0);
 
   useEffect(() => {
     document.body.style.background = '#000000';
-    const navH = navbarRef.current ? navbarRef.current.offsetHeight : 0;
-    requestAnimationFrame(() => window.scrollTo(0, navH));
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    requestAnimationFrame(() => window.scrollTo(0, 0));
+
+    const handleNavScroll = () => {
+      const current = window.scrollY;
+      const prev = lastScrollYRef.current;
+      setShowNavbar(current < prev && current > 80);
+      lastScrollYRef.current = current;
+    };
+
+    window.addEventListener('scroll', handleNavScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleNavScroll);
   }, []);
 
   return (
     <div className={styles.homePage}>
       {/* Navigation Bar */}
-      <nav className={styles.navbar} ref={navbarRef}>
+      <motion.nav
+        className={styles.navbar}
+        ref={navbarRef}
+        animate={{ y: showNavbar ? 0 : '-100%' }}
+        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      >
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
           <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0 }}>
             <img
@@ -208,7 +225,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
       <motion.section
@@ -238,16 +255,30 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </video>
             </motion.div>
 
-            {/* Text + CTA — centered below video */}
-            <motion.div
-              className={styles.heroTextBlock}
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.35 }}
-            >
-              <p className={styles.heroSubtitle}>{t('heroSubtitle')}</p>
-              <p className={styles.heroDesc}>{t('heroDescription')}</p>
-              <div className={styles.heroCta}>
+            {/* Text + CTA — centered below video, each line enters independently */}
+            <div className={styles.heroTextBlock}>
+              <motion.p
+                className={styles.heroSubtitle}
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('heroSubtitle')}
+              </motion.p>
+              <motion.p
+                className={styles.heroDesc}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.55, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('heroDescription')}
+              </motion.p>
+              <motion.div
+                className={styles.heroCta}
+                initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.72, ease: [0.4, 0, 0.2, 1] }}
+              >
                 <button
                   className={styles.requestButton}
                   onClick={(e) => {
@@ -258,8 +289,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 >
                   {t('requestAppointment')}
                 </button>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </div>
 
@@ -290,7 +321,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
         viewport={{ once: true, amount: 0.08 }}
       >
         <div className="container-xxl px-3 px-md-4">
-          <div className={`${styles.sectionHeading} mb-4`}>{t('servicesTitle')}</div>
+          <motion.div
+            className={`${styles.sectionHeading} mb-4`}
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+          >
+            {t('servicesTitle')}
+          </motion.div>
           {servicesLoading ? (
             <div className={styles.carouselViewport}>
               <div className={styles.carouselContainer}>
@@ -308,13 +347,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 ))}
               </div>
             </div>
-          ) : translatedServices.length === 0 ? (
+          ) : services.length === 0 ? (
             <div className="text-center py-3">
               <p style={{ color: 'rgba(255,255,255,0.5)' }}>
                 {language === 'es' ? '¡Servicios próximamente!' : 'Services coming soon!'}
               </p>
             </div>
-          ) : translatedServices.length <= 2 ? (
+          ) : services.length <= 2 ? (
             <div className={styles.centeredCards}>
               {translatedServices.map((service, idx) => (
                 <motion.div
@@ -452,9 +491,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
         viewport={{ once: true, amount: 0.05 }}
       >
         <div className="container">
-          <h2 className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}>
+          <motion.h2
+            className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
+          >
             {t('updatesTitle')}
-          </h2>
+          </motion.h2>
           {loading || translating ? (
             <div className="row g-3">
               {Array.from({ length: 4 }).map((_, i) => (
@@ -486,10 +531,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   <motion.div
                     key={article.id}
                     className="col-6 col-lg-3 mb-2"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, y: 28 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.08 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.09 }}
                   >
                     <motion.div
                       className={styles.updateCard}
@@ -573,18 +619,47 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 className={`img-fluid rounded ${styles.aboutLogo}`}
               />
             </motion.div>
-            <motion.div
-              className="col-md-6 ps-md-4"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <h2 className="fw-bold mb-3" style={{ color: '#fff' }}>{t('aboutTitle')}</h2>
-              <p className="mb-3" style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph1')}</p>
-              <p className="mb-3" style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph2')}</p>
-              <p style={{ color: 'rgba(255,255,255,0.75)' }}>{t('aboutParagraph3')}</p>
-            </motion.div>
+            <div className="col-md-6 ps-md-4">
+              <motion.h2
+                className="fw-bold mb-3"
+                style={{ color: '#fff' }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('aboutTitle')}
+              </motion.h2>
+              <motion.p
+                className="mb-3"
+                style={{ color: 'rgba(255,255,255,0.75)' }}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.32, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('aboutParagraph1')}
+              </motion.p>
+              <motion.p
+                className="mb-3"
+                style={{ color: 'rgba(255,255,255,0.75)' }}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.44, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('aboutParagraph2')}
+              </motion.p>
+              <motion.p
+                style={{ color: 'rgba(255,255,255,0.75)' }}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.56, ease: [0.4, 0, 0.2, 1] }}
+              >
+                {t('aboutParagraph3')}
+              </motion.p>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -669,7 +744,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       <UpdateModal update={selectedUpdate} show={showModal} onClose={handleCloseModal} />
-      <ScrollToTop hidden={showModal} offset={navbarRef.current?.offsetHeight ?? 0} />
+      <ScrollToTop hidden={showModal} />
     </div>
   );
 };
