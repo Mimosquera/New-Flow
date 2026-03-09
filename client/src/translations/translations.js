@@ -42,7 +42,7 @@ export const translations = {
     contactTitle: 'Get in Touch',
     address: 'Address',
     hours: 'Hours',
-    followUs: 'Follow Us',
+    followUs: 'Instagram',
     monSun: 'Mon-Sun',
     
     // Day names
@@ -446,7 +446,7 @@ export const translations = {
     contactTitle: 'Ponte en Contacto',
     address: 'Dirección',
     hours: 'Horario',
-    followUs: 'Síguenos',
+    followUs: 'Instagram',
     monSun: 'L-D',
     
     // Day names

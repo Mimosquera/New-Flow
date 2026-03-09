@@ -4,6 +4,34 @@ html, body {
   touch-action: pan-x pan-y;
 }
 
+/* ─── Global Skeleton Loading ────────────────────────────────────────────────── */
+@keyframes skeletonShimmer {
+  0%   { background-position: -300% 0; }
+  100% { background-position:  300% 0; }
+}
+
+.sk {
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(70, 161, 161, 0.13) 38%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(70, 161, 161, 0.13) 62%,
+    rgba(255, 255, 255, 0.03) 100%
+  );
+  background-size: 300% 100%;
+  animation: skeletonShimmer 2s ease-in-out infinite;
+  border-radius: 6px;
+  display: block;
+}
+
+.sk-card {
+  background: rgba(5, 45, 63, 0.48);
+  border: 1.5px solid rgba(70, 161, 161, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
 /* Scroll to Top Button */
 .scroll-to-top-btn svg {
   pointer-events: none;

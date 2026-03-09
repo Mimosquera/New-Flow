@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
+import { Clock, Phone, AtSign, MapPin } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../utils/tokenUtils.js';
@@ -141,7 +142,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
     fetchServices();
   }, [fetchUpdates, fetchServices]);
 
-  const handleViewMore = () => setDisplayCount(prev => prev + 4);
+  const [viewMorePending, setViewMorePending] = useState(false);
+
+  const handleViewMore = () => {
+    hapticLight();
+    setViewMorePending(true);
+    setTimeout(() => {
+      setDisplayCount(prev => prev + 4);
+      setViewMorePending(false);
+    }, 380);
+  };
 
   const handleShowLess = () => {
     setDisplayCount(4);
@@ -526,16 +536,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
           ) : (
             <>
               <div className="row g-3">
-                <AnimatePresence>
-                {displayedNews.map((article, idx) => (
+                <AnimatePresence initial={false}>
+                {displayedNews.map((article) => (
                   <motion.div
                     key={article.id}
                     className="col-6 col-lg-3 mb-2"
-                    initial={{ opacity: 0, y: 28 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    viewport={{ once: true, amount: 0.1 }}
-                    transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1], delay: (idx % 4) * 0.09 }}
+                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
                   >
                     <motion.div
                       className={styles.updateCard}
@@ -577,10 +583,32 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
                 </AnimatePresence>
+                {viewMorePending && Array.from({ length: 4 }).map((_, i) => (
+                  <motion.div
+                    key={`skeleton-${i}`}
+                    className="col-6 col-lg-3 mb-2"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1], delay: i * 0.07 }}
+                  >
+                    <div className={styles.skeletonCard}>
+                      <div className={`${styles.skeleton} ${styles.skeletonImage}`} style={{ '--sk-delay': `${i * 0.12}s` }} />
+                      <div className={styles.skeletonNewsBody} style={{ '--sk-delay': `${i * 0.12}s` }}>
+                        <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonLine}`} />
+                        <div className={`${styles.skeleton} ${styles.skeletonLine} ${styles.skeletonShort}`} />
+                        <div className={styles.skeletonMeta}>
+                          <div className={`${styles.skeleton} ${styles.skeletonMetaLeft}`} />
+                          <div className={`${styles.skeleton} ${styles.skeletonMetaRight}`} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
               <div className="text-center mt-4">
-                {hasMore && (
-                  <button className={`${styles.fancyButton} me-2`} onClick={() => { hapticLight(); handleViewMore(); }}>
+                {hasMore && !viewMorePending && (
+                  <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
                   </button>
                 )}
@@ -688,14 +716,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
           >
             <motion.div className="col-md-3 mb-4" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <span className={styles.contactIcon}>⏰</span>
+                <div className={styles.contactIcon}><Clock size={26} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('hours')}</h5>
                 <p className={styles.contactText}>{t('monSun')}: 9am – 7pm</p>
               </div>
             </motion.div>
             <motion.div className="col-md-3 mb-4" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <span className={styles.contactIcon}>📞</span>
+                <div className={styles.contactIcon}><Phone size={26} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('phone')}</h5>
                 <p className={styles.contactText}>
                   <a href="tel:+18047452525" className="text-white text-decoration-none">
@@ -706,7 +734,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </motion.div>
             <motion.div className="col-md-3 mb-4" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <span className={styles.contactIcon}>📱</span>
+                <div className={styles.contactIcon}><AtSign size={26} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('followUs')}</h5>
                 <a
                   href="https://www.instagram.com/newflowsalon/"
@@ -714,18 +742,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   rel="noopener noreferrer"
                   className={`d-inline-flex align-items-center justify-content-center gap-2 text-decoration-none text-white ${styles.contactText}`}
                 >
-                  <img
-                    src={new URL('../assets/images/instagram-logo.png', import.meta.url).href}
-                    alt="Instagram"
-                    className={styles.instagramIcon}
-                  />
                   <span>@newflowsalon</span>
                 </a>
               </div>
             </motion.div>
             <motion.div className="col-md-3 mb-4" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <span className={styles.contactIcon}>📍</span>
+                <div className={styles.contactIcon}><MapPin size={26} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('address')}</h5>
                 <p className={`${styles.addressText} ${styles.contactText}`}>
                   <a
