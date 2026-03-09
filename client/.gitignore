@@ -30,3 +30,7 @@ dist-ssr
 
 # Vite
 .vite
+
+
+.claude
+.vscode
