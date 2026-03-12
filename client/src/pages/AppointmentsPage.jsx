@@ -169,7 +169,7 @@ export const AppointmentsPage = () => {
             >
               <div className={styles.cardHeader}>
                 <h1 className={styles.cardTitle}>Your Details</h1>
-                <p className={styles.cardSubtitle}>Step 1 of 2 — Tell us who you are</p>
+                <p className={styles.cardSubtitle}>Step 1 of 2: Tell us who you are</p>
               </div>
               <div className={styles.cardBody}>
                 {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
@@ -239,7 +239,7 @@ export const AppointmentsPage = () => {
             >
               <div className={styles.cardHeader}>
                 <h1 className={styles.cardTitle}>Appointment Details</h1>
-                <p className={styles.cardSubtitle}>Step 2 of 2 — Pick your service and time</p>
+                <p className={styles.cardSubtitle}>Step 2 of 2: Pick your service and time</p>
               </div>
               <div className={styles.cardBody}>
                 {/* Personal info recap */}

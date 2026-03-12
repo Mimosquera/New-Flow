@@ -547,6 +547,7 @@
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
+  padding-bottom: 1.5rem;
 }
 
 
@@ -610,55 +611,8 @@
   font-weight: bold;
 }
 
-/* Desktop: keep compact */
-@media (min-width: 993px) {
-  .contentWrapper {
-    max-width: 520px;
-  }
-
-  .formLabel {
-    font-size: 0.8rem;
-    margin-bottom: 0.35rem;
-  }
-
-  .formControl,
-  .formSelect {
-    padding: 0.55rem 0.85rem;
-    font-size: 0.88rem;
-    border-radius: 10px;
-  }
-
-  .textarea {
-    min-height: 52px;
-  }
-
-  .submitButton {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.92rem;
-    border-radius: 10px;
-    margin-top: 0.5rem;
-  }
-
-  .formRow,
-  .dateTimeRow {
-    gap: 0.75rem;
-  }
-
-  .helpText {
-    font-size: 0.72rem;
-  }
-
-  .logo {
-    max-width: 100px;
-  }
-}
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .contentWrapper {
-    max-width: 100%;
-    padding: 0.5rem 0.75rem;
-  }
 
   .formCard {
     border-radius: 20px;
