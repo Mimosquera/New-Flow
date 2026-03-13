@@ -212,6 +212,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.nav
         className={styles.navbar}
         ref={navbarRef}
+        initial={{ y: '-100%' }}
         animate={{ y: showNavbar ? 0 : '-100%' }}
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       >

@@ -24,7 +24,9 @@
       "Bash(npm install embla-carousel-react)",
       "Bash(npm install embla-carousel-react --save)",
       "Bash(node -e \"require\\(''./node_modules/embla-carousel-react/package.json''\\); console.log\\(''ok''\\)\")",
-      "Bash(npm install lucide-react)"
+      "Bash(npm install lucide-react)",
+      "Bash(grep -E \"\\(index|global|^[^/]*\\\\.css$\\)\")",
+      "Bash(npx vite:*)"
     ]
   }
 }

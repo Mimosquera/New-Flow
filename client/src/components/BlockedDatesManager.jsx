@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
@@ -291,16 +292,23 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
             marginBottom: '1rem'
           }}
         >
-          <h6 className="mb-0" style={{ fontSize: '0.95rem', fontWeight: '600', color: THEME_COLOR }}>
+          <h6 className="mb-0" style={{ fontSize: '0.95rem', fontWeight: '600', color: '#fff' }}>
             {t('blockedDates')}
           </h6>
-          <span style={{ fontSize: '1.2rem', color: THEME_COLOR, fontWeight: 'bold' }}>
+          <span style={{ fontSize: '1.2rem', color: '#fff', fontWeight: 'bold' }}>
             {showBlockedDates ? '−' : '+'}
           </span>
         </div>
         
+        <AnimatePresence initial={false}>
         {showBlockedDates && (
-          <>
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
             {/* Admin Employee Filter */}
             {isAdmin && employees.length > 0 && (
               <div className="mb-3">
@@ -333,22 +341,22 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                 <div className="d-none d-md-block table-responsive">
                   <table className="table table-sm table-hover align-middle mb-0">
                     <thead>
-                      <tr style={{ borderBottom: `2px solid ${THEME_COLOR}` }}>
+                      <tr style={{ borderBottom: '2px solid rgba(70, 161, 161, 0.3)' }}>
                         {isAdmin && (
-                          <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
+                          <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px', fontSize: '0.85rem' }}>
                             {t('employee')}
                           </th>
                         )}
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
+                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px', fontSize: '0.85rem' }}>
                           {t('dateRange')}
                         </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
+                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px', fontSize: '0.85rem' }}>
                           {t('timeRange')}
                         </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
+                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px', fontSize: '0.85rem' }}>
                           {t('reason')}
                         </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
+                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px', fontSize: '0.85rem' }}>
                           {t('actions')}
                         </th>
                       </tr>
@@ -367,7 +375,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                         return (
                           <tr key={group.ids?.[0] || index}>
                             {isAdmin && (
-                              <td style={{ padding: '8px', fontSize: '0.85rem', fontWeight: '500', color: THEME_COLOR }}>
+                              <td style={{ padding: '8px', fontSize: '0.85rem', fontWeight: '500', color: '#fff' }}>
                                 {group.userName || t('unknown')}
                               </td>
                             )}
@@ -411,7 +419,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                           {isAdmin && (
                             <div className="mb-2">
                               <small className="text-muted d-block">{t('employee')}</small>
-                              <strong style={{ color: THEME_COLOR }}>{group.userName || t('unknown')}</strong>
+                              <strong style={{ color: '#fff' }}>{group.userName || t('unknown')}</strong>
                             </div>
                           )}
                           <div className="mb-2">
@@ -442,8 +450,9 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                 </div>
               </>
             )}
-          </>
+          </motion.div>
         )}
+        </AnimatePresence>
       </div>
     </>
   );

@@ -16,6 +16,7 @@ export const AppointmentsPage = () => {
   const location = useLocation();
   const { t, language } = useTranslation();
   const [phase, setPhase] = useState(1);
+  const [direction, setDirection] = useState(1);
 
   const [success, setSuccess] = useState(null);
   const [services, setServices] = useState([]);
@@ -128,12 +129,32 @@ export const AppointmentsPage = () => {
     handleFormSubmit(e);
   };
 
+  const goTo = (target) => {
+    hapticLight();
+    setDirection(target > phase ? 1 : -1);
+    setPhase(target);
+  };
+
   const phase1Complete = formData.name.trim() && formData.email.trim() && formData.phone.trim();
+  const phase2Complete = !!formData.service;
+  const phase3Complete = !!formData.date && !!formData.time;
   const today = new Date().toISOString().split('T')[0];
+
+  const selectedServiceObj = translatedServices.find(s => String(s.id) === String(formData.service));
+  const selectedEmployeeObj = employees.find(e => String(e.id) === String(formData.employee));
+
+  const formatPrice = (s) => s.price_max
+    ? `$${parseFloat(s.price).toFixed(2)}–$${parseFloat(s.price_max).toFixed(2)}`
+    : `$${parseFloat(s.price).toFixed(2)}`;
+
+  const slideVariants = {
+    enter: (dir) => ({ opacity: 0, x: dir * 28 }),
+    center: { opacity: 1, x: 0 },
+    exit: (dir) => ({ opacity: 0, x: dir * -32, scale: 0.97 }),
+  };
 
   return (
     <div className={styles.pageContainer}>
-      {/* Navbar — always visible */}
       <nav className={styles.apptNavbar}>
         <div className={styles.apptNavbarInner}>
           <img
@@ -155,21 +176,22 @@ export const AppointmentsPage = () => {
         </div>
       </nav>
 
-      {/* Centered phase content */}
       <div className={styles.contentWrapper}>
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           {phase === 1 && !success && (
             <motion.div
               key="phase1"
               className={styles.formCard}
-              initial={{ opacity: 0, x: -28 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -32, scale: 0.97 }}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>Your Details</h1>
-                <p className={styles.cardSubtitle}>Step 1 of 2: Tell us who you are</p>
+                <h1 className={styles.cardTitle}>{t('yourDetails')}</h1>
+                <p className={styles.cardSubtitle}>{t('step')} 1 / 3</p>
               </div>
               <div className={styles.cardBody}>
                 {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
@@ -220,9 +242,9 @@ export const AppointmentsPage = () => {
                   type="button"
                   className={styles.submitButton}
                   disabled={!phase1Complete}
-                  onClick={() => { hapticLight(); setPhase(2); }}
+                  onClick={() => goTo(2)}
                 >
-                  Continue
+                  {t('continue')}
                 </button>
               </div>
             </motion.div>
@@ -232,91 +254,200 @@ export const AppointmentsPage = () => {
             <motion.div
               key="phase2"
               className={styles.formCard}
-              initial={{ opacity: 0, x: 28 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 32, scale: 0.97 }}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
               transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>Appointment Details</h1>
-                <p className={styles.cardSubtitle}>Step 2 of 2: Pick your service and time</p>
+                <h1 className={styles.cardTitle}>{t('chooseService')}</h1>
+                <p className={styles.cardSubtitle}>{t('step')} 2 / 3</p>
               </div>
               <div className={styles.cardBody}>
-                {/* Personal info recap */}
-                <div className={styles.recap}>
-                  <span className={styles.recapName}>{formData.name}</span>
-                  <span className={styles.recapDot}>·</span>
-                  <span>{formData.email}</span>
-                  <span className={styles.recapDot}>·</span>
-                  <span>{formData.phone}</span>
-                  <button
-                    type="button"
-                    className={styles.recapEdit}
-                    onClick={() => { hapticLight(); setPhase(1); }}
-                  >
-                    Edit
-                  </button>
-                </div>
-
                 {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
 
-                <form onSubmit={handleSubmit}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="service" className={styles.formLabel}>
-                      {t('service')}<span className={styles.required}>*</span>
-                    </label>
-                    <select id="service" name="service" className={styles.formSelect} value={formData.service} onChange={handleChange} autoComplete="off">
-                      <option value="">{t('selectService')}</option>
-                      {translatedServices.map(s => (
-                        <option key={s.id} value={s.id}>
-                          {s.name} — {s.price_max
-                            ? `$${parseFloat(s.price).toFixed(2)}–$${parseFloat(s.price_max).toFixed(2)}`
-                            : `$${parseFloat(s.price).toFixed(2)}`}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="service" className={styles.formLabel}>
+                    {t('service')}<span className={styles.required}>*</span>
+                  </label>
+                  <select id="service" name="service" className={styles.formSelect} value={formData.service} onChange={handleChange} autoComplete="off">
+                    <option value="">{t('selectService')}</option>
+                    {translatedServices.map(s => (
+                      <option key={s.id} value={s.id}>
+                        {s.name} — {formatPrice(s)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="employee" className={styles.formLabel}>{t('barberStylist')}</label>
-                    <select id="employee" name="employee" className={styles.formSelect} value={formData.employee} onChange={handleChange} autoComplete="off">
-                      <option value="">{t('noPreference')}</option>
-                      {employees.filter(emp => emp.name !== 'Admin').map(emp => (
-                        <option key={emp.id} value={emp.id}>{emp.name}</option>
-                      ))}
-                    </select>
-                    <small className={styles.helpText}>{t('noPreferenceNote')}</small>
-                  </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="employee" className={styles.formLabel}>{t('barberStylist')}</label>
+                  <select id="employee" name="employee" className={styles.formSelect} value={formData.employee} onChange={handleChange} autoComplete="off">
+                    <option value="">{t('noPreference')}</option>
+                    {employees.filter(emp => emp.name !== 'Admin').map(emp => (
+                      <option key={emp.id} value={emp.id}>{emp.name}</option>
+                    ))}
+                  </select>
+                  <small className={styles.helpText}>{t('noPreferenceNote')}</small>
+                </div>
 
-                  <div className={styles.formGroup}>
-                    <div className={styles.dateTimeRow}>
-                      <div className={styles.formGroup}>
-                        <label htmlFor="date" className={styles.formLabel}>{t('date')}<span className={styles.required}>*</span></label>
-                        <input id="date" type="date" name="date" className={styles.formControl} value={formData.date} onChange={handleChange} min={today} autoComplete="off" />
-                      </div>
-                      <div className={styles.formGroup}>
-                        <label htmlFor="time" className={styles.formLabel}>{t('time')}<span className={styles.required}>*</span></label>
-                        <select id="time" name="time" className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`} value={formData.time} onChange={handleChange} disabled={!formData.date || loadingTimes} autoComplete="off">
-                          <option value="">
-                            {!formData.date ? t('selectDateFirst') : loadingTimes ? t('loading') : availableTimes.length === 0 ? t('noTimesAvailable') : t('selectTime')}
-                          </option>
-                          {availableTimes.map(time => (
-                            <option key={time} value={time}>{time}</option>
-                          ))}
-                        </select>
-                      </div>
+                <div className={styles.phaseNav}>
+                  <button type="button" className={styles.backButton} onClick={() => goTo(1)}>
+                    {t('back')}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.submitButton}
+                    disabled={!phase2Complete}
+                    onClick={() => goTo(3)}
+                    style={{ flex: 1 }}
+                  >
+                    {t('continue')}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {phase === 3 && !success && (
+            <motion.div
+              key="phase3"
+              className={styles.formCard}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <div className={styles.cardHeader}>
+                <h1 className={styles.cardTitle}>{t('pickTime')}</h1>
+                <p className={styles.cardSubtitle}>{t('step')} 3 / 3</p>
+              </div>
+              <div className={styles.cardBody}>
+                {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
+
+                <div className={styles.formGroup}>
+                  <div className={styles.dateTimeRow}>
+                    <div className={styles.formGroup}>
+                      <label htmlFor="date" className={styles.formLabel}>{t('date')}<span className={styles.required}>*</span></label>
+                      <input id="date" type="date" name="date" className={styles.formControl} value={formData.date} onChange={handleChange} min={today} autoComplete="off" />
                     </div>
-                    {formData.date && !loadingTimes && availableTimes.length === 0 && (
-                      <small className={styles.alertInfo}>{t('noAvailabilityForDate')}</small>
-                    )}
+                    <div className={styles.formGroup}>
+                      <label htmlFor="time" className={styles.formLabel}>{t('time')}<span className={styles.required}>*</span></label>
+                      <select id="time" name="time" className={`${styles.formSelect} ${loadingTimes ? styles.loadingSelect : ''}`} value={formData.time} onChange={handleChange} disabled={!formData.date || loadingTimes} autoComplete="off">
+                        <option value="">
+                          {!formData.date ? t('selectDateFirst') : loadingTimes ? t('loading') : availableTimes.length === 0 ? t('noTimesAvailable') : t('selectTime')}
+                        </option>
+                        {availableTimes.map(time => (
+                          <option key={time} value={time}>{time}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {formData.date && !loadingTimes && availableTimes.length === 0 && (
+                    <small className={styles.alertInfo}>{t('noAvailabilityForDate')}</small>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="notes" className={styles.formLabel}>{t('notes')}</label>
+                  <textarea id="notes" name="notes" className={`${styles.formControl} ${styles.textarea}`} rows="2" value={formData.notes} onChange={handleChange} placeholder={t('notesPlaceholder')} autoComplete="off" />
+                </div>
+
+                <div className={styles.phaseNav}>
+                  <button type="button" className={styles.backButton} onClick={() => goTo(2)}>
+                    {t('back')}
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.submitButton}
+                    disabled={!phase3Complete}
+                    onClick={() => goTo(4)}
+                    style={{ flex: 1 }}
+                  >
+                    {t('reviewBooking')}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {phase === 4 && !success && (
+            <motion.div
+              key="review"
+              className={styles.formCard}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
+            >
+              <div className={styles.cardHeader}>
+                <h1 className={styles.cardTitle}>{t('reviewRequest')}</h1>
+                <p className={styles.cardSubtitle}>{t('confirmDetails')}</p>
+              </div>
+              <div className={styles.cardBody}>
+                {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
+
+                <div className={styles.reviewSection}>
+                  <div className={styles.reviewBlock}>
+                    <div className={styles.reviewBlockHeader}>
+                      <span className={styles.reviewLabel}>{t('yourDetails')}</span>
+                      <button type="button" className={styles.recapEdit} onClick={() => goTo(1)}>{t('edit')}</button>
+                    </div>
+                    <div className={styles.reviewValue}>{formData.name}</div>
+                    <div className={styles.reviewValueSub}>{formData.email}</div>
+                    <div className={styles.reviewValueSub}>{formData.phone}</div>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="notes" className={styles.formLabel}>{t('notes')}</label>
-                    <textarea id="notes" name="notes" className={`${styles.formControl} ${styles.textarea}`} rows="2" value={formData.notes} onChange={handleChange} placeholder={t('notesPlaceholder')} autoComplete="off" />
+                  <div className={styles.reviewBlock}>
+                    <div className={styles.reviewBlockHeader}>
+                      <span className={styles.reviewLabel}>{t('service')}</span>
+                      <button type="button" className={styles.recapEdit} onClick={() => goTo(2)}>{t('edit')}</button>
+                    </div>
+                    <div className={styles.reviewValue}>
+                      {selectedServiceObj?.name}{selectedServiceObj && ` — ${formatPrice(selectedServiceObj)}`}
+                    </div>
+                    <div className={styles.reviewValueSub}>
+                      {selectedEmployeeObj ? selectedEmployeeObj.name : t('noPreference')}
+                    </div>
                   </div>
 
-                  <button type="submit" className={styles.submitButton}>{t('submitRequest')}</button>
+                  <div className={styles.reviewBlock}>
+                    <div className={styles.reviewBlockHeader}>
+                      <span className={styles.reviewLabel}>{t('dateTime')}</span>
+                      <button type="button" className={styles.recapEdit} onClick={() => goTo(3)}>{t('edit')}</button>
+                    </div>
+                    <div className={styles.reviewValue}>
+                      {new Date(formData.date + 'T12:00:00').toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+                    </div>
+                    <div className={styles.reviewValueSub}>{formData.time}</div>
+                  </div>
+
+                  {formData.notes && (
+                    <div className={styles.reviewBlock}>
+                      <div className={styles.reviewBlockHeader}>
+                        <span className={styles.reviewLabel}>{t('notes')}</span>
+                        <button type="button" className={styles.recapEdit} onClick={() => goTo(3)}>{t('edit')}</button>
+                      </div>
+                      <div className={styles.reviewValueSub}>{formData.notes}</div>
+                    </div>
+                  )}
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                  <div className={styles.phaseNav}>
+                    <button type="button" className={styles.backButton} onClick={() => goTo(3)}>
+                      {t('back')}
+                    </button>
+                    <button type="submit" className={styles.submitButton} style={{ flex: 1 }}>
+                      {t('submitRequest')}
+                    </button>
+                  </div>
                 </form>
               </div>
             </motion.div>
@@ -331,12 +462,12 @@ export const AppointmentsPage = () => {
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>You are all set!</h1>
+                <h1 className={styles.cardTitle}>{t('allSet')}</h1>
                 <p className={styles.cardSubtitle}>{success}</p>
               </div>
               <div className={styles.cardBody}>
                 <button type="button" className={styles.submitButton} onClick={() => { hapticLight(); navigate('/'); }}>
-                  Back to Home
+                  {t('backToHome')}
                 </button>
               </div>
             </motion.div>
@@ -344,7 +475,6 @@ export const AppointmentsPage = () => {
         </AnimatePresence>
       </div>
 
-      {/* Footer logo — visual only */}
       <footer className={styles.apptFooter}>
         <img
           src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}

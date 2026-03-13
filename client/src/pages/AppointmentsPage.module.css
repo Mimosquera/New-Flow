@@ -70,7 +70,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1rem;
+  padding: 2rem 1.5rem;
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -86,36 +86,80 @@
   padding: 0.75rem 0 calc(env(safe-area-inset-bottom, 0px) + 1rem);
 }
 
-/* Recap bar */
-.recap {
+/* Phase Navigation */
+.phaseNav {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  background: rgba(70, 161, 161, 0.08);
-  border: 1px solid rgba(70, 161, 161, 0.2);
-  border-radius: 10px;
-  padding: 0.5rem 0.85rem;
-  margin-bottom: 0.85rem;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.72);
+  gap: 0.65rem;
+  margin-top: 1rem;
 }
 
-.recapName {
+.backButton {
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, color 0.3s ease;
 }
 
-.recapDot {
-  color: rgba(70, 161, 161, 0.55);
+@media (hover: hover) {
+  .backButton:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    color: #fff;
+  }
+}
+
+/* Review Screen */
+.reviewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 0.25rem;
+}
+
+.reviewBlock {
+  background: rgba(70, 161, 161, 0.06);
+  border: 1px solid rgba(70, 161, 161, 0.18);
+  border-radius: 12px;
+  padding: 0.65rem 0.85rem;
+}
+
+.reviewBlockHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.reviewLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #46a1a1;
+}
+
+.reviewValue {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.reviewValueSub {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 .recapEdit {
-  margin-left: auto;
   background: none;
   border: none;
   color: #46a1a1;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   padding: 0;
@@ -225,11 +269,6 @@
   transition: color 0.3s ease;
 }
 
-.labelIcon {
-  font-size: 1rem;
-  opacity: 0.8;
-}
-
 /* Form Controls */
 .formControl,
 .formSelect {
@@ -295,10 +334,12 @@
   transition: background-color 9999s ease-in-out 0s;
 }
 
-.formControl:hover:not(:focus),
-.formSelect:hover:not(:focus) {
-  border-color: rgba(70, 161, 161, 0.55);
-  box-shadow: 0 2px 8px rgba(70, 161, 161, 0.1);
+@media (hover: hover) {
+  .formControl:hover:not(:focus),
+  .formSelect:hover:not(:focus) {
+    border-color: rgba(70, 161, 161, 0.55);
+    box-shadow: 0 2px 8px rgba(70, 161, 161, 0.1);
+  }
 }
 
 .formControl:disabled,
@@ -327,7 +368,6 @@
   overflow: hidden;
 }
 @media (max-width: 768px) {
-  /* Service dropdown: hide text behind arrow */
   .formSelect {
     padding-right: 2.5rem;
     background-position: right 0.5rem center;
@@ -337,23 +377,6 @@
     overflow: hidden;
   }
 
-  /* Keep name/email fields on same row in Spanish */
-  .formRow {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-  .formGroup {
-    min-width: 0;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-  .formGroup input[type="email"] {
-    margin-top: 0 !important;
-    align-self: flex-start;
-  }
   .formLabel {
     margin-bottom: 0.5rem;
     font-size: 0.85rem;
@@ -393,13 +416,6 @@
   font-weight: 500;
 }
 
-/* Row Layout */
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
 .dateTimeRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -407,12 +423,6 @@
 }
 
 @media (max-width: 768px) {
-  .formRow {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-  }
-
-  /* Keep date/time side by side on mobile */
   .dateTimeRow {
     grid-template-columns: 1fr 1fr;
     gap: 0.25rem;
@@ -448,12 +458,6 @@
 }
 
 @media (max-width: 480px) {
-  .formRow {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.4rem;
-  }
-
-  /* Keep date/time side by side even on small phones */
   .dateTimeRow {
     grid-template-columns: 1fr 1fr;
     gap: 0.2rem;
@@ -508,12 +512,6 @@
   margin-top: 1rem;
 }
 
-.submitButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(70, 161, 161, 0.5);
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
-}
-
 .submitButton:active {
   transform: translateY(-1px);
   box-shadow: 0 4px 15px rgba(5, 45, 63, 0.4);
@@ -532,9 +530,17 @@
   transition: width 0.6s, height 0.6s;
 }
 
-.submitButton:hover::before {
-  width: 300px;
-  height: 300px;
+@media (hover: hover) {
+  .submitButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(70, 161, 161, 0.5);
+    background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
+  }
+
+  .submitButton:hover::before {
+    width: 300px;
+    height: 300px;
+  }
 }
 
 /* Logo */
@@ -582,33 +588,6 @@
   margin-left: 0.25rem;
   font-weight: 700;
   text-shadow: 0 1px 2px rgba(231, 76, 60, 0.2);
-}
-
-/* Success Message */
-.successMessage {
-  background: linear-gradient(135deg, #d0f0f0 0%, #e0f5f5 100%);
-  border: 2px solid #46a1a1;
-  color: rgb(5, 45, 63);
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
-  font-weight: 700;
-  text-align: center;
-  box-shadow: 0 4px 16px rgba(70, 161, 161, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.successMessage::before {
-  content: '✓';
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.5rem;
-  color: #46a1a1;
-  font-weight: bold;
 }
 
 /* Responsive adjustments */
@@ -681,16 +660,6 @@
     line-height: 1.3;
   }
 
-  .successMessage {
-    padding: 0.85rem 1rem 0.85rem 2.5rem;
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
-  .successMessage::before {
-    left: 0.75rem;
-    font-size: 1.3rem;
-  }
 }
 
 /* Extra small devices */
@@ -705,10 +674,8 @@
   }
 
   .formCard {
-    margin: 1.5rem auto 0;
     border-radius: 16px;
     box-sizing: border-box;
-    width: 350px;
   }
 
   .cardHeader {
@@ -728,23 +695,9 @@
     box-sizing: border-box;
   }
 
-  .formRow {
-    gap: 0.35rem;
-  }
-
-  .formGroup {
-    margin-bottom: 0.75rem;
-  }
-
   .formControl,
   .formSelect {
     padding: 0.5rem 0.65rem;
-  }
-
-  .logoContainer {
-    margin-top: 1rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.25rem;
   }
 
   .logo {
