@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Alert } from './Common/index.jsx';
 import { appointmentService } from '../services/api.js';
@@ -323,8 +324,15 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                     <strong>{t('time')}:</strong> {formatTimeDisplay(apt.time)}
                   </div>
 
+                  <AnimatePresence initial={false}>
                   {expandedIds.has(apt.id) && (
-                    <>
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                      style={{ overflow: 'hidden' }}
+                    >
                       <hr />
                       <div className="mb-2">
                         <strong>{t('email')}:</strong> {apt.customerEmail}<br />
@@ -364,8 +372,9 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                           </>
                         )}
                       </div>
-                    </>
+                    </motion.div>
                   )}
+                  </AnimatePresence>
 
                   {apt.status === 'pending' && (
                     <div className="d-flex gap-2 mt-3">

@@ -6,7 +6,7 @@ import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
 import { UpdatePoster } from '../components/UpdatePoster.jsx';
 import { ServiceManager } from '../components/ServiceManager.jsx';
-import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
+// import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
 import { EmployeeManager } from '../components/EmployeeManager.jsx';
 import { ProfileManager } from '../components/ProfileManager.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -76,7 +76,7 @@ export default function EmployeeDashboard() {
   }, []);
 
   return (
-    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(2, 20, 30) 0%, rgb(5, 45, 63) 100%)', minHeight: '100vh' }}>
       <div
         className="pb-3 dashboard-header-sticky"
         style={{ 

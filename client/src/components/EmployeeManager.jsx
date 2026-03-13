@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -229,27 +230,35 @@ export const EmployeeManager = () => {
         <div
           key={employee.id}
           className={`list-group-item p-0${expandedEmployeeId === employee.id ? ' expanded-employee-card' : ''}`}
-          style={{ background: expandedEmployeeId === employee.id ? THEME_COLOR : '#fff' }}
+          style={{ background: expandedEmployeeId === employee.id ? THEME_COLOR : 'rgba(255, 255, 255, 0.06)' }}
         >
           <button
             className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
             onClick={() => toggleEmployee(employee.id)}
             style={{
-              color: expandedEmployeeId === employee.id ? '#fff' : THEME_COLOR,
-              background: expandedEmployeeId === employee.id ? THEME_COLOR : '#fff',
+              color: expandedEmployeeId === employee.id ? '#fff' : 'rgba(255, 255, 255, 0.9)',
+              background: expandedEmployeeId === employee.id ? THEME_COLOR : 'transparent',
               fontWeight: 600
             }}
           >
             <div>
-              <h5 className="mb-1" style={{ color: expandedEmployeeId === employee.id ? '#fff' : THEME_COLOR, fontWeight: 700 }}>{employee.name}</h5>
-              <small className={expandedEmployeeId === employee.id ? '' : 'text-muted'} style={{ color: expandedEmployeeId === employee.id ? '#fff' : undefined }}>{employee.email}</small>
+              <h5 className="mb-1" style={{ color: '#fff', fontWeight: 700 }}>{employee.name}</h5>
+              <small style={{ color: expandedEmployeeId === employee.id ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)' }}>{employee.email}</small>
             </div>
-            <span style={{ fontSize: '1.2rem', color: expandedEmployeeId === employee.id ? '#fff' : THEME_COLOR }}>
+            <span style={{ fontSize: '1.2rem', color: '#fff' }}>
               {expandedEmployeeId === employee.id ? '▲' : '▼'}
             </span>
           </button>
+          <AnimatePresence initial={false}>
           {expandedEmployeeId === employee.id && (
-            <div className="p-3 border-top bg-light">
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: 'hidden' }}
+            >
+            <div className="p-3 border-top" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
               <h6 className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 700, textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('editPassword')}</h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
@@ -304,7 +313,7 @@ export const EmployeeManager = () => {
                     {t('removeFromSystem')}
                   </button>
                 ) : (
-                  <div className="border border-danger rounded p-3 bg-light">
+                  <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
                     <p className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 600 }}>
                       <strong>{t('confirmDeleteEmployee')}</strong>
                     </p>
@@ -342,7 +351,9 @@ export const EmployeeManager = () => {
                 )}
               </div>
             </div>
+            </motion.div>
           )}
+          </AnimatePresence>
         </div>
       ))}
     </div>
@@ -362,7 +373,19 @@ export const EmployeeManager = () => {
                 <h3 className="card-title mb-0 create-employee-title">{t('createEmployee')}</h3>
                 <span className="toggle-arrow">{showCreateForm ? '▲' : '▼'}</span>
               </button>
-              {showCreateForm && renderCreateForm()}
+              <AnimatePresence initial={false}>
+                {showCreateForm && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    {renderCreateForm()}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
           <div className="card post-update-card shadow-sm">

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { serviceService } from '../services/api.js';
@@ -375,7 +376,7 @@ export const ServiceManager = () => {
                                 >
                                   {t('edit')}
                                 </button>
-                                <span style={{ display: 'inline-block', width: '1px', height: '24px', background: '#b0bec5', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
+                                <span style={{ display: 'inline-block', width: '1px', height: '24px', background: 'rgba(255, 255, 255, 0.2)', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
                                 <button
                                   className="btn btn-outline-danger"
                                   onClick={() => handleDelete(service?.id)}
