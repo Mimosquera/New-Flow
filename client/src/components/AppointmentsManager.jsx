@@ -214,8 +214,15 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   if (loading) {
     return (
       <div className="container py-4">
-        <div className="row justify-content-center">
-          <div className="col-12 col-lg-8 col-xl-6">
+        <div className="row justify-content-center g-3">
+          <div className="col-12 col-lg-3 d-none d-lg-block">
+            <div className="sk-card p-3" style={{ borderRadius: '1rem' }}>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <span key={i} className="sk d-block mb-2" style={{ height: '30px', borderRadius: '6px', animationDelay: `${i * 0.08}s` }} />
+              ))}
+            </div>
+          </div>
+          <div className="col-12 col-lg-7">
             {Array.from({ length: 4 }).map((_, i) => (
               <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
                 <div className="d-flex justify-content-between align-items-center mb-2">
@@ -236,63 +243,99 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     );
   }
 
+  const filterOptions = [
+    { value: 'all', label: t('allAppointments') },
+    { value: 'upcoming', label: t('upcoming') },
+    { value: 'pending', label: t('pending') },
+    { value: 'accepted', label: t('accepted') },
+    { value: 'declined', label: t('declined') },
+    { value: 'cancelled', label: t('cancelled') },
+  ];
+
   return (
     <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-12 col-lg-8 col-xl-6">
-          {error && (
-            <Alert 
-              message={error} 
-              type="danger"
-              onClose={() => setError(null)}
-            />
-          )}
-          
-          {success && (
-            <Alert 
-              message={success} 
-              type="success"
-              onClose={() => setSuccess(null)}
-            />
-          )}
+      {(error || success) && (
+        <div className="row justify-content-center mb-2">
+          <div className="col-12 col-lg-10">
+            {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
+            {success && <Alert message={success} type="success" onClose={() => setSuccess(null)} />}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Filter Dropdown - always above cards, aligned with card columns */}
-      <div className="row justify-content-center">
-        <div className="col-12 col-lg-8 col-xl-6">
-          <div className="mb-3">
-            <label htmlFor="statusFilter" className="form-label me-2 appointments-filter-label d-inline-flex align-items-center gap-1"><Filter size={13} />{t('filter')}:</label>
+      <div className="row justify-content-center g-3">
+
+        {/* Left: Filter sidebar (desktop) / dropdown (mobile) */}
+        <div className="col-12 col-lg-3">
+          {/* Mobile: compact dropdown */}
+          <div className="d-lg-none mb-2">
+            <label htmlFor="statusFilter" className="form-label me-2 appointments-filter-label d-inline-flex align-items-center gap-1">
+              <Filter size={13} />{t('filter')}:
+            </label>
             <select
               id="statusFilter"
               className="form-select d-inline-block w-auto appointments-filter-select"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
             >
-              <option value="all">{t('allAppointments')}</option>
-              <option value="upcoming">{t('upcoming')}</option>
-              <option value="pending">{t('pending')}</option>
-              <option value="accepted">{t('accepted')}</option>
-              <option value="declined">{t('declined')}</option>
-              <option value="cancelled">{t('cancelled')}</option>
+              {filterOptions.map(({ value, label }) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
             </select>
           </div>
-        </div>
-      </div>
 
-      {filteredAppointments.length === 0 ? (
-        <div className="row justify-content-center">
-          <div className="col-12 col-lg-8 col-xl-6">
-            <div className="alert mb-0 no-appointments-message appointments-no-results">
-              {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+          {/* Desktop: sticky sidebar card */}
+          <div className="d-none d-lg-block" style={{ position: 'sticky', top: '4rem' }}>
+            <div className="card post-update-card">
+              <div style={{
+                background: 'rgba(3, 25, 38, 0.45)',
+                borderBottom: '1px solid rgba(70,161,161,0.2)',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.75rem 0.75rem 0 0',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}>
+                <Filter size={13} style={{ color: '#46a1a1' }} />
+                <h6 className="mb-0" style={{ fontSize: '0.88rem', fontWeight: '700', color: '#fff' }}>{t('filter')}</h6>
+              </div>
+              <div className="card-body p-2">
+                <div className="d-flex flex-column gap-1">
+                  {filterOptions.map(({ value, label }) => (
+                    <button
+                      key={value}
+                      className="btn btn-sm text-start"
+                      style={{
+                        background: filter === value ? 'rgba(70,161,161,0.18)' : 'transparent',
+                        color: filter === value ? '#46a1a1' : 'rgba(255,255,255,0.7)',
+                        border: filter === value ? '1px solid rgba(70,161,161,0.35)' : '1px solid transparent',
+                        borderRadius: '6px',
+                        fontWeight: filter === value ? '600' : '400',
+                        fontSize: '0.82rem',
+                        padding: '0.35rem 0.7rem',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onClick={() => setFilter(value)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div className="row g-3 justify-content-center">
-          {filteredAppointments.map((apt) => (
-            <div key={apt.id} className="col-12 col-lg-8 col-xl-6">
-              <div className="card appointment-card">
+
+        {/* Right: Appointments list */}
+        <div className="col-12 col-lg-7">
+          {filteredAppointments.length === 0 ? (
+            <div className="alert mb-0 no-appointments-message appointments-no-results">
+              {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
+            </div>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {filteredAppointments.map((apt) => (
+                <div key={apt.id} className="card appointment-card">
                 <div className="card-body">
                   <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
@@ -438,10 +481,14 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                   )}
                 </div>
               </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+        {/* end col-lg-7 */}
+
+      </div>
+      {/* end row */}
 
       {/* Note Modal */}
       {showNoteModal && (

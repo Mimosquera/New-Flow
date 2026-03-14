@@ -15,7 +15,7 @@ export const EmployeeManager = () => {
   const [loading, setLoading] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(true);
   const [expandedEmployeeId, setExpandedEmployeeId] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(window.innerWidth >= 992);
   const [alerts, setAlerts] = useState({ error: null, success: null, editError: null, editSuccess: null });
   const [editPasswordData, setEditPasswordData] = useState({ newPassword: '', adminPassword: '' });
   const [editLoading, setEditLoading] = useState(false);
@@ -163,11 +163,11 @@ export const EmployeeManager = () => {
   };
 
   const renderCreateForm = () => (
-    <div className="p-3 border-top">
-      <p className="file-info-text mb-4 employee-info-black">{t('createEmployeeDescription')}</p>
+    <div className="p-4">
+      <p className="file-info-text mb-4 employee-info-black text-center">{t('createEmployeeDescription')}</p>
       {alerts.error && <Alert type="danger" message={alerts.error} onClose={() => setAlert('error', null)} />}
       {alerts.success && <Alert type="success" message={alerts.success} onClose={() => setAlert('success', null)} />}
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit} noValidate style={{ maxWidth: '380px', margin: '0 auto' }}>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">{t('name')} *</label>
           <input
@@ -213,7 +213,7 @@ export const EmployeeManager = () => {
           />
           <small className="file-info-text employee-info-black">{t('employeePasswordNote')}</small>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 d-flex justify-content-center">
           <button type="submit" className="btn post-update-btn" disabled={loading}>
             {loading ? t('creating') : t('createEmployee')}
           </button>
@@ -232,7 +232,7 @@ export const EmployeeManager = () => {
           key={employee.id}
           className={`list-group-item p-0${expandedEmployeeId === employee.id ? ' expanded-employee-card' : ''}`}
           style={{
-            background: expandedEmployeeId === employee.id ? THEME_COLOR : 'rgba(255,255,255,0.06)',
+            background: expandedEmployeeId === employee.id ? undefined : 'rgba(255,255,255,0.06)',
             border: '1px solid rgba(70,161,161,0.2)',
             borderRadius: '10px',
             marginBottom: '0.5rem'
@@ -271,7 +271,7 @@ export const EmployeeManager = () => {
               </h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
-              <form onSubmit={(e) => handleUpdatePassword(e, employee.id)} noValidate>
+              <form onSubmit={(e) => handleUpdatePassword(e, employee.id)} noValidate style={{ maxWidth: '360px', margin: '0 auto' }}>
                 <div className="mb-3">
                   <label htmlFor={`newPassword-${employee.id}`} className="form-label">{t('newPassword')} *</label>
                   <input
@@ -302,14 +302,15 @@ export const EmployeeManager = () => {
                   />
                   <small className="text-muted">{t('adminPasswordRequired')}</small>
                 </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={editLoading}
-                  style={{ backgroundColor: THEME_COLOR, border: 'none' }}
-                >
-                  {editLoading ? t('updating') : t('updatePassword')}
-                </button>
+                <div className="d-flex justify-content-center">
+                  <button
+                    type="submit"
+                    className="btn post-update-btn"
+                    disabled={editLoading}
+                  >
+                    {editLoading ? t('updating') : t('updatePassword')}
+                  </button>
+                </div>
               </form>
               <hr className="my-4 section-divider" style={{ borderColor: '#46a1a1', borderWidth: '2px' }} />
               <div className="mt-4">
@@ -318,12 +319,14 @@ export const EmployeeManager = () => {
                   {t('removeEmployee')}
                 </h6>
                 {!showDeleteConfirm || showDeleteConfirm !== employee.id ? (
-                  <button
-                    className="btn btn-outline-danger btn-sm"
-                    onClick={() => setShowDeleteConfirm(employee.id)}
-                  >
-                    {t('removeFromSystem')}
-                  </button>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      className="btn btn-outline-danger btn-sm"
+                      onClick={() => setShowDeleteConfirm(employee.id)}
+                    >
+                      {t('removeFromSystem')}
+                    </button>
+                  </div>
                 ) : (
                   <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
                     <p className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 600 }}>
@@ -343,16 +346,16 @@ export const EmployeeManager = () => {
                       />
                       <small className="text-muted">{t('adminPasswordRequired')}</small>
                     </div>
-                    <div className="d-flex gap-2">
+                    <div className="d-flex gap-2 justify-content-center">
                       <button
-                        className="btn btn-danger"
+                        className="btn btn-danger btn-sm"
                         onClick={() => handleDeleteEmployee(employee.id)}
                         disabled={deleteLoading === employee.id}
                       >
                         {deleteLoading === employee.id ? t('deleting') : t('confirmDelete')}
                       </button>
                       <button
-                        className="btn btn-secondary"
+                        className="btn btn-secondary btn-sm"
                         onClick={() => handleCancelDelete(employee.id)}
                         disabled={deleteLoading === employee.id}
                       >
@@ -374,35 +377,49 @@ export const EmployeeManager = () => {
 
   return (
     <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-12 col-lg-10">
-          <div className="card post-update-card shadow-sm mb-4">
-            <div className="card-body p-0">
-              <button
-                className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
-                onClick={() => setShowCreateForm(!showCreateForm)}
-              >
-                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
-                  <UserPlus size={18} />
-                  {t('createEmployee')}
-                </h3>
-                {showCreateForm ? <ChevronUp size={18} style={{ color: '#46a1a1' }} /> : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.6)' }} />}
-              </button>
-              <AnimatePresence initial={false}>
-                {showCreateForm && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    {renderCreateForm()}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+      <div className="row g-4 align-items-start justify-content-center">
+
+        {/* Left: Create Employee */}
+        <div className="col-12 col-lg-4">
+          <div className="card post-update-card shadow-sm">
+            <div
+              className="d-flex justify-content-between align-items-center collapsible-header"
+              style={{
+                background: 'rgba(3, 25, 38, 0.45)',
+                borderBottom: showCreateForm ? '1px solid rgba(70,161,161,0.2)' : 'none',
+                color: 'white',
+                cursor: 'pointer',
+                padding: '0.75rem 1rem',
+                borderRadius: showCreateForm ? '0.75rem 0.75rem 0 0' : '0.75rem',
+              }}
+              onClick={() => setShowCreateForm(!showCreateForm)}
+            >
+              <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
+                <UserPlus size={16} />
+                {t('createEmployee')}
+              </h3>
+              {showCreateForm
+                ? <ChevronUp size={16} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                : <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }} />}
             </div>
+            <AnimatePresence initial={false}>
+              {showCreateForm && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
+                  {renderCreateForm()}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+        </div>
+
+        {/* Right: Manage Employees */}
+        <div className="col-12 col-lg-6">
           <div className="card post-update-card shadow-sm">
             <div className="card-body">
               <h3 className="card-title mb-4 create-employee-title d-flex align-items-center gap-2">
@@ -432,6 +449,7 @@ export const EmployeeManager = () => {
             <strong>{t('note')}</strong> {t('employeeAccountNote')}
           </div>
         </div>
+
       </div>
     </div>
   );

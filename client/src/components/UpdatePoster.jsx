@@ -218,12 +218,12 @@ export const UpdatePoster = () => {
         <div className="row justify-content-center">
           {/* Post New Update Form */}
           <div className="col-lg-4 mb-4">
-            <div style={{ ...cardStyle, marginBottom: '0' }}>
+            <div className="post-update-card" style={{ ...cardStyle, marginBottom: '0' }}>
               <div
                 className="d-flex justify-content-between align-items-center collapsible-header"
                 style={{
-                  background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
-                  borderBottom: '1px solid rgba(70,161,161,0.25)',
+                  background: 'rgba(3, 25, 38, 0.45)',
+                  borderBottom: '1px solid rgba(70,161,161,0.2)',
                   color: 'white',
                   cursor: 'pointer',
                   padding: '0.75rem 1rem',
@@ -294,10 +294,20 @@ export const UpdatePoster = () => {
                   <div className="mb-3">
                     <label htmlFor="media" className="form-label">{t('photoOrVideo')}</label>
                     <div className="d-flex align-items-center gap-2">
-                      <label 
-                        htmlFor="media" 
-                        className="btn btn-outline-secondary mb-0"
-                        style={{ cursor: 'pointer' }}
+                      <label
+                        htmlFor="media"
+                        className="btn mb-0"
+                        style={{
+                          cursor: 'pointer',
+                          fontSize: '0.8rem',
+                          padding: '0.3rem 0.85rem',
+                          background: 'rgba(70,161,161,0.12)',
+                          color: '#46a1a1',
+                          border: '1.5px solid rgba(70,161,161,0.4)',
+                          borderRadius: '0.5rem',
+                          fontWeight: '500',
+                          transition: 'all 0.2s ease',
+                        }}
                       >
                         {t('chooseFile')}
                       </label>
@@ -345,12 +355,14 @@ export const UpdatePoster = () => {
                     </div>
                   )}
 
-                  <button 
-                    type="submit" 
-                    className="btn post-update-btn"
-                  >
-                    {t('post')}
-                  </button>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      type="submit"
+                      className="btn post-update-btn"
+                    >
+                      {t('post')}
+                    </button>
+                  </div>
                 </form>
               </div>
                 </motion.div>
@@ -363,7 +375,7 @@ export const UpdatePoster = () => {
           <div className="col-lg-8">
             <div
               className="d-flex justify-content-between align-items-center collapsible-header mb-0"
-              style={{ backgroundColor: 'rgb(5, 45, 63)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showUpdates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+              style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showUpdates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
               onClick={() => setShowUpdates(!showUpdates)}
             >
               <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', fontWeight: '700' }}>
