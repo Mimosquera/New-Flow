@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, User, Calendar, Clock, FileText, Scissors, Users } from 'lucide-react';
+import { Home, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
 import { removeToken, decodeToken, getToken } from '../utils/tokenUtils.js';
 import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
@@ -53,6 +53,23 @@ export default function EmployeeDashboard() {
         setIsAdmin(decoded.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL);
       }
     }
+  }, []);
+
+  const [mobileTabOpen, setMobileTabOpen] = useState(false);
+  const mobileTabRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (mobileTabRef.current && !mobileTabRef.current.contains(e.target)) {
+        setMobileTabOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const [showHeader, setShowHeader] = useState(true);
@@ -169,41 +186,63 @@ export default function EmployeeDashboard() {
             </ul>
           </div>
 
-          {/* Center: Mobile tab select */}
-          <div className="d-lg-none" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
-            <select
-              id="mobileTabSelect"
-              name="mobileTabSelect"
-              value={activeTab}
-              onChange={(e) => { hapticLight(); setActiveTab(e.target.value); }}
-              autoComplete="off"
-              style={{
-                backgroundColor: 'rgba(70, 161, 161, 0.15)',
-                color: 'white',
-                border: '1.5px solid rgba(70, 161, 161, 0.5)',
-                borderRadius: '8px',
-                padding: '0.3rem 1.6rem 0.3rem 0.65rem',
-                fontSize: '0.78rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                appearance: 'none',
-                WebkitAppearance: 'none',
-                width: 'auto',
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%2346a1a1\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 0.4rem center',
-                backgroundSize: '10px',
-                outline: 'none',
-                WebkitTapHighlightColor: 'transparent',
-              }}
-            >
-              <option value="profile" style={{ color: '#000', backgroundColor: '#fff' }}>{t('profile')}</option>
-              <option value="appointments" style={{ color: '#000', backgroundColor: '#fff' }}>{t('appointments')}</option>
-              <option value="availability" style={{ color: '#000', backgroundColor: '#fff' }}>{t('availability')}</option>
-              <option value="updates" style={{ color: '#000', backgroundColor: '#fff' }}>{t('postsTab')}</option>
-              <option value="services" style={{ color: '#000', backgroundColor: '#fff' }}>{t('services')}</option>
-              {isAdmin && <option value="team" style={{ color: '#000', backgroundColor: '#fff' }}>{t('team')}</option>}
-            </select>
+          {/* Center: Mobile tab dropdown */}
+          <div ref={mobileTabRef} className="d-lg-none" style={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative' }}>
+            {(() => {
+              const tabOptions = [
+                { value: 'profile', label: t('profile'), icon: <User size={13} /> },
+                { value: 'appointments', label: t('appointments'), icon: <Calendar size={13} /> },
+                { value: 'availability', label: t('availability'), icon: <Clock size={13} /> },
+                { value: 'updates', label: t('postsTab'), icon: <FileText size={13} /> },
+                { value: 'services', label: t('services'), icon: <Scissors size={13} /> },
+                ...(isAdmin ? [{ value: 'team', label: t('team'), icon: <Users size={13} /> }] : []),
+              ];
+              const active = tabOptions.find(o => o.value === activeTab);
+              return (
+                <>
+                  <button
+                    onClick={() => { hapticLight(); setMobileTabOpen(prev => !prev); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '0.35rem',
+                      backgroundColor: 'rgba(70, 161, 161, 0.15)', color: 'white',
+                      border: '1.5px solid rgba(70, 161, 161, 0.5)', borderRadius: '8px',
+                      padding: '0.3rem 0.65rem', fontSize: '0.78rem', fontWeight: '500',
+                      cursor: 'pointer', WebkitTapHighlightColor: 'transparent', outline: 'none',
+                    }}
+                  >
+                    {active?.icon}
+                    <span>{active?.label}</span>
+                    <ChevronDown size={11} style={{ color: '#46a1a1', marginLeft: '0.1rem', transform: mobileTabOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
+                  </button>
+                  {mobileTabOpen && (
+                    <div style={{
+                      position: 'absolute', top: 'calc(100% + 6px)', left: '50%', transform: 'translateX(-50%)',
+                      background: 'rgba(3, 25, 38, 0.97)', backdropFilter: 'blur(18px)',
+                      border: '1.5px solid rgba(70, 161, 161, 0.4)', borderRadius: '10px',
+                      zIndex: 2000, minWidth: '160px', padding: '0.35rem 0',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+                    }}>
+                      {tabOptions.map(({ value, label, icon }) => (
+                        <button
+                          key={value}
+                          onClick={() => { hapticLight(); setActiveTab(value); setMobileTabOpen(false); }}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '0.5rem',
+                            width: '100%', padding: '0.45rem 0.9rem', background: 'none',
+                            border: 'none', color: activeTab === value ? '#46a1a1' : 'rgba(255, 255, 255, 0.85)',
+                            fontSize: '0.82rem', fontWeight: activeTab === value ? '600' : '400',
+                            cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                          }}
+                        >
+                          {icon}
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
 
           {/* Right: Home + Language toggle */}
@@ -213,7 +252,7 @@ export default function EmployeeDashboard() {
               onClick={() => navigate('/')}
               title={t('backToHome')}
             >
-              <Home size={14} />
+              <Home size={19} />
             </button>
             <div style={{ width: '53px', height: '24px', position: 'relative', flexShrink: 0 }}>
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>

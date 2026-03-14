@@ -252,37 +252,49 @@ a:focus:not(:focus-visible) {
 
 /* Dashboard Home Button (matches Appointments/Login page style) */
 .dashboard-home-btn {
-  padding: 0.15rem 0.35rem !important;
-  background: linear-gradient(135deg, rgba(70, 161, 161, 0.15) 0%, rgba(70, 161, 161, 0.08) 100%) !important;
-  color: white !important;
-  border: 1.5px solid rgba(70, 161, 161, 0.7) !important;
+  padding: 0.35rem 0.5rem !important;
+  background: none !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: none !important;
   border-radius: 8px !important;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease, background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
   flex-shrink: 0;
   line-height: 1;
+  box-shadow: none !important;
 }
-.dashboard-home-btn span {
-  font-size: 0.8rem;
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-.dashboard-home-btn:hover {
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%) !important;
-  border-color: #46a1a1 !important;
-  color: white !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(70, 161, 161, 0.45);
+@media (hover: hover) {
+  .dashboard-home-btn:hover {
+    background: rgba(70, 161, 161, 0.12) !important;
+    color: #46a1a1 !important;
+  }
 }
 .dashboard-home-btn:active {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(70, 161, 161, 0.35);
+  color: #46a1a1 !important;
+}
+
+/* Logout button */
+.logout-btn {
+  background: none !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 8px !important;
+  font-size: 0.8rem !important;
+  padding: 0.35rem 0.9rem !important;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease !important;
+}
+@media (hover: hover) {
+  .logout-btn:hover {
+    color: #ff6b6b !important;
+    border-color: rgba(255, 107, 107, 0.45) !important;
+    background: rgba(255, 107, 107, 0.08) !important;
+  }
+}
+.logout-btn:active {
+  color: #ff6b6b !important;
 }
 
 /* Tab header shadow */

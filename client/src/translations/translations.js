@@ -1,7 +1,7 @@
 export const translations = {
   en: {
     // Navbar
-    employeeDashboard: 'Employee Dashboard',
+    employeeDashboard: 'Dashboard',
     employeeLogin: 'Employee Login',
     
     // Hero Section
@@ -367,7 +367,7 @@ export const translations = {
     removeProfileImage: 'Remove Image',
     bioPlaceholder: 'Write a brief introduction about yourself, your experience, and what makes you unique...',
     profileImageAlt: 'Profile picture',
-    noProfileImage: 'No profile image',
+    noProfileImage: 'Write about yourself here!',
     saveAboutMe: 'Save About Me',
     editAboutMe: 'Edit About Me',
     currentPassword: 'Current Password',
@@ -407,7 +407,7 @@ export const translations = {
 
   es: {
     // Navbar
-    employeeDashboard: 'Panel de Empleados',
+    employeeDashboard: 'Dashboard',
     employeeLogin: 'Acceso de Empleados',
     
     // Hero Section
@@ -771,7 +771,7 @@ export const translations = {
     removeProfileImage: 'Eliminar Imagen',
     bioPlaceholder: 'Escribe una breve introducción sobre ti, tu experiencia y lo que te hace único...',
     profileImageAlt: 'Foto de perfil',
-    noProfileImage: 'Sin imagen de perfil',
+    noProfileImage: '¡Escribe sobre ti aquí!',
     saveAboutMe: 'Guardar Acerca de Mí',
     editAboutMe: 'Editar Acerca de Mí',
     currentPassword: 'Contraseña Actual',
