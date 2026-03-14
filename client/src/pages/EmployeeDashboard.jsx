@@ -254,7 +254,7 @@ export default function EmployeeDashboard() {
         <img
           src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
           alt="New Flow Logo"
-          style={{ maxWidth: '60px', opacity: 0.7 }}
+          style={{ maxWidth: '80px', opacity: 0.9 }}
         />
       </div>
       <ScrollToTop />

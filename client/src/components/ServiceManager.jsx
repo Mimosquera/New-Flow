@@ -173,7 +173,8 @@ export const ServiceManager = () => {
               <div
                 className="card-header d-flex justify-content-between align-items-center collapsible-header"
                 style={{
-                  backgroundColor: THEME_COLOR,
+                  background: 'rgba(3, 25, 38, 0.45)',
+                  borderBottom: '1px solid rgba(70,161,161,0.2)',
                   color: 'white',
                   cursor: 'pointer',
                   padding: '0.75rem 1rem',
@@ -309,9 +310,9 @@ export const ServiceManager = () => {
                     </div>
                   )}
 
-                  <div className="d-flex gap-2">
-                    <button 
-                      type="submit" 
+                  <div className="d-flex gap-2 justify-content-center">
+                    <button
+                      type="submit"
                       className="btn post-update-btn"
                     >
                       {editingService ? t('updateService') : t('addService')}

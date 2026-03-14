@@ -198,7 +198,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
       {error && <Alert type="error" message={error} onClose={() => setError(null)} />}
       {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-      <div className="card post-update-card mb-4 shadow-sm border-0 block-date-card-border">
+      <div className="card post-update-card mb-4 shadow-sm block-date-card-border" style={{ background: 'rgba(255,255,255,0.05)' }}>
         <div className="card-body p-3">
           <h6 className="mb-3 block-date-title" style={{ color: 'white' }}>
             {t('blockDateAndTime')}
@@ -262,7 +262,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                   autocomplete="off"
                 />
               </div>
-              <div className="col-12">
+              <div className="col-12 d-flex justify-content-center">
                 <button
                   type="submit"
                   className="btn"

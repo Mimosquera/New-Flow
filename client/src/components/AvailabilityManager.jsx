@@ -47,6 +47,7 @@ export const AvailabilityManager = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState(FILTER_ALL_VALUE);
+  const [selectedDayFilter, setSelectedDayFilter] = useState(FILTER_ALL_VALUE);
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
   const [showAddAvailability, setShowAddAvailability] = useState(false);
   const [showBlockedDates, setShowBlockedDates] = useState(false);
@@ -193,16 +194,20 @@ export const AvailabilityManager = () => {
   }, [editFormData, fetchAvailabilities, t]);
 
   const groupedAvailabilities = useMemo(() => {
-    const filtered = (isAdmin && selectedEmployeeFilter !== FILTER_ALL_VALUE)
-      ? availabilities.filter(a => a?.user?.id === selectedEmployeeFilter)
-      : availabilities;
+    let filtered = availabilities;
+    if (isAdmin && selectedEmployeeFilter !== FILTER_ALL_VALUE) {
+      filtered = filtered.filter(a => a?.user?.id === selectedEmployeeFilter);
+    }
+    if (isAdmin && selectedDayFilter !== FILTER_ALL_VALUE) {
+      filtered = filtered.filter(a => String(a?.dayOfWeek) === selectedDayFilter);
+    }
     return filtered.reduce((acc, avail) => {
       if (typeof avail?.dayOfWeek !== 'number') return acc;
       if (!acc[avail.dayOfWeek]) acc[avail.dayOfWeek] = [];
       acc[avail.dayOfWeek].push(avail);
       return acc;
     }, {});
-  }, [availabilities, isAdmin, selectedEmployeeFilter]);
+  }, [availabilities, isAdmin, selectedEmployeeFilter, selectedDayFilter]);
 
   const formatTime = useCallback((timeString) => {
     if (!timeString) return '';
@@ -242,7 +247,7 @@ export const AvailabilityManager = () => {
               <div className="card post-update-card shadow-sm border-0">
                 <div
                   className="card-header d-flex justify-content-between align-items-center collapsible-header"
-                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAddAvailability ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+                  style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAddAvailability ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                   onClick={() => setShowAddAvailability(!showAddAvailability)}
                 >
                   <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
@@ -344,13 +349,15 @@ export const AvailabilityManager = () => {
                         </div>
                       </div>
 
-                      <button
-                        type="submit"
-                        className="btn"
-                        style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none', fontWeight: '500', fontSize: '0.88rem' }}
-                      >
-                        {t('addAvailability')}
-                      </button>
+                      <div className="d-flex justify-content-center">
+                        <button
+                          type="submit"
+                          className="btn"
+                          style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none', fontWeight: '500', fontSize: '0.88rem' }}
+                        >
+                          {t('addAvailability')}
+                        </button>
+                      </div>
                     </form>
                   </div>
                   </motion.div>
@@ -368,7 +375,7 @@ export const AvailabilityManager = () => {
               <div className="card post-update-card shadow-sm border-0">
                 <div
                   className="card-header d-flex justify-content-between align-items-center collapsible-header"
-                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showBlockedDates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+                  style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showBlockedDates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                   onClick={() => setShowBlockedDates(!showBlockedDates)}
                 >
                   <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
@@ -412,7 +419,7 @@ export const AvailabilityManager = () => {
             <div className="card post-update-card shadow-sm border-0">
               <div
                 className="card-header d-flex justify-content-between align-items-center collapsible-header"
-                style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAvailabilityList ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+                style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAvailabilityList ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                 onClick={() => setShowAvailabilityList(!showAvailabilityList)}
               >
                 <h5 className="mb-0" style={{ fontSize: '1rem' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
@@ -428,25 +435,43 @@ export const AvailabilityManager = () => {
                   style={{ overflow: 'hidden' }}
                 >
                 <div className="card-body p-4">
-                  <div className="d-flex justify-content-end align-items-start mb-3">
-                    {isAdmin && employees.length > 0 && (
-                      <div>
-                        <label id="availabilityFilterLabel" htmlFor="availabilityEmployeeFilter" className="form-label me-2">{t('filter')}:</label>
+                  <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
+                      {isAdmin && employees.length > 0 && (
+                        <div className="d-flex align-items-center gap-2">
+                          <label htmlFor="availabilityEmployeeFilter" className="form-label mb-0" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', whiteSpace: 'nowrap' }}>{t('employee')}:</label>
+                          <select
+                            id="availabilityEmployeeFilter"
+                            name="availabilityEmployeeFilter"
+                            className="form-select form-select-sm appointments-filter-select"
+                            style={{ width: 'auto' }}
+                            value={selectedEmployeeFilter}
+                            onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                            autoComplete="off"
+                          >
+                            <option value="all">{t('allEmployees')}</option>
+                            {employees.map(emp => (
+                              <option key={emp.id} value={emp.id}>{emp.name}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                      <div className="d-flex align-items-center gap-2">
+                        <label htmlFor="availabilityDayFilter" className="form-label mb-0" style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.7)', whiteSpace: 'nowrap' }}>{t('day')}:</label>
                         <select
-                          id="availabilityEmployeeFilter"
-                          name="availabilityEmployeeFilter"
-                          className="form-select d-inline-block w-auto appointments-filter-select"
-                          value={selectedEmployeeFilter}
-                          onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                          id="availabilityDayFilter"
+                          name="availabilityDayFilter"
+                          className="form-select form-select-sm appointments-filter-select"
+                          style={{ width: 'auto' }}
+                          value={selectedDayFilter}
+                          onChange={(e) => setSelectedDayFilter(e.target.value)}
                           autoComplete="off"
                         >
-                          <option value="all">{t('allEmployees')}</option>
-                          {employees.map(emp => (
-                            <option key={emp.id} value={emp.id}>{emp.name}</option>
+                          <option value="all">{t('allDays')}</option>
+                          {DAYS_OF_WEEK.map(day => (
+                            <option key={day.value} value={String(day.value)}>{day.label}</option>
                           ))}
                         </select>
                       </div>
-                    )}
                   </div>
 
                   {loading ? (

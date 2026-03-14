@@ -131,9 +131,9 @@ a:focus:not(:focus-visible) {
   border-radius: 1rem !important;
   overflow: hidden;
 }
-/* Block Date & Time section white border */
+/* Block Date & Time section border */
 .block-date-card-border {
-  border: 1px solid #fff !important;
+  border: 1px solid rgba(70, 161, 161, 0.35) !important;
   border-radius: 1rem !important;
 }
 
@@ -174,18 +174,39 @@ a:focus:not(:focus-visible) {
 }
 /* Post Update Card Input Fields */
 .post-update-card .form-control {
-  background: #e9ecef !important;
-  color: rgb(5, 45, 63) !important;
-  border: 1px solid #cfd8dc;
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+  border: 1px solid rgba(70, 161, 161, 0.25);
   border-radius: 0.5rem;
-  font-weight: 500;
+  font-weight: 400;
   box-shadow: none;
   transition: border 0.2s, box-shadow 0.2s;
 }
+.post-update-card .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
 .post-update-card .form-control:focus {
   border: 1.5px solid #46a1a1;
-  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.08);
-  background: #e9ecef !important;
+  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.12);
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  outline: none;
+}
+/* Select inputs inside dashboard cards */
+.post-update-card .form-select {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2346a1a1' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+  color: #fff !important;
+  border: 1px solid rgba(70, 161, 161, 0.25);
+  border-radius: 0.5rem;
+}
+.post-update-card .form-select:focus {
+  border-color: #46a1a1;
+  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.12);
+}
+.post-update-card .form-select option {
+  background: rgb(5, 45, 63);
+  color: #fff;
 }
 /* Sticky Employee Dashboard Header */
 .dashboard-header-sticky {
@@ -331,18 +352,21 @@ a:focus:not(:focus-visible) {
 }
 /* Employee Dashboard Post Update Card Theme */
 .post-update-card {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #083e56 100%);
+  background: rgba(5, 45, 63, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(70, 161, 161, 0.2) !important;
   color: #fff;
   border-radius: 1rem;
-  box-shadow: 0 4px 16px rgba(5, 45, 63, 0.15);
-  border: none;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
 }
 
 /* Expanded Employee Name Card */
 .expanded-employee-card {
-  background: rgb(5, 45, 63) !important;
+  background: rgba(70, 161, 161, 0.12) !important;
+  border: 1.5px solid rgba(70, 161, 161, 0.45) !important;
   color: #fff !important;
-  border-radius: 1rem !important;
+  border-radius: 10px !important;
 }
 .post-update-card .card-title {
   color: #46a1a1;
@@ -350,6 +374,10 @@ a:focus:not(:focus-visible) {
 }
 .post-update-card .form-label {
   color: rgba(255, 255, 255, 0.85) !important;
+}
+.post-update-card .file-info-text {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.8rem;
 }
 .post-update-card .form-check-label {
   color: rgba(255, 255, 255, 0.85);
@@ -403,6 +431,48 @@ a:focus:not(:focus-visible) {
 .post-update-card .btn-outline-secondary:hover {
   background: rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
+}
+.post-update-card .btn-secondary,
+.post-update-card .btn-secondary:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: none !important;
+}
+.post-update-card .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #fff !important;
+}
+.post-update-card .btn-outline-danger {
+  background: transparent !important;
+  color: rgba(255, 110, 110, 0.9) !important;
+  border: 1.5px solid rgba(220, 53, 69, 0.55) !important;
+}
+@media (hover: hover) {
+  .post-update-card .btn-outline-danger:hover {
+    background: rgba(220, 53, 69, 0.15) !important;
+    color: #ff8585 !important;
+    border-color: rgba(220, 53, 69, 0.8) !important;
+  }
+}
+.post-update-card .btn-danger {
+  background: rgba(220, 53, 69, 0.72) !important;
+  border: none !important;
+  color: #fff !important;
+}
+.post-update-card .btn-danger:hover {
+  background: rgba(220, 53, 69, 0.92) !important;
+}
+/* btn-link rows (employee list toggles) stay transparent */
+.post-update-card .btn.btn-link {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+@media (hover: hover) {
+  .post-update-card .btn.btn-link:hover {
+    background: rgba(70, 161, 161, 0.08) !important;
+  }
 }
 
 /* Update/Post Listing Cards */
