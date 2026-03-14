@@ -79,164 +79,87 @@ export default function EmployeeDashboard() {
   return (
     <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div
-        className="pb-3 dashboard-header-sticky"
-        style={{ 
-          position: 'sticky', 
-          top: '0', 
+        className="dashboard-header-sticky"
+        style={{
+          position: 'sticky',
+          top: 0,
           zIndex: 1050,
           background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)',
-          borderRadius: '0',
-          transition: 'all 0.3s ease',
-          transform: showHeader ? 'translateY(0)' : 'translateY(-100%)',
-          opacity: showHeader ? 1 : 0,
+          borderBottom: '2px solid #46a1a1',
           padding: '0.5rem 1rem',
           width: '100%',
           boxSizing: 'border-box',
-          borderBottom: '2px solid #46a1a1',
+          transition: 'transform 0.3s ease, opacity 0.3s ease',
+          transform: showHeader ? 'translateY(0)' : 'translateY(-100%)',
+          opacity: showHeader ? 1 : 0,
         }}
       >
-        <div 
-          className="dashboard-header mb-3"
-          style={{ 
-            backgroundColor: 'transparent',
-            borderRadius: '0',
-            padding: '0.6rem',
-            boxShadow: 'none',
-            border: 'none'
-          }}
-        >
-          <div className="d-flex align-items-center" style={{ width: '100%' }}>
-            <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem', overflow: 'hidden' }}>
-              <img 
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="Logo"
-                style={{ height: '1.3rem', flexShrink: 0 }}
-              />
-              <h1 className="mb-0 dashboard-title" style={{ 
-                fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', fontWeight: '600', color: '#ffffff', 
-                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 
-              }}>
-                {t('employeeDashboard')}
-              </h1>
-            </div>
-            <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
-              <button
-                className="btn btn-sm dashboard-home-btn"
-                onClick={() => navigate('/')}
-                title={t('backToHome')}
-              >
-                <Home size={14} />
-              </button>
-              <div style={{ 
-                width: '53px', 
-                height: '24px', 
-                position: 'relative',
-                flexShrink: 0
-              }}>
-                <div style={{ 
-                  transform: 'scale(0.75)', 
-                  transformOrigin: 'top left',
-                  position: 'absolute',
-                  top: 0,
-                  left: 0
-                }}>
-                  <LanguageToggle inverse />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="d-flex align-items-center" style={{ gap: '0.5rem' }}>
 
-        <div className="d-flex align-items-center justify-content-between mb-0" style={{ gap: '0.5rem' }}>
-          <div className="d-flex align-items-center" style={{ minWidth: 0, flex: '1 1 auto', gap: '0.4rem' }}>
-            <h2 className="mb-0" style={{ fontSize: 'clamp(1rem, 3.5vw, 1.5rem)', whiteSpace: 'nowrap', color: '#e0f7f7', minWidth: 0, fontWeight: '700', letterSpacing: '0.02em' }}>
-              {activeTab === 'profile' && t('myProfile')}
-              {activeTab === 'appointments' && t('appointmentRequests')}
-              {activeTab === 'availability' && t('manageAvailability')}
-              {activeTab === 'updates' && t('managePosts')}
-              {activeTab === 'services' && t('manageServices')}
-              {activeTab === 'team' && (t('manageTeam') || 'Manage Team')}
-            </h2>
+          {/* Left: Logo + name badge */}
+          <div className="d-flex align-items-center" style={{ gap: '0.5rem', flexShrink: 0 }}>
+            <img
+              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+              alt="Logo"
+              style={{ height: '1.4rem', flexShrink: 0 }}
+            />
             {employeeName && (
-              <span 
-                style={{ 
-                  backgroundColor: 'rgba(70, 161, 161, 0.25)',
-                  color: '#ffffff',
-                  padding: '0.15rem 0.5rem',
-                  borderRadius: '12px',
-                  fontSize: '0.7rem',
-                  fontWeight: '500',
-                  whiteSpace: 'nowrap',
-                  flexShrink: 0
-                }}
-              >
+              <span style={{
+                backgroundColor: 'rgba(70, 161, 161, 0.28)',
+                color: '#ffffff',
+                padding: '0.2rem 0.6rem',
+                borderRadius: '10px',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                whiteSpace: 'nowrap',
+                border: '1px solid rgba(70, 161, 161, 0.55)',
+                letterSpacing: '0.01em',
+              }}>
                 {employeeName.split(' ')[0]}
               </span>
             )}
           </div>
 
-          <div className="d-none d-lg-flex" style={{ minWidth: 0, flex: '1 1 auto', justifyContent: 'flex-end' }}>
+          {/* Center: Desktop tabs */}
+          <div className="d-none d-lg-flex" style={{ flex: 1, justifyContent: 'center' }}>
             <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
               <li className="nav-item">
-                <button
-                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'profile' ? 'active' : ''}`}
-                  onClick={() => { hapticLight(); setActiveTab('profile'); }}
-                >
-                  <User size={13} />
-                  {t('profile')}
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('profile'); }}>
+                  <User size={13} />{t('profile')}
                 </button>
               </li>
               <li className="nav-item">
-                <button
-                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'appointments' ? 'active' : ''}`}
-                  onClick={() => { hapticLight(); setActiveTab('appointments'); }}
-                >
-                  <Calendar size={13} />
-                  {t('appointments')}
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'appointments' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('appointments'); }}>
+                  <Calendar size={13} />{t('appointments')}
                 </button>
               </li>
               <li className="nav-item">
-                <button
-                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'availability' ? 'active' : ''}`}
-                  onClick={() => { hapticLight(); setActiveTab('availability'); }}
-                >
-                  <Clock size={13} />
-                  {t('availability')}
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'availability' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('availability'); }}>
+                  <Clock size={13} />{t('availability')}
                 </button>
               </li>
               <li className="nav-item">
-                <button
-                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'updates' ? 'active' : ''}`}
-                  onClick={() => { hapticLight(); setActiveTab('updates'); }}
-                >
-                  <FileText size={13} />
-                  {t('postsTab')}
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'updates' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('updates'); }}>
+                  <FileText size={13} />{t('postsTab')}
                 </button>
               </li>
               <li className="nav-item">
-                <button
-                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'services' ? 'active' : ''}`}
-                  onClick={() => { hapticLight(); setActiveTab('services'); }}
-                >
-                  <Scissors size={13} />
-                  {t('services')}
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'services' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('services'); }}>
+                  <Scissors size={13} />{t('services')}
                 </button>
               </li>
               {isAdmin && (
                 <li className="nav-item">
-                  <button
-                    className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'team' ? 'active' : ''}`}
-                    onClick={() => { hapticLight(); setActiveTab('team'); }}
-                  >
-                    <Users size={13} />
-                    {t('team') || 'Team'}
+                  <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'team' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('team'); }}>
+                    <Users size={13} />{t('team')}
                   </button>
                 </li>
               )}
             </ul>
           </div>
 
-          <div className="d-lg-none" style={{ flexShrink: 0 }}>
+          {/* Center: Mobile tab select */}
+          <div className="d-lg-none" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
             <select
               id="mobileTabSelect"
               name="mobileTabSelect"
@@ -254,13 +177,13 @@ export default function EmployeeDashboard() {
                 cursor: 'pointer',
                 appearance: 'none',
                 WebkitAppearance: 'none',
-                maxWidth: '130px',
+                width: 'auto',
                 backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%2346a1a1\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'right 0.4rem center',
                 backgroundSize: '10px',
                 outline: 'none',
-                WebkitTapHighlightColor: 'transparent'
+                WebkitTapHighlightColor: 'transparent',
               }}
             >
               <option value="profile" style={{ color: '#000', backgroundColor: '#fff' }}>{t('profile')}</option>
@@ -271,6 +194,23 @@ export default function EmployeeDashboard() {
               {isAdmin && <option value="team" style={{ color: '#000', backgroundColor: '#fff' }}>{t('team')}</option>}
             </select>
           </div>
+
+          {/* Right: Home + Language toggle */}
+          <div className="d-flex align-items-center" style={{ gap: '0.4rem', flexShrink: 0 }}>
+            <button
+              className="btn btn-sm dashboard-home-btn"
+              onClick={() => navigate('/')}
+              title={t('backToHome')}
+            >
+              <Home size={14} />
+            </button>
+            <div style={{ width: '53px', height: '24px', position: 'relative', flexShrink: 0 }}>
+              <div style={{ transform: 'scale(0.75)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>
+                <LanguageToggle inverse />
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -303,7 +243,7 @@ export default function EmployeeDashboard() {
         <img
           src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
           alt="New Flow Logo"
-          style={{ maxWidth: '60px', opacity: 0.35 }}
+          style={{ maxWidth: '60px', opacity: 0.7 }}
         />
       </div>
       <ScrollToTop />
