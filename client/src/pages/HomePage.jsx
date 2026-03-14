@@ -89,22 +89,22 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [displayCount, setDisplayCount] = useState(4);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedUpdate, setSelectedUpdate] = useState(null);
+  const [selectedUpdateIndex, setSelectedUpdateIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const updatesEndRef = useRef(null);
 
-  const handleUpdateClick = (update) => {
+  const handleUpdateClick = (article) => {
     hapticLight();
-    setSelectedUpdate(update);
+    const idx = translatedNews.findIndex(n => n.id === article.id);
+    setSelectedUpdateIndex(idx >= 0 ? idx : 0);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setSelectedUpdate(null);
   };
 
   const [translatedServices, translatingServices] = useTranslateItems(services, ['name', 'description'], language);
@@ -212,6 +212,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.nav
         className={styles.navbar}
         ref={navbarRef}
+        initial={{ y: '-100%' }}
         animate={{ y: showNavbar ? 0 : '-100%' }}
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       >
@@ -766,7 +767,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </motion.section>
 
-      <UpdateModal update={selectedUpdate} show={showModal} onClose={handleCloseModal} />
+      <UpdateModal updates={translatedNews} initialIndex={selectedUpdateIndex} show={showModal} onClose={handleCloseModal} />
       <ScrollToTop hidden={showModal} />
     </div>
   );

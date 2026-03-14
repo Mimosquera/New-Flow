@@ -1,68 +1,89 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
 
-export const UpdateModal = ({ update, show, onClose }) => {
+const slideVariants = {
+  enter: (dir) => ({ x: dir >= 0 ? '55%' : '-55%', opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (dir) => ({ x: dir >= 0 ? '-55%' : '55%', opacity: 0 }),
+};
+
+const slideTransition = { duration: 0.28, ease: [0.4, 0, 0.2, 1] };
+
+const mediaUrl = (url) => {
+  if (!url) return null;
+  return url.startsWith('http') ? url : `${SERVER_BASE_URL}${url}`;
+};
+
+export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
+  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [direction, setDirection] = useState(1);
   const [fullscreen, setFullscreen] = useState(false);
   const { t, language } = useTranslation();
 
-  // Lock body scroll when modal is open
   useEffect(() => {
-    if (show && update) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (show) {
+      setCurrentIndex(initialIndex);
+      setFullscreen(false);
     }
-    return () => {
-      document.body.style.overflow = '';
+  }, [show, initialIndex]);
+
+  const update = updates[currentIndex];
+  const showNav = updates.length > 1;
+
+  const goTo = useCallback((idx, dir) => {
+    setDirection(dir);
+    setCurrentIndex(idx);
+    setFullscreen(false);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    goTo((currentIndex - 1 + updates.length) % updates.length, -1);
+  }, [currentIndex, updates.length, goTo]);
+
+  const goNext = useCallback(() => {
+    goTo((currentIndex + 1) % updates.length, 1);
+  }, [currentIndex, updates.length, goTo]);
+
+  useEffect(() => {
+    if (!show) return;
+    const onKey = (e) => {
+      if (e.key === 'ArrowLeft') goPrev();
+      else if (e.key === 'ArrowRight') goNext();
+      else if (e.key === 'Escape') onClose();
     };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [show, goPrev, goNext, onClose]);
+
+  useEffect(() => {
+    document.body.style.overflow = show && update ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [show, update]);
 
   if (!show || !update) return null;
 
-  const handleMediaClick = () => {
-    setFullscreen(true);
-  };
+  const src = mediaUrl(update.media_url);
 
-  const handleCloseFullscreen = () => {
-    setFullscreen(false);
-  };
-
-  // Fullscreen overlay
-  if (fullscreen && update.media_url) {
+  if (fullscreen && src) {
     return (
-      <div 
+      <div
         className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-        style={{ 
-          backgroundColor: 'rgba(0, 0, 0, 0.95)', 
-          zIndex: 2000,
-          cursor: 'zoom-out'
-        }}
-        onClick={handleCloseFullscreen}
+        style={{ backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 2000, cursor: 'zoom-out', overflow: 'auto', touchAction: 'pinch-zoom' }}
+        onClick={() => setFullscreen(false)}
       >
-        <button
-          className="btn btn-light position-absolute top-0 end-0 m-3"
-          onClick={handleCloseFullscreen}
-          style={{ zIndex: 2001 }}
-        >
-          ✕ Close
-        </button>
         {update.media_type === 'image' ? (
           <img
-            src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
+            src={src}
             alt={update.title}
-            style={{ maxWidth: '95%', maxHeight: '95%', objectFit: 'contain' }}
+            style={{ maxWidth: '95%', maxHeight: '95%', objectFit: 'contain', cursor: 'default', touchAction: 'pinch-zoom' }}
             onClick={(e) => e.stopPropagation()}
           />
         ) : (
-          <video
-            src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-            style={{ maxWidth: '95%', maxHeight: '95%' }}
-            controls
-            autoPlay
-            onClick={(e) => e.stopPropagation()}
-          />
+          <video src={src} style={{ maxWidth: '95%', maxHeight: '95%' }} controls autoPlay onClick={(e) => e.stopPropagation()} />
         )}
       </div>
     );
@@ -70,126 +91,134 @@ export const UpdateModal = ({ update, show, onClose }) => {
 
   return (
     <>
-      {/* Modal backdrop */}
-      <div 
-        className="modal-backdrop fade show" 
-        onClick={onClose}
-        style={{ zIndex: 1040 }}
-      />
-      
-      {/* Modal */}
-      <div 
-        className="modal fade show d-block" 
-        tabIndex="-1" 
-        style={{ zIndex: 1050 }}
-      >
+      <div className="modal-backdrop fade show" onClick={onClose} style={{ zIndex: 1040 }} />
+      <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050 }}>
         <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-          <div className="modal-content" style={{ 
-            borderRadius: '24px', 
-            overflow: 'hidden', 
-            border: 'none',
-            boxShadow: '0 20px 60px rgba(5, 45, 63, 0.5), 0 0 0 1px rgba(70, 161, 161, 0.2)'
+          <div className="modal-content" style={{
+            borderRadius: '24px', overflow: 'hidden', border: 'none',
+            boxShadow: '0 20px 60px rgba(5,45,63,0.5), 0 0 0 1px rgba(70,161,161,0.2)',
           }}>
-            <div className="modal-header" style={{ 
-              background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
+            {/* Header */}
+            <div className="modal-header" style={{
+              background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
               borderBottom: '3px solid #46a1a1',
-              padding: '1.25rem 1.5rem'
+              padding: '1.25rem 1.5rem',
             }}>
-              <h5 className="modal-title" style={{ 
-                color: '#fff', 
-                fontWeight: '700', 
-                letterSpacing: '-0.01em',
-                textShadow: '0 2px 8px rgba(0,0,0,0.3)'
-              }}>{update.title}</h5>
-              <button 
-                type="button" 
-                className="btn-close btn-close-white" 
-                onClick={onClose}
-                aria-label="Close"
-              />
+              <h5 className="modal-title" style={{
+                color: '#fff', fontWeight: '700', letterSpacing: '-0.01em',
+                textShadow: '0 2px 8px rgba(0,0,0,0.3)',
+              }}>
+                {update.title}
+              </h5>
+              <button type="button" className="btn-close btn-close-white" onClick={onClose} aria-label="Close" />
             </div>
-            <div className="modal-body" style={{
-              padding: '1.75rem',
-              background: 'linear-gradient(180deg, rgba(5, 45, 63, 0.97) 0%, rgba(3, 28, 40, 0.99) 100%)'
+
+            {/* Swipeable body */}
+            <div style={{
+              overflow: 'hidden',
+              background: 'linear-gradient(180deg, rgba(5,45,63,0.97) 0%, rgba(3,28,40,0.99) 100%)',
+              position: 'relative',
             }}>
-              {/* Large media display */}
-              {update.media_url && (
-                <div 
-                  className="mb-4" 
-                  style={{ cursor: 'zoom-in' }}
-                  onClick={handleMediaClick}
+              <AnimatePresence custom={direction} mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={slideTransition}
+                  drag={showNav ? 'x' : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.12}
+                  dragDirectionLock
+                  onDragEnd={(_, { offset }) => {
+                    if (offset.x < -60) goNext();
+                    else if (offset.x > 60) goPrev();
+                  }}
+                  style={{
+                    padding: '1.75rem',
+                    cursor: showNav ? 'grab' : 'default',
+                  }}
                 >
-                  {update.media_type === 'image' ? (
-                    <img
-                      src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                      alt={update.title}
-                      className="img-fluid w-100"
-                      style={{ 
-                        maxHeight: '60vh', 
-                        objectFit: 'contain', 
-                        borderRadius: '12px',
-                        border: '1px solid rgba(70, 161, 161, 0.15)'
-                      }}
-                    />
-                  ) : (
-                    <video
-                      src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                      className="w-100"
-                      style={{ 
-                        maxHeight: '60vh', 
-                        borderRadius: '12px',
-                        border: '1px solid rgba(70, 161, 161, 0.15)'
-                      }}
-                      controls
-                    />
+                  {src && (
+                    <div className="mb-4" style={{ cursor: 'zoom-in' }} onClick={() => setFullscreen(true)}>
+                      {update.media_type === 'image' ? (
+                        <img
+                          src={src}
+                          alt={update.title}
+                          className="img-fluid w-100"
+                          style={{ maxHeight: '60vh', objectFit: 'contain', borderRadius: '12px', border: '1px solid rgba(70,161,161,0.15)' }}
+                        />
+                      ) : (
+                        <video
+                          src={src}
+                          className="w-100"
+                          style={{ maxHeight: '60vh', borderRadius: '12px', border: '1px solid rgba(70,161,161,0.15)' }}
+                          controls
+                        />
+                      )}
+                    </div>
                   )}
-                  <small style={{ color: '#46a1a1', fontWeight: '500' }} className="d-block text-center mt-2">
-                    {t('clickToViewFullscreen')}
-                  </small>
+
+                  <p className="mb-3" style={{ whiteSpace: 'pre-wrap', fontSize: '1rem', color: 'rgba(255,255,255,0.88)', lineHeight: '1.6' }}>
+                    {update.content}
+                  </p>
+
+                  <div style={{ borderTop: '1px solid rgba(70,161,161,0.25)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
+                    <small style={{ color: '#46a1a1', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
+                      {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
+                    </small>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Footer */}
+            <div className="modal-footer" style={{
+              background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
+              borderTop: '2px solid #46a1a1',
+              padding: '0.75rem 1.5rem',
+              display: 'flex',
+              justifyContent: showNav ? 'space-between' : 'flex-end',
+              alignItems: 'center',
+            }}>
+              {showNav && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <button
+                    onClick={goPrev}
+                    style={{
+                      background: 'none', border: '1px solid rgba(70,161,161,0.4)',
+                      borderRadius: '8px', color: '#46a1a1', cursor: 'pointer',
+                      padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
+                    }}
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', minWidth: '3rem', textAlign: 'center' }}>
+                    {currentIndex + 1} / {updates.length}
+                  </span>
+                  <button
+                    onClick={goNext}
+                    style={{
+                      background: 'none', border: '1px solid rgba(70,161,161,0.4)',
+                      borderRadius: '8px', color: '#46a1a1', cursor: 'pointer',
+                      padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
+                    }}
+                  >
+                    <ChevronRight size={16} />
+                  </button>
                 </div>
               )}
-              
-              {/* Content */}
-              <p className="mb-3" style={{
-                whiteSpace: 'pre-wrap',
-                fontSize: '1rem',
-                color: 'rgba(255, 255, 255, 0.88)',
-                lineHeight: '1.6'
-              }}>
-                {update.content}
-              </p>
-              
-              {/* Metadata */}
-              <div style={{
-                borderTop: '1px solid rgba(70, 161, 161, 0.25)',
-                paddingTop: '0.75rem',
-                marginTop: '0.5rem'
-              }}>
-                <small style={{ color: '#46a1a1', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
-                  {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
-                </small>
-              </div>
-            </div>
-            <div className="modal-footer" style={{ 
-              background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%)',
-              borderTop: '2px solid #46a1a1',
-              padding: '0.75rem 1.5rem'
-            }}>
-              <button 
-                type="button" 
+              <button
+                type="button"
                 onClick={onClose}
                 style={{
-                  background: 'linear-gradient(135deg, rgba(70, 161, 161, 0.15) 0%, rgba(70, 161, 161, 0.08) 100%)',
-                  color: '#fff',
-                  border: '1.5px solid rgba(70, 161, 161, 0.6)',
-                  borderRadius: '10px',
-                  padding: '0.4rem 1.25rem',
-                  fontWeight: '600',
-                  fontSize: '0.85rem',
-                  letterSpacing: '0.03em',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  backdropFilter: 'blur(8px)'
+                  background: 'linear-gradient(135deg, rgba(70,161,161,0.15) 0%, rgba(70,161,161,0.08) 100%)',
+                  color: '#fff', border: '1.5px solid rgba(70,161,161,0.6)',
+                  borderRadius: '10px', padding: '0.4rem 1.25rem',
+                  fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.03em',
+                  cursor: 'pointer', transition: 'all 0.2s ease', backdropFilter: 'blur(8px)',
                 }}
               >
                 {t('close')}
@@ -203,7 +232,7 @@ export const UpdateModal = ({ update, show, onClose }) => {
 };
 
 UpdateModal.propTypes = {
-  update: PropTypes.shape({
+  updates: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     title: PropTypes.string,
     content: PropTypes.string,
@@ -211,7 +240,8 @@ UpdateModal.propTypes = {
     date: PropTypes.string,
     media_url: PropTypes.string,
     media_type: PropTypes.string,
-  }),
+  })),
+  initialIndex: PropTypes.number,
   show: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
 };
