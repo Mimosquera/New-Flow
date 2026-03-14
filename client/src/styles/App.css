@@ -123,17 +123,9 @@ a:focus:not(:focus-visible) {
 
 /* Current Services Table Styles */
 .current-services-table {
-  border: 2px solid rgba(70, 161, 161, 0.3) !important;
+  border: 2px solid rgba(70, 161, 161, 0.4) !important;
   border-radius: 1rem !important;
   overflow: hidden;
-}
-.current-services-table th {
-  color: #46a1a1 !important;
-  border-bottom-color: rgba(70, 161, 161, 0.25) !important;
-}
-.current-services-table td {
-  color: rgba(255, 255, 255, 0.85) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.06) !important;
 }
 /* Block Date & Time section white border */
 .block-date-card-border {
@@ -170,30 +162,27 @@ a:focus:not(:focus-visible) {
 .post-update-card .card-title.force-black-title,
 .post-update-card .card-title.create-employee-title {
   color: #fff !important;
-  text-shadow: 0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
 }
-/* Force black info text for create employee card */
+/* Info text inside dark employee cards */
 .employee-info-black {
-  color: rgba(255, 255, 255, 0.85) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
   font-weight: 500;
 }
 /* Post Update Card Input Fields */
 .post-update-card .form-control {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fff !important;
-  border: 1px solid rgba(70, 161, 161, 0.25);
+  background: #e9ecef !important;
+  color: rgb(5, 45, 63) !important;
+  border: 1px solid #cfd8dc;
   border-radius: 0.5rem;
   font-weight: 500;
   box-shadow: none;
   transition: border 0.2s, box-shadow 0.2s;
 }
-.post-update-card .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.35);
-}
 .post-update-card .form-control:focus {
   border: 1.5px solid #46a1a1;
-  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.15);
-  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.08);
+  background: #e9ecef !important;
 }
 /* Sticky Employee Dashboard Header */
 .dashboard-header-sticky {
@@ -339,13 +328,11 @@ a:focus:not(:focus-visible) {
 }
 /* Employee Dashboard Post Update Card Theme */
 .post-update-card {
-  background: rgba(5, 45, 63, 0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #083e56 100%);
   color: #fff;
   border-radius: 1rem;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(70, 161, 161, 0.15);
+  box-shadow: 0 4px 16px rgba(5, 45, 63, 0.15);
+  border: none;
 }
 
 /* Expanded Employee Name Card */
@@ -362,7 +349,7 @@ a:focus:not(:focus-visible) {
   color: rgba(255, 255, 255, 0.85) !important;
 }
 .post-update-card .text-muted {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.55) !important;
   font-weight: 500;
 }
 .post-update-card .btn:not(.btn-close) {
@@ -385,20 +372,17 @@ a:focus:not(:focus-visible) {
 }
 .post-update-card .btn-outline-secondary {
   background: transparent;
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgb(5, 45, 63);
+  border: 1px solid rgb(5, 45, 63);
 }
 .post-update-card .btn-outline-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgb(5, 45, 63);
   color: #fff;
 }
 
 /* Update/Post Listing Cards */
 .updates-list .card {
-  background: rgba(5, 45, 63, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: none !important;
+  background: linear-gradient(135deg, #fff 0%, #e8f4f8 100%);
   border-left: 4px solid #46a1a1 !important;
   border-radius: 0.75rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -407,16 +391,16 @@ a:focus:not(:focus-visible) {
 
 .updates-list .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(70, 161, 161, 0.15) !important;
+  box-shadow: 0 12px 32px rgba(5, 45, 63, 0.25), 0 4px 12px rgba(70, 161, 161, 0.15) !important;
 }
 
 .updates-list .card .card-title {
-  color: #fff;
+  color: rgb(5, 45, 63);
   font-weight: 600;
 }
 
 .updates-list .card .card-text {
-  color: rgba(255, 255, 255, 0.85);
+  color: #3a4a5a;
 }
 
 .updates-list .card .text-muted {
@@ -889,50 +873,48 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Appointment card */
 .appointment-card {
-  background: rgba(5, 45, 63, 0.6) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, #ffffff 0%, #f0fafa 50%, #e3f3f3 100%) !important;
   border: none !important;
   border-left: 4px solid #46a1a1 !important;
   border-radius: 16px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 2px 12px rgba(70, 161, 161, 0.15), 0 4px 24px rgba(70, 161, 161, 0.08) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
   overflow: hidden;
 }
 .appointment-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.2), 0 8px 32px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.25), 0 8px 32px rgba(70, 161, 161, 0.12) !important;
 }
 .appointment-card .card-title {
-  color: #fff !important;
+  color: rgb(5, 45, 63) !important;
   font-weight: 600 !important;
   font-size: 1.05rem !important;
 }
 .appointment-card .card-body {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgb(5, 45, 63);
 }
 .appointment-card hr {
   border-color: rgba(70, 161, 161, 0.3);
   opacity: 0.6;
 }
 .appointment-card strong {
-  color: rgba(255, 255, 255, 0.95);
+  color: rgb(5, 45, 63);
 }
 
 /* Appointment filter dropdown */
 .appointments-filter-select {
   border-color: #46a1a1 !important;
   border-radius: 8px !important;
-  color: #fff !important;
+  color: rgb(5, 45, 63) !important;
   font-weight: 500 !important;
-  background-color: rgba(5, 45, 63, 0.6) !important;
+  background-color: rgba(240, 250, 250, 0.5) !important;
 }
 .appointments-filter-select:focus {
   border-color: #46a1a1 !important;
   box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.25) !important;
 }
 .appointments-filter-label {
-  color: #fff !important;
+  color: rgb(5, 45, 63) !important;
   font-weight: 600 !important;
 }
 .availability-filter-label {
@@ -946,8 +928,8 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Appointment no-results alert */
 .appointments-no-results {
-  background: rgba(5, 45, 63, 0.5) !important;
-  color: rgba(255, 255, 255, 0.85) !important;
+  background: linear-gradient(135deg, #f0fafa 0%, #e3f3f3 100%) !important;
+  color: rgb(5, 45, 63) !important;
   border: 1.5px solid rgba(70, 161, 161, 0.3) !important;
   border-radius: 12px !important;
   font-weight: 500 !important;
@@ -995,79 +977,6 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(10, 65, 90) 100%) !important;
   border-top: 3px solid #46a1a1 !important;
   padding: 0.85rem 1.25rem !important;
-}
-
-/* Dashboard Dark Theme - Bootstrap Overrides */
-.employee-dashboard .bg-light {
-  background-color: rgba(255, 255, 255, 0.05) !important;
-}
-.employee-dashboard .list-group-item {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(70, 161, 161, 0.15);
-  color: rgba(255, 255, 255, 0.9);
-}
-.employee-dashboard .border-top {
-  border-color: rgba(70, 161, 161, 0.2) !important;
-}
-.employee-dashboard .border-danger {
-  border-color: rgba(220, 53, 69, 0.5) !important;
-}
-.employee-dashboard .alert-info {
-  background: rgba(70, 161, 161, 0.12);
-  border-color: rgba(70, 161, 161, 0.25);
-  color: rgba(255, 255, 255, 0.85);
-}
-.employee-dashboard .form-select {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  border-color: rgba(70, 161, 161, 0.25);
-}
-.employee-dashboard .form-check-label {
-  color: rgba(255, 255, 255, 0.85);
-}
-.employee-dashboard .form-check-input {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(70, 161, 161, 0.4);
-}
-.employee-dashboard .form-check-input:checked {
-  background-color: #46a1a1;
-  border-color: #46a1a1;
-}
-.employee-dashboard .table {
-  color: rgba(255, 255, 255, 0.85);
-}
-.employee-dashboard .table th {
-  border-bottom-color: rgba(70, 161, 161, 0.25);
-}
-.employee-dashboard .table td {
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-}
-.employee-dashboard .text-muted {
-  color: rgba(255, 255, 255, 0.5) !important;
-}
-.employee-dashboard input[type="time"],
-.employee-dashboard input[type="date"] {
-  color-scheme: dark;
-}
-.employee-dashboard .post-update-card .form-select {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  color: #fff !important;
-  border-color: rgba(70, 161, 161, 0.25) !important;
-}
-.employee-dashboard .card:not(.post-update-card):not(.appointment-card) {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(70, 161, 161, 0.15);
-  color: rgba(255, 255, 255, 0.9);
-}
-.employee-dashboard input:-webkit-autofill,
-.employee-dashboard input:-webkit-autofill:hover,
-.employee-dashboard input:-webkit-autofill:focus,
-.employee-dashboard textarea:-webkit-autofill,
-.employee-dashboard select:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px rgba(5, 45, 63, 0.95) inset;
-  box-shadow: 0 0 0px 1000px rgba(5, 45, 63, 0.95) inset;
-  -webkit-text-fill-color: #fff;
-  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* Extra-small screens */
