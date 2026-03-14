@@ -43,52 +43,51 @@ button svg, a svg {
 
 .scroll-to-top-btn {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 1.75rem;
+  right: 1.75rem;
   z-index: 9999;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 2px solid rgba(70, 161, 161, 0.6);
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%);
-  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(70, 161, 161, 0.25);
+  background: rgba(5, 45, 63, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.45), 0 0 0 0 rgba(70, 161, 161, 0);
   opacity: 0;
-  transform: translateY(16px) scale(0.85);
+  transform: translateY(10px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .scroll-to-top-btn.visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-.scroll-to-top-btn:hover {
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
-  border-color: #46a1a1;
-  box-shadow: 0 6px 24px rgba(70, 161, 161, 0.5), 0 0 0 4px rgba(70, 161, 161, 0.15);
-  transform: translateY(-2px) scale(1.05);
+@media (hover: hover) {
+  .scroll-to-top-btn:hover {
+    color: #46a1a1;
+    border-color: rgba(70, 161, 161, 0.5);
+    background: rgba(5, 45, 63, 0.75);
+  }
 }
 
 .scroll-to-top-btn:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 2px 10px rgba(5, 45, 63, 0.4);
+  transform: translateY(1px);
 }
 
 @media (max-width: 768px) {
   .scroll-to-top-btn {
     bottom: 1.25rem;
     right: 1.25rem;
-    width: 40px;
-    height: 40px;
+    width: 34px;
+    height: 34px;
   }
 }
 /* Global Mobile Touch States - Prevent Sticky Selection */

@@ -31,16 +31,13 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Handle 401 errors
+// Handle 401 errors — dispatch event so UI can show a re-login modal
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401) {
-      const currentPath = window?.location?.pathname;
-      if (currentPath && currentPath.startsWith(PROTECTED_ROUTE_PREFIX)) {
-        removeToken();
-        window.location.href = LOGIN_REDIRECT_PATH;
-      }
+      removeToken();
+      window.dispatchEvent(new CustomEvent('auth:session-expired'));
     }
     return Promise.reject(error);
   }

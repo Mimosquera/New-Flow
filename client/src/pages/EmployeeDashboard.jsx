@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Home, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
-import { removeToken, decodeToken, getToken } from '../utils/tokenUtils.js';
+import { removeToken, decodeToken, getToken, isTokenValid } from '../utils/tokenUtils.js';
 import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
 import { UpdatePoster } from '../components/UpdatePoster.jsx';
@@ -31,6 +31,7 @@ export default function EmployeeDashboard() {
   const [employeeName, setEmployeeName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [appointmentFilter, setAppointmentFilter] = useState('all');
+  const [showSessionModal, setShowSessionModal] = useState(() => !isTokenValid(getToken()));
 
   useEffect(() => {
     localStorage.setItem('employeeDashboardTab', activeTab);
@@ -53,6 +54,12 @@ export default function EmployeeDashboard() {
         setIsAdmin(decoded.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL);
       }
     }
+  }, []);
+
+  useEffect(() => {
+    const handleExpired = () => setShowSessionModal(true);
+    window.addEventListener('auth:session-expired', handleExpired);
+    return () => window.removeEventListener('auth:session-expired', handleExpired);
   }, []);
 
   const [mobileTabOpen, setMobileTabOpen] = useState(false);
@@ -297,6 +304,46 @@ export default function EmployeeDashboard() {
         />
       </div>
       <ScrollToTop />
+
+      {showSessionModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          backgroundColor: 'rgba(0,0,0,0.88)',
+          backdropFilter: 'blur(10px)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '1rem',
+        }}>
+          <div style={{
+            background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
+            border: '1.5px solid rgba(70,161,161,0.4)',
+            borderRadius: '18px',
+            padding: '2rem 2rem 1.75rem',
+            maxWidth: '360px',
+            width: '100%',
+            textAlign: 'center',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.55)',
+          }}>
+            <h5 style={{ color: '#fff', fontWeight: '700', marginBottom: '0.65rem', letterSpacing: '-0.01em' }}>
+              {t('sessionExpired')}
+            </h5>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '1.5rem' }}>
+              {t('sessionExpiredMessage')}
+            </p>
+            <button
+              onClick={() => { removeToken(); navigate('/employee-login'); }}
+              style={{
+                width: '100%', padding: '0.65rem 1.5rem',
+                background: '#46a1a1', color: '#fff',
+                border: 'none', borderRadius: '10px',
+                fontWeight: '600', fontSize: '0.9rem',
+                cursor: 'pointer', letterSpacing: '0.01em',
+              }}
+            >
+              {t('logBackIn')}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
