@@ -1,9 +1,105 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
+
+const ZoomableImage = ({ src, alt }) => {
+  const wrapRef = useRef(null);
+  const scaleRef = useRef(1);
+  const lastDistRef = useRef(null);
+  const lastTapRef = useRef(0);
+  const [scale, setScale] = useState(1);
+  const [pinching, setPinching] = useState(false);
+
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const onTouchStart = (e) => {
+      if (e.touches.length === 2) {
+        setPinching(true);
+        lastDistRef.current = Math.hypot(
+          e.touches[1].clientX - e.touches[0].clientX,
+          e.touches[1].clientY - e.touches[0].clientY
+        );
+      } else if (e.touches.length === 1) {
+        const now = Date.now();
+        if (now - lastTapRef.current < 280) {
+          scaleRef.current = 1;
+          setScale(1);
+        }
+        lastTapRef.current = now;
+      }
+    };
+
+    const onTouchMove = (e) => {
+      if (e.touches.length !== 2 || lastDistRef.current === null) return;
+      e.preventDefault();
+      const dist = Math.hypot(
+        e.touches[1].clientX - e.touches[0].clientX,
+        e.touches[1].clientY - e.touches[0].clientY
+      );
+      scaleRef.current = Math.max(1, Math.min(5, scaleRef.current * (dist / lastDistRef.current)));
+      lastDistRef.current = dist;
+      setScale(scaleRef.current);
+    };
+
+    const onTouchEnd = () => {
+      lastDistRef.current = null;
+      setPinching(false);
+    };
+
+    const onWheel = (e) => {
+      e.preventDefault();
+      scaleRef.current = Math.max(1, Math.min(5, scaleRef.current - e.deltaY * 0.003));
+      setScale(scaleRef.current);
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('wheel', onWheel);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={wrapRef}
+      style={{
+        width: '100%', height: '100%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        overflow: 'hidden',
+        cursor: scale > 1 ? 'zoom-out' : 'zoom-in',
+      }}
+      onClick={(e) => {
+        if (scale > 1) { e.stopPropagation(); scaleRef.current = 1; setScale(1); }
+      }}
+    >
+      <img
+        src={src}
+        alt={alt}
+        draggable={false}
+        style={{
+          maxWidth: '95%',
+          maxHeight: '95vh',
+          objectFit: 'contain',
+          transform: `scale(${scale})`,
+          transition: pinching ? 'none' : 'transform 0.18s ease',
+          userSelect: 'none',
+          WebkitUserSelect: 'none',
+          touchAction: 'none',
+        }}
+      />
+    </div>
+  );
+};
 
 const slideVariants = {
   enter: (dir) => ({ x: dir >= 0 ? '55%' : '-55%', opacity: 0 }),
@@ -71,19 +167,19 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   if (fullscreen && src) {
     return (
       <div
-        className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-        style={{ backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 2000, cursor: 'zoom-out', overflow: 'auto', touchAction: 'pinch-zoom' }}
+        className="position-fixed top-0 start-0 w-100 h-100"
+        style={{ backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 2000 }}
         onClick={() => setFullscreen(false)}
       >
         {update.media_type === 'image' ? (
-          <img
-            src={src}
-            alt={update.title}
-            style={{ maxWidth: '95%', maxHeight: '95%', objectFit: 'contain', cursor: 'default', touchAction: 'pinch-zoom' }}
-            onClick={(e) => e.stopPropagation()}
-          />
+          <ZoomableImage src={src} alt={update.title} />
         ) : (
-          <video src={src} style={{ maxWidth: '95%', maxHeight: '95%' }} controls autoPlay onClick={(e) => e.stopPropagation()} />
+          <div
+            className="w-100 h-100 d-flex align-items-center justify-content-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video src={src} style={{ maxWidth: '95%', maxHeight: '95%' }} controls autoPlay />
+          </div>
         )}
       </div>
     );

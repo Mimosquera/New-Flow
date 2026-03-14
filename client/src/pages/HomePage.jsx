@@ -212,8 +212,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.nav
         className={styles.navbar}
         ref={navbarRef}
-        initial={{ y: '-100%' }}
-        animate={{ y: showNavbar ? 0 : '-100%' }}
+        initial={{ y: 'calc(-100% - 4px)' }}
+        animate={{ y: showNavbar ? 0 : 'calc(-100% - 4px)' }}
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       >
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
