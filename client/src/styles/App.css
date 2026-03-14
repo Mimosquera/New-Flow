@@ -775,7 +775,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Dashboard Logo */
 .dashboard-logo {
-  max-width: 300px;
+  max-width: 150px;
   width: 100%;
   height: auto;
   filter: drop-shadow(0 12px 48px rgba(5,45,63,0.75)) drop-shadow(0 4px 16px rgba(0,0,0,0.32));
