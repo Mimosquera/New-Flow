@@ -77,7 +77,7 @@ export default function EmployeeDashboard() {
   }, []);
 
   return (
-    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div
         className="pb-3 dashboard-header-sticky"
         style={{ 
@@ -236,8 +236,7 @@ export default function EmployeeDashboard() {
             </ul>
           </div>
 
-          <div className="d-lg-none" style={{ position: 'relative', flexShrink: 0 }}>
-            <div style={{ position: 'absolute', left: '0.35rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'white', fontSize: '0.75rem', zIndex: 1 }}>☰</div>
+          <div className="d-lg-none" style={{ flexShrink: 0 }}>
             <select
               id="mobileTabSelect"
               name="mobileTabSelect"
@@ -245,32 +244,31 @@ export default function EmployeeDashboard() {
               onChange={(e) => { hapticLight(); setActiveTab(e.target.value); }}
               autoComplete="off"
               style={{
-                backgroundColor: 'rgb(5, 45, 63)',
-                color: 'transparent',
-                border: '2.5px solid #b0bec5',
-                borderRadius: '6px',
-                padding: '0.25rem 5px 0.25rem 0.35rem',
-                fontSize: '0.75rem',
+                backgroundColor: 'rgba(70, 161, 161, 0.15)',
+                color: 'white',
+                border: '1.5px solid rgba(70, 161, 161, 0.5)',
+                borderRadius: '8px',
+                padding: '0.3rem 1.6rem 0.3rem 0.65rem',
+                fontSize: '0.78rem',
                 fontWeight: '500',
                 cursor: 'pointer',
                 appearance: 'none',
                 WebkitAppearance: 'none',
-                width: '35px',
-                boxShadow: '0 0 10px rgba(176, 190, 197, 0.8), 0 0 20px rgba(176, 190, 197, 0.5), 0 0 30px rgba(5, 45, 63, 0.4)',
-                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'white\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
+                maxWidth: '130px',
+                backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 12 12\'%3E%3Cpath fill=\'%2346a1a1\' d=\'M6 9L1 4h10z\'/%3E%3C/svg%3E")',
                 backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 0.15rem center',
+                backgroundPosition: 'right 0.4rem center',
                 backgroundSize: '10px',
                 outline: 'none',
                 WebkitTapHighlightColor: 'transparent'
               }}
             >
-              <option value="profile" style={{ color: 'black', backgroundColor: 'white' }}>{t('profile')}</option>
-              <option value="appointments" style={{ color: 'black', backgroundColor: 'white' }}>{t('appointments')}</option>
-              <option value="availability" style={{ color: 'black', backgroundColor: 'white' }}>{t('availability')}</option>
-              <option value="updates" style={{ color: 'black', backgroundColor: 'white' }}>{t('postsTab')}</option>
-              <option value="services" style={{ color: 'black', backgroundColor: 'white' }}>{t('services')}</option>
-              {isAdmin && <option value="team" style={{ color: 'black', backgroundColor: 'white' }}>{t('team') || 'Team'}</option>}
+              <option value="profile" style={{ color: '#000', backgroundColor: '#fff' }}>{t('profile')}</option>
+              <option value="appointments" style={{ color: '#000', backgroundColor: '#fff' }}>{t('appointments')}</option>
+              <option value="availability" style={{ color: '#000', backgroundColor: '#fff' }}>{t('availability')}</option>
+              <option value="updates" style={{ color: '#000', backgroundColor: '#fff' }}>{t('postsTab')}</option>
+              <option value="services" style={{ color: '#000', backgroundColor: '#fff' }}>{t('services')}</option>
+              {isAdmin && <option value="team" style={{ color: '#000', backgroundColor: '#fff' }}>{t('team')}</option>}
             </select>
           </div>
         </div>
@@ -283,6 +281,7 @@ export default function EmployeeDashboard() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+          style={{ flex: 1 }}
         >
           {activeTab === 'appointments' && <AppointmentsManager filter={appointmentFilter} setFilter={setAppointmentFilter} />}
           {activeTab === 'updates' && <UpdatePoster />}
@@ -300,14 +299,12 @@ export default function EmployeeDashboard() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="container pt-5 pb-4" style={{ marginTop: '4rem' }}>
-        <div className="text-center">
-          <img
-            src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
-            alt="New Flow Logo"
-            className="dashboard-logo"
-          />
-        </div>
+      <div style={{ textAlign: 'center', padding: '2.5rem 0 1.5rem' }}>
+        <img
+          src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
+          alt="New Flow Logo"
+          style={{ maxWidth: '60px', opacity: 0.35 }}
+        />
       </div>
       <ScrollToTop />
     </div>

@@ -148,7 +148,6 @@ a:focus:not(:focus-visible) {
 }
 .collapsible-header {
   animation: headerGlow 2s ease-in-out infinite;
-  border-radius: 0.75rem 0.75rem 0 0 !important;
 }
 
 /* Force white for Days of Week header in Add Availability */
@@ -362,6 +361,7 @@ a:focus:not(:focus-visible) {
 .post-update-card .table {
   color: rgba(255, 255, 255, 0.85);
   --bs-table-bg: transparent;
+  --bs-table-color: rgba(255, 255, 255, 0.85);
   --bs-table-border-color: rgba(255, 255, 255, 0.07);
 }
 .post-update-card .table th {
@@ -370,6 +370,7 @@ a:focus:not(:focus-visible) {
   border-color: rgba(70, 161, 161, 0.3);
 }
 .post-update-card .table td {
+  color: rgba(255, 255, 255, 0.85);
   border-color: rgba(255, 255, 255, 0.07);
 }
 .post-update-card .table-hover > tbody > tr:hover > * {
@@ -472,8 +473,8 @@ a:focus:not(:focus-visible) {
 
 .hide-posts-btn {
   background: transparent !important;
-  color: rgb(5, 45, 63) !important;
-  border: 1.5px solid rgb(5, 45, 63) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
   border-radius: 0.5rem;
   padding: 0.4rem 1.25rem;
   font-weight: 600;
@@ -481,12 +482,12 @@ a:focus:not(:focus-visible) {
   letter-spacing: 0.02em;
   transition: all 0.2s ease;
 }
-.hide-posts-btn:hover {
-  background: rgb(5, 45, 63) !important;
-  color: #fff !important;
-  border-color: rgb(5, 45, 63) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(5, 45, 63, 0.3);
+@media (hover: hover) {
+  .hide-posts-btn:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+  }
 }
 /* App Styles */
 

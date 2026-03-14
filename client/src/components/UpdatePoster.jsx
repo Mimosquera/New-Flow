@@ -1,4 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, ChevronUp, FileText, PenLine } from 'lucide-react';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { updateService, SERVER_BASE_URL } from '../services/api.js';
@@ -27,6 +29,8 @@ export const UpdatePoster = () => {
   const [showModal, setShowModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showUpdates, setShowUpdates] = useState(window.innerWidth >= 992);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
 
   const handleUpdateClick = (update) => {
     setSelectedUpdate(update);
@@ -164,6 +168,12 @@ export const UpdatePoster = () => {
     document.body.style.background = '#000000';
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 992);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const cardStyle = {
     background: 'rgba(5, 45, 63, 0.55)',
     backdropFilter: 'blur(18px)',
@@ -216,16 +226,28 @@ export const UpdatePoster = () => {
                   borderBottom: '1px solid rgba(70,161,161,0.25)',
                   color: 'white',
                   cursor: 'pointer',
-                  padding: '0.75rem 1rem'
+                  padding: '0.75rem 1rem',
+                  borderRadius: (isDesktop || showForm) ? '0.75rem 0.75rem 0 0' : '0.75rem',
                 }}
                 onClick={() => setShowForm(!showForm)}
               >
-                <h5 className="mb-0" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>{t('postUpdate')}</h5>
-                <span className="d-lg-none" style={{ fontSize: '1.2rem', color: '#46a1a1' }}>
-                  {showForm ? '\u2212' : '+'}
+                <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>
+                  <PenLine size={15} />
+                  {t('postUpdate')}
+                </h5>
+                <span className="d-lg-none">
+                  {showForm ? <ChevronUp size={16} style={{ color: '#46a1a1' }} /> : <ChevronDown size={16} style={{ color: '#46a1a1' }} />}
                 </span>
               </div>
-              <div className={`d-lg-block ${showForm ? 'd-block' : 'd-none'}`}>
+              <AnimatePresence initial={false}>
+                {(isDesktop || showForm) && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
               <div className="card-body p-4">
 
                 {success && (
@@ -331,24 +353,47 @@ export const UpdatePoster = () => {
                   </button>
                 </form>
               </div>
+                </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
           </div>
 
           {/* Updates List */}
-          <div className="col-lg-6">
-            <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <h4 className="mb-4 recent-updates-header">{t('recentUpdates')}</h4>
+          <div className="col-lg-8">
+            <div
+              className="d-flex justify-content-between align-items-center collapsible-header mb-0"
+              style={{ backgroundColor: 'rgb(5, 45, 63)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showUpdates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+              onClick={() => setShowUpdates(!showUpdates)}
+            >
+              <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', fontWeight: '700' }}>
+                <FileText size={15} />
+                {t('recentUpdates')}{totalUpdates > 0 && ` (${totalUpdates})`}
+              </h5>
+              {showUpdates ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </div>
+            <AnimatePresence initial={false}>
+            {showUpdates && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: 'hidden' }}
+            >
+            <div className="pt-3">
             {loading ? (
-              <div className="updates-list">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.14}s` }}>
-                    <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.14}s` }} />
-                    <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.14}s` }} />
-                    <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.14}s` }} />
-                    <div className="d-flex justify-content-between">
-                      <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.14}s` }} />
-                      <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.14}s` }} />
+              <div className="row g-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="col-6">
+                    <div className="sk-card p-3 h-100" style={{ animationDelay: `${i * 0.14}s` }}>
+                      <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.14}s` }} />
+                      <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.14}s` }} />
+                      <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.14}s` }} />
+                      <div className="d-flex justify-content-between">
+                        <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.14}s` }} />
+                        <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.14}s` }} />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -357,15 +402,16 @@ export const UpdatePoster = () => {
               <p style={{ color: 'rgba(255,255,255,0.5)' }}>{t('noUpdates')}</p>
             ) : (
               <>
-              <div className="updates-list">
+              <div className="row g-3">
                 {translatedUpdates.slice(0, displayCount).map(update => {
                   const isAdmin = currentUser?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
                   const isOwner = currentUser?.id === update.user_id;
                   const canDelete = isAdmin || isOwner;
 
                   return (
-                  <div key={update.id} style={cardStyle}>
-                    <div style={{ padding: '0.75rem 1rem' }}>
+                  <div key={update.id} className="col-6">
+                  <div style={{ ...cardStyle, marginBottom: 0, height: '100%' }}>
+                    <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
                       <div className="d-flex justify-content-between align-items-start mb-1">
                         <h6
                           style={cardTitleStyle}
@@ -399,7 +445,7 @@ export const UpdatePoster = () => {
 
                       {update.media_url && (
                         <div
-                          className="mt-1 mb-2"
+                          className="mt-3 mb-2"
                           style={{ cursor: 'pointer' }}
                           onClick={() => handleUpdateClick(update)}
                         >
@@ -431,20 +477,23 @@ export const UpdatePoster = () => {
                       </div>
                     </div>
                   </div>
+                  </div>
                   );
                 })}
               </div>
 
               {loadingMore && (
-                <div className="mt-2">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
-                      <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.12}s` }} />
-                      <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.12}s` }} />
-                      <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.12}s` }} />
-                      <div className="d-flex justify-content-between">
-                        <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.12}s` }} />
-                        <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.12}s` }} />
+                <div className="row g-3 mt-1">
+                  {Array.from({ length: 2 }).map((_, i) => (
+                    <div key={i} className="col-6">
+                      <div className="sk-card p-3" style={{ animationDelay: `${i * 0.12}s` }}>
+                        <span className="sk mb-2" style={{ height: '14px', width: '70%', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk mb-1" style={{ height: '11px', width: '90%', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk mb-3" style={{ height: '11px', width: '55%', animationDelay: `${i * 0.12}s` }} />
+                        <div className="d-flex justify-content-between">
+                          <span className="sk" style={{ height: '10px', width: '30%', animationDelay: `${i * 0.12}s` }} />
+                          <span className="sk" style={{ height: '10px', width: '22%', animationDelay: `${i * 0.12}s` }} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -474,16 +523,19 @@ export const UpdatePoster = () => {
               </>
             )}
             </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Update Modal */}
-      <UpdateModal 
-        update={selectedUpdate}
-        show={showModal}
-        onClose={handleCloseModal}
-      />
-    </div>
+    {/* Update Modal */}
+    <UpdateModal
+      update={selectedUpdate}
+      show={showModal}
+      onClose={handleCloseModal}
+    />
+  </div>
   );
 };
