@@ -312,7 +312,7 @@ export const ServiceManager = () => {
                   <div className="d-flex gap-2">
                     <button 
                       type="submit" 
-                      className="btn btn-lg flex-fill post-update-btn"
+                      className="btn post-update-btn"
                     >
                       {editingService ? t('updateService') : t('addService')}
                     </button>

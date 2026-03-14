@@ -463,10 +463,10 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
 
                 <div className="d-flex gap-2">
-                  <button type="submit" className="post-update-btn" disabled={loading || uploadingImage} style={{ flex: 1 }}>
+                  <button type="submit" className="btn post-update-btn" disabled={loading || uploadingImage}>
                     {loading || uploadingImage ? t('updating') : t('save')}
                   </button>
-                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-secondary" disabled={loading || uploadingImage} style={{ flex: 1 }}>
+                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-secondary btn-sm" disabled={loading || uploadingImage}>
                     {t('cancel')}
                   </button>
                 </div>
@@ -561,10 +561,10 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
 
                 <div className="d-flex gap-2">
-                  <button type="submit" className="post-update-btn" disabled={loading} style={{ flex: 1 }}>
+                  <button type="submit" className="btn post-update-btn" disabled={loading}>
                     {loading ? t('updating') : t('save')}
                   </button>
-                  <button type="button" onClick={handleCancelLogin} className="btn btn-secondary" disabled={loading} style={{ flex: 1 }}>
+                  <button type="button" onClick={handleCancelLogin} className="btn btn-secondary btn-sm" disabled={loading}>
                     {t('cancel')}
                   </button>
                 </div>
@@ -572,19 +572,20 @@ export const ProfileManager = ({ onLogout }) => {
             )}
           </div>
 
-          {onLogout && !isEditingLogin && (
-            <div className="text-center mt-3">
-              <button
-                onClick={() => { if (window.confirm(t('logoutConfirm'))) onLogout(); }}
-                className="btn logout-btn d-inline-flex align-items-center gap-2"
-              >
-                <LogOut size={14} />
-                {t('logout')}
-              </button>
-            </div>
-          )}
         </div>
       </div>
+
+      {onLogout && !isEditingLogin && (
+        <div className="text-center mt-3">
+          <button
+            onClick={() => { if (window.confirm(t('logoutConfirm'))) onLogout(); }}
+            className="btn logout-btn d-inline-flex align-items-center gap-2"
+          >
+            <LogOut size={14} />
+            {t('logout')}
+          </button>
+        </div>
+      )}
 
       {showForgotPassword && (
         <div

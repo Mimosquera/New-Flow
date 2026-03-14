@@ -347,7 +347,7 @@ export const UpdatePoster = () => {
 
                   <button 
                     type="submit" 
-                    className="btn btn-lg w-100 post-update-btn"
+                    className="btn post-update-btn"
                   >
                     {t('post')}
                   </button>

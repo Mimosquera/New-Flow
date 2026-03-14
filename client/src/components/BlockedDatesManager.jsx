@@ -265,7 +265,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
               <div className="col-12">
                 <button
                   type="submit"
-                  className="btn w-100"
+                  className="btn"
                   style={{
                     backgroundColor: THEME_COLOR,
                     color: 'white',
@@ -429,7 +429,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
                             </div>
                           )}
                           <button
-                            className="btn btn-sm btn-outline-danger w-100 mt-2"
+                            className="btn btn-sm btn-outline-danger mt-2"
                             onClick={() => handleDeleteGroup(group.ids)}
                             disabled={!group.ids || group.ids.length === 0}
                           >
