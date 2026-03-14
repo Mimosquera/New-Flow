@@ -346,8 +346,8 @@ export const AvailabilityManager = () => {
 
                       <button
                         type="submit"
-                        className="btn btn-lg w-100"
-                        style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none', fontWeight: '300' }}
+                        className="btn"
+                        style={{ backgroundColor: THEME_COLOR, color: 'white', border: 'none', fontWeight: '500', fontSize: '0.88rem' }}
                       >
                         {t('addAvailability')}
                       </button>

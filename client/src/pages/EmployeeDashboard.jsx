@@ -103,21 +103,32 @@ export default function EmployeeDashboard() {
               alt="Logo"
               style={{ height: '1.4rem', flexShrink: 0 }}
             />
-            {employeeName && (
-              <span style={{
+            {employeeName && (<>
+              <span className="d-lg-none" style={{
+                backgroundColor: 'rgba(70, 161, 161, 0.25)',
+                color: '#ffffff',
+                padding: '0.15rem 0.5rem',
+                borderRadius: '12px',
+                fontSize: '0.7rem',
+                fontWeight: '500',
+                whiteSpace: 'nowrap',
+              }}>
+                {employeeName.split(' ')[0]}
+              </span>
+              <span className="d-none d-lg-inline" style={{
                 backgroundColor: 'rgba(70, 161, 161, 0.28)',
                 color: '#ffffff',
-                padding: '0.2rem 0.6rem',
+                padding: '0.18rem 0.55rem',
                 borderRadius: '10px',
-                fontSize: '0.75rem',
+                fontSize: '0.72rem',
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
-                border: '1px solid rgba(70, 161, 161, 0.55)',
+                border: '1px solid rgba(70, 161, 161, 0.5)',
                 letterSpacing: '0.01em',
               }}>
                 {employeeName.split(' ')[0]}
               </span>
-            )}
+            </>)}
           </div>
 
           {/* Center: Desktop tabs */}

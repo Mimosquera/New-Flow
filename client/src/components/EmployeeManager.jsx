@@ -213,8 +213,8 @@ export const EmployeeManager = () => {
           />
           <small className="file-info-text employee-info-black">{t('employeePasswordNote')}</small>
         </div>
-        <div className="d-grid gap-2">
-          <button type="submit" className="btn btn-lg w-100 post-update-btn" disabled={loading}>
+        <div className="mt-2">
+          <button type="submit" className="btn post-update-btn" disabled={loading}>
             {loading ? t('creating') : t('createEmployee')}
           </button>
         </div>

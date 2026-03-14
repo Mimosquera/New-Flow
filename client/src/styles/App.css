@@ -310,13 +310,13 @@ a:focus:not(:focus-visible) {
 .post-update-btn {
   background: linear-gradient(90deg, #46a1a1 0%, rgb(5, 45, 63) 100%);
   color: #fff !important;
-  font-weight: 700;
-  font-size: 1.15rem;
+  font-weight: 600;
+  font-size: 0.88rem;
   border: none;
   border-radius: 0.5rem;
   box-shadow: 0 2px 8px rgba(5, 45, 63, 0.10);
-  letter-spacing: 1px;
-  padding: 0.75rem 1.5rem;
+  letter-spacing: 0.02em;
+  padding: 0.42rem 1.1rem;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .post-update-btn:hover, .post-update-btn:focus {
