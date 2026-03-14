@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Home, User, Calendar, Clock, FileText, Scissors, Users } from 'lucide-react';
 import { removeToken, decodeToken, getToken } from '../utils/tokenUtils.js';
 import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
 import { UpdatePoster } from '../components/UpdatePoster.jsx';
 import { ServiceManager } from '../components/ServiceManager.jsx';
-// import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
+import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
 import { EmployeeManager } from '../components/EmployeeManager.jsx';
 import { ProfileManager } from '../components/ProfileManager.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -76,7 +77,7 @@ export default function EmployeeDashboard() {
   }, []);
 
   return (
-    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(2, 20, 30) 0%, rgb(5, 45, 63) 100%)', minHeight: '100vh' }}>
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh' }}>
       <div
         className="pb-3 dashboard-header-sticky"
         style={{ 
@@ -119,12 +120,12 @@ export default function EmployeeDashboard() {
               </h1>
             </div>
             <div className="d-flex align-items-center" style={{ flexShrink: 0, gap: '0.4rem', marginLeft: '0.5rem' }}>
-              <button 
+              <button
                 className="btn btn-sm dashboard-home-btn"
                 onClick={() => navigate('/')}
                 title={t('backToHome')}
               >
-                <span>⌂</span>
+                <Home size={14} />
               </button>
               <div style={{ 
                 width: '53px', 
@@ -178,50 +179,56 @@ export default function EmployeeDashboard() {
             <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
               <li className="nav-item">
                 <button
-                  className={`nav-link ${activeTab === 'profile' ? 'active' : ''}`}
+                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'profile' ? 'active' : ''}`}
                   onClick={() => { hapticLight(); setActiveTab('profile'); }}
                 >
+                  <User size={13} />
                   {t('profile')}
                 </button>
               </li>
               <li className="nav-item">
-                <button 
-                  className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
+                <button
+                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'appointments' ? 'active' : ''}`}
                   onClick={() => { hapticLight(); setActiveTab('appointments'); }}
                 >
+                  <Calendar size={13} />
                   {t('appointments')}
                 </button>
               </li>
               <li className="nav-item">
-                <button 
-                  className={`nav-link ${activeTab === 'availability' ? 'active' : ''}`}
+                <button
+                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'availability' ? 'active' : ''}`}
                   onClick={() => { hapticLight(); setActiveTab('availability'); }}
                 >
+                  <Clock size={13} />
                   {t('availability')}
                 </button>
               </li>
               <li className="nav-item">
-                <button 
-                  className={`nav-link ${activeTab === 'updates' ? 'active' : ''}`}
+                <button
+                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'updates' ? 'active' : ''}`}
                   onClick={() => { hapticLight(); setActiveTab('updates'); }}
                 >
+                  <FileText size={13} />
                   {t('postsTab')}
                 </button>
               </li>
               <li className="nav-item">
-                <button 
-                  className={`nav-link ${activeTab === 'services' ? 'active' : ''}`}
+                <button
+                  className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'services' ? 'active' : ''}`}
                   onClick={() => { hapticLight(); setActiveTab('services'); }}
                 >
+                  <Scissors size={13} />
                   {t('services')}
                 </button>
               </li>
               {isAdmin && (
                 <li className="nav-item">
                   <button
-                    className={`nav-link ${activeTab === 'team' ? 'active' : ''}`}
+                    className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'team' ? 'active' : ''}`}
                     onClick={() => { hapticLight(); setActiveTab('team'); }}
                   >
+                    <Users size={13} />
                     {t('team') || 'Team'}
                   </button>
                 </li>

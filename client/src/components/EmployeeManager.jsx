@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -230,36 +230,36 @@ export const EmployeeManager = () => {
         <div
           key={employee.id}
           className={`list-group-item p-0${expandedEmployeeId === employee.id ? ' expanded-employee-card' : ''}`}
-          style={{ background: expandedEmployeeId === employee.id ? THEME_COLOR : 'rgba(255, 255, 255, 0.06)' }}
+          style={{
+            background: expandedEmployeeId === employee.id ? THEME_COLOR : 'rgba(255,255,255,0.06)',
+            border: '1px solid rgba(70,161,161,0.2)',
+            borderRadius: '10px',
+            marginBottom: '0.5rem'
+          }}
         >
           <button
             className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
             onClick={() => toggleEmployee(employee.id)}
             style={{
-              color: expandedEmployeeId === employee.id ? '#fff' : 'rgba(255, 255, 255, 0.9)',
-              background: expandedEmployeeId === employee.id ? THEME_COLOR : 'transparent',
+              color: '#fff',
+              background: 'transparent',
               fontWeight: 600
             }}
           >
             <div>
-              <h5 className="mb-1" style={{ color: '#fff', fontWeight: 700 }}>{employee.name}</h5>
-              <small style={{ color: expandedEmployeeId === employee.id ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.5)' }}>{employee.email}</small>
+              <h5 className="mb-1" style={{ color: expandedEmployeeId === employee.id ? '#fff' : '#e0f7f7', fontWeight: 700 }}>{employee.name}</h5>
+              <small style={{ color: 'rgba(255,255,255,0.55)' }}>{employee.email}</small>
             </div>
-            <span style={{ fontSize: '1.2rem', color: '#fff' }}>
-              {expandedEmployeeId === employee.id ? '▲' : '▼'}
-            </span>
+            {expandedEmployeeId === employee.id
+              ? <ChevronUp size={18} style={{ color: '#46a1a1', flexShrink: 0 }} />
+              : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />}
           </button>
-          <AnimatePresence initial={false}>
           {expandedEmployeeId === employee.id && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-              style={{ overflow: 'hidden' }}
-            >
-            <div className="p-3 border-top" style={{ background: 'rgba(255, 255, 255, 0.04)' }}>
-              <h6 className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 700, textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('editPassword')}</h6>
+            <div className="p-3 border-top bg-light">
+              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#46a1a1', fontWeight: 700 }}>
+                <Key size={15} />
+                {t('editPassword')}
+              </h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
               <form onSubmit={(e) => handleUpdatePassword(e, employee.id)} noValidate>
@@ -304,7 +304,10 @@ export const EmployeeManager = () => {
               </form>
               <hr className="my-4 section-divider" style={{ borderColor: '#46a1a1', borderWidth: '2px' }} />
               <div className="mt-4">
-                <h6 className="mb-3 text-danger section-header" style={{ textShadow: '0 5px 24px rgba(5,45,63,0.25), 0 3px 8px rgba(0,0,0,0.18)' }}>{t('removeEmployee')}</h6>
+                <h6 className="mb-3 text-danger section-header d-flex align-items-center gap-2">
+                  <UserMinus size={15} />
+                  {t('removeEmployee')}
+                </h6>
                 {!showDeleteConfirm || showDeleteConfirm !== employee.id ? (
                   <button
                     className="btn btn-outline-danger btn-sm"
@@ -313,7 +316,7 @@ export const EmployeeManager = () => {
                     {t('removeFromSystem')}
                   </button>
                 ) : (
-                  <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
+                  <div className="border border-danger rounded p-3 bg-light">
                     <p className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 600 }}>
                       <strong>{t('confirmDeleteEmployee')}</strong>
                     </p>
@@ -351,9 +354,7 @@ export const EmployeeManager = () => {
                 )}
               </div>
             </div>
-            </motion.div>
           )}
-          </AnimatePresence>
         </div>
       ))}
     </div>
@@ -370,27 +371,21 @@ export const EmployeeManager = () => {
                 className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
                 onClick={() => setShowCreateForm(!showCreateForm)}
               >
-                <h3 className="card-title mb-0 create-employee-title">{t('createEmployee')}</h3>
-                <span className="toggle-arrow">{showCreateForm ? '▲' : '▼'}</span>
+                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
+                  <UserPlus size={18} />
+                  {t('createEmployee')}
+                </h3>
+                {showCreateForm ? <ChevronUp size={18} style={{ color: '#46a1a1' }} /> : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.6)' }} />}
               </button>
-              <AnimatePresence initial={false}>
-                {showCreateForm && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                    style={{ overflow: 'hidden' }}
-                  >
-                    {renderCreateForm()}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {showCreateForm && renderCreateForm()}
             </div>
           </div>
           <div className="card post-update-card shadow-sm">
             <div className="card-body">
-              <h3 className="card-title mb-4 create-employee-title">{t('manageEmployees')}</h3>
+              <h3 className="card-title mb-4 create-employee-title d-flex align-items-center gap-2">
+                <Users size={18} />
+                {t('manageEmployees')}
+              </h3>
               {loadingEmployees ? (
                 <div className="list-group">
                   {Array.from({ length: 3 }).map((_, i) => (

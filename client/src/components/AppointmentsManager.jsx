@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
+import { Calendar, Clock, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { appointmentService } from '../services/api.js';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
@@ -314,25 +314,29 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       }}
                       onClick={() => toggleExpand(apt.id)}
                     >
-                      {expandedIds.has(apt.id) ? `▲ ${t('less')}` : `▼ ${t('more')}`}
+                      {expandedIds.has(apt.id)
+                        ? <><ChevronUp size={13} /> {t('less')}</>
+                        : <><ChevronDown size={13} /> {t('more')}</>}
                     </button>
                   </div>
 
-                  <div className="mb-2">
-                    <strong>{t('service')}:</strong> {apt.service?.name || 'N/A'}<br />
-                    <strong>{t('date')}:</strong> {formatDateDisplay(apt.date, language === 'es' ? 'es-ES' : 'en-US')}<br />
-                    <strong>{t('time')}:</strong> {formatTimeDisplay(apt.time)}
+                  <div className="mb-2" style={{ fontSize: '0.9rem' }}>
+                    <span className="d-flex align-items-center gap-1 mb-1">
+                      <Scissors size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <strong>{t('service')}:</strong>&nbsp;{apt.service?.name || 'N/A'}
+                    </span>
+                    <span className="d-flex align-items-center gap-1 mb-1">
+                      <Calendar size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <strong>{t('date')}:</strong>&nbsp;{formatDateDisplay(apt.date, language === 'es' ? 'es-ES' : 'en-US')}
+                    </span>
+                    <span className="d-flex align-items-center gap-1">
+                      <Clock size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <strong>{t('time')}:</strong>&nbsp;{formatTimeDisplay(apt.time)}
+                    </span>
                   </div>
 
-                  <AnimatePresence initial={false}>
                   {expandedIds.has(apt.id) && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-                      style={{ overflow: 'hidden' }}
-                    >
+                    <>
                       <hr />
                       <div className="mb-2">
                         <strong>{t('email')}:</strong> {apt.customerEmail}<br />
@@ -372,43 +376,42 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                           </>
                         )}
                       </div>
-                    </motion.div>
+                    </>
                   )}
-                  </AnimatePresence>
 
                   {apt.status === 'pending' && (
                     <div className="d-flex gap-2 mt-3">
                       <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
                         <button
-                          className="btn"
-                          style={{ 
-                            background: 'linear-gradient(135deg, rgb(5, 45, 63), rgb(10, 65, 90))', 
-                            color: '#fff', 
-                            border: '1.5px solid #46a1a1', 
-                            borderRadius: '8px', 
-                            fontWeight: '500', 
+                          className="btn d-flex align-items-center gap-1"
+                          style={{
+                            background: 'linear-gradient(135deg, rgb(5, 45, 63), rgb(10, 65, 90))',
+                            color: '#fff',
+                            border: '1.5px solid #46a1a1',
+                            borderRadius: '8px',
+                            fontWeight: '500',
                             fontSize: '0.85rem',
                             padding: '0.35rem 0.85rem',
-                            boxShadow: '0 2px 8px rgba(70, 161, 161, 0.3)' 
+                            boxShadow: '0 2px 8px rgba(70, 161, 161, 0.3)'
                           }}
                           onClick={() => handleAccept(apt)}
                         >
-                          {t('accept')}
+                          <Check size={14} /> {t('accept')}
                         </button>
                         <button
-                          className="btn"
-                          style={{ 
-                            background: 'transparent', 
-                            color: '#dc3545', 
-                            border: '1.5px solid #dc3545', 
-                            borderRadius: '8px', 
-                            fontWeight: '500', 
+                          className="btn d-flex align-items-center gap-1"
+                          style={{
+                            background: 'transparent',
+                            color: '#dc3545',
+                            border: '1.5px solid #dc3545',
+                            borderRadius: '8px',
+                            fontWeight: '500',
                             fontSize: '0.85rem',
                             padding: '0.35rem 0.85rem'
                           }}
                           onClick={() => handleDecline(apt)}
                         >
-                          {t('decline')}
+                          <X size={14} /> {t('decline')}
                         </button>
                       </div>
                     </div>
@@ -429,7 +432,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                         }}
                         onClick={() => handleCancel(apt)}
                       >
-                        {t('cancelAppointment')}
+                        <Ban size={14} /> {t('cancelAppointment')}
                       </button>
                     </div>
                   )}

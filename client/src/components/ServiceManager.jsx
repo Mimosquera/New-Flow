@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { Scissors, Plus, Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { serviceService } from '../services/api.js';
@@ -172,11 +172,12 @@ export const ServiceManager = () => {
                 }}
                 onClick={() => setShowForm(!showForm)}
               >
-                <h5 className="mb-0" style={{ fontSize: '1rem' }}>
+                <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
+                  {editingService ? <Pencil size={15} /> : <Plus size={15} />}
                   {editingService ? t('editService') : t('addService')}
                 </h5>
-                <span className="d-lg-none" style={{ fontSize: '1.2rem' }}>
-                  {showForm ? '\u2212' : '+'}
+                <span className="d-lg-none">
+                  {showForm ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </span>
               </div>
               <div className={`d-lg-block ${showForm ? 'd-block' : 'd-none'}`}>
@@ -318,7 +319,10 @@ export const ServiceManager = () => {
           <div className="col-lg-8">
             <div className="card post-update-card shadow-sm border-0">
               <div className="card-body">
-                <h5 className="card-title mb-4" style={{ color: '#fff' }}>{t('currentServices')}</h5>
+                <h5 className="card-title mb-4 d-flex align-items-center gap-2" style={{ color: '#fff' }}>
+                  <Scissors size={17} />
+                  {t('currentServices')}
+                </h5>
                 {loading ? (
                   <div className="table-responsive">
                     <table className="table current-services-table">
@@ -369,19 +373,21 @@ export const ServiceManager = () => {
                             <td>
                               <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
                                 <button
-                                  className="btn btn-outline-primary"
+                                  className="btn btn-outline-primary d-flex align-items-center gap-1"
                                   style={{ color: '#fff', background: THEME_COLOR, borderColor: THEME_COLOR, fontWeight: 600, position: 'relative', zIndex: 1 }}
                                   onClick={() => handleEdit(service)}
                                   disabled={!service?.id}
                                 >
+                                  <Pencil size={12} />
                                   {t('edit')}
                                 </button>
-                                <span style={{ display: 'inline-block', width: '1px', height: '24px', background: 'rgba(255, 255, 255, 0.2)', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
+                                <span style={{ display: 'inline-block', width: '1px', height: '24px', background: 'rgba(70,161,161,0.3)', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
                                 <button
-                                  className="btn btn-outline-danger"
+                                  className="btn btn-outline-danger d-flex align-items-center gap-1"
                                   onClick={() => handleDelete(service?.id)}
                                   disabled={!service?.id}
                                 >
+                                  <Trash2 size={12} />
                                   {t('delete')}
                                 </button>
                               </div>

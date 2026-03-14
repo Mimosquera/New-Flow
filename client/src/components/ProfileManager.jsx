@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { User, Lock, Camera, Trash2, LogOut, Pencil } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -326,16 +327,17 @@ export const ProfileManager = ({ onLogout }) => {
           <div className="card post-update-card shadow-sm mb-4">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="card-title mb-0 create-employee-title">{t('aboutMe')}</h3>
+                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
+                  <User size={18} />
+                  {t('aboutMe')}
+                </h3>
                 {!isEditingAboutMe && (
                   <button
                     onClick={handleEditAboutMe}
-                    className="post-update-btn"
-                    style={{
-                      padding: '0.5rem 1rem',
-                      fontSize: '0.9rem',
-                    }}
+                    className="post-update-btn d-flex align-items-center gap-1"
+                    style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
                   >
+                    <Pencil size={14} />
                     {t('editAboutMe')}
                   </button>
                 )}
@@ -363,15 +365,15 @@ export const ProfileManager = ({ onLogout }) => {
                           width: '200px',
                           height: '200px',
                           borderRadius: '50%',
-                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                          backgroundColor: '#f0f0f0',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)'
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
                         }}
                       >
-                        <span style={{ fontSize: '3rem', color: 'rgba(255,255,255,0.3)' }}>👤</span>
+                        <span style={{ fontSize: '3rem', color: '#ccc' }}>👤</span>
                       </div>
                     )}
                   </div>
@@ -390,7 +392,7 @@ export const ProfileManager = ({ onLogout }) => {
                     </label>
                     <div style={{
                       fontSize: '1rem',
-                      color: 'rgba(255, 255, 255, 0.9)',
+                      color: THEME_COLOR,
                       lineHeight: '1.6',
                       whiteSpace: 'pre-wrap'
                     }}>
@@ -431,16 +433,16 @@ export const ProfileManager = ({ onLogout }) => {
                           width: '200px',
                           height: '200px',
                           borderRadius: '50%',
-                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                          backgroundColor: '#f0f0f0',
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
                           marginBottom: '1rem'
                         }}
                       >
-                        <span style={{ fontSize: '3rem', color: 'rgba(255,255,255,0.3)' }}>👤</span>
+                        <span style={{ fontSize: '3rem', color: '#ccc' }}>👤</span>
                       </div>
                     )}
 
@@ -448,7 +450,7 @@ export const ProfileManager = ({ onLogout }) => {
                       <button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="btn"
+                        className="btn d-flex align-items-center gap-1"
                         disabled={uploadingImage}
                         style={{
                           backgroundColor: SECONDARY_COLOR,
@@ -458,19 +460,18 @@ export const ProfileManager = ({ onLogout }) => {
                           fontSize: '0.85rem'
                         }}
                       >
+                        <Camera size={14} />
                         {imagePreview ? t('changeProfileImage') : t('uploadProfileImage')}
                       </button>
                       {imagePreview && (
                         <button
                           type="button"
                           onClick={handleImageRemove}
-                          className="btn btn-outline-danger"
+                          className="btn btn-outline-danger d-flex align-items-center gap-1"
                           disabled={uploadingImage}
-                          style={{
-                            padding: '0.5rem 1rem',
-                            fontSize: '0.85rem'
-                          }}
+                          style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
                         >
+                          <Trash2 size={14} />
                           {t('removeProfileImage')}
                         </button>
                       )}
@@ -518,16 +519,17 @@ export const ProfileManager = ({ onLogout }) => {
           <div className="card post-update-card shadow-sm">
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="card-title mb-0 create-employee-title">{t('accountLogin')}</h3>
+                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
+                  <Lock size={18} />
+                  {t('accountLogin')}
+                </h3>
                 {!isEditingLogin && (
                   <button
                     onClick={handleEditLogin}
-                    className="post-update-btn"
-                    style={{
-                      padding: '0.5rem 1rem',
-                      fontSize: '0.9rem',
-                    }}
+                    className="post-update-btn d-flex align-items-center gap-1"
+                    style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
                   >
+                    <Pencil size={14} />
                     {t('editLogin')}
                   </button>
                 )}
@@ -548,7 +550,7 @@ export const ProfileManager = ({ onLogout }) => {
                       </label>
                       <div style={{
                         fontSize: '1.1rem',
-                        color: 'rgba(255, 255, 255, 0.9)',
+                        color: THEME_COLOR,
                         marginTop: '0.5rem',
                         fontWeight: '500'
                       }}>
@@ -568,7 +570,7 @@ export const ProfileManager = ({ onLogout }) => {
                       </label>
                       <div style={{
                         fontSize: '1.1rem',
-                        color: 'rgba(255, 255, 255, 0.9)',
+                        color: THEME_COLOR,
                         marginTop: '0.5rem',
                         fontWeight: '500'
                       }}>
@@ -582,7 +584,7 @@ export const ProfileManager = ({ onLogout }) => {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: '#46a1a1',
+                      color: THEME_COLOR,
                       textDecoration: 'underline',
                       cursor: 'pointer',
                       padding: '0',
@@ -616,7 +618,7 @@ export const ProfileManager = ({ onLogout }) => {
 
                   <hr style={{ margin: '1.5rem 0' }} />
 
-                  <h5 style={{ color: '#46a1a1', marginBottom: '1rem' }}>{t('accountInfo')}</h5>
+                  <h5 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('accountInfo')}</h5>
 
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">{t('name')} *</label>
@@ -648,8 +650,8 @@ export const ProfileManager = ({ onLogout }) => {
 
                   <hr style={{ margin: '1.5rem 0' }} />
 
-                  <h5 style={{ color: '#46a1a1', marginBottom: '0.5rem' }}>{t('changePassword')}</h5>
-                  <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.5)', marginBottom: '1rem' }}>
+                  <h5 style={{ color: THEME_COLOR, marginBottom: '0.5rem' }}>{t('changePassword')}</h5>
+                  <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '1rem' }}>
                     {t('leaveBlankToKeepPassword')}
                   </p>
 
@@ -721,18 +723,17 @@ export const ProfileManager = ({ onLogout }) => {
             >
               <div
                 style={{
-                  backgroundColor: 'rgb(5, 45, 63)',
+                  backgroundColor: 'white',
                   padding: '2rem',
                   borderRadius: '24px',
                   maxWidth: '500px',
                   width: '90%',
-                  boxShadow: '0 4px 30px rgba(0,0,0,0.5)',
-                  border: '1px solid rgba(70, 161, 161, 0.2)'
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <h4 style={{ color: '#fff', marginBottom: '1rem' }}>{t('forgotPassword')}</h4>
-                <p style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '1.5rem' }}>
+                <h4 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('forgotPassword')}</h4>
+                <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1.5rem' }}>
                   {t('forgotPasswordDescription')}
                 </p>
 
@@ -782,8 +783,9 @@ export const ProfileManager = ({ onLogout }) => {
                     onLogout();
                   }
                 }}
-                className="btn btn-lg logout-btn"
+                className="btn btn-lg logout-btn d-inline-flex align-items-center gap-2"
               >
+                <LogOut size={16} />
                 {t('logout')}
               </button>
             </div>
