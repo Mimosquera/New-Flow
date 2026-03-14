@@ -109,6 +109,8 @@
   border-bottom: 1px solid rgba(70, 161, 161, 0.2);
   box-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
   padding: calc(env(safe-area-inset-top, 0px) + 0.5rem) 0 0.5rem;
+  transform: translateY(-100%);
+  will-change: transform;
 }
 
 .brandName {

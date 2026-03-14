@@ -25,7 +25,7 @@ export const UpdatePoster = () => {
   const [loading, setLoading] = useState(true);
   const [mediaFile, setMediaFile] = useState(null);
   const [mediaPreview, setMediaPreview] = useState(null);
-  const [selectedUpdate, setSelectedUpdate] = useState(null);
+  const [selectedUpdateIndex, setSelectedUpdateIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -33,13 +33,13 @@ export const UpdatePoster = () => {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
 
   const handleUpdateClick = (update) => {
-    setSelectedUpdate(update);
+    const idx = translatedUpdates.findIndex(u => u.id === update.id);
+    setSelectedUpdateIndex(idx >= 0 ? idx : 0);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setSelectedUpdate(null);
   };
 
   const fetchUpdates = useCallback(async () => {
@@ -544,7 +544,8 @@ export const UpdatePoster = () => {
 
     {/* Update Modal */}
     <UpdateModal
-      update={selectedUpdate}
+      updates={translatedUpdates}
+      initialIndex={selectedUpdateIndex}
       show={showModal}
       onClose={handleCloseModal}
     />
