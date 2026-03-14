@@ -392,7 +392,7 @@ export const ProfileManager = ({ onLogout }) => {
                     </label>
                     <div style={{
                       fontSize: '1rem',
-                      color: THEME_COLOR,
+                      color: 'rgba(255, 255, 255, 0.9)',
                       lineHeight: '1.6',
                       whiteSpace: 'pre-wrap'
                     }}>
@@ -550,7 +550,7 @@ export const ProfileManager = ({ onLogout }) => {
                       </label>
                       <div style={{
                         fontSize: '1.1rem',
-                        color: THEME_COLOR,
+                        color: 'rgba(255, 255, 255, 0.9)',
                         marginTop: '0.5rem',
                         fontWeight: '500'
                       }}>
@@ -570,7 +570,7 @@ export const ProfileManager = ({ onLogout }) => {
                       </label>
                       <div style={{
                         fontSize: '1.1rem',
-                        color: THEME_COLOR,
+                        color: 'rgba(255, 255, 255, 0.9)',
                         marginTop: '0.5rem',
                         fontWeight: '500'
                       }}>
@@ -584,7 +584,7 @@ export const ProfileManager = ({ onLogout }) => {
                     style={{
                       background: 'none',
                       border: 'none',
-                      color: THEME_COLOR,
+                      color: '#46a1a1',
                       textDecoration: 'underline',
                       cursor: 'pointer',
                       padding: '0',
@@ -618,7 +618,7 @@ export const ProfileManager = ({ onLogout }) => {
 
                   <hr style={{ margin: '1.5rem 0' }} />
 
-                  <h5 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('accountInfo')}</h5>
+                  <h5 style={{ color: '#46a1a1', marginBottom: '1rem' }}>{t('accountInfo')}</h5>
 
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">{t('name')} *</label>
@@ -650,8 +650,8 @@ export const ProfileManager = ({ onLogout }) => {
 
                   <hr style={{ margin: '1.5rem 0' }} />
 
-                  <h5 style={{ color: THEME_COLOR, marginBottom: '0.5rem' }}>{t('changePassword')}</h5>
-                  <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '1rem' }}>
+                  <h5 style={{ color: '#46a1a1', marginBottom: '0.5rem' }}>{t('changePassword')}</h5>
+                  <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '1rem' }}>
                     {t('leaveBlankToKeepPassword')}
                   </p>
 

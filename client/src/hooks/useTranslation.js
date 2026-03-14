@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import { translations } from '../translations/translations.js';
 
@@ -5,18 +6,16 @@ const DEFAULT_LANGUAGE = 'en';
 
 export const useTranslation = () => {
   const languageContext = useLanguage();
+  const lang = languageContext?.language || DEFAULT_LANGUAGE;
 
   if (!languageContext) {
     console.error('useTranslation must be used within a LanguageProvider');
-    return { t: (key) => key, language: DEFAULT_LANGUAGE };
   }
 
-  const currentLanguage = languageContext.language || DEFAULT_LANGUAGE;
-
-  const t = (key) => {
+  const t = useCallback((key) => {
     if (!key) return '';
-    return translations[currentLanguage]?.[key] ?? key;
-  };
+    return translations[lang]?.[key] ?? key;
+  }, [lang]);
 
-  return { t, language: currentLanguage };
+  return { t, language: lang };
 };

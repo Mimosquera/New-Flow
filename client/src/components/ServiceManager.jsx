@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Scissors, Plus, Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert, FormInput } from './Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
@@ -18,6 +19,7 @@ export const ServiceManager = () => {
   const [editingService, setEditingService] = useState(null);
   const [isPriceRange, setIsPriceRange] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
   const formRef = useRef(null);
 
   const fetchServices = useCallback(async () => {
@@ -36,6 +38,12 @@ export const ServiceManager = () => {
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 992);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { formData, setFormData, handleChange, handleSubmit: handleFormSubmit, error, setError, resetForm } = useForm(
     {
@@ -180,7 +188,15 @@ export const ServiceManager = () => {
                   {showForm ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </span>
               </div>
-              <div className={`d-lg-block ${showForm ? 'd-block' : 'd-none'}`}>
+              <AnimatePresence initial={false}>
+                {(isDesktop || showForm) && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
               <div className="card-body p-4">
 
                 {success && (
@@ -228,7 +244,7 @@ export const ServiceManager = () => {
 
                   <div className="mb-3">
                     <label htmlFor="price" className="form-label">
-                      {isPriceRange ? (t('minPrice') || 'Minimum Price') : t('price')}
+                      {isPriceRange ? t('minPrice') : t('price')}
                     </label>
                     <div className="input-group">
                       <span className="input-group-text">$</span>
@@ -241,7 +257,7 @@ export const ServiceManager = () => {
                         className="form-control"
                         value={formData.price}
                         onChange={handleChange}
-                        placeholder={isPriceRange ? (t('minPricePlaceholder') || '20.00') : t('pricePlaceholder')}
+                        placeholder={isPriceRange ? t('minPricePlaceholder') : t('pricePlaceholder')}
                         required
                         autoComplete="off"
                       />
@@ -263,7 +279,7 @@ export const ServiceManager = () => {
                         className="form-check-label"
                         style={{ cursor: 'pointer', userSelect: 'none' }}
                       >
-                        {t('usePriceRange') || 'Use price range'}
+                        {t('usePriceRange')}
                       </label>
                     </div>
                   </div>
@@ -271,7 +287,7 @@ export const ServiceManager = () => {
                   {isPriceRange && (
                     <div className="mb-3">
                       <label htmlFor="price_max" className="form-label">
-                        {t('maxPrice') || 'Maximum Price'}
+                        {t('maxPrice')}
                       </label>
                       <div className="input-group">
                         <span className="input-group-text">$</span>
@@ -284,7 +300,7 @@ export const ServiceManager = () => {
                           className="form-control"
                           value={formData.price_max}
                           onChange={handleChange}
-                          placeholder={t('maxPricePlaceholder') || '40.00'}
+                          placeholder={t('maxPricePlaceholder')}
                           required={isPriceRange}
                           autoComplete="off"
                         />
@@ -311,8 +327,10 @@ export const ServiceManager = () => {
                   </div>
                 </form>
               </div>
+                </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
           </div>
 
           {/* Services List */}

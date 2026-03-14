@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Clock, CalendarOff, ChevronDown, ChevronUp, Pencil, Trash2, Check, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Clock, CalendarDays, CalendarOff, ChevronDown, ChevronUp, Pencil, Trash2, Check, X } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { availabilityService, dataService, blockedDateService } from '../services/api.js';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
@@ -79,7 +80,7 @@ export const AvailabilityManager = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   const fetchBlockedDates = useCallback(async () => {
     try {
@@ -250,7 +251,15 @@ export const AvailabilityManager = () => {
                   </h5>
                   {showAddAvailability ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
-                <div className={showAddAvailability ? 'd-block' : 'd-none'}>
+                <AnimatePresence initial={false}>
+                  {showAddAvailability && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
                   <div className="card-body p-4">
 
                     {success && (
@@ -344,7 +353,9 @@ export const AvailabilityManager = () => {
                       </button>
                     </form>
                   </div>
-                </div>
+                  </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
@@ -366,7 +377,15 @@ export const AvailabilityManager = () => {
                   </h5>
                   {showBlockedDates ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
-                <div className={showBlockedDates ? 'd-block' : 'd-none'}>
+                <AnimatePresence initial={false}>
+                  {showBlockedDates && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
                   <div className="card-body p-4">
                     <BlockedDatesManager
                       blockedDates={blockedDates}
@@ -375,11 +394,13 @@ export const AvailabilityManager = () => {
                       employees={employees}
                     />
                   </div>
-                </div>
+                  </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
 
-            <div style={infoBoxStyle}>
+            <div className="mb-4" style={infoBoxStyle}>
               {t('blockDatesDescription')}
             </div>
 
@@ -397,11 +418,20 @@ export const AvailabilityManager = () => {
                 <h5 className="mb-0" style={{ fontSize: '1rem' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
                 {showAvailabilityList ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
-              <div className={`d-md-block ${showAvailabilityList ? 'd-block' : 'd-none'}`}>
+              <AnimatePresence initial={false}>
+                {(!isMobile || showAvailabilityList) && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                  style={{ overflow: 'hidden' }}
+                >
                 <div className="card-body p-4">
                   <div className="d-flex justify-content-between align-items-start mb-3">
                     <div className="flex-grow-1 d-none d-md-block">
-                      <h5 className="card-title mb-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
+                      <h5 className="card-title mb-2 d-flex align-items-center gap-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
+                        <CalendarDays size={17} />
                         {isAdmin ? t('allAvailability') : t('yourAvailability')}
                       </h5>
                     </div>
@@ -635,7 +665,9 @@ export const AvailabilityManager = () => {
                     </div>
                   )}
                 </div>
-              </div>
+                </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
           {/* End Right Column */}

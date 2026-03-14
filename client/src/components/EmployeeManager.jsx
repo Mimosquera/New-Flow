@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { authService } from '../services/api.js';
@@ -254,8 +255,16 @@ export const EmployeeManager = () => {
               ? <ChevronUp size={18} style={{ color: '#46a1a1', flexShrink: 0 }} />
               : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />}
           </button>
+          <AnimatePresence initial={false}>
           {expandedEmployeeId === employee.id && (
-            <div className="p-3 border-top bg-light">
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: 'hidden' }}
+            >
+            <div className="p-3 border-top" style={{ borderColor: 'rgba(70, 161, 161, 0.25)' }}>
               <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#46a1a1', fontWeight: 700 }}>
                 <Key size={15} />
                 {t('editPassword')}
@@ -316,7 +325,7 @@ export const EmployeeManager = () => {
                     {t('removeFromSystem')}
                   </button>
                 ) : (
-                  <div className="border border-danger rounded p-3 bg-light">
+                  <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
                     <p className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 600 }}>
                       <strong>{t('confirmDeleteEmployee')}</strong>
                     </p>
@@ -354,7 +363,9 @@ export const EmployeeManager = () => {
                 )}
               </div>
             </div>
+            </motion.div>
           )}
+          </AnimatePresence>
         </div>
       ))}
     </div>
@@ -377,7 +388,19 @@ export const EmployeeManager = () => {
                 </h3>
                 {showCreateForm ? <ChevronUp size={18} style={{ color: '#46a1a1' }} /> : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.6)' }} />}
               </button>
-              {showCreateForm && renderCreateForm()}
+              <AnimatePresence initial={false}>
+                {showCreateForm && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    {renderCreateForm()}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
           <div className="card post-update-card shadow-sm">
