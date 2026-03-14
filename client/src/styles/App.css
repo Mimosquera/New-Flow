@@ -37,6 +37,10 @@ html, body {
   pointer-events: none;
 }
 
+button svg, a svg {
+  pointer-events: none;
+}
+
 .scroll-to-top-btn {
   position: fixed;
   bottom: 2rem;
@@ -348,9 +352,29 @@ a:focus:not(:focus-visible) {
 .post-update-card .form-label {
   color: rgba(255, 255, 255, 0.85) !important;
 }
+.post-update-card .form-check-label {
+  color: rgba(255, 255, 255, 0.85);
+}
 .post-update-card .text-muted {
   color: rgba(255, 255, 255, 0.55) !important;
   font-weight: 500;
+}
+.post-update-card .table {
+  color: rgba(255, 255, 255, 0.85);
+  --bs-table-bg: transparent;
+  --bs-table-border-color: rgba(255, 255, 255, 0.07);
+}
+.post-update-card .table th {
+  color: #46a1a1;
+  font-weight: 600;
+  border-color: rgba(70, 161, 161, 0.3);
+}
+.post-update-card .table td {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+.post-update-card .table-hover > tbody > tr:hover > * {
+  background-color: rgba(70, 161, 161, 0.08);
+  color: rgba(255, 255, 255, 0.95);
 }
 .post-update-card .btn:not(.btn-close) {
   background: rgb(5, 45, 63);
@@ -371,13 +395,13 @@ a:focus:not(:focus-visible) {
   color: #fff;
 }
 .post-update-card .btn-outline-secondary {
-  background: transparent;
-  color: rgb(5, 45, 63);
-  border: 1px solid rgb(5, 45, 63);
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 .post-update-card .btn-outline-secondary:hover {
-  background: rgb(5, 45, 63);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
 }
 
 /* Update/Post Listing Cards */
@@ -873,32 +897,34 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Appointment card */
 .appointment-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f0fafa 50%, #e3f3f3 100%) !important;
-  border: none !important;
+  background: rgba(5, 45, 63, 0.5) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(70, 161, 161, 0.2) !important;
   border-left: 4px solid #46a1a1 !important;
   border-radius: 16px !important;
-  box-shadow: 0 2px 12px rgba(70, 161, 161, 0.15), 0 4px 24px rgba(70, 161, 161, 0.08) !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
   overflow: hidden;
 }
 .appointment-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.25), 0 8px 32px rgba(70, 161, 161, 0.12) !important;
+  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.18), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
 }
 .appointment-card .card-title {
-  color: rgb(5, 45, 63) !important;
+  color: #fff !important;
   font-weight: 600 !important;
   font-size: 1.05rem !important;
 }
 .appointment-card .card-body {
-  color: rgb(5, 45, 63);
+  color: rgba(255, 255, 255, 0.85);
 }
 .appointment-card hr {
   border-color: rgba(70, 161, 161, 0.3);
   opacity: 0.6;
 }
 .appointment-card strong {
-  color: rgb(5, 45, 63);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* Appointment filter dropdown */
@@ -914,7 +940,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.25) !important;
 }
 .appointments-filter-label {
-  color: rgb(5, 45, 63) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
   font-weight: 600 !important;
 }
 .availability-filter-label {

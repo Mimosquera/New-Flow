@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Calendar, Clock, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
+import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { appointmentService } from '../services/api.js';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
@@ -262,7 +262,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       <div className="row justify-content-center">
         <div className="col-12 col-lg-8 col-xl-6">
           <div className="mb-3">
-            <label htmlFor="statusFilter" className="form-label me-2 appointments-filter-label">{t('filter')}:</label>
+            <label htmlFor="statusFilter" className="form-label me-2 appointments-filter-label d-inline-flex align-items-center gap-1"><Filter size={13} />{t('filter')}:</label>
             <select
               id="statusFilter"
               className="form-select d-inline-block w-auto appointments-filter-select"
