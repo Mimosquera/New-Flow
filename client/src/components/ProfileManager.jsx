@@ -305,493 +305,317 @@ export const ProfileManager = ({ onLogout }) => {
     }
   };
 
+  const profileCardStyle = {
+    background: 'rgba(5, 45, 63, 0.55)',
+    backdropFilter: 'blur(18px)',
+    WebkitBackdropFilter: 'blur(18px)',
+    border: '1px solid rgba(70, 161, 161, 0.2)',
+    borderRadius: '14px',
+    overflow: 'hidden',
+  };
+
+  const cardHeaderStyle = {
+    padding: '0.7rem 1rem',
+    borderBottom: '1px solid rgba(70,161,161,0.15)',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  };
+
+  const sectionLabelStyle = {
+    color: 'rgba(255,255,255,0.45)',
+    fontSize: '0.72rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    marginBottom: '0.2rem',
+    fontWeight: '600',
+  };
+
+  const sectionValueStyle = {
+    color: 'rgba(255,255,255,0.9)',
+    fontSize: '0.9rem',
+    fontWeight: '500',
+  };
+
   return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-12 col-lg-10">
-          {alerts.error && (
-            <Alert
-              type="error"
-              message={alerts.error}
-              onClose={() => setAlerts({ ...alerts, error: null })}
-            />
-          )}
-          {alerts.success && (
-            <Alert
-              type="success"
-              message={alerts.success}
-              onClose={() => setAlerts({ ...alerts, success: null })}
-            />
-          )}
+    <div className="container py-3">
+      {(alerts.error || alerts.success) && (
+        <div className="row justify-content-center mb-2">
+          <div className="col-12 col-xl-10">
+            {alerts.error && (
+              <Alert type="error" message={alerts.error} onClose={() => setAlerts({ ...alerts, error: null })} />
+            )}
+            {alerts.success && (
+              <Alert type="success" message={alerts.success} onClose={() => setAlerts({ ...alerts, success: null })} />
+            )}
+          </div>
+        </div>
+      )}
 
-          <div className="card post-update-card shadow-sm mb-4">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
-                  <User size={18} />
-                  {t('aboutMe')}
-                </h3>
-                {!isEditingAboutMe && (
-                  <button
-                    onClick={handleEditAboutMe}
-                    className="post-update-btn d-flex align-items-center gap-1"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
-                  >
-                    <Pencil size={14} />
-                    {t('editAboutMe')}
-                  </button>
-                )}
-              </div>
-
+      <div className="row justify-content-center g-3">
+        {/* About Me Card */}
+        <div className={`col-12 ${isEditingAboutMe ? '' : 'col-md-5 col-xl-4'}`}>
+          <div style={profileCardStyle}>
+            <div style={cardHeaderStyle}>
+              <h6 style={{ margin: 0, color: '#46a1a1', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <User size={13} />
+                {t('aboutMe')}
+              </h6>
               {!isEditingAboutMe && (
-                <div>
-                  <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                <button
+                  onClick={handleEditAboutMe}
+                  className="btn btn-sm d-flex align-items-center gap-1"
+                  style={{ background: 'rgba(70,161,161,0.15)', color: '#46a1a1', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                >
+                  <Pencil size={11} />
+                  {t('edit')}
+                </button>
+              )}
+            </div>
+
+            {!isEditingAboutMe && (
+              <div style={{ padding: '0.85rem 1rem' }}>
+                <div className="d-flex align-items-start gap-3">
+                  <div style={{ flexShrink: 0 }}>
                     {imagePreview ? (
                       <img
                         src={imagePreview}
                         alt={t('profileImageAlt')}
-                        style={{
-                          width: '200px',
-                          height: '200px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-                        }}
+                        style={{ width: '82px', height: '82px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${SECONDARY_COLOR}` }}
                       />
                     ) : (
-                      <div
-                        style={{
-                          width: '200px',
-                          height: '200px',
-                          borderRadius: '50%',
-                          backgroundColor: '#f0f0f0',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
-                        }}
-                      >
-                        <span style={{ fontSize: '3rem', color: '#ccc' }}>👤</span>
+                      <div style={{ width: '82px', height: '82px', borderRadius: '50%', background: 'rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `2px solid rgba(70,161,161,0.4)` }}>
+                        <User size={32} style={{ color: 'rgba(255,255,255,0.25)' }} />
                       </div>
                     )}
                   </div>
-
-                  <div>
-                    <label style={{
-                      fontWeight: '600',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                      fontSize: '0.85rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.5px',
-                      marginBottom: '0.75rem',
-                      display: 'block'
-                    }}>
-                      {t('aboutMe')}
-                    </label>
-                    <div style={{
-                      fontSize: '1rem',
-                      color: 'rgba(255, 255, 255, 0.9)',
-                      lineHeight: '1.6',
-                      whiteSpace: 'pre-wrap'
-                    }}>
-                      {profile.bio || t('noProfileImage')}
+                  <div style={{ minWidth: 0, flex: 1 }}>
+                    <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.88rem', lineHeight: '1.55', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                      {profile.bio || <span style={{ color: 'rgba(255,255,255,0.3)', fontStyle: 'italic' }}>{t('noProfileImage')}</span>}
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {isEditingAboutMe && (
-                <form onSubmit={handleAboutMeSubmit}>
-                  <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleImageSelect}
-                      accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                      style={{ display: 'none' }}
-                    />
+            {isEditingAboutMe && (
+              <form onSubmit={handleAboutMeSubmit} style={{ padding: '1rem' }}>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleImageSelect}
+                  accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                  style={{ display: 'none' }}
+                />
 
+                <div className="d-flex align-items-center gap-3 mb-3">
+                  <div style={{ flexShrink: 0 }}>
                     {imagePreview ? (
                       <img
                         src={imagePreview}
                         alt={t('profileImageAlt')}
-                        style={{
-                          width: '200px',
-                          height: '200px',
-                          borderRadius: '50%',
-                          objectFit: 'cover',
-                          border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                          marginBottom: '1rem'
-                        }}
+                        style={{ width: '82px', height: '82px', borderRadius: '50%', objectFit: 'cover', border: `2px solid ${SECONDARY_COLOR}` }}
                       />
                     ) : (
-                      <div
-                        style={{
-                          width: '200px',
-                          height: '200px',
-                          borderRadius: '50%',
-                          backgroundColor: '#f0f0f0',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: `4px solid ${SECONDARY_COLOR}`,
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                          marginBottom: '1rem'
-                        }}
-                      >
-                        <span style={{ fontSize: '3rem', color: '#ccc' }}>👤</span>
+                      <div style={{ width: '82px', height: '82px', borderRadius: '50%', background: 'rgba(255,255,255,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: `2px solid rgba(70,161,161,0.4)` }}>
+                        <User size={32} style={{ color: 'rgba(255,255,255,0.25)' }} />
                       </div>
                     )}
-
-                    <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  </div>
+                  <div className="d-flex flex-column gap-2">
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="btn btn-sm d-flex align-items-center gap-1"
+                      disabled={uploadingImage}
+                      style={{ backgroundColor: SECONDARY_COLOR, color: 'white', border: 'none', fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
+                    >
+                      <Camera size={12} />
+                      {imagePreview ? t('changeProfileImage') : t('uploadProfileImage')}
+                    </button>
+                    {imagePreview && (
                       <button
                         type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="btn d-flex align-items-center gap-1"
+                        onClick={handleImageRemove}
+                        className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
                         disabled={uploadingImage}
-                        style={{
-                          backgroundColor: SECONDARY_COLOR,
-                          color: 'white',
-                          border: 'none',
-                          padding: '0.5rem 1rem',
-                          fontSize: '0.85rem'
-                        }}
+                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
                       >
-                        <Camera size={14} />
-                        {imagePreview ? t('changeProfileImage') : t('uploadProfileImage')}
+                        <Trash2 size={12} />
+                        {t('removeProfileImage')}
                       </button>
-                      {imagePreview && (
-                        <button
-                          type="button"
-                          onClick={handleImageRemove}
-                          className="btn btn-outline-danger d-flex align-items-center gap-1"
-                          disabled={uploadingImage}
-                          style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}
-                        >
-                          <Trash2 size={14} />
-                          {t('removeProfileImage')}
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
+                </div>
 
-                  <div className="mb-3">
-                    <label htmlFor="bio" className="form-label">{t('aboutMe')}</label>
-                    <textarea
-                      id="bio"
-                      name="bio"
-                      className="form-control"
-                      rows="8"
-                      value={aboutMeData.bio}
-                      onChange={handleBioChange}
-                      placeholder={t('bioPlaceholder')}
-                      style={{ resize: 'vertical' }}
-                    />
-                  </div>
+                <div className="mb-3">
+                  <label htmlFor="bio" className="form-label">{t('aboutMe')}</label>
+                  <textarea
+                    id="bio"
+                    name="bio"
+                    className="form-control"
+                    rows="5"
+                    value={aboutMeData.bio}
+                    onChange={handleBioChange}
+                    placeholder={t('bioPlaceholder')}
+                    style={{ resize: 'vertical' }}
+                  />
+                </div>
 
-                  <div className="d-flex gap-2 mt-4">
-                    <button
-                      type="submit"
-                      className="post-update-btn"
-                      disabled={loading || uploadingImage}
-                      style={{ flex: 1 }}
-                    >
-                      {loading || uploadingImage ? t('updating') : t('save')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleCancelAboutMe}
-                      className="btn btn-secondary"
-                      disabled={loading || uploadingImage}
-                      style={{ flex: 1 }}
-                    >
-                      {t('cancel')}
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
-          </div>
-
-          <div className="card post-update-card shadow-sm">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2">
-                  <Lock size={18} />
-                  {t('accountLogin')}
-                </h3>
-                {!isEditingLogin && (
-                  <button
-                    onClick={handleEditLogin}
-                    className="post-update-btn d-flex align-items-center gap-1"
-                    style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
-                  >
-                    <Pencil size={14} />
-                    {t('editLogin')}
+                <div className="d-flex gap-2">
+                  <button type="submit" className="post-update-btn" disabled={loading || uploadingImage} style={{ flex: 1 }}>
+                    {loading || uploadingImage ? t('updating') : t('save')}
                   </button>
-                )}
-              </div>
-
-              {!isEditingLogin && (
-                <div style={{ padding: '0 0 1rem 0' }}>
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <div style={{ marginBottom: '1rem' }}>
-                      <label style={{
-                        fontWeight: '600',
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        fontSize: '0.85rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {t('name')}
-                      </label>
-                      <div style={{
-                        fontSize: '1.1rem',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        marginTop: '0.5rem',
-                        fontWeight: '500'
-                      }}>
-                        {profile.name}
-                      </div>
-                    </div>
-
-                    <div style={{ marginBottom: '1rem' }}>
-                      <label style={{
-                        fontWeight: '600',
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        fontSize: '0.85rem',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {t('email')}
-                      </label>
-                      <div style={{
-                        fontSize: '1.1rem',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        marginTop: '0.5rem',
-                        fontWeight: '500'
-                      }}>
-                        {profile.email}
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => setShowForgotPassword(true)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#46a1a1',
-                      textDecoration: 'underline',
-                      cursor: 'pointer',
-                      padding: '0',
-                      fontSize: '0.9rem'
-                    }}
-                  >
-                    {t('forgotPassword')}
+                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-secondary" disabled={loading || uploadingImage} style={{ flex: 1 }}>
+                    {t('cancel')}
                   </button>
                 </div>
-              )}
+              </form>
+            )}
+          </div>
+        </div>
 
-              {isEditingLogin && (
-                <form onSubmit={handleLoginSubmit}>
-                  <div className="alert alert-info" style={{ fontSize: '0.9rem', marginBottom: '1rem' }}>
-                    {t('verifyIdentity')}
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="currentPassword" className="form-label">{t('currentPassword')} *</label>
-                    <input
-                      type="password"
-                      id="currentPassword"
-                      name="currentPassword"
-                      className="form-control"
-                      value={loginFormData.currentPassword}
-                      onChange={handleLoginChange}
-                      required
-                      autoComplete="current-password"
-                    />
-                  </div>
-
-                  <hr style={{ margin: '1.5rem 0' }} />
-
-                  <h5 style={{ color: '#46a1a1', marginBottom: '1rem' }}>{t('accountInfo')}</h5>
-
-                  <div className="mb-3">
-                    <label htmlFor="name" className="form-label">{t('name')} *</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="form-control"
-                      value={loginFormData.name}
-                      onChange={handleLoginChange}
-                      required
-                      autoComplete="name"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">{t('email')} *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      className="form-control"
-                      value={loginFormData.email}
-                      onChange={handleLoginChange}
-                      required
-                      autoComplete="email"
-                    />
-                  </div>
-
-                  <hr style={{ margin: '1.5rem 0' }} />
-
-                  <h5 style={{ color: '#46a1a1', marginBottom: '0.5rem' }}>{t('changePassword')}</h5>
-                  <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '1rem' }}>
-                    {t('leaveBlankToKeepPassword')}
-                  </p>
-
-                  <div className="mb-3">
-                    <label htmlFor="newPassword" className="form-label">{t('newPassword')}</label>
-                    <input
-                      type="password"
-                      id="newPassword"
-                      name="newPassword"
-                      className="form-control"
-                      value={loginFormData.newPassword}
-                      onChange={handleLoginChange}
-                      autoComplete="new-password"
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="confirmPassword" className="form-label">{t('confirmPassword')}</label>
-                    <input
-                      type="password"
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      className="form-control"
-                      value={loginFormData.confirmPassword}
-                      onChange={handleLoginChange}
-                      autoComplete="new-password"
-                    />
-                  </div>
-
-                  <div className="d-flex gap-2 mt-4">
-                    <button
-                      type="submit"
-                      className="post-update-btn"
-                      disabled={loading}
-                      style={{ flex: 1 }}
-                    >
-                      {loading ? t('updating') : t('save')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleCancelLogin}
-                      className="btn btn-secondary"
-                      disabled={loading}
-                      style={{ flex: 1 }}
-                    >
-                      {t('cancel')}
-                    </button>
-                  </div>
-                </form>
+        {/* Account Login Card */}
+        <div className={`col-12 ${isEditingLogin ? '' : 'col-md-7 col-xl-8'}`}>
+          <div style={profileCardStyle}>
+            <div style={cardHeaderStyle}>
+              <h6 style={{ margin: 0, color: '#46a1a1', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Lock size={13} />
+                {t('accountLogin')}
+              </h6>
+              {!isEditingLogin && (
+                <button
+                  onClick={handleEditLogin}
+                  className="btn btn-sm d-flex align-items-center gap-1"
+                  style={{ background: 'rgba(70,161,161,0.15)', color: '#46a1a1', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                >
+                  <Pencil size={11} />
+                  {t('edit')}
+                </button>
               )}
             </div>
-          </div>
 
-          {showForgotPassword && (
-            <div
-              style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: 9999
-              }}
-              onClick={() => setShowForgotPassword(false)}
-            >
-              <div
-                style={{
-                  backgroundColor: 'white',
-                  padding: '2rem',
-                  borderRadius: '24px',
-                  maxWidth: '500px',
-                  width: '90%',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <h4 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('forgotPassword')}</h4>
-                <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1.5rem' }}>
-                  {t('forgotPasswordDescription')}
+            {!isEditingLogin && (
+              <div style={{ padding: '0.85rem 1rem' }}>
+                <div className="row g-2 mb-3">
+                  <div className="col-12 col-sm-6">
+                    <div style={sectionLabelStyle}>{t('name')}</div>
+                    <div style={sectionValueStyle}>{profile.name}</div>
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <div style={sectionLabelStyle}>{t('email')}</div>
+                    <div style={{ ...sectionValueStyle, wordBreak: 'break-all' }}>{profile.email}</div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowForgotPassword(true)}
+                  style={{ background: 'none', border: 'none', color: '#46a1a1', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontSize: '0.82rem' }}
+                >
+                  {t('forgotPassword')}
+                </button>
+              </div>
+            )}
+
+            {isEditingLogin && (
+              <form onSubmit={handleLoginSubmit} style={{ padding: '1rem' }}>
+                <div className="alert alert-info" style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
+                  {t('verifyIdentity')}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="currentPassword" className="form-label">{t('currentPassword')} *</label>
+                  <input type="password" id="currentPassword" name="currentPassword" className="form-control" value={loginFormData.currentPassword} onChange={handleLoginChange} required autoComplete="current-password" />
+                </div>
+
+                <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+
+                <h6 style={{ color: '#46a1a1', marginBottom: '0.75rem' }}>{t('accountInfo')}</h6>
+
+                <div className="row g-2 mb-2">
+                  <div className="col-12 col-sm-6">
+                    <label htmlFor="name" className="form-label">{t('name')} *</label>
+                    <input type="text" id="name" name="name" className="form-control" value={loginFormData.name} onChange={handleLoginChange} required autoComplete="name" />
+                  </div>
+                  <div className="col-12 col-sm-6">
+                    <label htmlFor="email" className="form-label">{t('email')} *</label>
+                    <input type="email" id="email" name="email" className="form-control" value={loginFormData.email} onChange={handleLoginChange} required autoComplete="email" />
+                  </div>
+                </div>
+
+                <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+
+                <h6 style={{ color: '#46a1a1', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
+                <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem' }}>
+                  {t('leaveBlankToKeepPassword')}
                 </p>
 
-                <form onSubmit={handleForgotPassword}>
-                  <div className="mb-3">
-                    <label htmlFor="resetEmail" className="form-label">{t('email')}</label>
-                    <input
-                      type="email"
-                      id="resetEmail"
-                      className="form-control"
-                      value={resetEmail}
-                      onChange={(e) => setResetEmail(e.target.value)}
-                      required
-                      autoComplete="email"
-                    />
+                <div className="row g-2 mb-3">
+                  <div className="col-12 col-sm-6">
+                    <label htmlFor="newPassword" className="form-label">{t('newPassword')}</label>
+                    <input type="password" id="newPassword" name="newPassword" className="form-control" value={loginFormData.newPassword} onChange={handleLoginChange} autoComplete="new-password" />
                   </div>
-
-                  <div className="d-flex gap-2">
-                    <button
-                      type="submit"
-                      className="post-update-btn"
-                      disabled={resetLoading}
-                      style={{ flex: 1 }}
-                    >
-                      {resetLoading ? t('sending') : t('sendResetLink')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setShowForgotPassword(false)}
-                      className="btn btn-secondary"
-                      disabled={resetLoading}
-                      style={{ flex: 1 }}
-                    >
-                      {t('cancel')}
-                    </button>
+                  <div className="col-12 col-sm-6">
+                    <label htmlFor="confirmPassword" className="form-label">{t('confirmPassword')}</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" className="form-control" value={loginFormData.confirmPassword} onChange={handleLoginChange} autoComplete="new-password" />
                   </div>
-                </form>
-              </div>
-            </div>
-          )}
+                </div>
 
-          {onLogout && (
-            <div className="text-center mt-5 pt-4">
+                <div className="d-flex gap-2">
+                  <button type="submit" className="post-update-btn" disabled={loading} style={{ flex: 1 }}>
+                    {loading ? t('updating') : t('save')}
+                  </button>
+                  <button type="button" onClick={handleCancelLogin} className="btn btn-secondary" disabled={loading} style={{ flex: 1 }}>
+                    {t('cancel')}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+
+          {onLogout && !isEditingLogin && (
+            <div className="text-center mt-3">
               <button
-                onClick={() => {
-                  if (window.confirm(t('logoutConfirm'))) {
-                    onLogout();
-                  }
-                }}
-                className="btn btn-lg logout-btn d-inline-flex align-items-center gap-2"
+                onClick={() => { if (window.confirm(t('logoutConfirm'))) onLogout(); }}
+                className="btn logout-btn d-inline-flex align-items-center gap-2"
               >
-                <LogOut size={16} />
+                <LogOut size={14} />
                 {t('logout')}
               </button>
             </div>
           )}
         </div>
       </div>
+
+      {showForgotPassword && (
+        <div
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}
+          onClick={() => setShowForgotPassword(false)}
+        >
+          <div
+            style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '24px', maxWidth: '500px', width: '90%', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h4 style={{ color: THEME_COLOR, marginBottom: '1rem' }}>{t('forgotPassword')}</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '1.5rem' }}>
+              {t('forgotPasswordDescription')}
+            </p>
+            <form onSubmit={handleForgotPassword}>
+              <div className="mb-3">
+                <label htmlFor="resetEmail" className="form-label">{t('email')}</label>
+                <input type="email" id="resetEmail" className="form-control" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} required autoComplete="email" />
+              </div>
+              <div className="d-flex gap-2">
+                <button type="submit" className="post-update-btn" disabled={resetLoading} style={{ flex: 1 }}>
+                  {resetLoading ? t('sending') : t('sendResetLink')}
+                </button>
+                <button type="button" onClick={() => setShowForgotPassword(false)} className="btn btn-secondary" disabled={resetLoading} style={{ flex: 1 }}>
+                  {t('cancel')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

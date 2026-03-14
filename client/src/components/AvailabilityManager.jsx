@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Clock, CalendarDays, CalendarOff, ChevronDown, ChevronUp, Pencil, Trash2, Check, X } from 'lucide-react';
+import { Clock, CalendarOff, ChevronDown, ChevronUp, Pencil, Trash2, Check, X } from 'lucide-react';
 import { Alert } from './Common/index.jsx';
 import { availabilityService, dataService, blockedDateService } from '../services/api.js';
 import { decodeToken, getToken } from '../utils/tokenUtils.js';
@@ -50,7 +50,7 @@ export const AvailabilityManager = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < MOBILE_BREAKPOINT);
   const [showAddAvailability, setShowAddAvailability] = useState(false);
   const [showBlockedDates, setShowBlockedDates] = useState(false);
-  const [showAvailabilityList, setShowAvailabilityList] = useState(false);
+  const [showAvailabilityList, setShowAvailabilityList] = useState(window.innerWidth >= 992);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
@@ -242,7 +242,7 @@ export const AvailabilityManager = () => {
               <div className="card post-update-card shadow-sm border-0">
                 <div
                   className="card-header d-flex justify-content-between align-items-center collapsible-header"
-                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem' }}
+                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAddAvailability ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                   onClick={() => setShowAddAvailability(!showAddAvailability)}
                 >
                   <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
@@ -368,7 +368,7 @@ export const AvailabilityManager = () => {
               <div className="card post-update-card shadow-sm border-0">
                 <div
                   className="card-header d-flex justify-content-between align-items-center collapsible-header"
-                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem' }}
+                  style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showBlockedDates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                   onClick={() => setShowBlockedDates(!showBlockedDates)}
                 >
                   <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
@@ -411,15 +411,15 @@ export const AvailabilityManager = () => {
           <div className="col-lg-8">
             <div className="card post-update-card shadow-sm border-0">
               <div
-                className="card-header d-flex justify-content-between align-items-center d-md-none collapsible-header"
-                style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem' }}
+                className="card-header d-flex justify-content-between align-items-center collapsible-header"
+                style={{ backgroundColor: THEME_COLOR, color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showAvailabilityList ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
                 onClick={() => setShowAvailabilityList(!showAvailabilityList)}
               >
                 <h5 className="mb-0" style={{ fontSize: '1rem' }}>{isAdmin ? t('allAvailability') : t('yourAvailability')}</h5>
                 {showAvailabilityList ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </div>
               <AnimatePresence initial={false}>
-                {(!isMobile || showAvailabilityList) && (
+                {showAvailabilityList && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
@@ -428,14 +428,7 @@ export const AvailabilityManager = () => {
                   style={{ overflow: 'hidden' }}
                 >
                 <div className="card-body p-4">
-                  <div className="d-flex justify-content-between align-items-start mb-3">
-                    <div className="flex-grow-1 d-none d-md-block">
-                      <h5 className="card-title mb-2 d-flex align-items-center gap-2" style={{ color: '#fff', textShadow: '0 5px 24px rgba(5,45,63,0.85), 0 3px 8px rgba(0,0,0,0.65)' }}>
-                        <CalendarDays size={17} />
-                        {isAdmin ? t('allAvailability') : t('yourAvailability')}
-                      </h5>
-                    </div>
-
+                  <div className="d-flex justify-content-end align-items-start mb-3">
                     {isAdmin && employees.length > 0 && (
                       <div>
                         <label id="availabilityFilterLabel" htmlFor="availabilityEmployeeFilter" className="form-label me-2">{t('filter')}:</label>

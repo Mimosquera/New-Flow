@@ -176,7 +176,8 @@ export const ServiceManager = () => {
                   backgroundColor: THEME_COLOR,
                   color: 'white',
                   cursor: 'pointer',
-                  padding: '0.75rem 1rem'
+                  padding: '0.75rem 1rem',
+                  borderRadius: (isDesktop || showForm) ? '0.75rem 0.75rem 0 0' : '0.75rem',
                 }}
                 onClick={() => setShowForm(!showForm)}
               >
