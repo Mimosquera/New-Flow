@@ -9,8 +9,6 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { translateObject } from '../services/translationService.js';
 import { hapticSuccess, hapticWarning, hapticMedium } from '../utils/haptics.js';
 
-// Constants
-const THEME_COLOR = 'rgb(5, 45, 63)';
 const DANGER_COLOR = '#dc3545';
 const FILTER_ALL = 'all';
 const FILTER_UPCOMING = 'upcoming';
@@ -31,14 +29,13 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   const [success, setSuccess] = useState(null);
   const [showNoteModal, setShowNoteModal] = useState(false);
   const [currentAppointment, setCurrentAppointment] = useState(null);
-  const [modalAction, setModalAction] = useState(''); // 'accept', 'decline', or 'cancel'
+  const [modalAction, setModalAction] = useState('');
   const [employeeNote, setEmployeeNote] = useState('');
   const [expandedIds, setExpandedIds] = useState(new Set());
   const [currentUser, setCurrentUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const isInitialMount = useRef(true);
 
-  // Use external filter if provided, otherwise use internal state
   const [internalFilter, setInternalFilter] = useState('all');
   const filter = externalFilter !== undefined ? externalFilter : internalFilter;
   const setFilter = externalSetFilter || setInternalFilter;
@@ -200,9 +197,9 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       if (upcoming) return showName ? `${t('upcomingFor')} ${apt.acceptedBy.name}` : t('upcomingBadge');
       return showName ? `${t('completedBy')} ${apt.acceptedBy.name}` : t('completed');
     }
-    if (apt.status === STATUS_PENDING) return t('pendingBadge') || 'Pending';
-    if (apt.status === STATUS_DECLINED) return t('declinedBadge') || 'Declined';
-    if (apt.status === STATUS_CANCELLED) return t('cancelledBadge') || 'Cancelled';
+    if (apt.status === STATUS_PENDING) return t('pendingBadge');
+    if (apt.status === STATUS_DECLINED) return t('declinedBadge');
+    if (apt.status === STATUS_CANCELLED) return t('cancelledBadge');
     return apt.status.charAt(0).toUpperCase() + apt.status.slice(1);
   }, [isUpcoming, isAdmin, currentUser, t]);
 
@@ -485,10 +482,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
             </div>
           )}
         </div>
-        {/* end col-lg-7 */}
-
       </div>
-      {/* end row */}
 
       {/* Note Modal */}
       {showNoteModal && (

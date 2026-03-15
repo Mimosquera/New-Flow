@@ -57,21 +57,3 @@ export const formatTimeDisplay = (timeString) => {
   return `${displayHour}:${minute.toString().padStart(2, '0')} ${ampm}`;
 };
 
-export const getTodayString = () => new Date().toISOString().split('T')[0];
-
-export const isValidDateString = (dateString) => {
-  if (!dateString || typeof dateString !== 'string') return false;
-  return !isNaN(new Date(dateString + 'T00:00:00').getTime());
-};
-
-export const compareDates = (date1, date2) => {
-  if (!date1 || !date2) return null;
-
-  const d1 = new Date(date1 + 'T00:00:00');
-  const d2 = new Date(date2 + 'T00:00:00');
-
-  if (isNaN(d1.getTime()) || isNaN(d2.getTime())) return null;
-  if (d1 < d2) return -1;
-  if (d1 > d2) return 1;
-  return 0;
-};

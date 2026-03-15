@@ -5,7 +5,6 @@ import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 
-// Constants
 const THEME_COLOR = 'rgb(5, 45, 63)';
 const MAX_FORM_WIDTH = '450px';
 
@@ -23,7 +22,6 @@ export const PasswordResetPage = () => {
   });
   const [alerts, setAlerts] = useState({ error: null, success: null });
 
-  // Verify token on mount
   useEffect(() => {
     verifyToken();
   }, [token]);
@@ -77,7 +75,6 @@ export const PasswordResetPage = () => {
 
       setAlerts({ error: null, success: t('passwordResetSuccess') });
 
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         navigate('/employee-login');
       }, 2000);
@@ -94,13 +91,12 @@ export const PasswordResetPage = () => {
   };
 
   const handleRequestNewLink = () => {
-    navigate('/employee-dashboard');
+    navigate('/employee-login');
   };
 
   return (
     <div className="form-container" style={{ background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)' }}>
       <div style={{ width: '100%', maxWidth: MAX_FORM_WIDTH }}>
-        {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <img
             src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
@@ -114,7 +110,6 @@ export const PasswordResetPage = () => {
             <h3 className="mb-0">{t('resetPassword')}</h3>
           </div>
           <div className="card-body">
-            {/* Alerts */}
             {alerts.error && (
               <Alert
                 message={alerts.error}
@@ -130,7 +125,6 @@ export const PasswordResetPage = () => {
               />
             )}
 
-            {/* Loading State */}
             {loading && (
               <div style={{ textAlign: 'center', padding: '2rem' }}>
                 <div className="spinner-border" role="status">
@@ -140,7 +134,6 @@ export const PasswordResetPage = () => {
               </div>
             )}
 
-            {/* Invalid Token */}
             {!loading && !isValidToken && (
               <div>
                 <div
@@ -177,7 +170,6 @@ export const PasswordResetPage = () => {
               </div>
             )}
 
-            {/* Valid Token - Show Reset Form */}
             {!loading && isValidToken && !alerts.success && (
               <form onSubmit={handleSubmit}>
                 <FormInput
@@ -215,7 +207,6 @@ export const PasswordResetPage = () => {
               </form>
             )}
 
-            {/* Success State */}
             {!loading && isValidToken && alerts.success && (
               <div style={{ textAlign: 'center', padding: '1rem' }}>
                 <p style={{ color: '#155724', marginBottom: 0 }}>
@@ -226,7 +217,6 @@ export const PasswordResetPage = () => {
           </div>
         </div>
 
-        {/* Back to Login */}
         {!alerts.success && (
           <div className="text-center mt-3">
             <div className="d-flex justify-content-center align-items-center gap-2">

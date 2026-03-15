@@ -131,61 +131,6 @@ router.post(
   }
 );
 
-// PUT /api/blocked-dates/:id
-router.put(
-  '/:id',
-  verifyToken,
-  requireEmployee,
-  validateRequired(['date', 'startTime', 'endTime']),
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { date, startTime, endTime, reason } = req.body;
-
-      const blockedDate = await BlockedDate.findByPk(id);
-
-      if (!blockedDate) {
-        return res.status(404).json({ error: 'Blocked date not found' });
-      }
-
-      if (!isAdmin(req.user) && blockedDate.userId !== req.user.id) {
-        return res.status(403).json({ error: 'Unauthorized to update this blocked date' });
-      }
-
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD' });
-      }
-
-      if (startTime >= endTime) {
-        return res.status(400).json({ error: 'End time must be after start time' });
-      }
-
-      await blockedDate.update({
-        date,
-        startTime,
-        endTime,
-        reason: reason || null,
-      });
-
-      const updatedBlockedDate = await BlockedDate.findByPk(id, {
-        include: [{
-          model: User,
-          as: 'user',
-          attributes: ['id', 'name', 'email'],
-        }],
-      });
-
-      res.json({
-        message: 'Blocked date updated successfully',
-        data: updatedBlockedDate
-      });
-    } catch (error) {
-      console.error('Error updating blocked date:', error);
-      res.status(500).json({ error: 'Failed to update blocked date' });
-    }
-  }
-);
-
 // DELETE /api/blocked-dates/:id
 router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {

@@ -62,11 +62,3 @@ export const decodeToken = (token) => {
   }
 };
 
-export const getUserIdFromToken = () => {
-  const token = getToken();
-  if (!token) return null;
-  const decoded = decodeToken(token);
-  return decoded?.id || decoded?.userId || null;
-};
-
-export const isAuthenticated = () => isTokenValid(getToken());

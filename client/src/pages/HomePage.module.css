@@ -114,12 +114,6 @@
   will-change: transform;
 }
 
-.brandName {
-  white-space: nowrap;
-  color: #fff;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-}
 
 .navLogoBtn {
   background: transparent;

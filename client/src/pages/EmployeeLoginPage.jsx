@@ -12,7 +12,6 @@ import { hapticSuccess, hapticWarning, hapticLight } from '../utils/haptics.js';
 export const EmployeeLoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [globalError, setGlobalError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { formData, handleChange, handleSubmit: handleFormSubmit, error, setError } = useForm(
@@ -50,7 +49,6 @@ export const EmployeeLoginPage = () => {
 
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
-    setGlobalError(null);
     handleFormSubmit(e);
   }, [handleFormSubmit]);
 
@@ -85,14 +83,11 @@ export const EmployeeLoginPage = () => {
             <h3 className={styles.cardTitle}>{t('employeeLoginTitle')}</h3>
           </div>
           <div className={styles.cardBody}>
-            {(globalError || error) && (
+            {error && (
               <Alert
-                message={globalError || error}
+                message={error}
                 type="danger"
-                onClose={() => {
-                  setGlobalError(null);
-                  setError(null);
-                }}
+                onClose={() => setError(null)}
               />
             )}
 

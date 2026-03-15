@@ -1,13 +1,5 @@
 import PropTypes from 'prop-types';
 
-export const LoadingSpinner = () => (
-  <div className="d-flex justify-content-center align-items-center vh-100">
-    <div className="spinner-border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  </div>
-);
-
 export const Alert = ({ message, type = 'danger', onClose }) => (
   <div className={`alert alert-${type} alert-dismissible fade show`} role="alert">
     {message}
@@ -75,15 +67,3 @@ FormInput.propTypes = {
   placeholder: PropTypes.string
 };
 
-export const LoadingState = ({ message = 'Loading...' }) => (
-  <div className="text-center py-5">
-    <div className="spinner-border mb-3" role="status">
-      <span className="visually-hidden">{message}</span>
-    </div>
-    <p>{message}</p>
-  </div>
-);
-
-LoadingState.propTypes = {
-  message: PropTypes.string
-};

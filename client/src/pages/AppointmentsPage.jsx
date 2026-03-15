@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { House } from 'lucide-react';
 import { Alert } from '../components/Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
 import { serviceService, availabilityService, appointmentService, dataService } from '../services/api.js';
@@ -147,8 +148,17 @@ export const AppointmentsPage = () => {
               className={styles.apptNavLogo}
             />
           </button>
-          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
-            <LanguageToggle darkText />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 0, flexShrink: 0 }}>
+            <button
+              className={styles.apptNavHomeBtn}
+              onClick={() => { hapticLight(); navigate('/'); }}
+              aria-label={t('backToHome')}
+            >
+              <House size={18} />
+            </button>
+            <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', marginLeft: '-10px' }}>
+              <LanguageToggle darkText />
+            </div>
           </div>
         </div>
       </nav>
