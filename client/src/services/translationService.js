@@ -10,12 +10,8 @@ const CACHE_TTL_MS = 48 * 60 * 60 * 1000;
 const RL_TTL_MS = 24 * 60 * 60 * 1000;
 
 const translationCache = new Map();
-
-// Deduplicates concurrent requests for the same text
 const pendingPromises = new Map();
 
-// Circuit breaker — one 429 silences all API calls for 24 hours across all tabs/sessions.
-// Persisted in localStorage with a timestamp so new tabs and page refreshes stay silent.
 const isRateLimitActive = () => {
   try {
     const until = parseInt(localStorage.getItem(RL_KEY) || '0', 10);
@@ -25,6 +21,11 @@ const isRateLimitActive = () => {
 
 const setRateLimited = () => {
   try { localStorage.setItem(RL_KEY, String(Date.now() + RL_TTL_MS)); } catch {}
+};
+
+const clearRateLimit = () => {
+  rateLimited = false;
+  try { localStorage.removeItem(RL_KEY); } catch {}
 };
 
 let rateLimited = isRateLimitActive();
@@ -80,6 +81,7 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
             rateLimited = true;
             setRateLimited();
           } else if (data.responseStatus === SUCCESS_STATUS && data?.responseData?.translatedText) {
+            if (rateLimited) clearRateLimit();
             result = data.responseData.translatedText;
             translationCache.set(cacheKey, result);
             saveCache();
@@ -90,7 +92,6 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
         }
       } catch {}
 
-      // Delay only runs if we actually made a request (circuit breaker skipped above)
       if (!rateLimited) await new Promise(r => setTimeout(r, REQUEST_DELAY_MS));
       resolve(result);
     });
@@ -116,5 +117,8 @@ export const translateObject = async (obj, fields, targetLang, sourceLang = DEFA
   return translatedObj;
 };
 
-
-
+export const clearTranslationCache = () => {
+  translationCache.clear();
+  clearRateLimit();
+  try { localStorage.removeItem(STORAGE_KEY); } catch {}
+};
