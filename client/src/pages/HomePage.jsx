@@ -255,6 +255,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
     );
   })();
 
+  const [aboutGlowing, setAboutGlowing] = useState(false);
+
   const navbarRef = useRef(null);
   const [showNavbar, setShowNavbar] = useState(false);
   const lastScrollYRef = useRef(0);
@@ -662,11 +664,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
       {/* About Section */}
       <motion.section
-        className={styles.aboutSection}
+        className={`${styles.aboutSection}${aboutGlowing ? ` ${styles.aboutGlowing}` : ''}`}
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
+        onViewportEnter={() => setTimeout(() => setAboutGlowing(true), 1200)}
       >
         <div className={styles.accentDivider} aria-hidden="true" />
         <div className="container">

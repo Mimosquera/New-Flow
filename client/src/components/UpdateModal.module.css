@@ -45,7 +45,7 @@
 }
 
 .title {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 1.15rem;
   font-weight: 600;
   color: #fff;
@@ -115,7 +115,7 @@
 
 /* ── Content text ────────────────────────────────────────── */
 .content {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.95rem;
   font-weight: 400;
   color: rgba(255, 255, 255, 0.82);
@@ -142,7 +142,7 @@
 }
 
 .metaText {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.78rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.35);
@@ -194,7 +194,7 @@
 }
 
 .counter {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.3);
@@ -204,7 +204,7 @@
 }
 
 .closeFooterBtn {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.82rem;
   font-weight: 500;
   letter-spacing: 0.03em;

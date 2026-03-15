@@ -110,7 +110,7 @@
 
 .cardTitle {
   color: #fff;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   margin: 0;
@@ -130,7 +130,7 @@
 
 .formLabel {
   display: block;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-weight: 600;
   color: #3aabdb;
   margin-bottom: 0.4rem;
@@ -146,7 +146,7 @@
   border: 1.5px solid rgba(58, 171, 219, 0.25);
   border-radius: 10px;
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Outfit', sans-serif;
   transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
   background: rgba(0, 0, 0, 0.28);
   color: rgba(255, 255, 255, 0.88);
@@ -185,7 +185,7 @@
   overflow: hidden;
   width: 100%;
   padding: 0.75rem 2rem;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Outfit', sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
   text-transform: uppercase;
