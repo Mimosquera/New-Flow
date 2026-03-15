@@ -116,26 +116,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
     loop: true,
     align: 'center',
   });
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(false);
   const scrollRafRef = useRef(null);
 
-  const onEmblaSelect = useCallback(() => {
-    if (!emblaApi) return;
-    setCanScrollPrev(emblaApi.canScrollPrev());
-    setCanScrollNext(emblaApi.canScrollNext());
-  }, [emblaApi]);
-
-  useEffect(() => {
-    if (!emblaApi) return;
-    onEmblaSelect();
-    emblaApi.on('select', onEmblaSelect);
-    emblaApi.on('reInit', onEmblaSelect);
-    return () => {
-      emblaApi.off('select', onEmblaSelect);
-      emblaApi.off('reInit', onEmblaSelect);
-    };
-  }, [emblaApi, onEmblaSelect]);
 
   const startAutoScroll = useCallback((direction) => {
     if (!emblaApi) return;
@@ -259,6 +241,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const displayedNews = translatedNews.slice(0, displayCount);
   const hasMore = displayCount < totalUpdates;
+
+  const loopedServices = (() => {
+    if (!translatedServices.length) return [];
+    const MIN_SLIDES = 10;
+    const times = Math.ceil(MIN_SLIDES / translatedServices.length);
+    return Array.from({ length: times }).flatMap((_, t) =>
+      translatedServices.map(s => ({ ...s, _key: `${s.id}-${t}` }))
+    );
+  })();
 
   const navbarRef = useRef(null);
   const [showNavbar, setShowNavbar] = useState(false);
@@ -485,23 +476,21 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </div>
           ) : (
             <div className={styles.carouselWrap}>
-              {canScrollPrev && (
-                <button
-                  className={`${styles.carouselArrow} ${styles.carouselArrowPrev}`}
-                  onClick={() => emblaApi?.scrollPrev()}
-                  onMouseEnter={() => startAutoScroll('prev')}
-                  onMouseLeave={stopAutoScroll}
-                  aria-label="Previous services"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-              )}
+              <button
+                className={`${styles.carouselArrow} ${styles.carouselArrowPrev}`}
+                onClick={() => emblaApi?.scrollPrev()}
+                onMouseEnter={() => startAutoScroll('prev')}
+                onMouseLeave={stopAutoScroll}
+                aria-label="Previous services"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
               <div className={styles.carouselViewport} ref={emblaRef}>
                 <div className={styles.carouselContainer}>
-                  {translatedServices.map((service, idx) => (
-                    <div key={service.id} className={styles.carouselSlide}>
+                  {loopedServices.map((service, idx) => (
+                    <div key={service._key} className={styles.carouselSlide}>
                       <motion.div
                         className={styles.serviceCard}
                         style={{ height: '100%' }}
@@ -547,19 +536,17 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   ))}
                 </div>
               </div>
-              {canScrollNext && (
-                <button
-                  className={`${styles.carouselArrow} ${styles.carouselArrowNext}`}
-                  onClick={() => emblaApi?.scrollNext()}
-                  onMouseEnter={() => startAutoScroll('next')}
-                  onMouseLeave={stopAutoScroll}
-                  aria-label="Next services"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-              )}
+              <button
+                className={`${styles.carouselArrow} ${styles.carouselArrowNext}`}
+                onClick={() => emblaApi?.scrollNext()}
+                onMouseEnter={() => startAutoScroll('next')}
+                onMouseLeave={stopAutoScroll}
+                aria-label="Next services"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
             </div>
           )}
         </div>
