@@ -136,21 +136,19 @@ export const AppointmentsPage = () => {
       {/* Navbar — always visible */}
       <nav className={styles.apptNavbar}>
         <div className={styles.apptNavbarInner}>
-          <img
-            src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-            alt="New Flow"
-            className={styles.apptNavLogo}
-          />
-          <div className="d-flex align-items-center gap-1">
-            <button
-              className={styles.apptNavBtn}
-              onClick={() => { hapticLight(); navigate('/'); }}
-            >
-              Home
-            </button>
-            <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
-              <LanguageToggle darkText />
-            </div>
+          <button
+            className={styles.apptNavLogoBtn}
+            onClick={() => { hapticLight(); navigate('/'); }}
+            aria-label={t('backToHome')}
+          >
+            <img
+              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+              alt="New Flow"
+              className={styles.apptNavLogo}
+            />
+          </button>
+          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
+            <LanguageToggle darkText />
           </div>
         </div>
       </nav>
@@ -168,8 +166,8 @@ export const AppointmentsPage = () => {
               transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>Your Details</h1>
-                <p className={styles.cardSubtitle}>Step 1 of 2: Tell us who you are</p>
+                <h1 className={styles.cardTitle}>{t('yourDetails')}</h1>
+                <p className={styles.cardSubtitle}>{t('stepPersonal')}</p>
               </div>
               <div className={styles.cardBody}>
                 {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
@@ -222,7 +220,7 @@ export const AppointmentsPage = () => {
                   disabled={!phase1Complete}
                   onClick={() => { hapticLight(); setPhase(2); }}
                 >
-                  Continue
+                  {t('continueBtn')}
                 </button>
               </div>
             </motion.div>
@@ -238,8 +236,8 @@ export const AppointmentsPage = () => {
               transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>Appointment Details</h1>
-                <p className={styles.cardSubtitle}>Step 2 of 2: Pick your service and time</p>
+                <h1 className={styles.cardTitle}>{t('appointmentDetails')}</h1>
+                <p className={styles.cardSubtitle}>{t('stepBooking')}</p>
               </div>
               <div className={styles.cardBody}>
                 {/* Personal info recap */}
@@ -254,7 +252,7 @@ export const AppointmentsPage = () => {
                     className={styles.recapEdit}
                     onClick={() => { hapticLight(); setPhase(1); }}
                   >
-                    Edit
+                    {t('edit')}
                   </button>
                 </div>
 
@@ -331,12 +329,12 @@ export const AppointmentsPage = () => {
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
             >
               <div className={styles.cardHeader}>
-                <h1 className={styles.cardTitle}>You are all set!</h1>
+                <h1 className={styles.cardTitle}>{t('allSet')}</h1>
                 <p className={styles.cardSubtitle}>{success}</p>
               </div>
               <div className={styles.cardBody}>
                 <button type="button" className={styles.submitButton} onClick={() => { hapticLight(); navigate('/'); }}>
-                  Back to Home
+                  {t('backToHome')}
                 </button>
               </div>
             </motion.div>

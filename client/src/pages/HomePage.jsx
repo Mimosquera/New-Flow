@@ -219,23 +219,19 @@ export const HomePage = ({ onNavigateToBooking }) => {
         transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       >
         <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
-          <div className="navbar-brand mb-0 h1 d-flex align-items-center" style={{ minWidth: 0 }}>
+          <button
+            className={styles.navLogoBtn}
+            onClick={() => navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login')}
+            aria-label={t(isLoggedIn ? 'employeeDashboard' : 'employeeLogin')}
+          >
             <img
               src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
               alt="New Flow Logo"
               style={{ height: 'clamp(22px, 5vw, 32px)', flexShrink: 0 }}
             />
-          </div>
-          <div className="d-flex flex-nowrap gap-1 align-items-center" style={{ flexShrink: 0 }}>
-            <button
-              className={styles.navButton}
-              onClick={() => navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login')}
-            >
-              {t(isLoggedIn ? 'employeeDashboard' : 'employeeLogin')}
-            </button>
-            <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
-              <LanguageToggle darkText />
-            </div>
+          </button>
+          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
+            <LanguageToggle darkText />
           </div>
         </div>
       </motion.nav>
@@ -466,7 +462,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                                     handleRequestAppointment(service);
                                   }}
                                 >
-                                  {t('requestAppointment')}
+                                  {t('requestShort')}
                                 </button>
                               </motion.div>
                             )}

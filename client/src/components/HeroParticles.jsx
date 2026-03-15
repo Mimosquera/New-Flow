@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const COUNT = 14;
+const COUNT = 28;
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
@@ -78,8 +78,9 @@ export const HeroParticles = () => {
     let particles = [];
 
     const resize = () => {
-      w = window.innerWidth;
-      h = window.innerHeight;
+      const parent = canvas.parentElement;
+      w = parent.clientWidth;
+      h = parent.clientHeight;
       canvas.width = w * devicePixelRatio;
       canvas.height = h * devicePixelRatio;
       canvas.style.width = `${w}px`;
@@ -145,10 +146,11 @@ export const HeroParticles = () => {
     init();
     tick();
 
-    window.addEventListener('resize', resize);
+    const ro = new ResizeObserver(resize);
+    ro.observe(canvas.parentElement);
     return () => {
       cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', resize);
+      ro.disconnect();
     };
   }, []);
 
@@ -156,10 +158,9 @@ export const HeroParticles = () => {
     <canvas
       ref={canvasRef}
       style={{
-        position: 'fixed',
-        inset: 0,
-        width: '100vw',
-        height: '100vh',
+        position: 'absolute',
+        top: 0,
+        left: 0,
         pointerEvents: 'none',
         zIndex: 9999,
         mixBlendMode: 'screen',
