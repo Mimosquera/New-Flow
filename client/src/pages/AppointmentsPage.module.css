@@ -156,12 +156,11 @@
 
 .cardTitle {
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.2rem;
   font-weight: 600;
   margin: 0 0 0.2rem 0;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
@@ -187,12 +186,13 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   color: #3aabdb;
   margin-bottom: 0.4rem;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
 }
 
 .required {
@@ -209,9 +209,9 @@
   border: 1.5px solid rgba(58, 171, 219, 0.25);
   border-radius: 10px;
   font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
   transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
   background: rgba(0, 0, 0, 0.28);
-  font-family: inherit;
   color: rgba(255, 255, 255, 0.88);
   font-weight: 400;
 }
@@ -331,11 +331,11 @@
   overflow: hidden;
   width: 100%;
   padding: 0.75rem 2rem;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: #fff;
   background: rgba(58, 171, 219, 0.12);
   border: 1.5px solid rgba(58, 171, 219, 0.5);
@@ -460,6 +460,7 @@
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  font-family: 'Inter', sans-serif;
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -499,6 +500,7 @@
 }
 
 .reviewLabel {
+  font-family: 'Inter', sans-serif;
   color: rgba(255, 255, 255, 0.38);
   font-size: 0.73rem;
   min-width: 3.5rem;
@@ -506,6 +508,7 @@
 }
 
 .reviewValue {
+  font-family: 'Inter', sans-serif;
   color: rgba(255, 255, 255, 0.88);
   font-size: 0.83rem;
   font-weight: 500;
@@ -513,6 +516,7 @@
 }
 
 .reviewValueMuted {
+  font-family: 'Inter', sans-serif;
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.83rem;
   font-style: italic;

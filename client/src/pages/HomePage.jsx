@@ -8,7 +8,6 @@ import { getToken } from '../utils/tokenUtils.js';
 import { hapticLight, hapticMedium, hapticSuccess } from '../utils/haptics.js';
 import { updateService, serviceService, SERVER_BASE_URL } from '../services/api.js';
 import { UpdateModal } from '../components/UpdateModal.jsx';
-import { HeroParticles } from '../components/HeroParticles.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { ReviewsCarousel } from '../components/ReviewsCarousel.jsx';
@@ -85,8 +84,9 @@ const NewsCard = ({ article, onClick, hideMeta = false }) => {
         </p>
         {!hideMeta && (
           <div className={styles.updateCardMeta}>
-            <span>{article.author}</span>
             <span>{new Date(article.date).toLocaleDateString()}</span>
+            <span className={styles.updateCardMetaDot} />
+            <span className={styles.updateCardMetaAuthor}>{article.author}</span>
           </div>
         )}
       </div>
@@ -277,7 +277,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   return (
     <div className={styles.homePage}>
-      <HeroParticles />
       {/* Navigation Bar */}
       <motion.nav
         className={styles.navbar}
@@ -425,7 +424,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   key={service.id}
                   className={styles.serviceCard}
                   style={{ width: 'min(300px, 80vw)' }}
-                  whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
+                  whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => handleServiceClick(service.id)}
                   ref={el => serviceCardsRef.current[idx] = el}
@@ -485,7 +484,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                       <motion.div
                         className={styles.serviceCard}
                         style={{ height: '100%' }}
-                        whileHover={{ scale: 1.03, boxShadow: '0 16px 48px rgba(70,161,161,0.28)' }}
+                        whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
                         onClick={() => handleServiceClick(service.id)}
                         ref={el => serviceCardsRef.current[idx] = el}
@@ -544,10 +543,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </section>
 
-      <div className={styles.serviceNewsAccent} aria-hidden="true" />
-
       {/* News Section */}
       <section className={styles.newsSection}>
+        <div className={styles.serviceNewsAccent} aria-hidden="true" />
         <div className="container">
           <motion.h2
             className={styles.sectionHeading}
@@ -662,8 +660,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </motion.section>
 
-      <div className={styles.accentDivider} aria-hidden="true" />
-
       {/* About Section */}
       <motion.section
         className={styles.aboutSection}
@@ -672,6 +668,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
       >
+        <div className={styles.accentDivider} aria-hidden="true" />
         <div className="container">
           <div className={styles.aboutRow}>
             <motion.div

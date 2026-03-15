@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
+import styles from './UpdateModal.module.css';
 
 const ZoomableImage = ({ src, alt }) => {
   const wrapRef = useRef(null);
@@ -161,15 +162,18 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   if (fullscreen && src) {
     return (
       <div
-        className="position-fixed top-0 start-0 w-100 h-100"
-        style={{ backgroundColor: 'rgba(0,0,0,0.95)', zIndex: 2000 }}
+        style={{
+          position: 'fixed', inset: 0,
+          backgroundColor: 'rgba(0,0,0,0.96)',
+          zIndex: 2000,
+        }}
         onClick={() => setFullscreen(false)}
       >
         {update.media_type === 'image' ? (
           <ZoomableImage src={src} alt={update.title} />
         ) : (
           <div
-            className="w-100 h-100 d-flex align-items-center justify-content-center"
+            style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={(e) => e.stopPropagation()}
           >
             <video src={src} style={{ maxWidth: '95%', maxHeight: '95%' }} controls autoPlay />
@@ -179,44 +183,41 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
     );
   }
 
+  const dateStr = new Date(update.date).toLocaleDateString(
+    language === 'es' ? 'es-ES' : 'en-US',
+    { year: 'numeric', month: 'short', day: 'numeric' }
+  );
+
   return (
     <>
-      <div className="modal-backdrop fade show" onClick={onClose} style={{ zIndex: 1040 }} />
-      <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050 }}>
-        <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-          <div className="modal-content" style={{
-            borderRadius: '24px', overflow: 'hidden', border: 'none',
-            boxShadow: '0 20px 60px rgba(5,45,63,0.5), 0 0 0 1px rgba(70,161,161,0.2)',
-          }}>
-            {/* Header */}
-            <div className="modal-header" style={{
-              background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
-              borderBottom: '3px solid #3aabdb',
-              padding: '1.25rem 1.5rem',
-            }}>
-              <h5 className="modal-title" style={{
-                color: '#fff', fontWeight: '700', letterSpacing: '-0.01em',
-                textShadow: '0 2px 8px rgba(0,0,0,0.3)',
-              }}>
-                {update.title}
-              </h5>
-              <button type="button" className="btn-close btn-close-white" onClick={onClose} aria-label="Close" />
-            </div>
+      <div className={styles.backdrop} onClick={onClose} />
+      <div className={styles.modalWrap}>
+        <motion.div
+          className={styles.modal}
+          initial={{ opacity: 0, scale: 0.97, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.97, y: 12 }}
+          transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+        >
+          {/* Header */}
+          <div className={styles.header}>
+            <h2 className={styles.title}>{update.title}</h2>
+            <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+              <X size={15} strokeWidth={2} />
+            </button>
+          </div>
 
-            {/* Swipeable body */}
-            <div style={{
-              overflow: 'hidden',
-              background: 'linear-gradient(180deg, rgba(5,45,63,0.97) 0%, rgba(3,28,40,0.99) 100%)',
-              position: 'relative',
-            }}>
-              <AnimatePresence mode="wait" custom={direction}>
+          {/* Body */}
+          <div className={styles.body}>
+            <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentIndex}
                 custom={direction}
+                className={styles.slideContent}
                 variants={{
-                  enter: (dir) => ({ opacity: 0, x: dir * 60 }),
+                  enter: (dir) => ({ opacity: 0, x: dir * 50 }),
                   center: { opacity: 1, x: 0 },
-                  exit: (dir) => ({ opacity: 0, x: dir * -60 }),
+                  exit: (dir) => ({ opacity: 0, x: dir * -50 }),
                 }}
                 initial="enter"
                 animate="center"
@@ -230,96 +231,52 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                   if (offset.x < -60) goNext();
                   else if (offset.x > 60) goPrev();
                 }}
-                style={{
-                  padding: '1.75rem',
-                  cursor: showNav ? 'grab' : 'default',
-                }}
+                style={{ cursor: showNav ? 'grab' : 'default' }}
               >
-                  {src && (
-                    <div className="mb-4" style={{ cursor: 'zoom-in' }} onClick={() => setFullscreen(true)}>
-                      {update.media_type === 'image' ? (
-                        <img
-                          src={src}
-                          alt={update.title}
-                          className="img-fluid w-100"
-                          style={{ maxHeight: '60vh', objectFit: 'contain', borderRadius: '12px' }}
-                        />
-                      ) : (
-                        <video
-                          src={src}
-                          className="w-100"
-                          style={{ maxHeight: '60vh', borderRadius: '12px' }}
-                          controls
-                        />
-                      )}
-                    </div>
-                  )}
-
-                  <p className="mb-3" style={{ whiteSpace: 'pre-wrap', fontSize: '1rem', color: 'rgba(255,255,255,0.88)', lineHeight: '1.6' }}>
-                    {update.content}
-                  </p>
-
-                  <div style={{ borderTop: '1px solid rgba(70,161,161,0.25)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
-                    <small style={{ color: '#3aabdb', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
-                      {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
-                    </small>
+                {src && (
+                  <div className={styles.mediaWrap} onClick={() => setFullscreen(true)}>
+                    {update.media_type === 'image' ? (
+                      <img src={src} alt={update.title} className={styles.mediaImg} />
+                    ) : (
+                      <video src={src} className={styles.mediaVideo} controls />
+                    )}
                   </div>
-              </motion.div>
-              </AnimatePresence>
-            </div>
+                )}
 
-            {/* Footer */}
-            <div className="modal-footer" style={{
-              background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
-              borderTop: '2px solid #3aabdb',
-              padding: '0.75rem 1.5rem',
-              display: 'flex',
-              justifyContent: showNav ? 'space-between' : 'flex-end',
-              alignItems: 'center',
-            }}>
-              {showNav && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <button
-                    onClick={goPrev}
-                    style={{
-                      background: 'none', border: '1px solid rgba(70,161,161,0.4)',
-                      borderRadius: '8px', color: '#3aabdb', cursor: 'pointer',
-                      padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
-                    }}
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', minWidth: '3rem', textAlign: 'center' }}>
-                    {currentIndex + 1} / {updates.length}
+                <p className={styles.content}>{update.content}</p>
+
+                <div className={styles.meta}>
+                  <span className={styles.metaDot} />
+                  <span className={styles.metaText}>
+                    {dateStr}
                   </span>
-                  <button
-                    onClick={goNext}
-                    style={{
-                      background: 'none', border: '1px solid rgba(70,161,161,0.4)',
-                      borderRadius: '8px', color: '#3aabdb', cursor: 'pointer',
-                      padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
-                    }}
-                  >
-                    <ChevronRight size={16} />
-                  </button>
+                  <span className={styles.metaDot} />
+                  <span className={`${styles.metaText} ${styles.metaAuthor}`}>
+                    {update.author}
+                  </span>
                 </div>
-              )}
-              <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  background: 'linear-gradient(135deg, rgba(70,161,161,0.15) 0%, rgba(70,161,161,0.08) 100%)',
-                  color: '#fff', border: '1.5px solid rgba(70,161,161,0.6)',
-                  borderRadius: '10px', padding: '0.4rem 1.25rem',
-                  fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.03em',
-                  cursor: 'pointer', transition: 'all 0.2s ease', backdropFilter: 'blur(8px)',
-                }}
-              >
-                {t('close')}
-              </button>
-            </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
-        </div>
+
+          {/* Footer */}
+          <div className={styles.footer}>
+            {showNav ? (
+              <div className={styles.navGroup}>
+                <button className={styles.navBtn} onClick={goPrev} aria-label="Previous">
+                  <ChevronLeft size={15} strokeWidth={2.5} />
+                </button>
+                <span className={styles.counter}>{currentIndex + 1} / {updates.length}</span>
+                <button className={styles.navBtn} onClick={goNext} aria-label="Next">
+                  <ChevronRight size={15} strokeWidth={2.5} />
+                </button>
+              </div>
+            ) : <span />}
+            <button className={styles.closeFooterBtn} onClick={onClose}>
+              {t('close')}
+            </button>
+          </div>
+        </motion.div>
       </div>
     </>
   );

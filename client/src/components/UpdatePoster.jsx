@@ -15,41 +15,47 @@ const INITIAL_DISPLAY = 4;
 const LOAD_MORE_BATCH = 8;
 
 const cardStyle = {
-  background: 'rgba(5, 60, 82, 0.55)',
-  backdropFilter: 'blur(18px)',
-  WebkitBackdropFilter: 'blur(18px)',
-  border: '1px solid rgba(58, 171, 219, 0.2)',
-  borderRadius: '18px',
+  background: 'linear-gradient(160deg, rgb(8, 16, 26) 0%, rgba(5, 38, 60, 0.92) 100%)',
+  border: '1px solid rgba(255, 255, 255, 0.07)',
+  borderTop: '1.5px solid rgba(58, 171, 219, 0.25)',
+  borderRadius: '16px',
   overflow: 'hidden',
   marginBottom: '0.75rem',
 };
 
 const cardTitleStyle = {
+  fontFamily: "'Space Grotesk', sans-serif",
   color: '#fff',
-  fontWeight: '700',
-  fontSize: '0.9rem',
+  fontWeight: '600',
+  fontSize: '0.88rem',
   letterSpacing: '-0.01em',
   cursor: 'pointer',
   flex: 1,
   margin: 0,
+  lineHeight: '1.35',
 };
 
 const cardTextStyle = {
-  color: 'rgba(255,255,255,0.65)',
-  fontSize: '0.82rem',
-  lineHeight: '1.45',
+  fontFamily: "'Inter', sans-serif",
+  color: 'rgba(255,255,255,0.52)',
+  fontSize: '0.78rem',
+  lineHeight: '1.55',
   cursor: 'pointer',
   margin: 0,
 };
 
 const cardMetaStyle = {
-  fontSize: '0.7rem',
-  color: '#3aabdb',
+  fontFamily: "'Inter', sans-serif",
+  fontSize: '0.68rem',
+  color: 'rgba(255,255,255,0.28)',
   fontWeight: '500',
-  letterSpacing: '0.025em',
-  borderTop: '1px solid rgba(70,161,161,0.12)',
-  paddingTop: '0.4rem',
+  letterSpacing: '0.02em',
+  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+  paddingTop: '0.5rem',
   marginTop: '0.25rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.4rem',
 };
 
 const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
@@ -99,7 +105,9 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
           {update.content.length > 150 ? update.content.substring(0, 150) + '...' : update.content}
         </p>
         <div style={cardMetaStyle}>
-          {new Date(update.date).toLocaleDateString()} · {update.author}
+          <span>{new Date(update.date).toLocaleDateString()}</span>
+          <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(58,171,219,0.5)', flexShrink: 0 }} />
+          <span style={{ color: 'rgba(58,171,219,0.65)' }}>{update.author}</span>
         </div>
         {canManage && (
           <div className="d-flex gap-1 mt-2">
