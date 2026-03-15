@@ -125,6 +125,7 @@ export default function EmployeeDashboard() {
             <img
               src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
               alt="Logo"
+              decoding="async"
               style={{ height: '1.4rem', flexShrink: 0 }}
             />
             {employeeName && (<>
@@ -296,13 +297,6 @@ export default function EmployeeDashboard() {
         </motion.div>
       </AnimatePresence>
 
-      <div style={{ textAlign: 'center', padding: '2.5rem 0 1.5rem' }}>
-        <img
-          src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
-          alt="New Flow Logo"
-          style={{ maxWidth: '80px', opacity: 0.9 }}
-        />
-      </div>
       <ScrollToTop />
 
       {showSessionModal && (

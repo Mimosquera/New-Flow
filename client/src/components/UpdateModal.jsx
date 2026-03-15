@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -101,14 +101,6 @@ const ZoomableImage = ({ src, alt }) => {
   );
 };
 
-const slideVariants = {
-  enter: (dir) => ({ x: dir >= 0 ? '55%' : '-55%', opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir) => ({ x: dir >= 0 ? '-55%' : '55%', opacity: 0 }),
-};
-
-const slideTransition = { duration: 0.28, ease: [0.4, 0, 0.2, 1] };
-
 const mediaUrl = (url) => {
   if (!url) return null;
   return url.startsWith('http') ? url : `${SERVER_BASE_URL}${url}`;
@@ -116,7 +108,6 @@ const mediaUrl = (url) => {
 
 export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [direction, setDirection] = useState(1);
   const [fullscreen, setFullscreen] = useState(false);
   const { t, language } = useTranslation();
 
@@ -130,18 +121,17 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   const update = updates[currentIndex];
   const showNav = updates.length > 1;
 
-  const goTo = useCallback((idx, dir) => {
-    setDirection(dir);
+  const goTo = useCallback((idx) => {
     setCurrentIndex(idx);
     setFullscreen(false);
   }, []);
 
   const goPrev = useCallback(() => {
-    goTo((currentIndex - 1 + updates.length) % updates.length, -1);
+    goTo((currentIndex - 1 + updates.length) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
   const goNext = useCallback(() => {
-    goTo((currentIndex + 1) % updates.length, 1);
+    goTo((currentIndex + 1) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
   useEffect(() => {
@@ -215,28 +205,21 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
               background: 'linear-gradient(180deg, rgba(5,45,63,0.97) 0%, rgba(3,28,40,0.99) 100%)',
               position: 'relative',
             }}>
-              <AnimatePresence custom={direction} mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={slideTransition}
-                  drag={showNav ? 'x' : false}
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.12}
-                  dragDirectionLock
-                  onDragEnd={(_, { offset }) => {
-                    if (offset.x < -60) goNext();
-                    else if (offset.x > 60) goPrev();
-                  }}
-                  style={{
-                    padding: '1.75rem',
-                    cursor: showNav ? 'grab' : 'default',
-                  }}
-                >
+              <motion.div
+                key={currentIndex}
+                drag={showNav ? 'x' : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.12}
+                dragDirectionLock
+                onDragEnd={(_, { offset }) => {
+                  if (offset.x < -60) goNext();
+                  else if (offset.x > 60) goPrev();
+                }}
+                style={{
+                  padding: '1.75rem',
+                  cursor: showNav ? 'grab' : 'default',
+                }}
+              >
                   {src && (
                     <div className="mb-4" style={{ cursor: 'zoom-in' }} onClick={() => setFullscreen(true)}>
                       {update.media_type === 'image' ? (
@@ -266,8 +249,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                       {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
                     </small>
                   </div>
-                </motion.div>
-              </AnimatePresence>
+              </motion.div>
             </div>
 
             {/* Footer */}
