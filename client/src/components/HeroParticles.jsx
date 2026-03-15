@@ -161,6 +161,8 @@ export const HeroParticles = () => {
     };
   }, []);
 
+  if (window.matchMedia('(max-width: 768px)').matches) return null;
+
   return (
     <canvas
       ref={canvasRef}
