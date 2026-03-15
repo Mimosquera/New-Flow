@@ -20,6 +20,7 @@ import serviceRoutes from './routes/services.js';
 import availabilityRoutes from './routes/availability.js';
 import appointmentRoutes from './routes/appointments.js';
 import blockedDatesRoutes from './routes/blocked-dates.js';
+import reviewsRoutes from './routes/reviews.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -84,6 +85,7 @@ app.use('/api/services', serviceRoutes);
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/blocked-dates', blockedDatesRoutes);
+app.use('/api/reviews', reviewsRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

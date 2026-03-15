@@ -135,7 +135,7 @@
 
 /* ─── Hero ──────────────────────────────────────────────────────────────────── */
 .heroSection {
-  background: linear-gradient(135deg, #000 0%, rgb(5, 45, 63) 100%) !important;
+  background: linear-gradient(135deg, #000 0%, rgb(5, 58, 82) 100%) !important;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -236,6 +236,8 @@
   .heroSubtitle {
     font-size: clamp(1.3rem, 6vw, 1.8rem);
   }
+
+
 }
 
 
@@ -341,8 +343,14 @@
 
 /* ─── Services Section ──────────────────────────────────────────────────────── */
 .servicesSection {
-  background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.35) 100%);
+  background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.52) 100%);
   padding: 5rem 0;
+}
+
+@media (max-width: 767px) {
+  .servicesSection {
+    padding-bottom: 2.75rem;
+  }
 }
 
 /* Service Card — glassmorphism */
@@ -436,8 +444,14 @@
 
 /* ─── News / Updates Section ────────────────────────────────────────────────── */
 .newsSection {
-  background: linear-gradient(180deg, rgba(5, 45, 63, 0.35) 0%, #000 100%);
+  background: linear-gradient(180deg, rgba(5, 45, 63, 0.52) 0%, #000 100%);
   padding: 5rem 0;
+}
+
+@media (max-width: 767px) {
+  .newsSection {
+    padding-top: 2.75rem;
+  }
 }
 
 .updatesHeading {
@@ -528,21 +542,41 @@
 
 /* ─── About Section ─────────────────────────────────────────────────────────── */
 .aboutSection {
-  background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.4) 50%, #000 100%);
-  padding: 6rem 0;
+  background: linear-gradient(180deg, #000 0%, rgba(5, 45, 63, 0.58) 50%, #000 100%);
+  padding: 6rem 0 8rem;
+}
+
+.aboutTextCol {
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  .aboutTextCol {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    text-align: center;
+  }
 }
 
 .aboutLogo {
-  width: 80%;
-  max-width: 460px;
+  width: 55%;
+  max-width: 300px;
   height: auto;
   display: block;
   margin: 0 auto;
 }
 
+@media (max-width: 767px) {
+  .aboutSection {
+    padding: 2.5rem 0;
+  }
+}
+
 /* ─── Reviews Section ───────────────────────────────────────────────────────── */
 .reviewsSection {
-  background: linear-gradient(180deg, rgba(5, 45, 63, 0.4) 0%, #000 100%);
+  background: linear-gradient(180deg, rgba(5, 45, 63, 0.58) 0%, #000 100%);
   padding: 5rem 0;
 }
 

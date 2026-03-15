@@ -141,5 +141,9 @@ export const blockedDateService = {
   delete: (id) => apiClient.delete(`/blocked-dates/${id}`),
 };
 
+export const reviewsService = {
+  get: () => apiClient.get('/reviews'),
+};
+
 export default apiClient;
 export { SERVER_BASE_URL };
