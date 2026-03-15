@@ -540,6 +540,12 @@
   margin: 0 auto;
 }
 
+/* ─── Reviews Section ───────────────────────────────────────────────────────── */
+.reviewsSection {
+  background: linear-gradient(180deg, rgba(5, 45, 63, 0.4) 0%, #000 100%);
+  padding: 5rem 0;
+}
+
 /* ─── Contact Section ───────────────────────────────────────────────────────── */
 .contactSection {
   background: linear-gradient(135deg, rgb(3, 18, 26) 0%, rgb(5, 45, 63) 50%, rgb(3, 18, 26) 100%);

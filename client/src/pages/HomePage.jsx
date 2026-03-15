@@ -11,6 +11,7 @@ import { UpdateModal } from '../components/UpdateModal.jsx';
 import { HeroParticles } from '../components/HeroParticles.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
+import { ReviewsCarousel } from '../components/ReviewsCarousel.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import styles from './HomePage.module.css';
@@ -645,6 +646,19 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </>
           )}
           <div ref={updatesEndRef} />
+        </div>
+      </motion.section>
+
+      {/* Reviews Section */}
+      <motion.section
+        className={styles.reviewsSection}
+        variants={sectionVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.08 }}
+      >
+        <div className="container">
+          <ReviewsCarousel />
         </div>
       </motion.section>
 
