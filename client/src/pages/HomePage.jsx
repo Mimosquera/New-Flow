@@ -31,7 +31,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } },
 };
 
-const NewsCard = ({ article, onClick }) => {
+const NewsCard = ({ article, onClick, hideMeta = false }) => {
   const [imgLoaded, setImgLoaded] = useState(!article.media_url);
   const src = article.media_url
     ? (article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`)
@@ -83,10 +83,12 @@ const NewsCard = ({ article, onClick }) => {
         <p className={styles.updateCardContent}>
           {article.content.length > 80 ? article.content.substring(0, 80) + '…' : article.content}
         </p>
-        <div className={styles.updateCardMeta}>
-          <span>{article.author}</span>
-          <span>{new Date(article.date).toLocaleDateString()}</span>
-        </div>
+        {!hideMeta && (
+          <div className={styles.updateCardMeta}>
+            <span>{article.author}</span>
+            <span>{new Date(article.date).toLocaleDateString()}</span>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -102,6 +104,7 @@ NewsCard.propTypes = {
     date: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
+  hideMeta: PropTypes.bool,
 };
 
 export const HomePage = ({ onNavigateToBooking }) => {
@@ -375,23 +378,23 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       {/* Services Section */}
-      <motion.section
-        className={styles.servicesSection}
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.08 }}
-      >
+      <section className={styles.servicesSection}>
         <div className="container-xxl px-3 px-md-4">
-          <motion.div
-            className={`${styles.sectionHeading} mb-4`}
+          <motion.h2
+            className={styles.sectionHeading}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
           >
             {t('servicesTitle')}
-          </motion.div>
+          </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: 0.12 }}
+          >
           {servicesLoading ? (
             <div className={styles.carouselViewport}>
               <div className={styles.carouselContainer}>
@@ -537,21 +540,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </button>
             </div>
           )}
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
       {/* News Section */}
-      <motion.section
-        className={styles.newsSection}
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-      >
+      <section className={styles.newsSection}>
         <div className={styles.sectionDivider} aria-hidden="true" />
         <div className="container">
           <motion.h2
-            className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}
+            className={styles.sectionHeading}
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -559,6 +557,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
           >
             {t('updatesTitle')}
           </motion.h2>
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.05 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
+          >
           {loading || translating ? (
             <div className="row g-3">
               {Array.from({ length: 4 }).map((_, i) => (
@@ -592,7 +596,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     className="col-6 col-lg-3 mb-2"
                     exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
                   >
-                    <NewsCard article={article} onClick={() => handleUpdateClick(article)} />
+                    <NewsCard article={article} onClick={() => handleUpdateClick(article)} hideMeta />
                   </motion.div>
                 ))}
                 </AnimatePresence>
@@ -619,7 +623,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
               </div>
-              <div className="text-center mt-5">
+              <motion.div
+                className="text-center mt-5"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+              >
                 {hasMore && !viewMorePending && (
                   <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
@@ -630,12 +640,13 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     {t('showLess')}
                   </button>
                 )}
-              </div>
+              </motion.div>
             </>
           )}
           <div ref={updatesEndRef} />
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Reviews Section */}
       <motion.section
@@ -650,6 +661,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </motion.section>
 
+      <div className={styles.accentDivider} aria-hidden="true" />
+
       {/* About Section */}
       <motion.section
         className={styles.aboutSection}
@@ -659,9 +672,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
         viewport={{ once: true, amount: 0.15 }}
       >
         <div className="container">
-          <div className="row align-items-center">
+          <div className={styles.aboutRow}>
             <motion.div
-              className="col-md-6 mb-5 mb-md-0"
+              className={`mb-5 mb-md-0 ${styles.aboutLogoCol}`}
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -677,7 +690,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 />
               </div>
             </motion.div>
-            <div className={`col-md-6 ps-md-4 ${styles.aboutTextCol}`}>
+            <div className={styles.aboutTextCol}>
               <motion.h2
                 className="fw-bold mb-3"
                 style={{ color: '#fff' }}
@@ -739,7 +752,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {t('contactTitle')}
           </motion.h2>
           <motion.div
-            className="row text-center"
+            className={`row text-center ${styles.contactRow}`}
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -777,7 +790,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 </a>
               </div>
             </motion.div>
-            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
+            <motion.div className="col-6 col-md-auto mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
                 <div className={styles.contactIcon}><MapPin size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('address')}</h5>

@@ -94,6 +94,13 @@ export const updateService = {
     return apiClient.post('/updates', updateData, config);
   },
 
+  update: (id, updateData) => {
+    const config = updateData instanceof FormData
+      ? { headers: { 'Content-Type': 'multipart/form-data' } }
+      : {};
+    return apiClient.put(`/updates/${id}`, updateData, config);
+  },
+
   delete: (id) => apiClient.delete(`/updates/${id}`),
 };
 
