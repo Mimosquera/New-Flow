@@ -192,13 +192,13 @@
 }
 
 .heroSubtitle {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-size: clamp(0.68rem, 1.6vw, 0.82rem);
   font-weight: 400;
   letter-spacing: 0.26em;
   text-transform: uppercase;
   color: rgba(168, 220, 245, 0.7);
-  margin: 0 0 1.5rem;
+  margin: 0 0 2.6rem;
 }
 
 .heroCta {
@@ -232,7 +232,7 @@
   .heroSubtitle {
     font-size: clamp(0.62rem, 3.5vw, 0.75rem);
     letter-spacing: 0.22em;
-    margin-bottom: 1.25rem;
+    margin-bottom: 2.1rem;
   }
 }
 
@@ -240,7 +240,7 @@
 /* ─── Shared section heading ────────────────────────────────────────────────── */
 .sectionHeading {
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cinzel', serif;
   font-size: clamp(1.5rem, 3vw, 1.9rem);
   font-weight: 500;
   color: #fff;
@@ -426,7 +426,7 @@
   border: 1.5px solid rgba(58, 171, 219, 0.45);
   border-radius: 50px;
   padding: 0.5rem 0;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cinzel', serif;
   font-weight: 500;
   font-size: 0.8rem;
   letter-spacing: 0.1em;
@@ -569,7 +569,7 @@
 }
 
 .updateCardTitle {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   color: #fff;
   font-weight: 600;
   font-size: 0.9rem;
@@ -579,7 +579,7 @@
 }
 
 .updateCardContent {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   color: rgba(255, 255, 255, 0.55);
   font-size: 0.78rem;
   line-height: 1.55;
@@ -588,7 +588,7 @@
 }
 
 .updateCardMeta {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   display: flex;
   align-items: center;
   gap: 0.4rem;
@@ -923,7 +923,7 @@
   border: 1.5px solid rgba(58, 171, 219, 0.7);
   border-radius: 50px;
   padding: 0.4rem 1.5rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
@@ -931,13 +931,7 @@
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  animation: fancyBtnGlow 3s ease-in-out infinite;
-}
-
-@keyframes fancyBtnGlow {
-  0%, 100% { box-shadow: 0 0 14px rgba(58, 171, 219, 0.2), 0 0 28px rgba(58, 171, 219, 0.08); }
-  50%       { box-shadow: 0 0 22px rgba(58, 171, 219, 0.38), 0 0 50px rgba(58, 171, 219, 0.15); }
+  transition: border-color 0.3s ease, transform 0.2s ease;
 }
 
 .fancyButton::after {
@@ -954,7 +948,6 @@
 @media (hover: hover) {
   .fancyButton:hover {
     border-color: #3aabdb;
-    box-shadow: 0 0 18px rgba(58, 171, 219, 0.45), 0 6px 20px rgba(0, 0, 0, 0.3);
     transform: translateY(-2px);
   }
 
@@ -975,7 +968,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
   padding: 0.4rem 1.5rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
   letter-spacing: 0.06em;
@@ -1009,7 +1002,7 @@
   -webkit-backdrop-filter: blur(14px);
   cursor: pointer;
   border-radius: 50px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cinzel', serif;
   font-weight: 500;
   font-size: 0.78rem;
   letter-spacing: 0.12em;

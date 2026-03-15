@@ -369,7 +369,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         >
           <motion.div
             animate={{ y: [0, 9, 0] }}
-            transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut' }}
+            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
           >
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="6 9 12 15 18 9" />
