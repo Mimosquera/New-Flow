@@ -101,15 +101,15 @@ export default function EmployeeDashboard() {
   }, []);
 
   return (
-    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #fff 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div className="employee-dashboard" style={{ background: 'linear-gradient(135deg, rgb(5, 60, 82) 0%, #fff 100%)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <div
         className="dashboard-header-sticky"
         style={{
           position: 'sticky',
           top: 0,
           zIndex: 1050,
-          background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%)',
-          borderBottom: '2px solid #46a1a1',
+          background: 'linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%)',
+          borderBottom: '2px solid #3aabdb',
           padding: '0.5rem 1rem',
           width: '100%',
           boxSizing: 'border-box',
@@ -130,7 +130,7 @@ export default function EmployeeDashboard() {
             />
             {employeeName && (<>
               <span className="d-lg-none" style={{
-                backgroundColor: 'rgba(70, 161, 161, 0.25)',
+                backgroundColor: 'rgba(58, 171, 219, 0.25)',
                 color: '#ffffff',
                 padding: '0.15rem 0.5rem',
                 borderRadius: '12px',
@@ -141,14 +141,14 @@ export default function EmployeeDashboard() {
                 {employeeName.split(' ')[0]}
               </span>
               <span className="d-none d-lg-inline" style={{
-                backgroundColor: 'rgba(70, 161, 161, 0.28)',
+                backgroundColor: 'rgba(58, 171, 219, 0.28)',
                 color: '#ffffff',
                 padding: '0.18rem 0.55rem',
                 borderRadius: '10px',
                 fontSize: '0.72rem',
                 fontWeight: '600',
                 whiteSpace: 'nowrap',
-                border: '1px solid rgba(70, 161, 161, 0.5)',
+                border: '1px solid rgba(58, 171, 219, 0.5)',
                 letterSpacing: '0.01em',
               }}>
                 {employeeName.split(' ')[0]}
@@ -212,21 +212,21 @@ export default function EmployeeDashboard() {
                     onClick={() => { hapticLight(); setMobileTabOpen(prev => !prev); }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: '0.35rem',
-                      backgroundColor: 'rgba(70, 161, 161, 0.15)', color: 'white',
-                      border: '1.5px solid rgba(70, 161, 161, 0.5)', borderRadius: '8px',
+                      backgroundColor: 'rgba(58, 171, 219, 0.15)', color: 'white',
+                      border: '1.5px solid rgba(58, 171, 219, 0.5)', borderRadius: '8px',
                       padding: '0.3rem 0.65rem', fontSize: '0.78rem', fontWeight: '500',
                       cursor: 'pointer', WebkitTapHighlightColor: 'transparent', outline: 'none',
                     }}
                   >
                     {active?.icon}
                     <span>{active?.label}</span>
-                    <ChevronDown size={11} style={{ color: '#46a1a1', marginLeft: '0.1rem', transform: mobileTabOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
+                    <ChevronDown size={11} style={{ color: '#3aabdb', marginLeft: '0.1rem', transform: mobileTabOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
                   </button>
                   {mobileTabOpen && (
                     <div style={{
                       position: 'absolute', top: 'calc(100% + 6px)', left: '50%', transform: 'translateX(-50%)',
                       background: 'rgba(3, 25, 38, 0.97)', backdropFilter: 'blur(18px)',
-                      border: '1.5px solid rgba(70, 161, 161, 0.4)', borderRadius: '10px',
+                      border: '1.5px solid rgba(58, 171, 219, 0.4)', borderRadius: '10px',
                       zIndex: 2000, minWidth: '160px', padding: '0.35rem 0',
                       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
                     }}>
@@ -237,7 +237,7 @@ export default function EmployeeDashboard() {
                           style={{
                             display: 'flex', alignItems: 'center', gap: '0.5rem',
                             width: '100%', padding: '0.45rem 0.9rem', background: 'none',
-                            border: 'none', color: activeTab === value ? '#46a1a1' : 'rgba(255, 255, 255, 0.85)',
+                            border: 'none', color: activeTab === value ? '#3aabdb' : 'rgba(255, 255, 255, 0.85)',
                             fontSize: '0.82rem', fontWeight: activeTab === value ? '600' : '400',
                             cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
                           }}
@@ -327,7 +327,7 @@ export default function EmployeeDashboard() {
               onClick={() => { removeToken(); navigate('/employee-login'); }}
               style={{
                 width: '100%', padding: '0.65rem 1.5rem',
-                background: '#46a1a1', color: '#fff',
+                background: '#3aabdb', color: '#fff',
                 border: 'none', borderRadius: '10px',
                 fontWeight: '600', fontSize: '0.9rem',
                 cursor: 'pointer', letterSpacing: '0.01em',

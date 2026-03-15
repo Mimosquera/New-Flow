@@ -311,48 +311,35 @@ export const HomePage = ({ onNavigateToBooking }) => {
       >
         <div className="container">
           <div className={styles.heroInner}>
-            {/* Video — animated brand header, centered */}
+            {/* Logo image — centered brand header */}
             <motion.div
               className={styles.heroVideoWrap}
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
+              initial={{ opacity: 0, y: 20, scale: 0.94 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <video
+              <img
+                src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
+                alt="New Flow"
                 className={styles.heroVideo}
-                autoPlay
-                muted
-                loop
-                playsInline
-                disablePictureInPicture
-              >
-                <source src={new URL('../assets/videos/hero-banner-video.mp4', import.meta.url).href} type="video/mp4" />
-              </video>
+              />
             </motion.div>
 
             {/* Text + CTA — centered below video, each line enters independently */}
             <div className={styles.heroTextBlock}>
               <motion.p
                 className={styles.heroSubtitle}
-                initial={{ opacity: 0, y: 22 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
                 {t('heroSubtitle')}
               </motion.p>
-              <motion.p
-                className={styles.heroDesc}
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.55, ease: [0.4, 0, 0.2, 1] }}
-              >
-                {t('heroDescription')}
-              </motion.p>
               <motion.div
                 className={styles.heroCta}
-                initial={{ opacity: 0, y: 14, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.72, ease: [0.4, 0, 0.2, 1] }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
               >
                 <button
                   className={styles.requestButton}
@@ -561,6 +548,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.05 }}
       >
+        <div className={styles.sectionDivider} aria-hidden="true" />
         <div className="container">
           <motion.h2
             className={`text-center mb-4 fw-bold text-white ${styles.updatesHeading}`}
@@ -679,13 +667,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <img
-                src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-                alt="New Flow Team"
-                loading="lazy"
-                decoding="async"
-                className={`img-fluid rounded ${styles.aboutLogo}`}
-              />
+              <div className={styles.aboutLogoWrap}>
+                <img
+                  src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+                  alt="New Flow Team"
+                  loading="lazy"
+                  decoding="async"
+                  className={`img-fluid rounded ${styles.aboutLogo}`}
+                />
+              </div>
             </motion.div>
             <div className={`col-md-6 ps-md-4 ${styles.aboutTextCol}`}>
               <motion.h2

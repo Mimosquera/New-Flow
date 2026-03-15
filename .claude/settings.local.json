@@ -36,7 +36,8 @@
       "WebFetch(domain:local.yahoo.com)",
       "WebFetch(domain:www.google.com)",
       "WebFetch(domain:barberhead.com)",
-      "WebFetch(domain:m.yelp.ca)"
+      "WebFetch(domain:m.yelp.ca)",
+      "Bash(xargs sed:*)"
     ]
   }
 }

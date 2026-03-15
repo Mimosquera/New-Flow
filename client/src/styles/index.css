@@ -163,7 +163,7 @@ textarea:-webkit-autofill,
 select:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
   box-shadow: 0 0 0px 1000px #ffffff inset;
-  -webkit-text-fill-color: rgb(5, 45, 63);
+  -webkit-text-fill-color: rgb(5, 60, 82);
   transition: background-color 9999s ease-in-out 0s;
 }
 

@@ -7,8 +7,8 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { setToken } from '../utils/tokenUtils.js';
 import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
-const THEME_COLOR = 'rgb(5, 45, 63)';
-const SECONDARY_COLOR = '#46a1a1';
+const THEME_COLOR = 'rgb(5, 60, 82)';
+const SECONDARY_COLOR = '#3aabdb';
 
 export const ProfileManager = ({ onLogout }) => {
   const { t } = useTranslation();
@@ -306,10 +306,10 @@ export const ProfileManager = ({ onLogout }) => {
   };
 
   const profileCardStyle = {
-    background: 'rgba(5, 45, 63, 0.55)',
+    background: 'rgba(5, 60, 82, 0.55)',
     backdropFilter: 'blur(18px)',
     WebkitBackdropFilter: 'blur(18px)',
-    border: '1px solid rgba(70, 161, 161, 0.2)',
+    border: '1px solid rgba(58, 171, 219, 0.2)',
     borderRadius: '14px',
     overflow: 'hidden',
   };
@@ -357,7 +357,7 @@ export const ProfileManager = ({ onLogout }) => {
         <div className="col-12 col-md-5 col-xl-4">
           <div style={profileCardStyle}>
             <div style={cardHeaderStyle}>
-              <h6 style={{ margin: 0, color: '#46a1a1', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <h6 style={{ margin: 0, color: '#3aabdb', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <User size={13} />
                 {t('aboutMe')}
               </h6>
@@ -365,7 +365,7 @@ export const ProfileManager = ({ onLogout }) => {
                 <button
                   onClick={handleEditAboutMe}
                   className="btn btn-sm d-flex align-items-center gap-1"
-                  style={{ background: 'rgba(70,161,161,0.15)', color: '#46a1a1', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                  style={{ background: 'rgba(70,161,161,0.15)', color: '#3aabdb', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
                 >
                   <Pencil size={11} />
                   {t('edit')}
@@ -479,7 +479,7 @@ export const ProfileManager = ({ onLogout }) => {
         <div className="col-12 col-md-6 col-xl-4">
           <div style={profileCardStyle}>
             <div style={cardHeaderStyle}>
-              <h6 style={{ margin: 0, color: '#46a1a1', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <h6 style={{ margin: 0, color: '#3aabdb', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Lock size={13} />
                 {t('accountLogin')}
               </h6>
@@ -487,7 +487,7 @@ export const ProfileManager = ({ onLogout }) => {
                 <button
                   onClick={handleEditLogin}
                   className="btn btn-sm d-flex align-items-center gap-1"
-                  style={{ background: 'rgba(70,161,161,0.15)', color: '#46a1a1', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                  style={{ background: 'rgba(70,161,161,0.15)', color: '#3aabdb', border: '1px solid rgba(70,161,161,0.3)', fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
                 >
                   <Pencil size={11} />
                   {t('edit')}
@@ -509,7 +509,7 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
                 <button
                   onClick={() => setShowForgotPassword(true)}
-                  style={{ background: 'none', border: 'none', color: '#46a1a1', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontSize: '0.82rem' }}
+                  style={{ background: 'none', border: 'none', color: '#3aabdb', textDecoration: 'underline', cursor: 'pointer', padding: 0, fontSize: '0.82rem' }}
                 >
                   {t('forgotPassword')}
                 </button>
@@ -529,7 +529,7 @@ export const ProfileManager = ({ onLogout }) => {
 
                 <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
 
-                <h6 style={{ color: '#46a1a1', marginBottom: '0.75rem' }}>{t('accountInfo')}</h6>
+                <h6 style={{ color: '#3aabdb', marginBottom: '0.75rem' }}>{t('accountInfo')}</h6>
 
                 <div className="row g-2 mb-2">
                   <div className="col-12 col-sm-6">
@@ -544,7 +544,7 @@ export const ProfileManager = ({ onLogout }) => {
 
                 <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
 
-                <h6 style={{ color: '#46a1a1', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
+                <h6 style={{ color: '#3aabdb', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
                 <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem' }}>
                   {t('leaveBlankToKeepPassword')}
                 </p>

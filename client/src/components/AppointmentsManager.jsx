@@ -183,7 +183,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       case STATUS_PENDING: return { ...base, background: 'linear-gradient(135deg, #f9a825, #fbc02d)', color: '#3e2723' };
       case STATUS_ACCEPTED: return isUpcoming(apt)
         ? { ...base, background: 'linear-gradient(135deg, #0288d1, #03a9f4)', color: '#fff' }
-        : { ...base, background: 'linear-gradient(135deg, #2e7d6f, #46a1a1)', color: '#fff' };
+        : { ...base, background: 'linear-gradient(135deg, #2e7d6f, #3aabdb)', color: '#fff' };
       case STATUS_DECLINED: return { ...base, background: 'linear-gradient(135deg, #c62828, #e53935)', color: '#fff' };
       case STATUS_CANCELLED: return { ...base, background: 'linear-gradient(135deg, #546e7a, #78909c)', color: '#fff' };
       default: return { ...base, background: '#78909c', color: '#fff' };
@@ -293,7 +293,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                 alignItems: 'center',
                 gap: '0.5rem',
               }}>
-                <Filter size={13} style={{ color: '#46a1a1' }} />
+                <Filter size={13} style={{ color: '#3aabdb' }} />
                 <h6 className="mb-0" style={{ fontSize: '0.88rem', fontWeight: '700', color: '#fff' }}>{t('filter')}</h6>
               </div>
               <div className="card-body p-2">
@@ -304,7 +304,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       className="btn btn-sm text-start"
                       style={{
                         background: filter === value ? 'rgba(70,161,161,0.18)' : 'transparent',
-                        color: filter === value ? '#46a1a1' : 'rgba(255,255,255,0.7)',
+                        color: filter === value ? '#3aabdb' : 'rgba(255,255,255,0.7)',
                         border: filter === value ? '1px solid rgba(70,161,161,0.35)' : '1px solid transparent',
                         borderRadius: '6px',
                         fontWeight: filter === value ? '600' : '400',
@@ -345,8 +345,8 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       className="btn btn-sm"
                       style={{ 
                         background: 'transparent', 
-                        border: '1.5px solid #46a1a1', 
-                        color: '#46a1a1', 
+                        border: '1.5px solid #3aabdb', 
+                        color: '#3aabdb', 
                         borderRadius: '8px', 
                         fontWeight: '500', 
                         fontSize: '0.8rem', 
@@ -362,15 +362,15 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
                   <div className="mb-2" style={{ fontSize: '0.9rem' }}>
                     <span className="d-flex align-items-center gap-1 mb-1">
-                      <Scissors size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <Scissors size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
                       <strong>{t('service')}:</strong>&nbsp;{apt.service?.name || 'N/A'}
                     </span>
                     <span className="d-flex align-items-center gap-1 mb-1">
-                      <Calendar size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <Calendar size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
                       <strong>{t('date')}:</strong>&nbsp;{formatDateDisplay(apt.date, language === 'es' ? 'es-ES' : 'en-US')}
                     </span>
                     <span className="d-flex align-items-center gap-1">
-                      <Clock size={13} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                      <Clock size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
                       <strong>{t('time')}:</strong>&nbsp;{formatTimeDisplay(apt.time)}
                     </span>
                   </div>
@@ -425,14 +425,14 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                         <button
                           className="btn d-flex align-items-center gap-1"
                           style={{
-                            background: 'linear-gradient(135deg, rgb(5, 45, 63), rgb(10, 65, 90))',
+                            background: 'linear-gradient(135deg, rgb(5, 60, 82), rgb(10, 65, 90))',
                             color: '#fff',
-                            border: '1.5px solid #46a1a1',
+                            border: '1.5px solid #3aabdb',
                             borderRadius: '8px',
                             fontWeight: '500',
                             fontSize: '0.85rem',
                             padding: '0.35rem 0.85rem',
-                            boxShadow: '0 2px 8px rgba(70, 161, 161, 0.3)'
+                            boxShadow: '0 2px 8px rgba(58, 171, 219, 0.3)'
                           }}
                           onClick={() => handleAccept(apt)}
                         >
@@ -543,14 +543,14 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                   type="button" 
                   className="btn"
                   style={{ 
-                    backgroundColor: modalAction === ACTION_ACCEPT ? '#46a1a1' : DANGER_COLOR, 
+                    backgroundColor: modalAction === ACTION_ACCEPT ? '#3aabdb' : DANGER_COLOR, 
                     color: 'white', 
                     border: 'none', 
                     fontWeight: '500', 
                     borderRadius: '10px',
                     padding: '0.4rem 1rem',
                     boxShadow: modalAction === ACTION_ACCEPT 
-                      ? '0 2px 12px rgba(70, 161, 161, 0.4)' 
+                      ? '0 2px 12px rgba(58, 171, 219, 0.4)' 
                       : '0 2px 12px rgba(220, 53, 69, 0.3)'
                   }}
                   onClick={handleSubmitNote}

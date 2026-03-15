@@ -191,7 +191,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
             {/* Header */}
             <div className="modal-header" style={{
               background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
-              borderBottom: '3px solid #46a1a1',
+              borderBottom: '3px solid #3aabdb',
               padding: '1.25rem 1.5rem',
             }}>
               <h5 className="modal-title" style={{
@@ -260,7 +260,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                   </p>
 
                   <div style={{ borderTop: '1px solid rgba(70,161,161,0.25)', paddingTop: '0.75rem', marginTop: '0.5rem' }}>
-                    <small style={{ color: '#46a1a1', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
+                    <small style={{ color: '#3aabdb', fontWeight: '600', fontSize: '0.82rem', letterSpacing: '0.02em' }}>
                       {t('postedOn')} {new Date(update.date).toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')} {t('by')} {update.author}
                     </small>
                   </div>
@@ -271,7 +271,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
             {/* Footer */}
             <div className="modal-footer" style={{
               background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
-              borderTop: '2px solid #46a1a1',
+              borderTop: '2px solid #3aabdb',
               padding: '0.75rem 1.5rem',
               display: 'flex',
               justifyContent: showNav ? 'space-between' : 'flex-end',
@@ -283,7 +283,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                     onClick={goPrev}
                     style={{
                       background: 'none', border: '1px solid rgba(70,161,161,0.4)',
-                      borderRadius: '8px', color: '#46a1a1', cursor: 'pointer',
+                      borderRadius: '8px', color: '#3aabdb', cursor: 'pointer',
                       padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
                     }}
                   >
@@ -296,7 +296,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                     onClick={goNext}
                     style={{
                       background: 'none', border: '1px solid rgba(70,161,161,0.4)',
-                      borderRadius: '8px', color: '#46a1a1', cursor: 'pointer',
+                      borderRadius: '8px', color: '#3aabdb', cursor: 'pointer',
                       padding: '0.3rem 0.5rem', display: 'flex', alignItems: 'center',
                     }}
                   >
