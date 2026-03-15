@@ -14,9 +14,9 @@ html, body {
   background: linear-gradient(
     105deg,
     rgba(255, 255, 255, 0.03) 0%,
-    rgba(70, 161, 161, 0.13) 38%,
+    rgba(58, 171, 219, 0.13) 38%,
     rgba(255, 255, 255, 0.07) 50%,
-    rgba(70, 161, 161, 0.13) 62%,
+    rgba(58, 171, 219, 0.13) 62%,
     rgba(255, 255, 255, 0.03) 100%
   );
   background-size: 300% 100%;
@@ -26,8 +26,8 @@ html, body {
 }
 
 .sk-card {
-  background: rgba(5, 45, 63, 0.48);
-  border: 1.5px solid rgba(70, 161, 161, 0.12);
+  background: rgba(5, 60, 82, 0.48);
+  border: 1.5px solid rgba(58, 171, 219, 0.12);
   border-radius: 16px;
   overflow: hidden;
 }
@@ -50,7 +50,7 @@ button svg, a svg {
   height: 36px;
   border: none;
   background: transparent;
-  color: rgba(70, 161, 161, 0.85);
+  color: rgba(58, 171, 219, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,7 +59,7 @@ button svg, a svg {
   transform: translateY(10px);
   pointer-events: none;
   transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease;
-  filter: drop-shadow(0 0 0px rgba(70, 161, 161, 0));
+  filter: drop-shadow(0 0 0px rgba(58, 171, 219, 0));
 }
 
 .scroll-to-top-btn.visible {
@@ -70,15 +70,15 @@ button svg, a svg {
 }
 
 @keyframes scrollBtnGlow {
-  0%, 100% { filter: drop-shadow(0 0 2px rgba(70, 161, 161, 0.4)); color: rgba(70, 161, 161, 0.7); }
-  50%       { filter: drop-shadow(0 0 10px rgba(70, 161, 161, 1)) drop-shadow(0 0 20px rgba(70, 161, 161, 0.6)); color: #fff; }
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(58, 171, 219, 0.4)); color: rgba(58, 171, 219, 0.7); }
+  50%       { filter: drop-shadow(0 0 10px rgba(58, 171, 219, 1)) drop-shadow(0 0 20px rgba(58, 171, 219, 0.6)); color: #fff; }
 }
 
 @media (hover: hover) {
   .scroll-to-top-btn:hover {
     color: #fff;
     animation: none;
-    filter: drop-shadow(0 0 10px rgba(70, 161, 161, 1)) drop-shadow(0 0 20px rgba(70, 161, 161, 0.6));
+    filter: drop-shadow(0 0 10px rgba(58, 171, 219, 1)) drop-shadow(0 0 20px rgba(58, 171, 219, 0.6));
   }
 }
 
@@ -130,23 +130,23 @@ a:focus:not(:focus-visible) {
 
 /* Current Services Table Styles */
 .current-services-table {
-  border: 2px solid rgba(70, 161, 161, 0.4) !important;
+  border: 2px solid rgba(58, 171, 219, 0.4) !important;
   border-radius: 1rem !important;
   overflow: hidden;
 }
 /* Block Date & Time section border */
 .block-date-card-border {
-  border: 1px solid rgba(70, 161, 161, 0.35) !important;
+  border: 1px solid rgba(58, 171, 219, 0.35) !important;
   border-radius: 1rem !important;
 }
 
 /* Collapsible Section Header */
 @keyframes headerGlow {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(70, 161, 161, 0.3), 0 0 20px rgba(70, 161, 161, 0.2);
+    box-shadow: 0 0 10px rgba(58, 171, 219, 0.3), 0 0 20px rgba(58, 171, 219, 0.2);
   }
   50% {
-    box-shadow: 0 0 20px rgba(70, 161, 161, 0.5), 0 0 30px rgba(70, 161, 161, 0.3), 0 0 40px rgba(70, 161, 161, 0.1);
+    box-shadow: 0 0 20px rgba(58, 171, 219, 0.5), 0 0 30px rgba(58, 171, 219, 0.3), 0 0 40px rgba(58, 171, 219, 0.1);
   }
 }
 .collapsible-header {
@@ -179,7 +179,7 @@ a:focus:not(:focus-visible) {
 .post-update-card .form-control {
   background: rgba(255, 255, 255, 0.08) !important;
   color: #fff !important;
-  border: 1px solid rgba(70, 161, 161, 0.25);
+  border: 1px solid rgba(58, 171, 219, 0.25);
   border-radius: 0.5rem;
   font-weight: 400;
   box-shadow: none;
@@ -189,8 +189,8 @@ a:focus:not(:focus-visible) {
   color: rgba(255, 255, 255, 0.38);
 }
 .post-update-card .form-control:focus {
-  border: 1.5px solid #46a1a1;
-  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.12);
+  border: 1.5px solid #3aabdb;
+  box-shadow: 0 0 0 2px rgba(58, 171, 219, 0.12);
   background: rgba(255, 255, 255, 0.12) !important;
   color: #fff !important;
   outline: none;
@@ -200,15 +200,15 @@ a:focus:not(:focus-visible) {
   background-color: rgba(255, 255, 255, 0.08) !important;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2346a1a1' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
   color: #fff !important;
-  border: 1px solid rgba(70, 161, 161, 0.25);
+  border: 1px solid rgba(58, 171, 219, 0.25);
   border-radius: 0.5rem;
 }
 .post-update-card .form-select:focus {
-  border-color: #46a1a1;
-  box-shadow: 0 0 0 2px rgba(70, 161, 161, 0.12);
+  border-color: #3aabdb;
+  box-shadow: 0 0 0 2px rgba(58, 171, 219, 0.12);
 }
 .post-update-card .form-select option {
-  background: rgb(5, 45, 63);
+  background: rgb(5, 60, 82);
   color: #fff;
 }
 /* Sticky Employee Dashboard Header */
@@ -228,9 +228,9 @@ a:focus:not(:focus-visible) {
   height: 30px;
   background: linear-gradient(
     to bottom,
-    rgba(5, 45, 63, 0.7) 0%,
-    rgba(5, 45, 63, 0.35) 30%,
-    rgba(5, 45, 63, 0.1) 65%,
+    rgba(5, 60, 82, 0.7) 0%,
+    rgba(5, 60, 82, 0.35) 30%,
+    rgba(5, 60, 82, 0.1) 65%,
     transparent 100%
   );
   transform: translateY(100%);
@@ -249,7 +249,7 @@ a:focus:not(:focus-visible) {
 
 #mobileTabSelect option:checked,
 #mobileTabSelect option:hover {
-  background-color: rgb(5, 45, 63) !important;
+  background-color: rgb(5, 60, 82) !important;
   color: white !important;
 }
 
@@ -271,12 +271,12 @@ a:focus:not(:focus-visible) {
 }
 @media (hover: hover) {
   .dashboard-home-btn:hover {
-    background: rgba(70, 161, 161, 0.12) !important;
-    color: #46a1a1 !important;
+    background: rgba(58, 171, 219, 0.12) !important;
+    color: #3aabdb !important;
   }
 }
 .dashboard-home-btn:active {
-  color: #46a1a1 !important;
+  color: #3aabdb !important;
 }
 
 /* Logout button */
@@ -302,11 +302,11 @@ a:focus:not(:focus-visible) {
 
 /* Tab header shadow */
 .dashboard-tabs {
-  box-shadow: 0 2px 10px 0 rgba(5, 45, 63, 0.18), 0 1px 2px 0 rgba(0,0,0,0.10);
+  box-shadow: 0 2px 10px 0 rgba(5, 60, 82, 0.18), 0 1px 2px 0 rgba(0,0,0,0.10);
   border-radius: 0.5rem;
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgba(5, 45, 63, 0.85) 100%);
+  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, rgba(5, 60, 82, 0.85) 100%);
   margin-bottom: 1.5rem;
-  border: 1px solid rgba(70, 161, 161, 0.25);
+  border: 1px solid rgba(58, 171, 219, 0.25);
   align-items: center;
   border-bottom: none;
   padding: 0.25rem;
@@ -328,37 +328,37 @@ a:focus:not(:focus-visible) {
 }
 
 .dashboard-tabs .nav-link:hover {
-  color: #46a1a1 !important;
-  background: rgba(70, 161, 161, 0.1);
+  color: #3aabdb !important;
+  background: rgba(58, 171, 219, 0.1);
   border-radius: 0.4rem;
 }
 
 .dashboard-tabs .nav-link.active {
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%) !important;
+  background: linear-gradient(135deg, #3aabdb 0%, #3d8d8d 100%) !important;
   color: #fff !important;
   border: none !important;
   border-radius: 0.4rem;
-  box-shadow: 0 2px 8px rgba(70, 161, 161, 0.35);
+  box-shadow: 0 2px 8px rgba(58, 171, 219, 0.35);
   font-weight: 600;
   margin: 0;
 }
 /* Post Update Button Custom Style */
 .post-update-btn {
-  background: linear-gradient(90deg, #46a1a1 0%, rgb(5, 45, 63) 100%);
+  background: linear-gradient(90deg, #3aabdb 0%, rgb(5, 60, 82) 100%);
   color: #fff !important;
   font-weight: 600;
   font-size: 0.88rem;
   border: none;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(5, 45, 63, 0.10);
+  box-shadow: 0 2px 8px rgba(5, 60, 82, 0.10);
   letter-spacing: 0.02em;
   padding: 0.42rem 1.1rem;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
 .post-update-btn:hover, .post-update-btn:focus {
-  background: linear-gradient(90deg, rgb(5, 45, 63) 0%, #46a1a1 100%);
+  background: linear-gradient(90deg, rgb(5, 60, 82) 0%, #3aabdb 100%);
   color: #fff !important;
-  box-shadow: 0 4px 16px rgba(5, 45, 63, 0.18);
+  box-shadow: 0 4px 16px rgba(5, 60, 82, 0.18);
 }
 @media (max-width: 991.98px) {
   .update-poster .post-update-card {
@@ -367,10 +367,10 @@ a:focus:not(:focus-visible) {
 }
 /* Employee Dashboard Post Update Card Theme */
 .post-update-card {
-  background: rgba(5, 45, 63, 0.55);
+  background: rgba(5, 60, 82, 0.55);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(70, 161, 161, 0.2) !important;
+  border: 1px solid rgba(58, 171, 219, 0.2) !important;
   color: #fff;
   border-radius: 1rem;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
@@ -378,13 +378,13 @@ a:focus:not(:focus-visible) {
 
 /* Expanded Employee Name Card */
 .expanded-employee-card {
-  background: rgba(70, 161, 161, 0.12) !important;
-  border: 1.5px solid rgba(70, 161, 161, 0.45) !important;
+  background: rgba(58, 171, 219, 0.12) !important;
+  border: 1.5px solid rgba(58, 171, 219, 0.45) !important;
   color: #fff !important;
   border-radius: 10px !important;
 }
 .post-update-card .card-title {
-  color: #46a1a1;
+  color: #3aabdb;
   font-weight: 600;
 }
 .post-update-card .form-label {
@@ -408,34 +408,34 @@ a:focus:not(:focus-visible) {
   --bs-table-border-color: rgba(255, 255, 255, 0.07);
 }
 .post-update-card .table th {
-  color: #46a1a1;
+  color: #3aabdb;
   font-weight: 600;
-  border-color: rgba(70, 161, 161, 0.3);
+  border-color: rgba(58, 171, 219, 0.3);
 }
 .post-update-card .table td {
   color: rgba(255, 255, 255, 0.85);
   border-color: rgba(255, 255, 255, 0.07);
 }
 .post-update-card .table-hover > tbody > tr:hover > * {
-  background-color: rgba(70, 161, 161, 0.08);
+  background-color: rgba(58, 171, 219, 0.08);
   color: rgba(255, 255, 255, 0.95);
 }
 .post-update-card .btn:not(.btn-close) {
-  background: rgb(5, 45, 63);
+  background: rgb(5, 60, 82);
   color: #fff;
   border: none;
   font-weight: 600;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(5, 45, 63, 0.10);
+  box-shadow: 0 2px 8px rgba(5, 60, 82, 0.10);
   transition: background 0.2s, color 0.2s;
 }
 
 .post-update-card .btn:focus:not(.btn-close) {
-  background: rgb(5, 45, 63);
+  background: rgb(5, 60, 82);
   color: #fff;
 }
 .post-update-card .btn:hover:not(.btn-close) {
-  background: #46a1a1;
+  background: #3aabdb;
   color: #fff;
 }
 .post-update-card .btn-outline-secondary {
@@ -486,14 +486,14 @@ a:focus:not(:focus-visible) {
 }
 @media (hover: hover) {
   .post-update-card .btn.btn-link:hover {
-    background: rgba(70, 161, 161, 0.08) !important;
+    background: rgba(58, 171, 219, 0.08) !important;
   }
 }
 
 /* Update/Post Listing Cards */
 .updates-list .card {
   background: linear-gradient(135deg, #fff 0%, #e8f4f8 100%);
-  border-left: 4px solid #46a1a1 !important;
+  border-left: 4px solid #3aabdb !important;
   border-radius: 0.75rem;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
@@ -501,11 +501,11 @@ a:focus:not(:focus-visible) {
 
 .updates-list .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(5, 45, 63, 0.25), 0 4px 12px rgba(70, 161, 161, 0.15) !important;
+  box-shadow: 0 12px 32px rgba(5, 60, 82, 0.25), 0 4px 12px rgba(58, 171, 219, 0.15) !important;
 }
 
 .updates-list .card .card-title {
-  color: rgb(5, 45, 63);
+  color: rgb(5, 60, 82);
   font-weight: 600;
 }
 
@@ -514,7 +514,7 @@ a:focus:not(:focus-visible) {
 }
 
 .updates-list .card .text-muted {
-  color: #46a1a1 !important;
+  color: #3aabdb !important;
   font-weight: 500;
 }
 
@@ -534,9 +534,9 @@ a:focus:not(:focus-visible) {
 
 /* Load More / Hide Posts Buttons */
 .load-more-btn {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%);
+  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, #0d5c6e 100%);
   color: #fff;
-  border: 1.5px solid #46a1a1;
+  border: 1.5px solid #3aabdb;
   border-radius: 0.5rem;
   padding: 0.4rem 1.25rem;
   font-weight: 600;
@@ -545,10 +545,10 @@ a:focus:not(:focus-visible) {
   transition: all 0.2s ease;
 }
 .load-more-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0d5c6e 0%, #46a1a1 100%);
+  background: linear-gradient(135deg, #0d5c6e 0%, #3aabdb 100%);
   color: #fff;
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(70, 161, 161, 0.35);
+  box-shadow: 0 4px 14px rgba(58, 171, 219, 0.35);
 }
 .load-more-btn:disabled {
   opacity: 0.65;
@@ -658,7 +658,7 @@ a:focus:not(:focus-visible) {
 }
 
 .form-card .card-header {
-  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   color: white;
   font-weight: 600;
   padding: 1.5rem;
@@ -685,7 +685,7 @@ a:focus:not(:focus-visible) {
 
 /* Homepage Styles */
 .hero-section {
-  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   padding: 4rem 0 !important;
 }
 
@@ -707,9 +707,9 @@ a:focus:not(:focus-visible) {
 .services-section .card {
   background: linear-gradient(145deg, #ffffff 0%, #f0fafa 60%, #e3f3f3 100%) !important;
   border: none !important;
-  border-top: 4px solid #46a1a1 !important;
+  border-top: 4px solid #3aabdb !important;
   border-radius: 16px !important;
-  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.15), 0 0 16px rgba(70, 161, 161, 0.25), 0 0 32px rgba(70, 161, 161, 0.12) !important;
+  box-shadow: 0 4px 18px rgba(5, 60, 82, 0.15), 0 0 16px rgba(58, 171, 219, 0.25), 0 0 32px rgba(58, 171, 219, 0.12) !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
   position: relative;
@@ -722,15 +722,15 @@ a:focus:not(:focus-visible) {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent 0%, rgba(70, 161, 161, 0.3) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(58, 171, 219, 0.3) 50%, transparent 100%);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
 
 .services-section .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 36px rgba(5, 45, 63, 0.25), 0 0 24px rgba(70, 161, 161, 0.4), 0 0 48px rgba(70, 161, 161, 0.2), 0 0 0 1px rgba(70, 161, 161, 0.15) !important;
-  border-top-color: rgb(5, 45, 63);
+  box-shadow: 0 12px 36px rgba(5, 60, 82, 0.25), 0 0 24px rgba(58, 171, 219, 0.4), 0 0 48px rgba(58, 171, 219, 0.2), 0 0 0 1px rgba(58, 171, 219, 0.15) !important;
+  border-top-color: rgb(5, 60, 82);
 }
 
 .services-section .card:hover::after {
@@ -738,7 +738,7 @@ a:focus:not(:focus-visible) {
 }
 
 .services-section .card-title {
-  color: rgb(5, 45, 63);
+  color: rgb(5, 60, 82);
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: -0.01em;
@@ -752,7 +752,7 @@ a:focus:not(:focus-visible) {
 }
 
 .services-section .card-subtitle {
-  color: #46a1a1;
+  color: #3aabdb;
   font-size: 0.9rem;
   margin-top: 0.35rem;
 }
@@ -762,7 +762,7 @@ a:focus:not(:focus-visible) {
 }
 
 .news-section {
-  background-color: rgb(5, 45, 63);
+  background-color: rgb(5, 60, 82);
 }
 
 .news-section .card {
@@ -777,9 +777,9 @@ a:focus:not(:focus-visible) {
 .update-card-desktop {
   background: linear-gradient(145deg, #ffffff 0%, #eaf6f6 60%, #d4eeee 100%) !important;
   border: none !important;
-  border-left: 4px solid #46a1a1 !important;
+  border-left: 4px solid #3aabdb !important;
   border-radius: 14px !important;
-  box-shadow: 0 4px 18px rgba(5, 45, 63, 0.18), 0 1.5px 4px rgba(70, 161, 161, 0.12) !important;
+  box-shadow: 0 4px 18px rgba(5, 60, 82, 0.18), 0 1.5px 4px rgba(58, 171, 219, 0.12) !important;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
   overflow: hidden;
   position: relative;
@@ -792,21 +792,21 @@ a:focus:not(:focus-visible) {
   right: 0;
   width: 80px;
   height: 80px;
-  background: radial-gradient(circle at top right, rgba(70, 161, 161, 0.12) 0%, transparent 70%);
+  background: radial-gradient(circle at top right, rgba(58, 171, 219, 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .update-card-desktop:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 36px rgba(5, 45, 63, 0.25), 0 0 0 1.5px rgba(70, 161, 161, 0.25) !important;
-  border-left-color: rgb(5, 45, 63) !important;
+  box-shadow: 0 12px 36px rgba(5, 60, 82, 0.25), 0 0 0 1.5px rgba(58, 171, 219, 0.25) !important;
+  border-left-color: rgb(5, 60, 82) !important;
 }
 
 @media (max-width: 767px) {
   .update-card-desktop:hover {
     transform: none !important;
-    box-shadow: 0 4px 18px rgba(5, 45, 63, 0.18), 0 1.5px 4px rgba(70, 161, 161, 0.12) !important;
-    border-left-color: #46a1a1 !important;
+    box-shadow: 0 4px 18px rgba(5, 60, 82, 0.18), 0 1.5px 4px rgba(58, 171, 219, 0.12) !important;
+    border-left-color: #3aabdb !important;
   }
 }
 
@@ -815,7 +815,7 @@ a:focus:not(:focus-visible) {
 }
 
 .update-card-desktop .card-title {
-  color: rgb(5, 45, 63) !important;
+  color: rgb(5, 60, 82) !important;
   font-weight: 700 !important;
   font-size: 1.05rem !important;
   letter-spacing: -0.01em;
@@ -830,7 +830,7 @@ a:focus:not(:focus-visible) {
 }
 
 .update-card-desktop .text-muted {
-  color: #46a1a1 !important;
+  color: #3aabdb !important;
   font-weight: 600 !important;
   font-size: 0.78rem !important;
   letter-spacing: 0.02em;
@@ -839,7 +839,7 @@ a:focus:not(:focus-visible) {
 .update-card-desktop .img-fluid,
 .update-card-desktop video {
   border-radius: 8px !important;
-  border: 1px solid rgba(70, 161, 161, 0.15);
+  border: 1px solid rgba(58, 171, 219, 0.15);
 }
 
 .about-section {
@@ -852,7 +852,7 @@ a:focus:not(:focus-visible) {
 }
 
 .contact-section {
-background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
+background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
 }
 
 .contact-section h2 {
@@ -983,11 +983,11 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Appointment card */
 .appointment-card {
-  background: rgba(5, 45, 63, 0.5) !important;
+  background: rgba(5, 60, 82, 0.5) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(70, 161, 161, 0.2) !important;
-  border-left: 4px solid #46a1a1 !important;
+  border: 1px solid rgba(58, 171, 219, 0.2) !important;
+  border-left: 4px solid #3aabdb !important;
   border-radius: 16px !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18) !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease !important;
@@ -995,7 +995,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 }
 .appointment-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(70, 161, 161, 0.18), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(58, 171, 219, 0.18), 0 8px 32px rgba(0, 0, 0, 0.15) !important;
 }
 .appointment-card .card-title {
   color: #fff !important;
@@ -1006,7 +1006,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   color: rgba(255, 255, 255, 0.85);
 }
 .appointment-card hr {
-  border-color: rgba(70, 161, 161, 0.3);
+  border-color: rgba(58, 171, 219, 0.3);
   opacity: 0.6;
 }
 .appointment-card strong {
@@ -1015,15 +1015,15 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 
 /* Appointment filter dropdown */
 .appointments-filter-select {
-  border-color: #46a1a1 !important;
+  border-color: #3aabdb !important;
   border-radius: 8px !important;
-  color: rgb(5, 45, 63) !important;
+  color: rgb(5, 60, 82) !important;
   font-weight: 500 !important;
   background-color: rgba(240, 250, 250, 0.5) !important;
 }
 .appointments-filter-select:focus {
-  border-color: #46a1a1 !important;
-  box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.25) !important;
+  border-color: #3aabdb !important;
+  box-shadow: 0 0 0 0.2rem rgba(58, 171, 219, 0.25) !important;
 }
 .appointments-filter-label {
   color: rgba(255, 255, 255, 0.85) !important;
@@ -1041,8 +1041,8 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 /* Appointment no-results alert */
 .appointments-no-results {
   background: linear-gradient(135deg, #f0fafa 0%, #e3f3f3 100%) !important;
-  color: rgb(5, 45, 63) !important;
-  border: 1.5px solid rgba(70, 161, 161, 0.3) !important;
+  color: rgb(5, 60, 82) !important;
+  border: 1.5px solid rgba(58, 171, 219, 0.3) !important;
   border-radius: 12px !important;
   font-weight: 500 !important;
 }
@@ -1052,11 +1052,11 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   border-radius: 24px !important;
   overflow: hidden;
   border: none !important;
-  box-shadow: 0 0 30px rgba(70, 161, 161, 0.15), 0 0 60px rgba(5, 45, 63, 0.1) !important;
+  box-shadow: 0 0 30px rgba(58, 171, 219, 0.15), 0 0 60px rgba(5, 60, 82, 0.1) !important;
 }
 .appointment-modal .modal-header {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(10, 65, 90) 100%) !important;
-  border-bottom: 3px solid #46a1a1 !important;
+  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, rgb(10, 65, 90) 100%) !important;
+  border-bottom: 3px solid #3aabdb !important;
   padding: 1rem 1.25rem !important;
 }
 .appointment-modal .modal-title {
@@ -1066,28 +1066,28 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
 }
 .appointment-modal .modal-body {
   background: linear-gradient(180deg, #ffffff 0%, #f0fafa 100%) !important;
-  color: rgb(5, 45, 63) !important;
+  color: rgb(5, 60, 82) !important;
   padding: 1.25rem !important;
 }
 .appointment-modal .modal-body strong {
-  color: rgb(5, 45, 63);
+  color: rgb(5, 60, 82);
 }
 .appointment-modal .modal-body .form-control {
-  border-color: rgba(70, 161, 161, 0.4) !important;
+  border-color: rgba(58, 171, 219, 0.4) !important;
   border-radius: 10px !important;
-  color: rgb(5, 45, 63) !important;
+  color: rgb(5, 60, 82) !important;
 }
 .appointment-modal .modal-body .form-control:focus {
-  border-color: #46a1a1 !important;
-  box-shadow: 0 0 0 0.2rem rgba(70, 161, 161, 0.2) !important;
+  border-color: #3aabdb !important;
+  box-shadow: 0 0 0 0.2rem rgba(58, 171, 219, 0.2) !important;
 }
 .appointment-modal .modal-body .form-label {
-  color: rgb(5, 45, 63) !important;
+  color: rgb(5, 60, 82) !important;
   font-weight: 500 !important;
 }
 .appointment-modal .modal-footer {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(10, 65, 90) 100%) !important;
-  border-top: 3px solid #46a1a1 !important;
+  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, rgb(10, 65, 90) 100%) !important;
+  border-top: 3px solid #3aabdb !important;
   padding: 0.85rem 1.25rem !important;
 }
 

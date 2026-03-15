@@ -15,7 +15,7 @@ const DEFAULT_FORM_DATA = {
 };
 
 const MOBILE_BREAKPOINT = 768;
-const THEME_COLOR = 'rgb(5, 45, 63)';
+const THEME_COLOR = 'rgb(5, 60, 82)';
 const FILTER_ALL_VALUE = 'all';
 const TIME_FORMAT_OPTIONS = {
   hour: 'numeric',
@@ -216,8 +216,8 @@ export const AvailabilityManager = () => {
   }, []);
 
   const infoBoxStyle = {
-    backgroundColor: 'rgba(70, 161, 161, 0.08)',
-    border: '1px solid rgba(70, 161, 161, 0.35)',
+    backgroundColor: 'rgba(58, 171, 219, 0.08)',
+    border: '1px solid rgba(58, 171, 219, 0.35)',
     borderRadius: '8px',
     padding: '0.75rem',
     fontSize: '0.875rem',
@@ -229,7 +229,7 @@ export const AvailabilityManager = () => {
   const dayGroupCardStyle = {
     background: 'rgba(255,255,255,0.04)',
     borderRadius: '16px',
-    border: '1px solid rgba(70, 161, 161, 0.2)',
+    border: '1px solid rgba(58, 171, 219, 0.2)',
     padding: '1rem 1.25rem',
     boxShadow: '0 2px 8px rgba(0,0,0,0.12)'
   };
@@ -296,10 +296,10 @@ export const AvailabilityManager = () => {
                                   fontWeight: '700',
                                   cursor: 'pointer',
                                   transition: 'all 0.2s ease',
-                                  border: isSelected ? '2px solid #46a1a1' : '2px solid #b0bec5',
-                                  background: isSelected ? 'linear-gradient(135deg, rgb(5, 45, 63) 0%, #0d5c6e 100%)' : '#f5f5f5',
-                                  color: isSelected ? '#fff' : 'rgb(5, 45, 63)',
-                                  boxShadow: isSelected ? '0 2px 8px rgba(70, 161, 161, 0.3)' : 'none',
+                                  border: isSelected ? '2px solid #3aabdb' : '2px solid #b0bec5',
+                                  background: isSelected ? 'linear-gradient(135deg, rgb(5, 60, 82) 0%, #0d5c6e 100%)' : '#f5f5f5',
+                                  color: isSelected ? '#fff' : 'rgb(5, 60, 82)',
+                                  boxShadow: isSelected ? '0 2px 8px rgba(58, 171, 219, 0.3)' : 'none',
                                   userSelect: 'none'
                                 }}
                               >
@@ -497,10 +497,10 @@ export const AvailabilityManager = () => {
                                   <table className="table table-hover align-middle" style={{ tableLayout: 'auto', width: '100%' }}>
                                     <thead>
                                       <tr style={{ borderBottom: `2px solid rgba(70,161,161,0.4)` }}>
-                                        {isAdmin && <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px' }}>{t('employee')}</th>}
-                                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px' }}>{t('startTime')}</th>
-                                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px' }}>{t('endTime')}</th>
-                                        <th style={{ fontWeight: '500', color: '#46a1a1', padding: '8px' }}>{t('actions')}</th>
+                                        {isAdmin && <th style={{ fontWeight: '500', color: '#3aabdb', padding: '8px' }}>{t('employee')}</th>}
+                                        <th style={{ fontWeight: '500', color: '#3aabdb', padding: '8px' }}>{t('startTime')}</th>
+                                        <th style={{ fontWeight: '500', color: '#3aabdb', padding: '8px' }}>{t('endTime')}</th>
+                                        <th style={{ fontWeight: '500', color: '#3aabdb', padding: '8px' }}>{t('actions')}</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -508,7 +508,7 @@ export const AvailabilityManager = () => {
                                         .sort((a, b) => a.startTime.localeCompare(b.startTime))
                                         .map(avail => (
                                           <tr key={avail.id} style={{ color: 'rgba(255,255,255,0.85)' }}>
-                                            {isAdmin && <td className="fw-bold" style={{ color: '#46a1a1', padding: '8px' }}>{avail?.user?.name || 'Unknown'}</td>}
+                                            {isAdmin && <td className="fw-bold" style={{ color: '#3aabdb', padding: '8px' }}>{avail?.user?.name || 'Unknown'}</td>}
                                             <td style={{ padding: '8px' }}>
                                               {editingId === avail.id ? (
                                                 <input
@@ -540,7 +540,7 @@ export const AvailabilityManager = () => {
                                                 <div className="d-flex align-items-center gap-1">
                                                   <button
                                                     className="btn btn-sm d-flex align-items-center gap-1"
-                                                    style={{ color: '#fff', background: '#46a1a1', border: 'none', borderRadius: '6px' }}
+                                                    style={{ color: '#fff', background: '#3aabdb', border: 'none', borderRadius: '6px' }}
                                                     onClick={() => handleUpdateSubmit(avail.id)}
                                                   >
                                                     <Check size={13} />
@@ -591,7 +591,7 @@ export const AvailabilityManager = () => {
                                           {isAdmin && (
                                             <div className="mb-2">
                                               <small style={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>{t('employee')}</small>
-                                              <strong style={{ color: '#46a1a1' }}>{avail?.user?.name || 'Unknown'}</strong>
+                                              <strong style={{ color: '#3aabdb' }}>{avail?.user?.name || 'Unknown'}</strong>
                                             </div>
                                           )}
 
@@ -624,7 +624,7 @@ export const AvailabilityManager = () => {
                                               <div className="d-grid gap-2">
                                                 <button
                                                   className="btn d-flex align-items-center justify-content-center gap-1"
-                                                  style={{ backgroundColor: '#46a1a1', color: '#fff', border: 'none' }}
+                                                  style={{ backgroundColor: '#3aabdb', color: '#fff', border: 'none' }}
                                                   onClick={() => handleUpdateSubmit(avail.id)}
                                                 >
                                                   <Check size={14} />

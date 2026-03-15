@@ -8,7 +8,7 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
-const THEME_COLOR = 'rgb(5, 45, 63)';
+const THEME_COLOR = 'rgb(5, 60, 82)';
 
 export const ServiceManager = () => {
   const { t, language } = useTranslation();

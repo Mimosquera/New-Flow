@@ -14,7 +14,7 @@ const INITIAL_FORM_DATA = {
   reason: '',
 };
 
-const THEME_COLOR = 'rgb(5, 45, 63)';
+const THEME_COLOR = 'rgb(5, 60, 82)';
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 const DATE_TIME_REFERENCE = '2000-01-01T';
 

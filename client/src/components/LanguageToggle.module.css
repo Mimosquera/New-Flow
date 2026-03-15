@@ -17,7 +17,7 @@
   width: 70px;
   height: 32px;
   background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(70, 161, 161, 0.4);
+  border: 2px solid rgba(58, 171, 219, 0.4);
   border-radius: 20px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -30,8 +30,8 @@
 }
 
 .trackActive {
-  background: rgba(70, 161, 161, 0.15);
-  border-color: #46a1a1;
+  background: rgba(58, 171, 219, 0.15);
+  border-color: #3aabdb;
 }
 
 /* Labels inside the track */
@@ -63,7 +63,7 @@
   left: 4px;
   width: 36px;
   height: 24px;
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%);
+  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, rgb(3, 35, 50) 100%);
   border-radius: 14px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
@@ -72,25 +72,25 @@
   font-size: 0.65rem;
   font-weight: 700;
   color: white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(70, 161, 161, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(58, 171, 219, 0.2);
   letter-spacing: 0.3px;
   z-index: 2;
 }
 
 .sliderRight {
   left: calc(100% - 40px);
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
+  background: linear-gradient(135deg, #3aabdb 0%, #3d8d8d 100%);
 }
 
 /* Hover effects - only on devices that support hover */
 @media (hover: hover) {
   .toggleContainer:hover .track {
-    border-color: #46a1a1;
-    box-shadow: 0 4px 12px rgba(70, 161, 161, 0.25);
+    border-color: #3aabdb;
+    box-shadow: 0 4px 12px rgba(58, 171, 219, 0.25);
   }
 
   .toggleContainer:hover .slider {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(70, 161, 161, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(58, 171, 219, 0.3);
   }
 }
 
@@ -101,13 +101,13 @@
 
 /* Inverse style (for dark backgrounds) */
 .inverse .track {
-  background: rgba(5, 45, 63, 0.3);
-  border-color: rgba(70, 161, 161, 0.6);
+  background: rgba(5, 60, 82, 0.3);
+  border-color: rgba(58, 171, 219, 0.6);
 }
 
 .inverse .trackActive {
-  background: rgba(70, 161, 161, 0.2);
-  border-color: #46a1a1;
+  background: rgba(58, 171, 219, 0.2);
+  border-color: #3aabdb;
 }
 
 .inverse .label {

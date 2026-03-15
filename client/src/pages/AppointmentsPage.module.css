@@ -1,7 +1,7 @@
 /* ─── Page ───────────────────────────────────────────────────────────────────── */
 .pageContainer {
   height: 100svh;
-  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
+  background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -16,10 +16,10 @@
 /* ─── Navbar ─────────────────────────────────────────────────────────────────── */
 .apptNavbar {
   flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.97) 0%, rgba(5, 45, 63, 0.97) 100%);
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.97) 0%, rgba(5, 60, 82, 0.97) 100%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(70, 161, 161, 0.2);
+  border-bottom: 1px solid rgba(58, 171, 219, 0.2);
   box-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
   padding: calc(env(safe-area-inset-top, 0px) + 0.5rem) 0 0.5rem;
 }
@@ -101,8 +101,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.35rem;
-  background: rgba(70, 161, 161, 0.07);
-  border: 1px solid rgba(70, 161, 161, 0.18);
+  background: rgba(58, 171, 219, 0.07);
+  border: 1px solid rgba(58, 171, 219, 0.18);
   border-radius: 10px;
   padding: 0.5rem 0.85rem;
   margin-bottom: 0.85rem;
@@ -116,14 +116,14 @@
 }
 
 .recapDot {
-  color: rgba(70, 161, 161, 0.5);
+  color: rgba(58, 171, 219, 0.5);
 }
 
 .recapEdit {
   margin-left: auto;
   background: none;
   border: none;
-  color: #46a1a1;
+  color: #3aabdb;
   font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
@@ -135,12 +135,12 @@
 
 /* ─── Form Card ──────────────────────────────────────────────────────────────── */
 .formCard {
-  background: rgba(5, 45, 63, 0.5);
+  background: rgba(5, 60, 82, 0.5);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1.5px solid rgba(70, 161, 161, 0.2);
+  border: 1.5px solid rgba(58, 171, 219, 0.2);
   border-radius: 24px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(70, 161, 161, 0.08);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(58, 171, 219, 0.08);
   overflow: hidden;
   width: min(480px, 100%);
   margin: 0 auto;
@@ -148,10 +148,10 @@
 
 /* ─── Card Header ────────────────────────────────────────────────────────────── */
 .cardHeader {
-  background: linear-gradient(135deg, rgba(5, 45, 63, 0.9) 0%, rgba(3, 35, 50, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(5, 60, 82, 0.9) 0%, rgba(3, 35, 50, 0.95) 100%);
   padding: 1.25rem 1.5rem 1.1rem;
   text-align: center;
-  border-bottom: 1px solid rgba(70, 161, 161, 0.18);
+  border-bottom: 1px solid rgba(58, 171, 219, 0.18);
 }
 
 .cardTitle {
@@ -188,7 +188,7 @@
   align-items: center;
   gap: 0.4rem;
   font-weight: 600;
-  color: #46a1a1;
+  color: #3aabdb;
   margin-bottom: 0.4rem;
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -206,7 +206,7 @@
 .formSelect {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1.5px solid rgba(70, 161, 161, 0.25);
+  border: 1.5px solid rgba(58, 171, 219, 0.25);
   border-radius: 10px;
   font-size: 0.9rem;
   transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
@@ -223,9 +223,9 @@
 .formControl:focus,
 .formSelect:focus {
   outline: none;
-  border-color: rgba(70, 161, 161, 0.7);
+  border-color: rgba(58, 171, 219, 0.7);
   background: rgba(0, 0, 0, 0.42);
-  box-shadow: 0 0 0 3px rgba(70, 161, 161, 0.14);
+  box-shadow: 0 0 0 3px rgba(58, 171, 219, 0.14);
   transform: translateY(-1px);
   color: #fff;
 }
@@ -233,7 +233,7 @@
 @media (hover: hover) {
   .formControl:hover:not(:focus),
   .formSelect:hover:not(:focus) {
-    border-color: rgba(70, 161, 161, 0.45);
+    border-color: rgba(58, 171, 219, 0.45);
   }
 }
 
@@ -250,7 +250,7 @@
 .formControl:-webkit-autofill,
 .formControl:-webkit-autofill:hover,
 .formControl:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0px 1000px rgba(5, 45, 63, 0.9) inset;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(5, 60, 82, 0.9) inset;
   -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
   transition: background-color 9999s ease-in-out 0s;
 }
@@ -276,12 +276,12 @@
 }
 
 .formSelect option {
-  background-color: rgb(5, 45, 63);
+  background-color: rgb(5, 60, 82);
   color: rgba(255, 255, 255, 0.9);
 }
 
 .formSelect option:checked {
-  background-color: #46a1a1;
+  background-color: #3aabdb;
   color: #fff;
 }
 
@@ -308,14 +308,14 @@
   display: block;
   margin-top: 0.4rem;
   font-size: 0.76rem;
-  color: rgba(70, 161, 161, 0.75);
+  color: rgba(58, 171, 219, 0.75);
   font-style: italic;
 }
 
 .alertInfo {
   display: block;
-  background: rgba(70, 161, 161, 0.08);
-  border: 1px solid rgba(70, 161, 161, 0.3);
+  background: rgba(58, 171, 219, 0.08);
+  border: 1px solid rgba(58, 171, 219, 0.3);
   color: rgba(255, 255, 255, 0.75);
   padding: 0.55rem 0.85rem;
   border-radius: 8px;
@@ -338,14 +338,14 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #fff;
-  background: rgba(70, 161, 161, 0.12);
-  border: 1.5px solid rgba(70, 161, 161, 0.5);
+  background: rgba(58, 171, 219, 0.12);
+  border: 1.5px solid rgba(58, 171, 219, 0.5);
   border-radius: 50px;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 0 14px rgba(70, 161, 161, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 14px rgba(58, 171, 219, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
   margin-top: 0.75rem;
   -webkit-tap-highlight-color: transparent;
 }
@@ -365,9 +365,9 @@
 @media (hover: hover) {
   .submitButton:hover:not(:disabled) {
     transform: translateY(-2px);
-    background: rgba(70, 161, 161, 0.22);
-    border-color: rgba(70, 161, 161, 0.8);
-    box-shadow: 0 0 22px rgba(70, 161, 161, 0.3), 0 6px 20px rgba(0, 0, 0, 0.35);
+    background: rgba(58, 171, 219, 0.22);
+    border-color: rgba(58, 171, 219, 0.8);
+    box-shadow: 0 0 22px rgba(58, 171, 219, 0.3), 0 6px 20px rgba(0, 0, 0, 0.35);
   }
 
   .submitButton:hover:not(:disabled)::after {
@@ -396,29 +396,29 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(70, 161, 161, 0.2);
-  border: 1.5px solid rgba(70, 161, 161, 0.3);
+  background: rgba(58, 171, 219, 0.2);
+  border: 1.5px solid rgba(58, 171, 219, 0.3);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   flex-shrink: 0;
 }
 
 .stepDotActive {
-  background: #46a1a1;
-  border-color: #46a1a1;
-  box-shadow: 0 0 8px rgba(70, 161, 161, 0.5);
+  background: #3aabdb;
+  border-color: #3aabdb;
+  box-shadow: 0 0 8px rgba(58, 171, 219, 0.5);
   transform: scale(1.2);
 }
 
 .stepLine {
   height: 1.5px;
   width: 22px;
-  background: rgba(70, 161, 161, 0.2);
+  background: rgba(58, 171, 219, 0.2);
   flex-shrink: 0;
   transition: background 0.25s ease;
 }
 
 .stepLineActive {
-  background: #46a1a1;
+  background: #3aabdb;
 }
 
 /* ─── Back Link ──────────────────────────────────────────────────────────────── */
@@ -444,7 +444,7 @@
 /* ─── Review Screen ──────────────────────────────────────────────────────────── */
 .reviewSection {
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(70, 161, 161, 0.15);
+  border: 1px solid rgba(58, 171, 219, 0.15);
   border-radius: 12px;
   padding: 0.75rem 0.9rem;
   margin-bottom: 0.55rem;
@@ -464,14 +464,14 @@
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: #46a1a1;
+  color: #3aabdb;
   font-weight: 600;
 }
 
 .reviewEdit {
   background: none;
   border: none;
-  color: rgba(70, 161, 161, 0.7);
+  color: rgba(58, 171, 219, 0.7);
   font-size: 0.72rem;
   font-weight: 600;
   cursor: pointer;
@@ -483,7 +483,7 @@
 
 @media (hover: hover) {
   .reviewEdit:hover {
-    color: #46a1a1;
+    color: #3aabdb;
   }
 }
 

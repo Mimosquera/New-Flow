@@ -6,7 +6,7 @@ import { authService } from '../services/api.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
 
-const THEME_COLOR = 'rgb(5, 45, 63)';
+const THEME_COLOR = 'rgb(5, 60, 82)';
 
 export const EmployeeManager = () => {
   const { t } = useTranslation();
@@ -252,7 +252,7 @@ export const EmployeeManager = () => {
               <small style={{ color: 'rgba(255,255,255,0.55)' }}>{employee.email}</small>
             </div>
             {expandedEmployeeId === employee.id
-              ? <ChevronUp size={18} style={{ color: '#46a1a1', flexShrink: 0 }} />
+              ? <ChevronUp size={18} style={{ color: '#3aabdb', flexShrink: 0 }} />
               : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />}
           </button>
           <AnimatePresence initial={false}>
@@ -264,8 +264,8 @@ export const EmployeeManager = () => {
               transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
               style={{ overflow: 'hidden' }}
             >
-            <div className="p-3 border-top" style={{ borderColor: 'rgba(70, 161, 161, 0.25)' }}>
-              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#46a1a1', fontWeight: 700 }}>
+            <div className="p-3 border-top" style={{ borderColor: 'rgba(58, 171, 219, 0.25)' }}>
+              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
                 <Key size={15} />
                 {t('editPassword')}
               </h6>
@@ -312,7 +312,7 @@ export const EmployeeManager = () => {
                   </button>
                 </div>
               </form>
-              <hr className="my-4 section-divider" style={{ borderColor: '#46a1a1', borderWidth: '2px' }} />
+              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
               <div className="mt-4">
                 <h6 className="mb-3 text-danger section-header d-flex align-items-center gap-2">
                   <UserMinus size={15} />
@@ -329,7 +329,7 @@ export const EmployeeManager = () => {
                   </div>
                 ) : (
                   <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
-                    <p className="mb-3 section-header" style={{ color: '#46a1a1', fontWeight: 600 }}>
+                    <p className="mb-3 section-header" style={{ color: '#3aabdb', fontWeight: 600 }}>
                       <strong>{t('confirmDeleteEmployee')}</strong>
                     </p>
                     <p className="text-danger mb-3">{t('deleteEmployeeWarning')}</p>
@@ -399,7 +399,7 @@ export const EmployeeManager = () => {
                 {t('createEmployee')}
               </h3>
               {showCreateForm
-                ? <ChevronUp size={16} style={{ color: '#46a1a1', flexShrink: 0 }} />
+                ? <ChevronUp size={16} style={{ color: '#3aabdb', flexShrink: 0 }} />
                 : <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }} />}
             </div>
             <AnimatePresence initial={false}>
