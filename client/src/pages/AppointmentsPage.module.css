@@ -84,7 +84,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1rem;
+  gap: 1rem;
+  padding: 0.75rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
   overflow-y: auto;
   scrollbar-width: none;
 }
@@ -93,21 +94,6 @@
   display: none;
 }
 
-/* ─── Footer ─────────────────────────────────────────────────────────────────── */
-.apptFooter {
-  flex-shrink: 0;
-  text-align: center;
-  padding: 0.75rem 0 calc(env(safe-area-inset-bottom, 0px) + 2.25rem);
-}
-
-.logo {
-  max-width: 120px;
-  width: 100%;
-  height: auto;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-}
 
 /* ─── Recap bar ──────────────────────────────────────────────────────────────── */
 .recap {
@@ -592,9 +578,6 @@
     margin-top: 0.5rem;
   }
 
-  .logo {
-    max-width: 80px;
-  }
 }
 
 @media (max-width: 480px) {

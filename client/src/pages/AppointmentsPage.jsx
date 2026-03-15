@@ -13,6 +13,7 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import { ReviewsCarousel } from '../components/ReviewsCarousel.jsx';
 import styles from './AppointmentsPage.module.css';
 import { hapticSuccess, hapticWarning, hapticLight } from '../utils/haptics.js';
 
@@ -583,15 +584,8 @@ export const AppointmentsPage = () => {
             )}
           </AnimatePresence>
         </form>
+        <ReviewsCarousel mini />
       </div>
-
-      <footer className={styles.apptFooter}>
-        <img
-          src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
-          alt="New Flow"
-          className={styles.logo}
-        />
-      </footer>
 
       <ScrollToTop />
     </div>

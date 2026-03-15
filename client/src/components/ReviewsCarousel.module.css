@@ -1,0 +1,266 @@
+/* ─── Wrapper ────────────────────────────────────────────────────────────────── */
+.wrapper {
+  width: 100%;
+}
+
+.wrapperMini {
+  width: 88%;
+  max-width: 360px;
+  margin-top: 2rem;
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 2.25rem;
+}
+
+.heading {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 1rem;
+}
+
+.ratingLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  background: rgba(5, 45, 63, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(70, 161, 161, 0.2);
+  border-radius: 50px;
+  padding: 0.45rem 1.1rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+  .ratingLink:hover {
+    border-color: rgba(70, 161, 161, 0.45);
+    box-shadow: 0 4px 18px rgba(70, 161, 161, 0.15);
+  }
+}
+
+.ratingText {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.ratingScore {
+  color: #fff;
+  font-weight: 700;
+}
+
+.ratingStars {
+  color: #f59e0b;
+  letter-spacing: 1px;
+}
+
+.ratingCount {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.82rem;
+}
+
+/* ─── Fade mask ──────────────────────────────────────────────────────────────── */
+.fade {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%);
+}
+
+/* ─── Track ──────────────────────────────────────────────────────────────────── */
+.track {
+  display: flex;
+  gap: 1rem;
+  width: max-content;
+  animation: marquee 65s linear infinite;
+}
+
+.trackMini {
+  animation-duration: 48s;
+  gap: 0.7rem;
+}
+
+@media (hover: hover) {
+  .track:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────────── */
+.card {
+  flex-shrink: 0;
+  width: 272px;
+  background: rgba(5, 45, 63, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(70, 161, 161, 0.18);
+  border-radius: 16px;
+  padding: 1.1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cardMini {
+  width: 205px;
+  padding: 0.75rem 0.85rem;
+  gap: 0.4rem;
+  border-radius: 12px;
+}
+
+/* ─── Card Top ───────────────────────────────────────────────────────────────── */
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* ─── Avatar ─────────────────────────────────────────────────────────────────── */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #46a1a1, #2a7070);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.avatarMini {
+  width: 28px;
+  height: 28px;
+  font-size: 0.78rem;
+}
+
+/* ─── Reviewer ───────────────────────────────────────────────────────────────── */
+.reviewer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.reviewerName {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reviewerNameMini {
+  font-size: 0.77rem;
+}
+
+.reviewerDate {
+  color: rgba(255, 255, 255, 0.36);
+  font-size: 0.71rem;
+}
+
+.reviewerDateMini {
+  font-size: 0.64rem;
+}
+
+/* ─── Stars ──────────────────────────────────────────────────────────────────── */
+.stars {
+  display: flex;
+  gap: 1px;
+}
+
+.star {
+  width: 13px;
+  height: 13px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.starFilled {
+  color: #f59e0b;
+}
+
+.starEmpty {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Review text ────────────────────────────────────────────────────────────── */
+.reviewText {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.83rem;
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.reviewTextMini {
+  font-size: 0.74rem;
+  line-height: 1.45;
+  -webkit-line-clamp: 3;
+}
+
+/* ─── Mini Google link ───────────────────────────────────────────────────────── */
+.miniLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.72rem;
+  margin-top: 0.6rem;
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .miniLink:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .heading {
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+  }
+
+  .card {
+    width: 240px;
+  }
+
+  .cardMini {
+    width: 185px;
+  }
+
+  .track {
+    animation-duration: 50s;
+  }
+
+  .trackMini {
+    animation-duration: 38s;
+  }
+}
