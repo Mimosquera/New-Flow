@@ -355,13 +355,13 @@
     linear-gradient(180deg, rgba(5, 45, 65, 0.35) 0%, rgba(5, 60, 82, 0.88) 100%);
   padding: 5rem 0;
   border-top: 1px solid rgba(58, 171, 219, 0.4);
+  margin-bottom: -1px;
 }
 
 @media (max-width: 767px) {
   .servicesSection {
     padding-top: 3.75rem;
     padding-bottom: 3.75rem;
-    margin-bottom: -1px;
   }
 }
 
