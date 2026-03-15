@@ -398,6 +398,141 @@
   cursor: not-allowed;
 }
 
+/* ─── Step Progress ──────────────────────────────────────────────────────────── */
+.stepProgress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.65rem;
+}
+
+.stepDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(70, 161, 161, 0.2);
+  border: 1.5px solid rgba(70, 161, 161, 0.3);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+.stepDotActive {
+  background: #46a1a1;
+  border-color: #46a1a1;
+  box-shadow: 0 0 8px rgba(70, 161, 161, 0.5);
+  transform: scale(1.2);
+}
+
+.stepLine {
+  height: 1.5px;
+  width: 22px;
+  background: rgba(70, 161, 161, 0.2);
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+}
+
+.stepLineActive {
+  background: #46a1a1;
+}
+
+/* ─── Back Link ──────────────────────────────────────────────────────────────── */
+.backLink {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.78rem;
+  cursor: pointer;
+  padding: 0.5rem 0 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .backLink:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* ─── Review Screen ──────────────────────────────────────────────────────────── */
+.reviewSection {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(70, 161, 161, 0.15);
+  border-radius: 12px;
+  padding: 0.75rem 0.9rem;
+  margin-bottom: 0.55rem;
+}
+
+.reviewSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+}
+
+.reviewSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #46a1a1;
+  font-weight: 600;
+}
+
+.reviewEdit {
+  background: none;
+  border: none;
+  color: rgba(70, 161, 161, 0.7);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .reviewEdit:hover {
+    color: #46a1a1;
+  }
+}
+
+.reviewRows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.reviewRow {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.reviewLabel {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 0.73rem;
+  min-width: 3.5rem;
+  flex-shrink: 0;
+}
+
+.reviewValue {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.83rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.reviewValueMuted {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.83rem;
+  font-style: italic;
+}
+
 /* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .formCard {

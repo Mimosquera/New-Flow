@@ -238,6 +238,38 @@
   cursor: not-allowed;
 }
 
+/* ─── Forgot Password ────────────────────────────────────────────────────────── */
+.forgotLink {
+  display: block;
+  width: 100%;
+  text-align: center;
+  background: none;
+  border: none;
+  color: rgba(70, 161, 161, 0.7);
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.55rem 0 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .forgotLink:hover {
+    color: #46a1a1;
+  }
+}
+
+.resetSentMsg {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem 0.5rem;
+  background: rgba(70, 161, 161, 0.08);
+  border: 1px solid rgba(70, 161, 161, 0.25);
+  border-radius: 10px;
+}
+
 /* ─── Footer Text ────────────────────────────────────────────────────────────── */
 .footerText {
   margin-top: 1rem;
