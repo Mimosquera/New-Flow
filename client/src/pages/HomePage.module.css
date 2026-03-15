@@ -352,7 +352,7 @@
 .servicesSection {
   background:
     linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 13%),
-    linear-gradient(180deg, rgba(5, 45, 65, 0.35) 0%, rgba(5, 60, 82, 0.88) 100%);
+    linear-gradient(180deg, rgba(5, 45, 65, 0.35) 0%, rgba(5, 60, 82, 0.88) 72%, rgba(5, 60, 82, 0.88) 100%);
   padding: 5rem 0;
   border-top: 1px solid rgba(58, 171, 219, 0.4);
   margin-bottom: -1px;
@@ -456,18 +456,20 @@
 
 /* ─── News / Updates Section ────────────────────────────────────────────────── */
 .newsSection {
-  background: linear-gradient(180deg, rgba(5, 60, 82, 0.88) 0%, rgba(5, 50, 72, 0.5) 55%, rgba(3, 18, 30, 0.15) 100%);
+  background:
+    linear-gradient(to bottom, rgb(4, 53, 72) 0px, transparent 3px),
+    linear-gradient(180deg, rgba(5, 60, 82, 0.88) 0%, rgba(5, 60, 82, 0.88) 12%, rgba(5, 50, 72, 0.5) 55%, rgba(3, 18, 30, 0.15) 100%);
   padding: 5rem 0;
   position: relative;
 }
 
 .sectionDivider {
   position: absolute;
-  top: 0;
+  top: -2px;
   left: 21%;
   right: 21%;
-  height: 1px;
-  clip-path: inset(0);
+  height: 4px;
+  clip-path: ellipse(50% 50% at 50% 50%);
   background: linear-gradient(
     to right,
     transparent 0%,
@@ -614,12 +616,12 @@
 /* ─── Accent Divider (between sections, flow element) ───────────────────────── */
 .accentDivider {
   display: block;
-  height: 1px;
+  height: 4px;
   width: 320px;
   position: absolute;
-  top: 0;
+  top: -2px;
   left: calc(50% - 160px);
-  clip-path: inset(0);
+  clip-path: ellipse(50% 50% at 50% 50%);
   background: linear-gradient(
     to right,
     transparent 0%,
@@ -651,20 +653,20 @@
 
 @media (max-width: 767px) {
   .accentDivider {
-    width: 240px;
-    left: calc(50% - 120px);
+    width: 220px;
+    left: calc(50% - 110px);
   }
 }
 
 /* ─── Services → News Accent Divider ───────────────────────────────────────── */
 .serviceNewsAccent {
   display: block;
-  height: 1px;
+  height: 4px;
   width: 320px;
   position: absolute;
-  top: 0;
+  top: -2px;
   left: calc(50% - 160px);
-  clip-path: inset(0);
+  clip-path: ellipse(50% 50% at 50% 50%);
   background: linear-gradient(
     to right,
     transparent 0%,
@@ -696,8 +698,8 @@
 
 @media (max-width: 767px) {
   .serviceNewsAccent {
-    width: 240px;
-    left: calc(50% - 120px);
+    width: 220px;
+    left: calc(50% - 110px);
   }
 }
 
