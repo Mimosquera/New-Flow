@@ -198,7 +198,8 @@ export const ReviewsCarousel = ({ mini = false }) => {
           <GoogleIcon />
           <span>{rating}</span>
           <Stars count={rating} muted />
-          <span>· {reviewCount} reviews on Google</span>
+          <span>·</span>
+          <span className={styles.miniLinkReviews}>{reviewCount} reviews on Google</span>
         </a>
       )}
     </div>

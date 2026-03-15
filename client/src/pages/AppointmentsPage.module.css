@@ -142,7 +142,9 @@
   border-radius: 24px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(58, 171, 219, 0.08);
   overflow: hidden;
-  width: min(480px, 100%);
+  width: fit-content;
+  min-width: min(300px, 100%);
+  max-width: min(400px, 100%);
   margin: 0 auto;
 }
 
@@ -204,7 +206,7 @@
 /* ─── Form Controls ──────────────────────────────────────────────────────────── */
 .formControl,
 .formSelect {
-  width: 100%;
+  width: min(100%, 320px);
   padding: 0.7rem 1rem;
   border: 1.5px solid rgba(58, 171, 219, 0.25);
   border-radius: 10px;
@@ -329,7 +331,8 @@
 .submitButton {
   position: relative;
   overflow: hidden;
-  width: 100%;
+  width: auto;
+  display: block;
   padding: 0.75rem 2rem;
   font-family: 'Raleway', sans-serif;
   font-size: 0.88rem;
@@ -345,7 +348,7 @@
   -webkit-backdrop-filter: blur(12px);
   transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   box-shadow: 0 0 14px rgba(58, 171, 219, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
-  margin-top: 0.75rem;
+  margin: 0.75rem auto 0;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -423,14 +426,15 @@
 /* ─── Back Link ──────────────────────────────────────────────────────────────── */
 .backLink {
   display: block;
-  width: 100%;
+  width: auto;
   text-align: center;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.4);
   font-size: 0.78rem;
   cursor: pointer;
-  padding: 0.5rem 0 0;
+  padding: 0.4rem 0.75rem;
+  margin-top: 0.6rem;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -526,7 +530,8 @@
 @media (max-width: 768px) {
   .formCard {
     border-radius: 20px;
-    width: 100%;
+    min-width: min(300px, 100%);
+    max-width: 100%;
   }
 
   .cardHeader {

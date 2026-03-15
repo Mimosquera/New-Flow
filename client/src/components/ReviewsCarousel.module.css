@@ -6,8 +6,8 @@
 }
 
 .wrapperMini {
-  width: 82%;
-  max-width: 320px;
+  width: 100%;
+  max-width: 210px;
   margin-top: 2.75rem;
 }
 
@@ -237,6 +237,7 @@
 /* ─── Mini Google link ───────────────────────────────────────────────────────── */
 .miniLink {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
@@ -247,6 +248,11 @@
   margin-bottom: 0;
   transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+}
+
+.miniLinkReviews {
+  width: 100%;
+  text-align: center;
 }
 
 @media (hover: hover) {

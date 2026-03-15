@@ -355,9 +355,6 @@ export const AppointmentsPage = () => {
                   >
                     {t('continueBtn')}
                   </button>
-                  <button type="button" className={styles.backLink} onClick={() => goTo(1)}>
-                    ← {t('edit')}
-                  </button>
                 </div>
               </motion.div>
             )}
@@ -445,9 +442,6 @@ export const AppointmentsPage = () => {
                     onClick={() => goTo(4)}
                   >
                     {t('continueBtn')}
-                  </button>
-                  <button type="button" className={styles.backLink} onClick={() => goTo(2)}>
-                    ← {t('edit')}
                   </button>
                 </div>
               </motion.div>
@@ -584,6 +578,15 @@ export const AppointmentsPage = () => {
             )}
           </AnimatePresence>
         </form>
+        {phase > 1 && !success && (
+          <button
+            type="button"
+            className={styles.backLink}
+            onClick={() => goTo(phase - 1)}
+          >
+            ← {t('edit')}
+          </button>
+        )}
         <ReviewsCarousel mini />
       </div>
 
