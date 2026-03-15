@@ -286,7 +286,9 @@
 
 .carouselSlide {
   flex: 0 0 auto;
-  width: clamp(220px, 22vw, 280px);
+  width: fit-content;
+  min-width: 165px;
+  max-width: 270px;
   margin-right: 1rem;
 }
 
@@ -335,7 +337,9 @@
   }
 
   .carouselSlide {
-    width: clamp(200px, 72vw, 260px);
+    width: fit-content;
+    min-width: 155px;
+    max-width: 240px;
     margin-right: 1rem;
   }
 }
@@ -520,7 +524,7 @@
 
 /* Update Card */
 .updateCard {
-  background: linear-gradient(175deg, rgb(5, 10, 18) 0%, rgb(3, 18, 32) 100%);
+  background: linear-gradient(145deg, rgb(3, 22, 38) 0%, rgb(4, 10, 18) 55%, rgb(2, 6, 12) 100%);
   border: 1px solid rgba(58, 171, 219, 0.1);
   border-radius: 10px;
   overflow: hidden;
@@ -851,6 +855,7 @@
     max-width: 1020px;
     margin-left: auto;
     margin-right: auto;
+    justify-content: center;
   }
 }
 

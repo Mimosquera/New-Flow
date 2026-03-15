@@ -95,6 +95,10 @@
   animation-play-state: paused;
 }
 
+.fadeTouched {
+  opacity: 0.78;
+}
+
 @media (hover: hover) {
   .fade:hover {
     opacity: 0.88;
@@ -203,16 +207,8 @@
 .star {
   width: 13px;
   height: 13px;
-  fill: currentColor;
   flex-shrink: 0;
-}
-
-.starFilled {
-  color: #f59e0b;
-}
-
-.starEmpty {
-  color: rgba(255, 255, 255, 0.15);
+  overflow: visible;
 }
 
 .cardMini .star {
@@ -247,7 +243,7 @@
   text-decoration: none;
   color: rgba(255, 255, 255, 0.35);
   font-size: 0.72rem;
-  margin-top: 0.35rem;
+  margin-top: 0.85rem;
   margin-bottom: 0;
   transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;

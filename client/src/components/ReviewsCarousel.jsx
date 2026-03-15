@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   reviews as staticReviews,
@@ -18,22 +18,51 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const Stars = ({ count }) => (
+const STAR_PATH = "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
+
+const STAR_FILLED = '#3aabdb';
+const STAR_EMPTY = 'rgba(255,255,255,0.15)';
+
+const Stars = ({ count, muted = false }) => (
   <div className={styles.stars} aria-label={`${count} out of 5 stars`}>
-    {Array.from({ length: 5 }).map((_, i) => (
-      <svg
-        key={i}
-        className={`${styles.star} ${i < count ? styles.starFilled : styles.starEmpty}`}
-        viewBox="0 0 20 20"
-        aria-hidden="true"
-      >
-        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-      </svg>
-    ))}
+    {Array.from({ length: 5 }).map((_, i) => {
+      if (muted) {
+        const filled = i < Math.floor(count);
+        return (
+          <svg key={i} className={styles.star} viewBox="0 0 20 20" aria-hidden="true">
+            <path
+              d={STAR_PATH}
+              style={{
+                fill: filled ? 'rgba(255,255,255,0.45)' : 'none',
+                stroke: 'rgba(255,255,255,0.3)',
+                strokeWidth: filled ? 0 : 1.2,
+              }}
+            />
+          </svg>
+        );
+      }
+      const isHalf = i === Math.floor(count) && count % 1 >= 0.5;
+      const isFull = i < Math.floor(count);
+      return (
+        <svg key={i} className={styles.star} viewBox="0 0 20 20" aria-hidden="true">
+          {isHalf && (
+            <defs>
+              <clipPath id={`hsc-${i}`}>
+                <rect x="0" y="0" width="10" height="20" />
+              </clipPath>
+            </defs>
+          )}
+          <path d={STAR_PATH} style={{ fill: isFull ? STAR_FILLED : STAR_EMPTY }} />
+          {isHalf && (
+            <path d={STAR_PATH} style={{ fill: STAR_FILLED }} clipPath={`url(#hsc-${i})`} />
+          )}
+        </svg>
+      );
+    })}
   </div>
 );
 
-Stars.propTypes = { count: PropTypes.number.isRequired };
+Stars.propTypes = { count: PropTypes.number.isRequired, muted: PropTypes.bool };
 
 const ReviewCard = ({ review, mini }) => (
   <div className={`${styles.card} ${mini ? styles.cardMini : ''}`}>
@@ -71,6 +100,8 @@ ReviewCard.propTypes = {
 
 export const ReviewsCarousel = ({ mini = false }) => {
   const trackRef = useRef(null);
+  const fadeRef = useRef(null);
+  const resumeTimerRef = useRef(null);
   const [reviews, setReviews] = useState(staticReviews);
   const [rating, setRating] = useState(staticRating);
   const [reviewCount, setReviewCount] = useState(staticCount);
@@ -98,6 +129,27 @@ export const ReviewsCarousel = ({ mini = false }) => {
     return () => observer.disconnect();
   }, []);
 
+  const handleTouchStart = useCallback(() => {
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+      resumeTimerRef.current = null;
+    }
+    if (trackRef.current) trackRef.current.style.animationPlayState = 'paused';
+    fadeRef.current?.classList.add(styles.fadeTouched);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    fadeRef.current?.classList.remove(styles.fadeTouched);
+    resumeTimerRef.current = setTimeout(() => {
+      if (trackRef.current) trackRef.current.style.animationPlayState = '';
+      resumeTimerRef.current = null;
+    }, 180);
+  }, []);
+
+  useEffect(() => () => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  }, []);
+
   const doubled = [...reviews, ...reviews];
 
   return (
@@ -114,13 +166,19 @@ export const ReviewsCarousel = ({ mini = false }) => {
             <GoogleIcon />
             <span className={styles.ratingText}>
               <span className={styles.ratingScore}>{rating}</span>
-              <span className={styles.ratingStars}>★★★★★</span>
+              <Stars count={rating} />
               <span className={styles.ratingCount}>· {reviewCount} reviews</span>
             </span>
           </a>
         </div>
       )}
-      <div className={styles.fade}>
+      <div
+        ref={fadeRef}
+        className={styles.fade}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
+      >
         <div
           ref={trackRef}
           className={`${styles.track} ${mini ? styles.trackMini : ''}`}
@@ -138,7 +196,9 @@ export const ReviewsCarousel = ({ mini = false }) => {
           className={styles.miniLink}
         >
           <GoogleIcon />
-          <span>{rating} ★★★★★ · {reviewCount} reviews on Google</span>
+          <span>{rating}</span>
+          <Stars count={rating} muted />
+          <span>· {reviewCount} reviews on Google</span>
         </a>
       )}
     </div>

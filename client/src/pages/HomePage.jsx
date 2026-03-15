@@ -110,6 +110,7 @@ NewsCard.propTypes = {
 export const HomePage = ({ onNavigateToBooking }) => {
   const navigate = useNavigate();
   const { t, language } = useTranslation();
+  const pageSize = window.innerWidth < 768 ? 2 : 4;
 
   const [services, setServices] = useState([]);
   const [servicesLoading, setServicesLoading] = useState(true);
@@ -146,7 +147,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   useEffect(() => () => stopAutoScroll(), [stopAutoScroll]);
 
   const [news, setNews] = useState([]);
-  const [displayCount, setDisplayCount] = useState(4);
+  const [displayCount, setDisplayCount] = useState(pageSize);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selectedUpdateIndex, setSelectedUpdateIndex] = useState(0);
@@ -208,13 +209,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
     hapticLight();
     setViewMorePending(true);
     setTimeout(() => {
-      setDisplayCount(prev => prev + 4);
+      const increment = window.innerWidth < 768 ? 2 : 4;
+      setDisplayCount(prev => prev + increment);
       setViewMorePending(false);
     }, 380);
   };
 
   const handleShowLess = () => {
-    setDisplayCount(4);
+    setDisplayCount(pageSize);
     setTimeout(() => {
       updatesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
@@ -566,7 +568,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
           >
           {loading || translating ? (
             <div className="row g-3">
-              {Array.from({ length: 4 }).map((_, i) => (
+              {Array.from({ length: pageSize }).map((_, i) => (
                 <div key={i} className="col-6 col-lg-3 mb-2" style={{ '--sk-delay': `${i * 0.18}s` }}>
                   <div className={styles.skeletonCard}>
                     <div className={`${styles.skeleton} ${styles.skeletonImage}`} />
@@ -601,7 +603,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
                 </AnimatePresence>
-                {viewMorePending && Array.from({ length: 4 }).map((_, i) => (
+                {viewMorePending && Array.from({ length: pageSize }).map((_, i) => (
                   <motion.div
                     key={`skeleton-${i}`}
                     className="col-6 col-lg-3 mb-2"
@@ -636,7 +638,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     {t('viewMore')}
                   </button>
                 )}
-                {displayCount > 4 && (
+                {displayCount > pageSize && (
                   <button className={styles.fancyButtonOutline} onClick={() => { hapticLight(); handleShowLess(); }}>
                     {t('showLess')}
                   </button>
@@ -759,14 +761,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
+            <motion.div className="col-6 col-md-auto mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
                 <div className={styles.contactIcon}><Clock size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('hours')}</h5>
                 <p className={styles.contactText}>{t('monSun')}: 9am – 7pm</p>
               </div>
             </motion.div>
-            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
+            <motion.div className="col-6 col-md-auto mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
                 <div className={styles.contactIcon}><Phone size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('phone')}</h5>
@@ -777,7 +779,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 </p>
               </div>
             </motion.div>
-            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
+            <motion.div className="col-6 col-md-auto mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
                 <div className={styles.contactIcon}><AtSign size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('followUs')}</h5>
