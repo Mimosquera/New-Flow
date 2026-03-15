@@ -9,6 +9,7 @@ export const translations = {
     heroSubtitle: 'Premium Barber & Hair Salon',
     heroDescription: 'Experience excellence in grooming. Your style, our craft.',
     requestAppointment: 'Request Appointment',
+    requestShort: 'Request',
     
     // Services Section
     servicesTitle: 'Our Services',
@@ -418,6 +419,7 @@ export const translations = {
     heroSubtitle: 'Barbería y Salón de Peluquería Premium',
     heroDescription: 'Experimenta la excelencia en el cuidado personal. Tu estilo, nuestra pasión.',
     requestAppointment: 'Solicitar Cita',
+    requestShort: 'Solicitar',
     
     // Services Section
     servicesTitle: 'Nuestros Servicios',

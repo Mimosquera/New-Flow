@@ -8,6 +8,7 @@ import { getToken } from '../utils/tokenUtils.js';
 import { hapticLight, hapticMedium, hapticSuccess } from '../utils/haptics.js';
 import { updateService, serviceService, SERVER_BASE_URL } from '../services/api.js';
 import { UpdateModal } from '../components/UpdateModal.jsx';
+import { HeroParticles } from '../components/HeroParticles.jsx';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import { ScrollToTop } from '../components/ScrollToTop.jsx';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -208,6 +209,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   return (
     <div className={styles.homePage}>
+      <HeroParticles />
       {/* Navigation Bar */}
       <motion.nav
         className={styles.navbar}
@@ -402,7 +404,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                               handleRequestAppointment(service);
                             }}
                           >
-                            {t('requestAppointment')}
+                            {t('requestShort')}
                           </button>
                         </motion.div>
                       )}
