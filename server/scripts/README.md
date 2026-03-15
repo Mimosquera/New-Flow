@@ -1,59 +1,59 @@
-# Server Utility Scripts
+# Server Scripts
 
-This folder contains utility scripts for database setup and maintenance.
+Utility scripts for database setup. These run once during environment setup, not at runtime.
+
+---
 
 ## Active Scripts
 
 ### init-db.js
-Initializes the database by creating the salon_db database. Run this first when setting up a new development environment.
 
-**Usage:**
+Creates the database if it does not exist. Run this first when setting up a new environment.
+
 ```bash
 node scripts/init-db.js
 ```
 
 ### create-admin.js
-Creates or updates an admin user account.
 
-**Usage:**
+Creates or updates the admin employee account. Pass credentials via environment variables.
+
 ```bash
-# With environment variables (recommended)
 ADMIN_EMAIL="admin@example.com" ADMIN_PASSWORD="secure_password" node scripts/create-admin.js
-
-# Using defaults (development only)
-node scripts/create-admin.js
 ```
 
-**Note:** The script will display the password after creation. Only use default credentials in development.
+Defaults are present for local development only. Do not use defaults in production.
 
 ### seeds.js
-Populates the database with sample data for development/testing.
 
-**Usage:**
+Populates the database with sample data. Clears existing data first. Development only.
+
 ```bash
 node scripts/seeds.js
 ```
 
-**Warning:** This script clears existing data before seeding. Only use in development.
+### run-migration.js
+
+Runs pending schema migrations. Use this to apply database changes in production.
+
+```bash
+node scripts/run-migration.js
+```
 
 ---
 
 ## Archived Scripts
 
-The `archive/` folder contains one-off migration scripts that have already been executed:
+`archive/` contains one-off scripts that have already been executed against production. They are kept for reference only and should not be run again.
 
-- `sync-db.js` - Database schema synchronization (superseded by migrations)
-- `test-login.js` - Login verification tool (development/debugging)
-- `add-cloudinary-column.js` - Added Cloudinary support (already executed)
-
-These scripts are kept for reference and should not be run again.
+- `sync-db.js` — early schema sync, superseded by migrations
+- `test-login.js` — login verification for debugging
+- `add-cloudinary-column.js` — added `cloudinary_id` to the updates table
 
 ---
 
 ## Notes
 
-- Scripts are for setup and maintenance, not runtime
-- Always use environment variables for credentials
-- Never commit credentials to version control
-- For production setup, use DATABASE_URL environment variable (Heroku)
-- For local development, use individual DB_* environment variables
+- Use `DATABASE_URL` for Heroku/production connections; individual `DB_*` vars for local development.
+- Never commit credentials. Pass them via environment variables.
+- Never run `seeds.js` in production — it destroys existing data.

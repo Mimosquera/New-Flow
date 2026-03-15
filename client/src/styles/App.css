@@ -48,10 +48,9 @@ button svg, a svg {
   z-index: 9999;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  border: 1px solid rgba(70, 161, 161, 0.25);
-  background: rgba(5, 45, 63, 0.55);
-  color: rgba(255, 255, 255, 0.55);
+  border: none;
+  background: transparent;
+  color: rgba(70, 161, 161, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -59,22 +58,27 @@ button svg, a svg {
   opacity: 0;
   transform: translateY(10px);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease, color 0.2s ease;
+  filter: drop-shadow(0 0 0px rgba(70, 161, 161, 0));
 }
 
 .scroll-to-top-btn.visible {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+  animation: scrollBtnGlow 2.8s ease-in-out infinite;
+}
+
+@keyframes scrollBtnGlow {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(70, 161, 161, 0.4)); color: rgba(70, 161, 161, 0.7); }
+  50%       { filter: drop-shadow(0 0 10px rgba(70, 161, 161, 1)) drop-shadow(0 0 20px rgba(70, 161, 161, 0.6)); color: #fff; }
 }
 
 @media (hover: hover) {
   .scroll-to-top-btn:hover {
-    color: #46a1a1;
-    border-color: rgba(70, 161, 161, 0.5);
-    background: rgba(5, 45, 63, 0.75);
+    color: #fff;
+    animation: none;
+    filter: drop-shadow(0 0 10px rgba(70, 161, 161, 1)) drop-shadow(0 0 20px rgba(70, 161, 161, 0.6));
   }
 }
 
