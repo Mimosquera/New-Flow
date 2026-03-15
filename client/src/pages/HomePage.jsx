@@ -30,6 +30,79 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } },
 };
 
+const NewsCard = ({ article, onClick }) => {
+  const [imgLoaded, setImgLoaded] = useState(!article.media_url);
+  const src = article.media_url
+    ? (article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`)
+    : null;
+
+  return (
+    <motion.div
+      className={styles.updateCard}
+      whileHover={{ scale: 1.025 }}
+      whileTap={{ scale: 0.975 }}
+      onClick={onClick}
+    >
+      {src && (
+        <div className={styles.updateCardMedia}>
+          {!imgLoaded && (
+            <div
+              className={`${styles.skeleton} ${styles.skeletonImage}`}
+              style={{ position: 'absolute', inset: 0, height: '100%', zIndex: 1 }}
+            />
+          )}
+          {article.media_type === 'image' ? (
+            <img
+              src={src}
+              alt={article.title}
+              loading="lazy"
+              decoding="async"
+              className={styles.updateCardImage}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgLoaded(true)}
+              style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+            />
+          ) : (
+            <video
+              src={src}
+              className={styles.updateCardImage}
+              playsInline
+              disablePictureInPicture
+              controls={false}
+              onLoadedData={() => setImgLoaded(true)}
+              onError={() => setImgLoaded(true)}
+              style={{ opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+            />
+          )}
+          <div className={styles.updateCardMediaOverlay} />
+        </div>
+      )}
+      <div className={styles.updateCardBody}>
+        <h5 className={styles.updateCardTitle}>{article.title}</h5>
+        <p className={styles.updateCardContent}>
+          {article.content.length > 80 ? article.content.substring(0, 80) + '…' : article.content}
+        </p>
+        <div className={styles.updateCardMeta}>
+          <span>{article.author}</span>
+          <span>{new Date(article.date).toLocaleDateString()}</span>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+NewsCard.propTypes = {
+  article: PropTypes.shape({
+    media_url: PropTypes.string,
+    media_type: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    author: PropTypes.string,
+    date: PropTypes.string,
+  }).isRequired,
+  onClick: PropTypes.func.isRequired,
+};
+
 export const HomePage = ({ onNavigateToBooking }) => {
   const navigate = useNavigate();
   const { t, language } = useTranslation();
@@ -543,45 +616,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     className="col-6 col-lg-3 mb-2"
                     exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.25 } }}
                   >
-                    <motion.div
-                      className={styles.updateCard}
-                      whileHover={{ scale: 1.025 }}
-                      whileTap={{ scale: 0.975 }}
-                      onClick={() => handleUpdateClick(article)}
-                    >
-                      {article.media_url && (
-                        <div className={styles.updateCardMedia}>
-                          {article.media_type === 'image' ? (
-                            <img
-                              src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
-                              alt={article.title}
-                              loading="lazy"
-                              decoding="async"
-                              className={styles.updateCardImage}
-                            />
-                          ) : (
-                            <video
-                              src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
-                              className={styles.updateCardImage}
-                              playsInline
-                              disablePictureInPicture
-                              controls={false}
-                            />
-                          )}
-                          <div className={styles.updateCardMediaOverlay} />
-                        </div>
-                      )}
-                      <div className={styles.updateCardBody}>
-                        <h5 className={styles.updateCardTitle}>{article.title}</h5>
-                        <p className={styles.updateCardContent}>
-                          {article.content.length > 80 ? article.content.substring(0, 80) + '…' : article.content}
-                        </p>
-                        <div className={styles.updateCardMeta}>
-                          <span>{article.author}</span>
-                          <span>{new Date(article.date).toLocaleDateString()}</span>
-                        </div>
-                      </div>
-                    </motion.div>
+                    <NewsCard article={article} onClick={() => handleUpdateClick(article)} />
                   </motion.div>
                 ))}
                 </AnimatePresence>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -109,12 +109,14 @@ const mediaUrl = (url) => {
 export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [fullscreen, setFullscreen] = useState(false);
+  const [direction, setDirection] = useState(0);
   const { t, language } = useTranslation();
 
   useEffect(() => {
     if (show) {
       setCurrentIndex(initialIndex);
       setFullscreen(false);
+      setDirection(0);
     }
   }, [show, initialIndex]);
 
@@ -127,10 +129,12 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   }, []);
 
   const goPrev = useCallback(() => {
+    setDirection(-1);
     goTo((currentIndex - 1 + updates.length) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
   const goNext = useCallback(() => {
+    setDirection(1);
     goTo((currentIndex + 1) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
@@ -205,8 +209,19 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
               background: 'linear-gradient(180deg, rgba(5,45,63,0.97) 0%, rgba(3,28,40,0.99) 100%)',
               position: 'relative',
             }}>
+              <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentIndex}
+                custom={direction}
+                variants={{
+                  enter: (dir) => ({ opacity: 0, x: dir * 60 }),
+                  center: { opacity: 1, x: 0 },
+                  exit: (dir) => ({ opacity: 0, x: dir * -60 }),
+                }}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
                 drag={showNav ? 'x' : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.12}
@@ -227,13 +242,13 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                           src={src}
                           alt={update.title}
                           className="img-fluid w-100"
-                          style={{ maxHeight: '60vh', objectFit: 'contain', borderRadius: '12px', border: '1px solid rgba(70,161,161,0.15)' }}
+                          style={{ maxHeight: '60vh', objectFit: 'contain', borderRadius: '12px' }}
                         />
                       ) : (
                         <video
                           src={src}
                           className="w-100"
-                          style={{ maxHeight: '60vh', borderRadius: '12px', border: '1px solid rgba(70,161,161,0.15)' }}
+                          style={{ maxHeight: '60vh', borderRadius: '12px' }}
                           controls
                         />
                       )}
@@ -250,6 +265,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                     </small>
                   </div>
               </motion.div>
+              </AnimatePresence>
             </div>
 
             {/* Footer */}

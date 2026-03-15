@@ -14,6 +14,119 @@ const INITIAL_FETCH = 5;
 const INITIAL_DISPLAY = 4;
 const LOAD_MORE_BATCH = 8;
 
+const cardStyle = {
+  background: 'rgba(5, 45, 63, 0.55)',
+  backdropFilter: 'blur(18px)',
+  WebkitBackdropFilter: 'blur(18px)',
+  border: '1px solid rgba(70, 161, 161, 0.2)',
+  borderRadius: '18px',
+  overflow: 'hidden',
+  marginBottom: '0.75rem',
+};
+
+const cardTitleStyle = {
+  color: '#fff',
+  fontWeight: '700',
+  fontSize: '0.9rem',
+  letterSpacing: '-0.01em',
+  cursor: 'pointer',
+  flex: 1,
+  margin: 0,
+};
+
+const cardTextStyle = {
+  color: 'rgba(255,255,255,0.65)',
+  fontSize: '0.82rem',
+  lineHeight: '1.45',
+  cursor: 'pointer',
+  margin: 0,
+};
+
+const cardMetaStyle = {
+  fontSize: '0.7rem',
+  color: '#46a1a1',
+  fontWeight: '500',
+  letterSpacing: '0.025em',
+  borderTop: '1px solid rgba(70,161,161,0.12)',
+  paddingTop: '0.4rem',
+  marginTop: '0.25rem',
+};
+
+const PostCard = ({ update, onOpen, onDelete, canDelete, t }) => {
+  const [imgLoaded, setImgLoaded] = useState(!update.media_url);
+  const src = update.media_url
+    ? (update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`)
+    : null;
+
+  return (
+    <div style={{ ...cardStyle, marginBottom: 0, height: '100%' }}>
+      <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="d-flex justify-content-between align-items-start mb-1">
+          <h6 style={cardTitleStyle} onClick={onOpen}>{update.title}</h6>
+          {canDelete && (
+            <button
+              className="btn btn-sm"
+              style={{
+                background: 'rgba(220, 53, 69, 0.2)',
+                color: '#ff7b7b',
+                border: '1px solid rgba(220, 53, 69, 0.4)',
+                borderRadius: '8px',
+                padding: '0.15rem 0.5rem',
+                fontSize: '0.7rem',
+                fontWeight: '600',
+                flexShrink: 0,
+                marginLeft: '0.5rem',
+              }}
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            >
+              {t('delete')}
+            </button>
+          )}
+        </div>
+
+        {src && (
+          <div
+            className="mt-3 mb-2"
+            style={{ cursor: 'pointer', position: 'relative', borderRadius: '12px', overflow: 'hidden' }}
+            onClick={onOpen}
+          >
+            {!imgLoaded && (
+              <div className="sk" style={{ position: 'absolute', inset: 0, height: '100%', borderRadius: '12px', zIndex: 1 }} />
+            )}
+            {update.media_type === 'image' ? (
+              <img
+                src={src}
+                alt={update.title}
+                loading="lazy"
+                decoding="async"
+                className="img-fluid rounded"
+                style={{ maxHeight: '200px', width: '100%', objectFit: 'cover', borderRadius: '12px', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+                onLoad={() => setImgLoaded(true)}
+                onError={() => setImgLoaded(true)}
+              />
+            ) : (
+              <video
+                src={src}
+                className="w-100"
+                style={{ maxHeight: '200px', objectFit: 'cover', borderRadius: '12px', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+                onLoadedData={() => setImgLoaded(true)}
+                onError={() => setImgLoaded(true)}
+              />
+            )}
+          </div>
+        )}
+
+        <p style={cardTextStyle} onClick={onOpen}>
+          {update.content.length > 150 ? update.content.substring(0, 150) + '...' : update.content}
+        </p>
+        <div style={cardMetaStyle}>
+          {new Date(update.date).toLocaleDateString()} · {update.author}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const UpdatePoster = () => {
   const { t, language } = useTranslation();
   const [updates, setUpdates] = useState([]);
@@ -173,44 +286,6 @@ export const UpdatePoster = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const cardStyle = {
-    background: 'rgba(5, 45, 63, 0.55)',
-    backdropFilter: 'blur(18px)',
-    WebkitBackdropFilter: 'blur(18px)',
-    border: '1px solid rgba(70, 161, 161, 0.2)',
-    borderRadius: '18px',
-    overflow: 'hidden',
-    marginBottom: '0.75rem',
-  };
-
-  const cardTitleStyle = {
-    color: '#fff',
-    fontWeight: '700',
-    fontSize: '0.9rem',
-    letterSpacing: '-0.01em',
-    cursor: 'pointer',
-    flex: 1,
-    margin: 0,
-  };
-
-  const cardTextStyle = {
-    color: 'rgba(255,255,255,0.65)',
-    fontSize: '0.82rem',
-    lineHeight: '1.45',
-    cursor: 'pointer',
-    margin: 0,
-  };
-
-  const cardMetaStyle = {
-    fontSize: '0.7rem',
-    color: '#46a1a1',
-    fontWeight: '500',
-    letterSpacing: '0.025em',
-    borderTop: '1px solid rgba(70,161,161,0.12)',
-    paddingTop: '0.4rem',
-    marginTop: '0.25rem',
-  };
 
   return (
     <div className="update-poster">
@@ -422,73 +497,13 @@ export const UpdatePoster = () => {
 
                   return (
                   <div key={update.id} className="col-6">
-                  <div style={{ ...cardStyle, marginBottom: 0, height: '100%' }}>
-                    <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                      <div className="d-flex justify-content-between align-items-start mb-1">
-                        <h6
-                          style={cardTitleStyle}
-                          onClick={() => handleUpdateClick(update)}
-                        >
-                          {update.title}
-                        </h6>
-                        {canDelete && (
-                        <button
-                          className="btn btn-sm"
-                          style={{
-                            background: 'rgba(220, 53, 69, 0.2)',
-                            color: '#ff7b7b',
-                            border: '1px solid rgba(220, 53, 69, 0.4)',
-                            borderRadius: '8px',
-                            padding: '0.15rem 0.5rem',
-                            fontSize: '0.7rem',
-                            fontWeight: '600',
-                            flexShrink: 0,
-                            marginLeft: '0.5rem',
-                          }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(update.id);
-                          }}
-                        >
-                          {t('delete')}
-                        </button>
-                        )}
-                      </div>
-
-                      {update.media_url && (
-                        <div
-                          className="mt-3 mb-2"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => handleUpdateClick(update)}
-                        >
-                          {update.media_type === 'image' ? (
-                            <img
-                              src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                              alt={update.title}
-                              className="img-fluid rounded"
-                              style={{ maxHeight: '200px', width: '100%', objectFit: 'cover', borderRadius: '12px' }}
-                            />
-                          ) : (
-                            <video
-                              src={update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`}
-                              className="w-100"
-                              style={{ maxHeight: '200px', objectFit: 'cover', borderRadius: '12px' }}
-                            />
-                          )}
-                        </div>
-                      )}
-
-                      <p
-                        style={cardTextStyle}
-                        onClick={() => handleUpdateClick(update)}
-                      >
-                        {update.content.length > 150 ? update.content.substring(0, 150) + '...' : update.content}
-                      </p>
-                      <div style={cardMetaStyle}>
-                        {new Date(update.date).toLocaleDateString()} · {update.author}
-                      </div>
-                    </div>
-                  </div>
+                    <PostCard
+                      update={update}
+                      onOpen={() => handleUpdateClick(update)}
+                      onDelete={() => handleDelete(update.id)}
+                      canDelete={canDelete}
+                      t={t}
+                    />
                   </div>
                   );
                 })}
