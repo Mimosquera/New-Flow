@@ -267,6 +267,7 @@
 .carouselViewport {
   overflow: hidden;
   cursor: grab;
+  touch-action: pan-y;
 }
 
 .carouselViewport:active {

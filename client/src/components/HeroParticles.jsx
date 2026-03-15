@@ -146,10 +146,17 @@ export const HeroParticles = () => {
     init();
     tick();
 
-    const ro = new ResizeObserver(resize);
+    let resizeTimer;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 80);
+    };
+
+    const ro = new ResizeObserver(debouncedResize);
     ro.observe(canvas.parentElement);
     return () => {
       cancelAnimationFrame(rafId);
+      clearTimeout(resizeTimer);
       ro.disconnect();
     };
   }, []);
@@ -163,7 +170,7 @@ export const HeroParticles = () => {
         left: 0,
         pointerEvents: 'none',
         zIndex: 9999,
-        mixBlendMode: 'screen',
+        willChange: 'transform',
       }}
     />
   );
