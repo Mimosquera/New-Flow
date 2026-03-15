@@ -5,19 +5,29 @@ const RATE_LIMIT_STATUS = 429;
 const ADMIN_AUTHOR = 'Admin';
 const REQUEST_DELAY_MS = 350;
 const STORAGE_KEY = 'nf_translation_cache';
+const RL_KEY = 'nf_rl_until';
 const CACHE_TTL_MS = 48 * 60 * 60 * 1000;
+const RL_TTL_MS = 24 * 60 * 60 * 1000;
 
 const translationCache = new Map();
 
 // Deduplicates concurrent requests for the same text
 const pendingPromises = new Map();
 
-// Circuit breaker — one 429 silences all API calls for this browser session.
-// Persisted in sessionStorage so page refreshes within the same session skip the API entirely.
-// localStorage cache ensures subsequent sessions never reach the API once translations are stored.
-let rateLimited = (() => {
-  try { return sessionStorage.getItem('nf_rl') === '1'; } catch { return false; }
-})();
+// Circuit breaker — one 429 silences all API calls for 24 hours across all tabs/sessions.
+// Persisted in localStorage with a timestamp so new tabs and page refreshes stay silent.
+const isRateLimitActive = () => {
+  try {
+    const until = parseInt(localStorage.getItem(RL_KEY) || '0', 10);
+    return Date.now() < until;
+  } catch { return false; }
+};
+
+const setRateLimited = () => {
+  try { localStorage.setItem(RL_KEY, String(Date.now() + RL_TTL_MS)); } catch {}
+};
+
+let rateLimited = isRateLimitActive();
 
 const loadCache = () => {
   try {
@@ -68,7 +78,7 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
           const data = await response.json();
           if (data.responseStatus === RATE_LIMIT_STATUS) {
             rateLimited = true;
-            try { sessionStorage.setItem('nf_rl', '1'); } catch {}
+            setRateLimited();
           } else if (data.responseStatus === SUCCESS_STATUS && data?.responseData?.translatedText) {
             result = data.responseData.translatedText;
             translationCache.set(cacheKey, result);
@@ -76,7 +86,7 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
           }
         } else if (response.status === RATE_LIMIT_STATUS) {
           rateLimited = true;
-          try { sessionStorage.setItem('nf_rl', '1'); } catch {}
+          setRateLimited();
         }
       } catch {}
 
@@ -109,7 +119,7 @@ export const translateObject = async (obj, fields, targetLang, sourceLang = DEFA
 export const clearTranslationCache = () => {
   translationCache.clear();
   rateLimited = false;
-  try { localStorage.removeItem(STORAGE_KEY); sessionStorage.removeItem('nf_rl'); } catch {}
+  try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(RL_KEY); } catch {}
 };
 
 export const getCacheSize = () => translationCache.size;
