@@ -1,138 +1,231 @@
-/* Page Container */
+/* ─── Page ───────────────────────────────────────────────────────────────────── */
 .pageContainer {
-  min-height: 100vh;
+  height: 100svh;
   background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 45, 63) 100%);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem 1rem;
-  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 @supports (height: 100dvh) {
   .pageContainer {
-    min-height: 100dvh;
+    height: 100dvh;
   }
 }
 
-.contentWrapper {
-  width: 100%;
-  max-width: 420px;
+/* ─── Navbar ─────────────────────────────────────────────────────────────────── */
+.navbar {
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.97) 0%, rgba(5, 45, 63, 0.97) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(70, 161, 161, 0.2);
+  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
+  padding: calc(env(safe-area-inset-top, 0px) + 0.5rem) 0 0.5rem;
 }
 
+.navbarInner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-/* Form Card */
+.navLogoBtn {
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0.3rem;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .navLogoBtn:hover {
+    opacity: 0.75;
+  }
+}
+
+.navLogo {
+  height: clamp(22px, 5vw, 30px);
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ─── Content ────────────────────────────────────────────────────────────────── */
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.contentWrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────────── */
+.footer {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 0.75rem 0 calc(env(safe-area-inset-bottom, 0px) + 1rem);
+}
+
+.footerLogo {
+  max-width: 120px;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ─── Form Card ──────────────────────────────────────────────────────────────── */
 .formCard {
-  background: rgba(5, 45, 63, 0.55);
+  background: rgba(5, 45, 63, 0.5);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(70, 161, 161, 0.25);
-  border-radius: 20px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(70, 161, 161, 0.1);
+  border: 1.5px solid rgba(70, 161, 161, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(70, 161, 161, 0.08);
   overflow: hidden;
+  width: min(420px, 100%);
 }
 
-/* Card Header */
+/* ─── Card Header ────────────────────────────────────────────────────────────── */
 .cardHeader {
-  background: linear-gradient(135deg, rgb(5, 45, 63) 0%, rgb(3, 35, 50) 100%);
-  padding: 1.75rem 2rem;
+  background: linear-gradient(135deg, rgba(5, 45, 63, 0.9) 0%, rgba(3, 35, 50, 0.95) 100%);
+  padding: 1.25rem 1.5rem 1.1rem;
   text-align: center;
-  margin: 0;
-  border: none;
-  outline: none;
+  border-bottom: 1px solid rgba(70, 161, 161, 0.18);
 }
 
 .cardTitle {
-  color: white;
+  color: #fff;
   font-family: 'Oswald', sans-serif;
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   font-weight: 600;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Card Body */
+/* ─── Card Body ──────────────────────────────────────────────────────────────── */
 .cardBody {
-  padding: 2rem;
-  background: transparent;
+  padding: 1.25rem 1.5rem 1rem;
 }
 
-/* Form Groups */
+/* ─── Form Groups ────────────────────────────────────────────────────────────── */
 .formGroup {
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .formLabel {
   display: block;
   font-weight: 600;
   color: #46a1a1;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-/* Form Controls */
+/* ─── Form Controls ──────────────────────────────────────────────────────────── */
 .formInput {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1.5px solid rgba(70, 161, 161, 0.3);
+  padding: 0.7rem 1rem;
+  border: 1.5px solid rgba(70, 161, 161, 0.25);
   border-radius: 10px;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  background: rgba(0, 0, 0, 0.3);
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  background: rgba(0, 0, 0, 0.28);
+  color: rgba(255, 255, 255, 0.88);
   font-family: inherit;
+  font-weight: 400;
+}
+
+.formInput::placeholder {
+  color: rgba(255, 255, 255, 0.28);
 }
 
 .formInput:focus {
   outline: none;
-  border-color: #46a1a1;
-  background: rgba(0, 0, 0, 0.45);
-  box-shadow: 0 0 0 3px rgba(70, 161, 161, 0.2), 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(70, 161, 161, 0.7);
+  background: rgba(0, 0, 0, 0.42);
+  box-shadow: 0 0 0 3px rgba(70, 161, 161, 0.14);
   transform: translateY(-1px);
   color: #fff;
 }
 
 @media (hover: hover) {
   .formInput:hover:not(:focus) {
-    border-color: rgba(70, 161, 161, 0.55);
+    border-color: rgba(70, 161, 161, 0.45);
   }
 }
 
-.formInput::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+.formInput:-webkit-autofill,
+.formInput:-webkit-autofill:hover,
+.formInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px rgba(5, 45, 63, 0.9) inset;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.9);
+  transition: background-color 9999s ease-in-out 0s;
 }
 
-/* Submit Button */
+/* ─── Submit Button ──────────────────────────────────────────────────────────── */
 .submitButton {
+  position: relative;
+  overflow: hidden;
   width: 100%;
-  padding: 0.85rem 2rem;
+  padding: 0.75rem 2rem;
   font-family: 'Oswald', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: white;
-  background: rgba(70, 161, 161, 0.15);
-  border: 1.5px solid rgba(70, 161, 161, 0.55);
+  color: #fff;
+  background: rgba(70, 161, 161, 0.12);
+  border: 1.5px solid rgba(70, 161, 161, 0.5);
   border-radius: 50px;
   cursor: pointer;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-  box-shadow: 0 0 14px rgba(70, 161, 161, 0.12), 0 4px 16px rgba(0, 0, 0, 0.3);
-  margin-top: 0.5rem;
+  box-shadow: 0 0 14px rgba(70, 161, 161, 0.1), 0 4px 16px rgba(0, 0, 0, 0.3);
+  margin-top: 0.75rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.submitButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  transition: left 0.6s ease;
+  pointer-events: none;
 }
 
 @media (hover: hover) {
   .submitButton:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(70, 161, 161, 0.35);
-    background: #46a1a1;
-    border-color: #46a1a1;
+    background: rgba(70, 161, 161, 0.22);
+    border-color: rgba(70, 161, 161, 0.8);
+    box-shadow: 0 0 22px rgba(70, 161, 161, 0.3), 0 6px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  .submitButton:hover:not(:disabled)::after {
+    left: 150%;
   }
 }
 
@@ -141,88 +234,28 @@
 }
 
 .submitButton:disabled {
-  opacity: 0.6;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
-/* Footer Text */
+/* ─── Footer Text ────────────────────────────────────────────────────────────── */
 .footerText {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.82rem;
   font-style: italic;
 }
 
-/* Action Buttons Container */
-.actionButtons {
-  margin-top: 1.25rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-/* Back Button */
-.backButton {
-  padding: 0.45rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, rgba(70, 161, 161, 0.1) 0%, rgba(70, 161, 161, 0.05) 100%);
-  color: white;
-  border: 2px solid rgba(70, 161, 161, 0.6);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.backButton span {
-  font-size: 0.95rem;
-  transition: transform 0.3s ease;
-  vertical-align: middle;
-  display: inline-block;
-}
-
-@media (hover: hover) {
-  .backButton:hover {
-    background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
-    border-color: #46a1a1;
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(70, 161, 161, 0.4);
-  }
-
-  .backButton:hover span {
-    transform: translateX(-3px);
-  }
-}
-
-.backButton:active {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(70, 161, 161, 0.3);
-}
-
-/* Responsive */
+/* ─── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .pageContainer {
-    padding: 1.5rem 1rem;
-  }
-
-  .contentWrapper {
-    max-width: 100%;
+  .formCard {
+    border-radius: 20px;
+    width: 100%;
   }
 
   .cardHeader {
-    padding: 1.5rem 1.5rem;
+    padding: 1rem 1.25rem 0.9rem;
   }
 
   .cardTitle {
@@ -230,59 +263,25 @@
   }
 
   .cardBody {
-    padding: 1.5rem;
+    padding: 1rem 1rem 0.85rem;
   }
 
   .formGroup {
-    margin-bottom: 1rem;
-  }
-
-  .formLabel {
-    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
   }
 
   .formInput {
-    padding: 0.65rem 0.85rem;
-    font-size: 0.9rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.86rem;
   }
 
   .submitButton {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-  }
-
-  .backButton {
-    padding: 0.35rem 0.85rem;
-    font-size: 0.7rem;
-    border-radius: 10px;
-  }
-
-  .backButton span {
+    padding: 0.65rem 1.5rem;
     font-size: 0.85rem;
-    vertical-align: middle;
-    display: inline-block;
-    line-height: 1;
-  }
-}
-
-@media (max-width: 400px) {
-  .cardHeader {
-    padding: 1.25rem 1rem;
+    margin-top: 0.5rem;
   }
 
-  .cardTitle {
-    font-size: 1.2rem;
-  }
-
-  .cardBody {
-    padding: 1.25rem;
-  }
-
-  .formInput {
-    padding: 0.6rem 0.75rem;
-  }
-
-  .submitButton {
-    padding: 0.7rem 1.25rem;
+  .footerLogo {
+    max-width: 80px;
   }
 }
