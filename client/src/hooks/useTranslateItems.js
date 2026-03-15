@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { translateObject } from '../services/translationService.js';
-import { detectLang } from '../utils/languageDetection.js';
 
 export const useTranslateItems = (items, fields, language) => {
   const [translated, setTranslated] = useState(items);
@@ -12,20 +11,19 @@ export const useTranslateItems = (items, fields, language) => {
       return;
     }
 
-    const targetLang = language === 'es' ? 'es' : 'en';
+    // DB content is always English; only translate when switching to Spanish.
+    if (language !== 'es') {
+      setTranslated(items);
+      return;
+    }
+
     let cancelled = false;
 
     const run = async () => {
       setTranslating(true);
       try {
         const result = await Promise.all(
-          items.map(item => {
-            const sourceLang = item.language || detectLang(fields.map(f => item[f] || '').join(' '));
-            if (sourceLang !== targetLang) {
-              return translateObject(item, fields, targetLang, sourceLang);
-            }
-            return item;
-          })
+          items.map(item => translateObject(item, fields, 'es'))
         );
         if (!cancelled) setTranslated(result);
       } catch {
