@@ -27,13 +27,13 @@ export const AvailabilityManager = () => {
   const { t } = useTranslation();
 
   const DAYS_OF_WEEK = useMemo(() => [
-    { value: 0, label: t('sundays') || 'Sundays', short: (t('sundays') || 'S')[0].toUpperCase() },
-    { value: 1, label: t('mondays') || 'Mondays', short: (t('mondays') || 'M')[0].toUpperCase() },
-    { value: 2, label: t('tuesdays') || 'Tuesdays', short: (t('tuesdays') || 'T')[0].toUpperCase() },
-    { value: 3, label: t('wednesdays') || 'Wednesdays', short: (t('wednesdays') || 'W')[0].toUpperCase() },
-    { value: 4, label: t('thursdays') || 'Thursdays', short: (t('thursdays') || 'T')[0].toUpperCase() },
-    { value: 5, label: t('fridays') || 'Fridays', short: (t('fridays') || 'F')[0].toUpperCase() },
-    { value: 6, label: t('saturdays') || 'Saturdays', short: (t('saturdays') || 'S')[0].toUpperCase() },
+    { value: 0, label: t('sundays'), short: t('sundays')[0].toUpperCase() },
+    { value: 1, label: t('mondays'), short: t('mondays')[0].toUpperCase() },
+    { value: 2, label: t('tuesdays'), short: t('tuesdays')[0].toUpperCase() },
+    { value: 3, label: t('wednesdays'), short: t('wednesdays')[0].toUpperCase() },
+    { value: 4, label: t('thursdays'), short: t('thursdays')[0].toUpperCase() },
+    { value: 5, label: t('fridays'), short: t('fridays')[0].toUpperCase() },
+    { value: 6, label: t('saturdays'), short: t('saturdays')[0].toUpperCase() },
   ], [t]);
 
   const [availabilities, setAvailabilities] = useState([]);

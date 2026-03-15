@@ -116,15 +116,5 @@ export const translateObject = async (obj, fields, targetLang, sourceLang = DEFA
   return translatedObj;
 };
 
-export const clearTranslationCache = () => {
-  translationCache.clear();
-  rateLimited = false;
-  try { localStorage.removeItem(STORAGE_KEY); localStorage.removeItem(RL_KEY); } catch {}
-};
 
-export const getCacheSize = () => translationCache.size;
 
-export const isCached = (text, targetLang, sourceLang = DEFAULT_SOURCE_LANG) => {
-  if (!text || !targetLang) return false;
-  return translationCache.has(`${sourceLang}|${targetLang}|${text}`);
-};

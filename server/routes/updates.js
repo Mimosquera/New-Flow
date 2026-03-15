@@ -3,6 +3,7 @@ import { Update } from '../models/Update.js';
 import { verifyToken } from '../middleware/auth.js';
 import { requireEmployee, validateRequired, sanitizeString } from '../middleware/validation.js';
 import { upload, cloudinary } from '../config/upload.js';
+import { detectLanguage } from '../utils/detectLanguage.js';
 
 const router = express.Router();
 
@@ -36,13 +37,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch updates' });
   }
 });
-
-function detectLanguage(text) {
-  if (/[áéíóúñü¿¡]/i.test(text) || /\b(el|la|de|que|y|en|un|una|por|con|para|es)\b/i.test(text)) {
-    return 'es';
-  }
-  return 'en';
-}
 
 // POST /api/updates
 router.post('/', verifyToken, requireEmployee, upload.single('media'), validateRequired(['title', 'content']), async (req, res) => {

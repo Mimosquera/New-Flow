@@ -8,8 +8,6 @@ const API_BASE_URL = import.meta.env.PROD
   : (import.meta.env.VITE_API_URL_DEV || 'http://localhost:3001/api');
 const SERVER_BASE_URL = API_BASE_URL.replace('/api', '');
 const DEFAULT_TIMEOUT = 30000;
-const PROTECTED_ROUTE_PREFIX = '/dashboard';
-const LOGIN_REDIRECT_PATH = '/employee-login';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -44,15 +42,9 @@ apiClient.interceptors.response.use(
 );
 
 export const authService = {
-  register: (userData) => apiClient.post('/auth/register', userData),
-  
   login: (credentials) => apiClient.post('/auth/login', credentials),
-  
+
   employeeLogin: (credentials) => apiClient.post('/auth/employee-login', credentials),
-  
-  verify: () => apiClient.get('/auth/verify'),
-  
-  getMe: () => apiClient.get('/auth/me'),
 
   createEmployee: (employeeData) => apiClient.post('/auth/create-employee', employeeData),
 
@@ -84,8 +76,6 @@ export const authService = {
 };
 
 export const dataService = {
-  getAll: () => apiClient.get('/data'),
-  getById: (id) => apiClient.get(`/data/${id}`),
   getEmployees: () => apiClient.get('/data/employees'),
 };
 
@@ -116,8 +106,6 @@ export const serviceService = {
 
 export const availabilityService = {
   getAll: () => apiClient.get('/availability'),
-
-  getByDayOfWeek: (dayOfWeek) => apiClient.get(`/availability/day/${dayOfWeek}`),
 
   getAvailableTimes: (date, employeeId) => {
     const params = employeeId ? { employeeId } : {};
@@ -150,7 +138,6 @@ export const appointmentService = {
 export const blockedDateService = {
   getAll: () => apiClient.get('/blocked-dates'),
   create: (blockedDateData) => apiClient.post('/blocked-dates', blockedDateData),
-  update: (id, blockedDateData) => apiClient.put(`/blocked-dates/${id}`, blockedDateData),
   delete: (id) => apiClient.delete(`/blocked-dates/${id}`),
 };
 

@@ -1,7 +1,9 @@
 import express from 'express';
 import { Service } from '../models/Service.js';
+import { Appointment } from '../models/Appointment.js';
 import { verifyToken } from '../middleware/auth.js';
 import { requireEmployee, validateRequired, sanitizeString } from '../middleware/validation.js';
+import { detectLanguage } from '../utils/detectLanguage.js';
 
 const router = express.Router();
 
@@ -17,13 +19,6 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch services' });
   }
 });
-
-function detectLanguage(text) {
-  if (/[áéíóúñü¿¡]/i.test(text) || /\b(el|la|de|que|y|en|un|una|por|con|para|es)\b/i.test(text)) {
-    return 'es';
-  }
-  return 'en';
-}
 
 // POST /api/services
 router.post('/', verifyToken, requireEmployee, validateRequired(['name', 'description', 'price']), async (req, res) => {
@@ -116,7 +111,6 @@ router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
       return res.status(404).json({ message: 'Service not found' });
     }
 
-    const { Appointment } = await import('../models/Appointment.js');
     const appointments = await Appointment.findAll({ where: { serviceId: id } });
 
     const deletableAppointments = appointments.filter(a => !['pending', 'accepted'].includes(a.status));

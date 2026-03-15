@@ -54,10 +54,8 @@ const canGroupEntries = (current, group, dayDiff) => {
   if (current?.startTime !== group?.startTime) return false;
   if (current?.endTime !== group?.endTime) return false;
   
-  // Check if userId matches (for proper grouping per employee)
   if (current?.userId !== group?.userId) return false;
-  
-  // Normalize reasons for comparison (treat null, undefined, and empty string as equivalent)
+
   const currentReason = (current?.reason || '').trim();
   const groupReason = (group?.reason || '').trim();
   
@@ -144,10 +142,6 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
     handleFormSubmit
   );
 
-  /**
-   * Handle deletion of a group of blocked dates
-   * @param {Array<string>} ids - Array of blocked date IDs to delete
-   */
   const handleDeleteGroup = async (ids) => {
     if (!Array.isArray(ids) || ids.length === 0) {
       console.warn('No IDs provided for deletion');
@@ -195,7 +189,7 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
 
   return (
     <>
-      {error && <Alert type="error" message={error} onClose={() => setError(null)} />}
+      {error && <Alert type="danger" message={error} onClose={() => setError(null)} />}
       {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
       <div className="card post-update-card mb-4 shadow-sm block-date-card-border" style={{ background: 'rgba(255,255,255,0.05)' }}>

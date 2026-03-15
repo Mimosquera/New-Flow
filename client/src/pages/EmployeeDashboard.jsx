@@ -39,7 +39,7 @@ export default function EmployeeDashboard() {
 
   useEffect(() => {
     return () => {
-      if (!location.pathname.includes('/employee/dashboard')) {
+      if (!location.pathname.includes('/employee-dashboard')) {
         sessionStorage.removeItem('dashboardVisited');
       }
     };
