@@ -121,16 +121,22 @@
   letter-spacing: 0.1em;
 }
 
-.navButton {
+.navLogoBtn {
   background: transparent;
-  color: rgba(255, 255, 255, 0.8);
   border: none;
-  font-weight: 300;
-  white-space: nowrap;
-  padding: 0.25rem 0.5rem;
-  font-size: clamp(0.75rem, 2.5vw, 1rem);
-  text-shadow: 0 0 10px rgba(70, 161, 161, 0.8), 0 0 20px rgba(70, 161, 161, 0.5);
+  padding: 0.2rem 0.3rem;
   cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .navLogoBtn:hover {
+    opacity: 0.75;
+  }
 }
 
 /* ─── Hero ──────────────────────────────────────────────────────────────────── */
@@ -259,8 +265,7 @@
 
 
 .carouselViewport {
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow: hidden;
   cursor: grab;
 }
 
@@ -669,15 +674,17 @@
   transform: translateY(0);
 }
 
-/* ─── Request / Glow Button ─────────────────────────────────────────────────── */
+/* ─── Request / Glass Button ─────────────────────────────────────────────────── */
 .requestButton {
   position: relative;
-  z-index: 1;
-  padding: 0.55rem 2rem;
-  border: none;
+  overflow: hidden;
+  padding: 0.65rem 2.4rem;
+  border: 1.5px solid rgba(70, 161, 161, 0.55);
   outline: none;
   color: #fff;
-  background: transparent;
+  background: rgba(70, 161, 161, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   cursor: pointer;
   border-radius: 50px;
   font-family: 'Oswald', sans-serif;
@@ -692,70 +699,46 @@
   -webkit-touch-callout: none;
   appearance: none;
   -webkit-appearance: none;
-  transition: transform 0.2s ease;
-  will-change: transform;
-}
-
-.requestButton:focus,
-.requestButton:focus-visible,
-.requestButton:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.requestButton::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  border-radius: 54px;
-  z-index: -1;
-  background: linear-gradient(
-    45deg,
-    #46a1a1,
-    rgb(5, 45, 63),
-    #3dd6d6,
-    #46a1a1,
-    rgb(5, 65, 85),
-    #3a8f8f,
-    #46a1a1,
-    rgb(5, 45, 63)
-  );
-  background-size: 400%;
-  filter: blur(7px);
-  -webkit-filter: blur(7px);
-  animation: glowingButton 30s linear infinite;
-  opacity: 1;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  will-change: background-position;
+  box-shadow: 0 0 18px rgba(70, 161, 161, 0.18), 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  animation: glowPulse 3.5s ease-in-out infinite;
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .requestButton::after {
   content: '';
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: 50px;
-  background: linear-gradient(135deg, rgba(5, 45, 63, 0.95) 0%, rgba(3, 28, 40, 0.98) 100%);
+  top: 0;
+  left: -100%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+  transition: left 0.65s ease;
+  pointer-events: none;
+}
+
+.requestButton:focus,
+.requestButton:focus-visible {
+  outline: none !important;
+}
+
+.requestButton:active {
+  transform: translateY(0) scale(0.98);
 }
 
 @media (hover: hover) {
   .requestButton:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    background: rgba(70, 161, 161, 0.16);
+    border-color: rgba(70, 161, 161, 0.85);
+    box-shadow: 0 0 28px rgba(70, 161, 161, 0.38), 0 8px 28px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .requestButton:hover::after {
+    left: 150%;
   }
 }
 
-.requestButton:active {
-  transform: translateY(0);
-}
-
-@keyframes glowingButton {
-  0%   { background-position: 0 0; }
-  50%  { background-position: 400% 0; }
-  100% { background-position: 0 0; }
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(70, 161, 161, 0.15), 0 4px 20px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
+  50%       { box-shadow: 0 0 28px rgba(70, 161, 161, 0.35), 0 4px 22px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
 }

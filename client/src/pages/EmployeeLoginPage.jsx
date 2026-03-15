@@ -7,7 +7,7 @@ import { setToken } from '../utils/tokenUtils.js';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { LanguageToggle } from '../components/LanguageToggle.jsx';
 import styles from './EmployeeLoginPage.module.css';
-import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
+import { hapticSuccess, hapticWarning, hapticLight } from '../utils/haptics.js';
 
 export const EmployeeLoginPage = () => {
   const { t } = useTranslation();
@@ -20,30 +20,27 @@ export const EmployeeLoginPage = () => {
     async (data) => {
       try {
         if (!data.email || !data.password) {
-          throw new Error(t('fillAllFields') || 'Please fill in all fields');
+          throw new Error(t('pleaseFillRequired'));
         }
 
         setLoading(true);
         const response = await authService.employeeLogin(data);
-        
+
         if (!response || !response.data) {
-          throw new Error(t('invalidResponse') || 'Invalid server response');
+          throw new Error(t('somethingWentWrong'));
         }
 
         if (response.data.token) {
-          const tokenSet = setToken(response.data.token);
-          if (!tokenSet) {
-            throw new Error(t('tokenStorageError') || 'Failed to store authentication token');
-          }
+          setToken(response.data.token);
           hapticSuccess();
           navigate('/employee-dashboard');
         } else {
-          throw new Error(response.data?.message || t('loginFailed') || 'Login failed');
+          throw new Error(response.data?.message || t('loginError'));
         }
       } catch (err) {
         hapticWarning();
         console.error('Employee login error:', err);
-        const errorMessage = err?.response?.data?.message || err?.message || t('loginError') || 'Employee login failed';
+        const errorMessage = err?.response?.data?.message || err?.message || t('loginError');
         throw new Error(errorMessage);
       } finally {
         setLoading(false);
@@ -57,16 +54,31 @@ export const EmployeeLoginPage = () => {
     handleFormSubmit(e);
   }, [handleFormSubmit]);
 
-  const handleBackToHome = useCallback(() => {
-    navigate('/');
-  }, [navigate]);
-
   useEffect(() => {
     document.body.style.background = '#000000';
   }, []);
 
   return (
     <div className={styles.pageContainer}>
+      <nav className={styles.navbar}>
+        <div className={styles.navbarInner}>
+          <button
+            className={styles.navLogoBtn}
+            onClick={() => { hapticLight(); navigate('/'); }}
+            aria-label={t('backToHome')}
+          >
+            <img
+              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+              alt="New Flow"
+              className={styles.navLogo}
+            />
+          </button>
+          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
+            <LanguageToggle darkText />
+          </div>
+        </div>
+      </nav>
+
       <div className={styles.contentWrapper}>
         <div className={styles.formCard}>
           <div className={styles.cardHeader}>
@@ -124,7 +136,7 @@ export const EmployeeLoginPage = () => {
                 className={styles.submitButton}
                 disabled={loading}
               >
-                {loading ? t('loggingIn') : t('employeeLogin')}
+                {loading ? t('loggingIn') : t('login')}
               </button>
             </form>
 
@@ -133,18 +145,15 @@ export const EmployeeLoginPage = () => {
             </p>
           </div>
         </div>
-
-        <div className={styles.actionButtons}>
-          <button
-            className={styles.backButton}
-            onClick={handleBackToHome}
-          >
-            <span>⌂</span>
-            {t('backToHome')}
-          </button>
-          <LanguageToggle inverse />
-        </div>
       </div>
+
+      <footer className={styles.footer}>
+        <img
+          src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
+          alt="New Flow"
+          className={styles.footerLogo}
+        />
+      </footer>
     </div>
   );
 };

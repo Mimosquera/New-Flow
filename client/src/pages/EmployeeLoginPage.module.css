@@ -17,8 +17,9 @@
 
 .contentWrapper {
   width: 100%;
-  max-width: 450px;
+  max-width: 420px;
 }
+
 
 /* Form Card */
 .formCard {
@@ -43,11 +44,13 @@
 
 .cardTitle {
   color: white;
-  font-size: 1.5rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.45rem;
   font-weight: 600;
   margin: 0;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  letter-spacing: -0.3px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* Card Body */
@@ -107,29 +110,34 @@
 .submitButton {
   width: 100%;
   padding: 0.85rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.1em;
   color: white;
-  background: rgb(5, 45, 63);
-  border: none;
-  border-radius: 10px;
+  background: rgba(70, 161, 161, 0.15);
+  border: 1.5px solid rgba(70, 161, 161, 0.55);
+  border-radius: 50px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(5, 45, 63, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 0 14px rgba(70, 161, 161, 0.12), 0 4px 16px rgba(0, 0, 0, 0.3);
   margin-top: 0.5rem;
 }
 
-.submitButton:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(5, 45, 63, 0.4);
-  background: #46a1a1;
+@media (hover: hover) {
+  .submitButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(70, 161, 161, 0.35);
+    background: #46a1a1;
+    border-color: #46a1a1;
+  }
 }
 
 .submitButton:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(5, 45, 63, 0.3);
+  transform: translateY(0) scale(0.98);
 }
 
 .submitButton:disabled {
@@ -184,16 +192,18 @@
   display: inline-block;
 }
 
-.backButton:hover {
-  background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
-  border-color: #46a1a1;
-  color: white;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(70, 161, 161, 0.4);
-}
+@media (hover: hover) {
+  .backButton:hover {
+    background: linear-gradient(135deg, #46a1a1 0%, #3d8d8d 100%);
+    border-color: #46a1a1;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(70, 161, 161, 0.4);
+  }
 
-.backButton:hover span {
-  transform: translateX(-3px);
+  .backButton:hover span {
+    transform: translateX(-3px);
+  }
 }
 
 .backButton:active {
@@ -216,7 +226,7 @@
   }
 
   .cardTitle {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
   }
 
   .cardBody {

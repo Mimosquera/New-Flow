@@ -63,6 +63,11 @@ export const translations = {
     saturdays: 'Saturdays',
     
     // Appointments Page
+    yourDetails: 'Your Details',
+    stepPersonal: 'Step 1 of 2: Tell us who you are',
+    stepBooking: 'Step 2 of 2: Pick your service and time',
+    allSet: "You're all set!",
+    continueBtn: 'Continue',
     bookAppointment: 'Request an Appointment',
     name: 'Name',
     email: 'Email',
@@ -473,6 +478,11 @@ export const translations = {
     saturdays: 'Sábados',
     
     // Appointments Page
+    yourDetails: 'Tus Datos',
+    stepPersonal: 'Paso 1 de 2: Cuéntanos quién eres',
+    stepBooking: 'Paso 2 de 2: Elige tu servicio y horario',
+    allSet: '¡Todo listo!',
+    continueBtn: 'Continuar',
     bookAppointment: 'Solicitar una Cita',
     name: 'Nombre',
     email: 'Correo',
