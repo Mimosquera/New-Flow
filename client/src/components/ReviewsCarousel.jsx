@@ -1,6 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { reviews, GOOGLE_RATING, REVIEW_COUNT, GOOGLE_MAPS_URL } from '../data/reviews.js';
+import {
+  reviews as staticReviews,
+  GOOGLE_RATING as staticRating,
+  REVIEW_COUNT as staticCount,
+  GOOGLE_MAPS_URL,
+} from '../data/reviews.js';
+import { reviewsService } from '../services/api.js';
 import styles from './ReviewsCarousel.module.css';
 
 const GoogleIcon = () => (
@@ -63,25 +69,36 @@ ReviewCard.propTypes = {
   mini: PropTypes.bool,
 };
 
-const doubled = [...reviews, ...reviews];
-
 export const ReviewsCarousel = ({ mini = false }) => {
   const trackRef = useRef(null);
+  const [reviews, setReviews] = useState(staticReviews);
+  const [rating, setRating] = useState(staticRating);
+  const [reviewCount, setReviewCount] = useState(staticCount);
+
+  useEffect(() => {
+    reviewsService.get()
+      .then(({ data }) => {
+        if (data.reviews?.length) setReviews(data.reviews);
+        if (data.rating) setRating(data.rating);
+        if (data.reviewCount) setReviewCount(String(data.reviewCount));
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        track.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+        track.classList.toggle(styles.trackOffscreen, !entry.isIntersecting);
       },
       { threshold: 0 }
     );
-
     observer.observe(track);
     return () => observer.disconnect();
   }, []);
+
+  const doubled = [...reviews, ...reviews];
 
   return (
     <div className={`${styles.wrapper} ${mini ? styles.wrapperMini : ''}`}>
@@ -96,9 +113,9 @@ export const ReviewsCarousel = ({ mini = false }) => {
           >
             <GoogleIcon />
             <span className={styles.ratingText}>
-              <span className={styles.ratingScore}>{GOOGLE_RATING}</span>
+              <span className={styles.ratingScore}>{rating}</span>
               <span className={styles.ratingStars}>★★★★★</span>
-              <span className={styles.ratingCount}>· {REVIEW_COUNT} reviews</span>
+              <span className={styles.ratingCount}>· {reviewCount} reviews</span>
             </span>
           </a>
         </div>
@@ -121,7 +138,7 @@ export const ReviewsCarousel = ({ mini = false }) => {
           className={styles.miniLink}
         >
           <GoogleIcon />
-          <span>{GOOGLE_RATING} ★★★★★ · {REVIEW_COUNT} reviews on Google</span>
+          <span>{rating} ★★★★★ · {reviewCount} reviews on Google</span>
         </a>
       )}
     </div>

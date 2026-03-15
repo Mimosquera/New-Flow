@@ -26,7 +26,17 @@
       "Bash(node -e \"require\\(''./node_modules/embla-carousel-react/package.json''\\); console.log\\(''ok''\\)\")",
       "Bash(npm install lucide-react)",
       "Bash(grep -E \"\\(index|global|^[^/]*\\\\.css$\\)\")",
-      "Bash(npx vite:*)"
+      "Bash(npx vite:*)",
+      "WebSearch",
+      "WebFetch(domain:www.yelp.com)",
+      "WebFetch(domain:booksy.com)",
+      "WebFetch(domain:www.fresha.com)",
+      "WebFetch(domain:www.superpages.com)",
+      "WebFetch(domain:www.yellowpages.com)",
+      "WebFetch(domain:local.yahoo.com)",
+      "WebFetch(domain:www.google.com)",
+      "WebFetch(domain:barberhead.com)",
+      "WebFetch(domain:m.yelp.ca)"
     ]
   }
 }

@@ -631,7 +631,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
               </div>
-              <div className="text-center mt-4">
+              <div className="text-center mt-5">
                 {hasMore && !viewMorePending && (
                   <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
@@ -687,7 +687,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 className={`img-fluid rounded ${styles.aboutLogo}`}
               />
             </motion.div>
-            <div className="col-md-6 ps-md-4">
+            <div className={`col-md-6 ps-md-4 ${styles.aboutTextCol}`}>
               <motion.h2
                 className="fw-bold mb-3"
                 style={{ color: '#fff' }}

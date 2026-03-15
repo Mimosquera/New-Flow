@@ -4,9 +4,9 @@
 }
 
 .wrapperMini {
-  width: 88%;
-  max-width: 360px;
-  margin-top: 2rem;
+  width: 82%;
+  max-width: 320px;
+  margin-top: 2.75rem;
 }
 
 /* ─── Header ─────────────────────────────────────────────────────────────────── */
@@ -73,6 +73,7 @@
   overflow: hidden;
   mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 9%, black 91%, transparent 100%);
+  transition: opacity 0.55s ease;
 }
 
 /* ─── Track ──────────────────────────────────────────────────────────────────── */
@@ -80,16 +81,24 @@
   display: flex;
   gap: 1rem;
   width: max-content;
-  animation: marquee 65s linear infinite;
+  animation: marquee 160s linear infinite;
 }
 
 .trackMini {
-  animation-duration: 48s;
+  animation-duration: 220s;
   gap: 0.7rem;
 }
 
+.trackOffscreen {
+  animation-play-state: paused;
+}
+
 @media (hover: hover) {
-  .track:hover {
+  .fade:hover {
+    opacity: 0.88;
+  }
+
+  .fade:hover .track {
     animation-play-state: paused;
   }
 }
@@ -102,23 +111,23 @@
 /* ─── Card ───────────────────────────────────────────────────────────────────── */
 .card {
   flex-shrink: 0;
-  width: 272px;
+  width: 234px;
   background: rgba(5, 45, 63, 0.45);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(70, 161, 161, 0.18);
-  border-radius: 16px;
-  padding: 1.1rem 1.15rem;
+  border-radius: 14px;
+  padding: 0.9rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
 }
 
 .cardMini {
-  width: 205px;
-  padding: 0.75rem 0.85rem;
-  gap: 0.4rem;
-  border-radius: 12px;
+  width: 175px;
+  padding: 0.6rem 0.72rem;
+  gap: 0.3rem;
+  border-radius: 10px;
 }
 
 /* ─── Card Top ───────────────────────────────────────────────────────────────── */
@@ -130,8 +139,8 @@
 
 /* ─── Avatar ─────────────────────────────────────────────────────────────────── */
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: linear-gradient(135deg, #46a1a1, #2a7070);
   display: flex;
@@ -147,9 +156,9 @@
 }
 
 .avatarMini {
-  width: 28px;
-  height: 28px;
-  font-size: 0.78rem;
+  width: 24px;
+  height: 24px;
+  font-size: 0.7rem;
 }
 
 /* ─── Reviewer ───────────────────────────────────────────────────────────────── */
@@ -163,7 +172,7 @@
 
 .reviewerName {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
@@ -171,16 +180,16 @@
 }
 
 .reviewerNameMini {
-  font-size: 0.77rem;
+  font-size: 0.7rem;
 }
 
 .reviewerDate {
   color: rgba(255, 255, 255, 0.36);
-  font-size: 0.71rem;
+  font-size: 0.65rem;
 }
 
 .reviewerDateMini {
-  font-size: 0.64rem;
+  font-size: 0.58rem;
 }
 
 /* ─── Stars ──────────────────────────────────────────────────────────────────── */
@@ -204,11 +213,16 @@
   color: rgba(255, 255, 255, 0.15);
 }
 
+.cardMini .star {
+  width: 10px;
+  height: 10px;
+}
+
 /* ─── Review text ────────────────────────────────────────────────────────────── */
 .reviewText {
   color: rgba(255, 255, 255, 0.68);
-  font-size: 0.83rem;
-  line-height: 1.55;
+  font-size: 0.76rem;
+  line-height: 1.5;
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -217,8 +231,8 @@
 }
 
 .reviewTextMini {
-  font-size: 0.74rem;
-  line-height: 1.45;
+  font-size: 0.68rem;
+  line-height: 1.4;
   -webkit-line-clamp: 3;
 }
 
@@ -231,7 +245,8 @@
   text-decoration: none;
   color: rgba(255, 255, 255, 0.35);
   font-size: 0.72rem;
-  margin-top: 0.6rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0;
   transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
@@ -249,18 +264,18 @@
   }
 
   .card {
-    width: 240px;
+    width: 210px;
   }
 
   .cardMini {
-    width: 185px;
+    width: 160px;
   }
 
   .track {
-    animation-duration: 50s;
+    animation-duration: 160s;
   }
 
   .trackMini {
-    animation-duration: 38s;
+    animation-duration: 220s;
   }
 }
