@@ -29,8 +29,8 @@ export const ScrollToTop = ({ hidden = false, offset = 0 }) => {
       tabIndex={show ? 0 : -1}
     >
       <svg
-        width="15"
-        height="15"
+        width="18"
+        height="18"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

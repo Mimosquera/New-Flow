@@ -584,12 +584,14 @@
 .contactSection {
   background: linear-gradient(135deg, rgb(3, 18, 26) 0%, rgb(5, 45, 63) 50%, rgb(3, 18, 26) 100%);
   border-top: 1px solid rgba(70, 161, 161, 0.2);
+  padding: 2.25rem 0 2rem;
 }
 
 .contactTitle {
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   letter-spacing: -0.01em;
   text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1.25rem;
 }
 
 .contactCard {
@@ -597,8 +599,8 @@
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(70, 161, 161, 0.18);
-  border-radius: 20px;
-  padding: 1.75rem 1.25rem 1.5rem;
+  border-radius: 14px;
+  padding: 1rem 1rem;
   height: 100%;
   transition: border-color 0.3s ease;
 }
@@ -613,24 +615,40 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 0.85rem;
+  margin-bottom: 0.55rem;
   color: #46a1a1;
 }
 
 .contactHeading {
   color: #46a1a1 !important;
-  font-size: 1rem;
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
 }
 
 .contactText {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: rgba(255, 255, 255, 0.8);
+  margin: 0;
 }
-
 
 .addressText {
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .contactSection {
+    padding: 2.5rem 0 2rem;
+  }
+
+  .contactTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .contactCard {
+    padding: 1rem 0.8rem;
+  }
 }
 
 /* ─── Fancy Expand Buttons ───────────────────────────────────────────────────── */

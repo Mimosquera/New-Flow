@@ -733,8 +733,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       {/* Contact Section */}
+      {/* Contact Section */}
       <motion.section
-        className={`py-5 ${styles.contactSection}`}
+        className={styles.contactSection}
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -742,7 +743,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       >
         <div className="container">
           <motion.h2
-            className={`text-center mb-5 fw-bold text-white ${styles.contactTitle}`}
+            className={`text-center fw-bold text-white ${styles.contactTitle}`}
             variants={cardVariants}
           >
             {t('contactTitle')}
@@ -754,16 +755,16 @@ export const HomePage = ({ onNavigateToBooking }) => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
-            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <div className={styles.contactIcon}><Clock size={26} strokeWidth={1.5} /></div>
+                <div className={styles.contactIcon}><Clock size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('hours')}</h5>
                 <p className={styles.contactText}>{t('monSun')}: 9am – 7pm</p>
               </div>
             </motion.div>
-            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <div className={styles.contactIcon}><Phone size={26} strokeWidth={1.5} /></div>
+                <div className={styles.contactIcon}><Phone size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('phone')}</h5>
                 <p className={styles.contactText}>
                   <a href="tel:+18047452525" className="text-white text-decoration-none">
@@ -772,9 +773,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 </p>
               </div>
             </motion.div>
-            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <div className={styles.contactIcon}><AtSign size={26} strokeWidth={1.5} /></div>
+                <div className={styles.contactIcon}><AtSign size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('followUs')}</h5>
                 <a
                   href="https://www.instagram.com/newflowsalon/"
@@ -786,9 +787,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 </a>
               </div>
             </motion.div>
-            <motion.div className="col-md-3 mb-4" variants={cardVariants}>
+            <motion.div className="col-6 col-md-3 mb-3" variants={cardVariants}>
               <div className={styles.contactCard}>
-                <div className={styles.contactIcon}><MapPin size={26} strokeWidth={1.5} /></div>
+                <div className={styles.contactIcon}><MapPin size={20} strokeWidth={1.5} /></div>
                 <h5 className={styles.contactHeading}>{t('address')}</h5>
                 <p className={`${styles.addressText} ${styles.contactText}`}>
                   <a
@@ -797,7 +798,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     rel="noopener noreferrer"
                     className="text-white text-decoration-none"
                   >
-                    7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA 23235
+                    7102 Hull Street Rd N Suite F,<br />North Chesterfield, VA
                   </a>
                 </p>
               </div>
