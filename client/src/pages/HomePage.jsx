@@ -227,6 +227,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <img
               src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
               alt="New Flow Logo"
+              decoding="async"
               style={{ height: 'clamp(22px, 5vw, 32px)', flexShrink: 0 }}
             />
           </button>
@@ -554,6 +555,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
                             <img
                               src={article.media_url.startsWith('http') ? article.media_url : `${SERVER_BASE_URL}${article.media_url}`}
                               alt={article.title}
+                              loading="lazy"
+                              decoding="async"
                               className={styles.updateCardImage}
                             />
                           ) : (
@@ -643,6 +646,8 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <img
                 src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
                 alt="New Flow Team"
+                loading="lazy"
+                decoding="async"
                 className={`img-fluid rounded ${styles.aboutLogo}`}
               />
             </motion.div>
