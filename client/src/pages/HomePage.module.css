@@ -350,7 +350,7 @@
 
 /* ─── Services Section ──────────────────────────────────────────────────────── */
 .servicesSection {
-  background: linear-gradient(180deg, #000 0%, rgba(5, 60, 82, 0.52) 100%);
+  background: linear-gradient(180deg, #000 0%, #000 22%, rgba(5, 60, 82, 0.6) 40%, rgba(5, 60, 82, 0.88) 58%, rgba(5, 60, 82, 0.6) 75%, #000 92%, #000 100%);
   padding: 5rem 0;
   border-top: 1px solid rgba(58, 171, 219, 0.4);
 }
@@ -454,7 +454,7 @@
 
 /* ─── News / Updates Section ────────────────────────────────────────────────── */
 .newsSection {
-  background: linear-gradient(180deg, rgba(5, 60, 82, 0.52) 0%, #000 100%);
+  background: linear-gradient(180deg, #000 0%, rgba(5, 60, 82, 0.6) 15%, rgba(5, 60, 82, 0.88) 25%, #000 42%, #000 58%, rgba(5, 60, 82, 0.88) 75%, rgba(5, 60, 82, 0.6) 85%, #000 100%);
   padding: 5rem 0;
   position: relative;
 }
@@ -599,8 +599,8 @@
 .accentDivider {
   display: block;
   height: 1px;
-  width: 58%;
-  margin: 0 auto;
+  width: 320px;
+  margin-left: calc(50% - 160px);
   position: relative;
   clip-path: inset(0);
   background: linear-gradient(
@@ -634,7 +634,52 @@
 
 @media (max-width: 767px) {
   .accentDivider {
-    width: 78%;
+    width: 240px;
+    margin-left: calc(50% - 120px);
+  }
+}
+
+/* ─── Services → News Accent Divider ───────────────────────────────────────── */
+.serviceNewsAccent {
+  display: block;
+  height: 1px;
+  width: 320px;
+  margin-left: calc(50% - 160px);
+  position: relative;
+  clip-path: inset(0);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(58, 171, 219, 0.15) 8%,
+    rgba(58, 171, 219, 0.75) 30%,
+    rgba(58, 171, 219, 1) 50%,
+    rgba(58, 171, 219, 0.75) 70%,
+    rgba(58, 171, 219, 0.15) 92%,
+    transparent 100%
+  );
+}
+
+.serviceNewsAccent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -180px;
+  width: 180px;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(168, 220, 245, 0.9) 50%,
+    transparent 100%
+  );
+  animation: dividerShimmer 5s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+@media (max-width: 767px) {
+  .serviceNewsAccent {
+    width: 240px;
+    margin-left: calc(50% - 120px);
   }
 }
 

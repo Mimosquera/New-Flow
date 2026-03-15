@@ -544,9 +544,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </section>
 
+      <div className={styles.serviceNewsAccent} aria-hidden="true" />
+
       {/* News Section */}
       <section className={styles.newsSection}>
-        <div className={styles.sectionDivider} aria-hidden="true" />
         <div className="container">
           <motion.h2
             className={styles.sectionHeading}
