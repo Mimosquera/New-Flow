@@ -52,7 +52,7 @@ const cardMetaStyle = {
   marginTop: '0.25rem',
 };
 
-const PostCard = ({ update, onOpen, onDelete, canDelete, t }) => {
+const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
   const [imgLoaded, setImgLoaded] = useState(!update.media_url);
   const src = update.media_url
     ? (update.media_url.startsWith('http') ? update.media_url : `${SERVER_BASE_URL}${update.media_url}`)
@@ -61,28 +61,7 @@ const PostCard = ({ update, onOpen, onDelete, canDelete, t }) => {
   return (
     <div style={{ ...cardStyle, marginBottom: 0, height: '100%' }}>
       <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <div className="d-flex justify-content-between align-items-start mb-1">
-          <h6 style={cardTitleStyle} onClick={onOpen}>{update.title}</h6>
-          {canDelete && (
-            <button
-              className="btn btn-sm"
-              style={{
-                background: 'rgba(220, 53, 69, 0.2)',
-                color: '#ff7b7b',
-                border: '1px solid rgba(220, 53, 69, 0.4)',
-                borderRadius: '8px',
-                padding: '0.15rem 0.5rem',
-                fontSize: '0.7rem',
-                fontWeight: '600',
-                flexShrink: 0,
-                marginLeft: '0.5rem',
-              }}
-              onClick={(e) => { e.stopPropagation(); onDelete(); }}
-            >
-              {t('delete')}
-            </button>
-          )}
-        </div>
+        <h6 style={cardTitleStyle} onClick={onOpen}>{update.title}</h6>
 
         {src && (
           <div
@@ -122,6 +101,40 @@ const PostCard = ({ update, onOpen, onDelete, canDelete, t }) => {
         <div style={cardMetaStyle}>
           {new Date(update.date).toLocaleDateString()} · {update.author}
         </div>
+        {canManage && (
+          <div className="d-flex gap-1 mt-2">
+            <button
+              className="btn btn-sm"
+              style={{
+                background: 'rgba(58, 171, 219, 0.12)',
+                color: '#3aabdb',
+                border: '1px solid rgba(58, 171, 219, 0.35)',
+                borderRadius: '8px',
+                padding: '0.15rem 0.5rem',
+                fontSize: '0.7rem',
+                fontWeight: '600',
+              }}
+              onClick={(e) => { e.stopPropagation(); onEdit(); }}
+            >
+              {t('edit')}
+            </button>
+            <button
+              className="btn btn-sm"
+              style={{
+                background: 'rgba(220, 53, 69, 0.2)',
+                color: '#ff7b7b',
+                border: '1px solid rgba(220, 53, 69, 0.4)',
+                borderRadius: '8px',
+                padding: '0.15rem 0.5rem',
+                fontSize: '0.7rem',
+                fontWeight: '600',
+              }}
+              onClick={(e) => { e.stopPropagation(); onDelete(); }}
+            >
+              {t('delete')}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -144,6 +157,11 @@ export const UpdatePoster = () => {
   const [showForm, setShowForm] = useState(false);
   const [showUpdates, setShowUpdates] = useState(window.innerWidth >= 992);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
+
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ title: '', content: '' });
+  const [editMediaFile, setEditMediaFile] = useState(null);
+  const [editLoading, setEditLoading] = useState(false);
 
   const handleUpdateClick = (update) => {
     const idx = translatedUpdates.findIndex(u => u.id === update.id);
@@ -274,6 +292,42 @@ export const UpdatePoster = () => {
       hapticWarning();
       console.error('Error deleting update:', error);
       alert(t('error'));
+    }
+  };
+
+  const handleEditStart = (updateId) => {
+    const original = updates.find(u => u.id === updateId);
+    if (!original) return;
+    setEditingId(updateId);
+    setEditForm({ title: original.title, content: original.content });
+    setEditMediaFile(null);
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
+    setEditForm({ title: '', content: '' });
+    setEditMediaFile(null);
+  };
+
+  const handleEditSave = async (updateId) => {
+    if (!editForm.title || !editForm.content) return;
+    setEditLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append('title', editForm.title);
+      formData.append('content', editForm.content);
+      if (editMediaFile) formData.append('media', editMediaFile);
+      const response = await updateService.update(updateId, formData);
+      setUpdates(prev => prev.map(u => u.id === updateId ? response.data : u));
+      hapticSuccess();
+      setSuccess(t('updateEdited'));
+      setEditingId(null);
+      setEditMediaFile(null);
+    } catch (error) {
+      hapticWarning();
+      console.error('Error editing update:', error);
+    } finally {
+      setEditLoading(false);
     }
   };
 
@@ -493,7 +547,59 @@ export const UpdatePoster = () => {
                 {translatedUpdates.slice(0, displayCount).map(update => {
                   const isAdmin = currentUser?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
                   const isOwner = currentUser?.id === update.user_id;
-                  const canDelete = isAdmin || isOwner;
+                  const canManage = isAdmin || isOwner;
+
+                  if (editingId === update.id) {
+                    return (
+                      <div key={update.id} className="col-6">
+                        <div style={{ ...cardStyle, marginBottom: 0, height: '100%', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                          <input
+                            className="form-control form-control-sm"
+                            value={editForm.title}
+                            onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
+                            placeholder={t('title')}
+                          />
+                          <textarea
+                            className="form-control form-control-sm"
+                            rows="4"
+                            value={editForm.content}
+                            onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
+                            placeholder={t('content')}
+                          />
+                          <div className="d-flex align-items-center gap-2">
+                            <label
+                              htmlFor={`edit-media-${update.id}`}
+                              className="btn btn-sm mb-0"
+                              style={{ cursor: 'pointer', fontSize: '0.7rem', padding: '0.2rem 0.6rem', background: 'rgba(58,171,219,0.1)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '6px' }}
+                            >
+                              {t('chooseFile')}
+                            </label>
+                            <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.4)' }}>
+                              {editMediaFile ? editMediaFile.name : t('noFileChosen')}
+                            </span>
+                            <input type="file" id={`edit-media-${update.id}`} className="d-none" accept="image/*,video/*" onChange={(e) => setEditMediaFile(e.target.files[0] || null)} />
+                          </div>
+                          <div className="d-flex gap-2 justify-content-end mt-auto">
+                            <button
+                              className="btn btn-sm"
+                              style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem', background: 'none', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px' }}
+                              onClick={handleEditCancel}
+                            >
+                              {t('cancel')}
+                            </button>
+                            <button
+                              className="btn btn-sm"
+                              style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem', background: 'rgba(58,171,219,0.18)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.45)', borderRadius: '6px' }}
+                              onClick={() => handleEditSave(update.id)}
+                              disabled={editLoading}
+                            >
+                              {editLoading ? '…' : t('save')}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
 
                   return (
                   <div key={update.id} className="col-6">
@@ -501,7 +607,8 @@ export const UpdatePoster = () => {
                       update={update}
                       onOpen={() => handleUpdateClick(update)}
                       onDelete={() => handleDelete(update.id)}
-                      canDelete={canDelete}
+                      onEdit={() => handleEditStart(update.id)}
+                      canManage={canManage}
                       t={t}
                     />
                   </div>

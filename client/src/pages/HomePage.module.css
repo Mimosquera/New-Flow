@@ -192,7 +192,7 @@
 }
 
 .heroSubtitle {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Jost', sans-serif;
   font-size: clamp(0.68rem, 1.6vw, 0.82rem);
   font-weight: 400;
   letter-spacing: 0.26em;
@@ -240,13 +240,24 @@
 /* ─── Shared section heading ────────────────────────────────────────────────── */
 .sectionHeading {
   text-align: center;
-  font-family: 'Oswald', sans-serif;
-  font-size: 2rem;
-  font-weight: 700;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+  font-weight: 500;
   color: #fff;
-  letter-spacing: 0.02em;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
-  margin-bottom: 2.5rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2.8rem;
+}
+
+.sectionHeading::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: rgba(58, 171, 219, 0.75);
+  margin: 0.7rem auto 0;
+  box-shadow: 0 0 8px rgba(58, 171, 219, 0.4);
 }
 
 /* ─── Services Carousel ─────────────────────────────────────────────────────── */
@@ -346,7 +357,9 @@
 
 @media (max-width: 767px) {
   .servicesSection {
-    padding-bottom: 2.75rem;
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
+    margin-bottom: -1px;
   }
 }
 
@@ -411,7 +424,7 @@
   border: 1.5px solid rgba(58, 171, 219, 0.45);
   border-radius: 50px;
   padding: 0.5rem 0;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   font-size: 0.8rem;
   letter-spacing: 0.1em;
@@ -449,11 +462,10 @@
 .sectionDivider {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 58%;
+  left: 21%;
+  right: 21%;
   height: 1px;
-  overflow: hidden;
+  clip-path: inset(0);
   background: linear-gradient(
     to right,
     transparent 0%,
@@ -484,36 +496,23 @@
 }
 
 @keyframes dividerShimmer {
-  0% {
-    left: -180px;
-    opacity: 0;
-  }
-  12% {
-    opacity: 1;
-  }
-  88% {
-    opacity: 1;
-  }
-  100% {
-    left: 100%;
-    opacity: 0;
-  }
+  0%   { left: -180px; opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
 }
 
 @media (max-width: 767px) {
   .newsSection {
-    padding-top: 2.75rem;
+    padding-top: 3.75rem;
+    padding-bottom: 3.75rem;
   }
   .sectionDivider {
-    width: 78%;
+    left: 11%;
+    right: 11%;
   }
 }
 
-.updatesHeading {
-  font-size: 2rem;
-  letter-spacing: -0.01em;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-}
 
 /* Update Card — glassmorphism */
 .updateCard {
@@ -582,6 +581,7 @@
   flex: 1;
 }
 
+
 .updateCardMeta {
   display: flex;
   justify-content: space-between;
@@ -595,10 +595,53 @@
   border-top: 1px solid rgba(58, 171, 219, 0.12);
 }
 
+/* ─── Accent Divider (between sections, flow element) ───────────────────────── */
+.accentDivider {
+  display: block;
+  height: 1px;
+  width: 58%;
+  margin: 0 auto;
+  position: relative;
+  clip-path: inset(0);
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(58, 171, 219, 0.15) 8%,
+    rgba(58, 171, 219, 0.75) 30%,
+    rgba(58, 171, 219, 1) 50%,
+    rgba(58, 171, 219, 0.75) 70%,
+    rgba(58, 171, 219, 0.15) 92%,
+    transparent 100%
+  );
+}
+
+.accentDivider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -180px;
+  width: 180px;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(168, 220, 245, 0.9) 50%,
+    transparent 100%
+  );
+  animation: dividerShimmer 5s ease-in-out infinite;
+  animation-delay: 3.5s;
+}
+
+@media (max-width: 767px) {
+  .accentDivider {
+    width: 78%;
+  }
+}
+
 /* ─── About Section ─────────────────────────────────────────────────────────── */
 .aboutSection {
   background: linear-gradient(180deg, #000 0%, rgba(5, 60, 82, 0.58) 50%, #000 100%);
-  padding: 3.5rem 0 4.5rem;
+  padding: 4rem 0 5rem;
   position: relative;
   overflow: visible;
 }
@@ -610,7 +653,7 @@
   bottom: -15%;
   left: 0;
   right: 0;
-  background: radial-gradient(ellipse 40% 70% at 30% 50%, rgba(58, 171, 219, 0.22) 0%, transparent 65%);
+  background: radial-gradient(ellipse 40% 70% at 38% 50%, rgba(58, 171, 219, 0.22) 0%, transparent 65%);
   pointer-events: none;
   animation: aboutGlowPulse 6s ease-in-out infinite;
   z-index: 0;
@@ -623,35 +666,56 @@
 
 @media (max-width: 767px) {
   .aboutSection::before {
-    top: -10%;
-    bottom: -10%;
-    left: -10%;
-    right: -10%;
-    background: radial-gradient(ellipse 90% 60% at 50% 30%, rgba(58, 171, 219, 0.24) 0%, transparent 70%);
-  }
-  .aboutSection::after {
-    content: '';
-    position: absolute;
-    top: -10%;
+    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
-    height: 1px;
-    background: rgba(58, 171, 219, 0.45);
-    pointer-events: none;
+    background: radial-gradient(ellipse 90% 60% at 50% 30%, rgba(58, 171, 219, 0.24) 0%, transparent 70%);
+  }
+}
+
+/* About row — mobile: stacked center, desktop: explicit flex */
+.aboutRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .aboutRow {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+  }
+}
+
+.aboutLogoCol {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .aboutLogoCol {
+    flex: 0 0 220px;
+    justify-content: flex-end;
   }
 }
 
 .aboutTextCol {
   max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  text-align: center;
 }
 
-@media (max-width: 767px) {
+@media (min-width: 768px) {
   .aboutTextCol {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    text-align: center;
+    flex: 0 0 580px;
+    max-width: 580px;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
   }
 }
 
@@ -661,19 +725,31 @@
   justify-content: center;
 }
 
+@media (min-width: 768px) {
+  .aboutLogoWrap {
+    justify-content: flex-end;
+  }
+}
+
 .aboutLogo {
-  width: 55%;
-  max-width: 300px;
+  width: 190px;
   height: auto;
   display: block;
   margin: 0 auto;
   position: relative;
 }
 
+@media (min-width: 768px) {
+  .aboutLogo {
+    margin: 0 0 0 auto;
+  }
+}
+
+
 /* ─── Reviews Section ───────────────────────────────────────────────────────── */
 .reviewsSection {
   background: linear-gradient(180deg, rgba(5, 60, 82, 0.58) 0%, #000 100%);
-  padding: 5rem 0 7rem;
+  padding: 4.5rem 0 6rem;
   position: relative;
   border-top: 1px solid rgba(58, 171, 219, 0.45);
 }
@@ -683,6 +759,14 @@
   background: linear-gradient(135deg, rgb(3, 24, 34) 0%, rgb(5, 60, 82) 50%, rgb(3, 24, 34) 100%);
   border-top: 1px solid rgba(58, 171, 219, 0.4);
   padding: 2.25rem 0 2rem;
+}
+
+@media (min-width: 768px) {
+  .contactRow {
+    max-width: 1020px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 .contactTitle {
@@ -734,9 +818,16 @@
   line-height: 1.45;
 }
 
+@media (min-width: 768px) {
+  .addressText {
+    font-size: 0.82rem;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 768px) {
   .contactSection {
-    padding: 2.5rem 0 2rem;
+    padding: 2.5rem 0 3.2rem;
   }
 
   .contactTitle {
@@ -758,7 +849,7 @@
   border: 1.5px solid rgba(58, 171, 219, 0.7);
   border-radius: 50px;
   padding: 0.6rem 2.2rem;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.1em;
@@ -810,7 +901,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.25);
   border-radius: 50px;
   padding: 0.6rem 2.2rem;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   font-size: 0.9rem;
   letter-spacing: 0.1em;
@@ -844,7 +935,7 @@
   -webkit-backdrop-filter: blur(14px);
   cursor: pointer;
   border-radius: 50px;
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   font-size: 0.78rem;
   letter-spacing: 0.12em;

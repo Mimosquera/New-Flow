@@ -85,6 +85,56 @@ router.post('/', verifyToken, requireEmployee, upload.single('media'), validateR
   }
 });
 
+// PUT /api/updates/:id
+router.put('/:id', verifyToken, requireEmployee, upload.single('media'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isAdmin = req.user.email === process.env.SEED_EMPLOYEE_EMAIL;
+
+    const update = await Update.findByPk(id);
+    if (!update) return res.status(404).json({ message: 'Update not found' });
+
+    if (!isAdmin && update.user_id !== req.user.id) {
+      return res.status(403).json({ message: 'You do not have permission to edit this update' });
+    }
+
+    const { title, content } = req.body;
+    const updateData = {};
+    if (title) updateData.title = sanitizeString(title);
+    if (content) updateData.content = sanitizeString(content);
+
+    if (req.file) {
+      if (update.cloudinary_id) {
+        try {
+          const resourceType = update.media_type === 'video' ? 'video' : 'image';
+          await cloudinary.uploader.destroy(update.cloudinary_id, { resource_type: resourceType });
+        } catch (cloudinaryError) {
+          console.error('Error deleting old media:', cloudinaryError);
+        }
+      }
+
+      const isVideo = req.file.mimetype.startsWith('video/');
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: 'newflow-updates', resource_type: isVideo ? 'video' : 'image' },
+          (error, result) => { if (error) reject(error); else resolve(result); }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+
+      updateData.media_url = uploadResult.secure_url;
+      updateData.media_type = isVideo ? 'video' : 'image';
+      updateData.cloudinary_id = uploadResult.public_id;
+    }
+
+    await update.update(updateData);
+    res.json(update);
+  } catch (error) {
+    console.error('Error updating update:', error);
+    res.status(500).json({ message: 'Failed to update', error: error.message });
+  }
+});
+
 // DELETE /api/updates/:id
 router.delete('/:id', verifyToken, requireEmployee, async (req, res) => {
   try {
