@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
@@ -113,7 +113,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   const [direction, setDirection] = useState(0);
   const { t, language } = useTranslation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (show) {
       setCurrentIndex(initialIndex);
       setFullscreen(false);
@@ -201,7 +201,18 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
         >
           {/* Header */}
           <div className={styles.header}>
-            <h2 className={styles.title}>{update.title}</h2>
+            <AnimatePresence mode="wait">
+              <motion.h2
+                key={currentIndex}
+                className={styles.title}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.09 }}
+              >
+                {update.title}
+              </motion.h2>
+            </AnimatePresence>
           </div>
 
           {/* Body */}
