@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Scissors, Plus, Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import { Alert, FormInput } from '../../components/common/index.jsx';
+import { Alert, FormInput } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { serviceService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';

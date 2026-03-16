@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Alert } from '../../components/common/index.jsx';
+import { Alert } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { authService } from '../../services/api.js';
 import { setToken } from '../../utils/tokenUtils.js';

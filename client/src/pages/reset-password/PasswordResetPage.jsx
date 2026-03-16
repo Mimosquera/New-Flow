@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Alert, FormInput } from '../../components/common/index.jsx';
+import { Alert, FormInput } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 import { LanguageToggle } from '../../components/LanguageToggle.jsx';

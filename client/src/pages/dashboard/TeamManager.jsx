@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus } from 'lucide-react';
-import { Alert } from '../../components/common/index.jsx';
+import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';

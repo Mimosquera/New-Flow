@@ -6,7 +6,7 @@ import {
   ArrowLeft, Scissors, Users, User, Mail, Phone,
   CalendarDays, Clock, StickyNote, CheckCircle2,
 } from 'lucide-react';
-import { Alert } from '../../components/common/index.jsx';
+import { Alert } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { serviceService, availabilityService, appointmentService, dataService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { User, Lock, Camera, Trash2, LogOut, Pencil } from 'lucide-react';
-import { Alert } from '../../components/common/index.jsx';
+import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 import { setToken } from '../../utils/tokenUtils.js';

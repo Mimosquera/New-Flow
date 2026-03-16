@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, FormInput } from '../../components/common/index.jsx';
+import { Alert, FormInput } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { blockedDateService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';

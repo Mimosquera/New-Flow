@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
-import { Alert } from '../../components/common/index.jsx';
+import { Alert } from '../../components/Common/index.jsx';
 import { appointmentService } from '../../services/api.js';
 import { decodeToken, getToken } from '../../utils/tokenUtils.js';
 import { isAppointmentUpcoming, formatDateDisplay, formatTimeDisplay } from '../../utils/dateUtils.js';

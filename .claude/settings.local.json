@@ -53,7 +53,14 @@
       "Bash(cp \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/components/UpdateModal.module.css\" \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/styles/components/PostModal.module.css\")",
       "Bash(cp \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/components/ReviewsCarousel.module.css\" \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/styles/components/ReviewsCarousel.module.css\")",
       "Bash(cp \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/components/LanguageToggle.module.css\" \"c:\\\\Users\\\\micha\\\\MiMo Projects\\\\new_flow_0.2/client/src/styles/components/LanguageToggle.module.css\")",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(xargs grep:*)",
+      "Bash(while read:*)",
+      "Bash(do sed:*)",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(python3 -c \":*)",
+      "Bash(done)"
     ]
   }
 }
