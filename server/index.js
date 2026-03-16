@@ -35,6 +35,7 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https:"],
       mediaSrc: ["'self'"],
+      connectSrc: ["'self'", "https://api.mymemory.translated.net"],
     },
   },
 }));
