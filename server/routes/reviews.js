@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
   const placeId = process.env.GOOGLE_PLACE_ID;
 
   if (!apiKey || !placeId) {
-    return res.status(503).json({ message: 'Google Places API not configured.' });
+    return res.json({ live: false });
   }
 
   if (cache.data && Date.now() - cache.fetchedAt < CACHE_TTL_MS) {

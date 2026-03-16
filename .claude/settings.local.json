@@ -37,7 +37,8 @@
       "WebFetch(domain:www.google.com)",
       "WebFetch(domain:barberhead.com)",
       "WebFetch(domain:m.yelp.ca)",
-      "Bash(xargs sed:*)"
+      "Bash(xargs sed:*)",
+      "Bash(grep -r .navbar '/c/Users/micha/MiMo Projects/new_flow_0.2/client/src/' --include=*.jsx --include=*.js)"
     ]
   }
 }

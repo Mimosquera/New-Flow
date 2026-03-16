@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import {
-  reviews as staticReviews,
-  GOOGLE_RATING as staticRating,
-  REVIEW_COUNT as staticCount,
+  reviews,
+  GOOGLE_RATING as rating,
+  REVIEW_COUNT as reviewCount,
   GOOGLE_MAPS_URL,
 } from '../data/reviews.js';
-import { reviewsService } from '../services/api.js';
 import styles from './ReviewsCarousel.module.css';
 
 const GoogleIcon = () => (
@@ -104,20 +103,6 @@ export const ReviewsCarousel = ({ mini = false }) => {
   const trackRef = useRef(null);
   const fadeRef = useRef(null);
   const resumeTimerRef = useRef(null);
-  const [reviews, setReviews] = useState(staticReviews);
-  const [rating, setRating] = useState(staticRating);
-  const [reviewCount, setReviewCount] = useState(staticCount);
-
-  useEffect(() => {
-    reviewsService.get()
-      .then(({ data }) => {
-        if (data.reviews?.length) setReviews(data.reviews);
-        if (data.rating) setRating(data.rating);
-        if (data.reviewCount) setReviewCount(String(data.reviewCount));
-      })
-      .catch(() => {});
-  }, []);
-
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
