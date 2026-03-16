@@ -47,7 +47,7 @@ export const isTokenValid = (token) => {
     const currentTime = Date.now();
 
     return expirationTime > currentTime;
-  } catch (error) {
+  } catch {
     return false;
   }
 };
@@ -57,7 +57,7 @@ export const decodeToken = (token) => {
 
   try {
     return jwtDecode(token) || null;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

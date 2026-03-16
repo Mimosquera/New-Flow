@@ -24,6 +24,7 @@ export const PasswordResetPage = () => {
 
   useEffect(() => {
     verifyToken();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export const PasswordResetPage = () => {
     try {
       const response = await authService.verifyResetToken(token);
       setIsValidToken(response.data.valid);
-    } catch (error) {
+    } catch {
       setIsValidToken(false);
     } finally {
       setLoading(false);

@@ -60,7 +60,8 @@
       "Bash(for f:*)",
       "Bash(do)",
       "Bash(python3 -c \":*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(grep -v \"^$\")"
     ]
   }
 }

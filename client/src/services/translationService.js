@@ -20,12 +20,12 @@ const isRateLimitActive = () => {
 };
 
 const setRateLimited = () => {
-  try { localStorage.setItem(RL_KEY, String(Date.now() + RL_TTL_MS)); } catch {}
+  try { localStorage.setItem(RL_KEY, String(Date.now() + RL_TTL_MS)); } catch { /* no-op */ }
 };
 
 const clearRateLimit = () => {
   rateLimited = false;
-  try { localStorage.removeItem(RL_KEY); } catch {}
+  try { localStorage.removeItem(RL_KEY); } catch { /* no-op */ }
 };
 
 let rateLimited = isRateLimitActive();
@@ -37,7 +37,7 @@ const loadCache = () => {
     const { entries, ts } = JSON.parse(raw);
     if (Date.now() - ts > CACHE_TTL_MS) { localStorage.removeItem(STORAGE_KEY); return; }
     for (const [k, v] of Object.entries(entries)) translationCache.set(k, v);
-  } catch {}
+  } catch { /* no-op */ }
 };
 
 const saveCache = () => {
@@ -46,7 +46,7 @@ const saveCache = () => {
       entries: Object.fromEntries(translationCache),
       ts: Date.now(),
     }));
-  } catch {}
+  } catch { /* no-op */ }
 };
 
 loadCache();
@@ -90,7 +90,7 @@ export const translateText = async (text, targetLang, sourceLang = DEFAULT_SOURC
           rateLimited = true;
           setRateLimited();
         }
-      } catch {}
+      } catch { /* no-op */ }
 
       if (!rateLimited) await new Promise(r => setTimeout(r, REQUEST_DELAY_MS));
       resolve(result);
@@ -120,5 +120,5 @@ export const translateObject = async (obj, fields, targetLang, sourceLang = DEFA
 export const clearTranslationCache = () => {
   translationCache.clear();
   clearRateLimit();
-  try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  try { localStorage.removeItem(STORAGE_KEY); } catch { /* no-op */ }
 };

@@ -143,8 +143,7 @@ export const translations = {
     loadMorePosts: 'Load More Posts',
     hidePosts: 'Hide Posts',
     deleteUpdate: 'Delete Update',
-    confirmDelete: 'Are you sure you want to delete this update?',
-    
+
     // ServiceManager
     addService: 'Add Service',
     editService: 'Edit Service',
@@ -196,7 +195,6 @@ export const translations = {
     allEmployees: 'All Employees',
     allDays: 'All Days',
     day: 'Day',
-    employee: 'Employee',
     noAvailability: 'No availability set yet. Add your first availability slot!',
     selectOneDay: 'Please select at least one day',
     endTimeAfterStart: 'End time must be after start time',
@@ -572,8 +570,7 @@ export const translations = {
     loadMorePosts: 'Cargar Más Publicaciones',
     hidePosts: 'Ocultar Publicaciones',
     deleteUpdate: 'Eliminar Actualización',
-    confirmDelete: '¿Estás seguro de que deseas eliminar esta actualización?',
-    
+
     // ServiceManager
     addService: 'Agregar Servicio',
     editService: 'Editar Servicio',
@@ -625,7 +622,6 @@ export const translations = {
     allEmployees: 'Todos los Empleados',
     allDays: 'Todos los Días',
     day: 'Día',
-    employee: 'Empleado',
     noAvailability: 'Aún no hay disponibilidad. ¡Agregue su primer horario!',
     selectOneDay: 'Por favor seleccione al menos un día',
     endTimeAfterStart: 'La hora de fin debe ser después de la hora de inicio',

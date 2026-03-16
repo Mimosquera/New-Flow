@@ -43,6 +43,7 @@ export const ProfileManager = ({ onLogout }) => {
 
   useEffect(() => {
     fetchProfile();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProfile = async () => {
@@ -66,7 +67,7 @@ export const ProfileManager = ({ onLogout }) => {
         bio: data.bio || ''
       });
       setImagePreview(data.profileImageUrl || null);
-    } catch (error) {
+    } catch {
       setAlerts({ error: t('failedToLoadProfile'), success: null });
     }
   };
@@ -297,7 +298,7 @@ export const ProfileManager = ({ onLogout }) => {
       setAlerts({ error: null, success: t('resetLinkSent') });
       setShowForgotPassword(false);
       setResetEmail('');
-    } catch (error) {
+    } catch {
       hapticWarning();
       setAlerts({ error: t('failedToSendResetLink'), success: null });
     } finally {

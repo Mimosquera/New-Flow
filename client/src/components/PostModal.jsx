@@ -318,6 +318,11 @@ const ZoomableImage = ({ src, alt }) => {
   );
 };
 
+ZoomableImage.propTypes = {
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
+};
+
 const mediaUrl = (url) => {
   if (!url) return null;
   return url.startsWith('http') ? url : `${SERVER_BASE_URL}${url}`;

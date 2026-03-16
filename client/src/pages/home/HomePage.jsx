@@ -31,7 +31,7 @@ const loadPostsCache = () => {
 const savePostsCache = (posts, total) => {
   try {
     localStorage.setItem(POSTS_CACHE_KEY, JSON.stringify({ posts, total, ts: Date.now() }));
-  } catch {}
+  } catch { /* no-op */ }
 };
 
 const SKELETON_MIN_MS = 420;

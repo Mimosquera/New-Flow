@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, FileText, PenLine } from 'lucide-react';
 import { Alert, FormInput } from '../../components/Common/index.jsx';
@@ -146,6 +147,22 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
       </div>
     </div>
   );
+};
+
+PostCard.propTypes = {
+  update: PropTypes.shape({
+    media_url: PropTypes.string,
+    media_type: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    date: PropTypes.string,
+    author: PropTypes.string,
+  }).isRequired,
+  onOpen: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  canManage: PropTypes.bool.isRequired,
+  t: PropTypes.func.isRequired,
 };
 
 export const PostsManager = () => {

@@ -6,8 +6,6 @@ import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 
-const THEME_COLOR = 'rgb(5, 60, 82)';
-
 export const TeamManager = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
@@ -44,8 +42,8 @@ export const TeamManager = () => {
       setLoadingEmployees(true);
       const response = await authService.getEmployees();
       setEmployees(response.data.data || []);
-    } catch (err) {
-      // Optionally show error
+    } catch {
+      // intentional
     } finally {
       setLoadingEmployees(false);
     }
@@ -157,8 +155,9 @@ export const TeamManager = () => {
   const handleCancelDelete = (employeeId) => {
     setShowDeleteConfirm(null);
     setDeletePasswordData(prev => {
-      const { [employeeId]: _, ...rest } = prev;
-      return rest;
+      const next = { ...prev };
+      delete next[employeeId];
+      return next;
     });
   };
 
