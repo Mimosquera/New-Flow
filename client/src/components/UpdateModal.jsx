@@ -9,10 +9,24 @@ import styles from './UpdateModal.module.css';
 const ZoomableImage = ({ src, alt }) => {
   const wrapRef = useRef(null);
   const scaleRef = useRef(1);
+  const txRef = useRef(0);
+  const tyRef = useRef(0);
   const lastDistRef = useRef(null);
+  const lastTouchRef = useRef(null);
   const lastTapRef = useRef(0);
+  const mouseDownRef = useRef(null);
+  const didDragRef = useRef(false);
   const [scale, setScale] = useState(1);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
   const [pinching, setPinching] = useState(false);
+
+  const resetZoom = useCallback(() => {
+    scaleRef.current = 1;
+    txRef.current = 0;
+    tyRef.current = 0;
+    setScale(1);
+    setPos({ x: 0, y: 0 });
+  }, []);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -21,6 +35,7 @@ const ZoomableImage = ({ src, alt }) => {
     const onTouchStart = (e) => {
       if (e.touches.length === 2) {
         setPinching(true);
+        lastTouchRef.current = null;
         lastDistRef.current = Math.hypot(
           e.touches[1].clientX - e.touches[0].clientX,
           e.touches[1].clientY - e.touches[0].clientY
@@ -28,47 +43,97 @@ const ZoomableImage = ({ src, alt }) => {
       } else if (e.touches.length === 1) {
         const now = Date.now();
         if (now - lastTapRef.current < 280) {
-          scaleRef.current = 1;
-          setScale(1);
+          resetZoom();
         }
         lastTapRef.current = now;
+        if (scaleRef.current > 1) {
+          lastTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
       }
     };
 
     const onTouchMove = (e) => {
-      if (e.touches.length !== 2 || lastDistRef.current === null) return;
-      e.preventDefault();
-      const dist = Math.hypot(
-        e.touches[1].clientX - e.touches[0].clientX,
-        e.touches[1].clientY - e.touches[0].clientY
-      );
-      scaleRef.current = Math.max(1, Math.min(5, scaleRef.current * (dist / lastDistRef.current)));
-      lastDistRef.current = dist;
-      setScale(scaleRef.current);
+      if (e.touches.length === 2 && lastDistRef.current !== null) {
+        e.preventDefault();
+        const dist = Math.hypot(
+          e.touches[1].clientX - e.touches[0].clientX,
+          e.touches[1].clientY - e.touches[0].clientY
+        );
+        scaleRef.current = Math.max(1, Math.min(5, scaleRef.current * (dist / lastDistRef.current)));
+        lastDistRef.current = dist;
+        setScale(scaleRef.current);
+      } else if (e.touches.length === 1 && scaleRef.current > 1 && lastTouchRef.current) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - lastTouchRef.current.x;
+        const dy = e.touches[0].clientY - lastTouchRef.current.y;
+        lastTouchRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        txRef.current += dx;
+        tyRef.current += dy;
+        setPos({ x: txRef.current, y: tyRef.current });
+      }
     };
 
     const onTouchEnd = () => {
       lastDistRef.current = null;
+      lastTouchRef.current = null;
       setPinching(false);
+      if (scaleRef.current <= 1) {
+        txRef.current = 0;
+        tyRef.current = 0;
+        setPos({ x: 0, y: 0 });
+      }
     };
 
     const onWheel = (e) => {
       e.preventDefault();
-      scaleRef.current = Math.max(1, Math.min(5, scaleRef.current - e.deltaY * 0.003));
-      setScale(scaleRef.current);
+      const newScale = Math.max(1, Math.min(5, scaleRef.current - e.deltaY * 0.003));
+      scaleRef.current = newScale;
+      setScale(newScale);
+      if (newScale <= 1) {
+        txRef.current = 0;
+        tyRef.current = 0;
+        setPos({ x: 0, y: 0 });
+      }
+    };
+
+    const onMouseDown = (e) => {
+      if (scaleRef.current <= 1) return;
+      e.preventDefault();
+      didDragRef.current = false;
+      mouseDownRef.current = { x: e.clientX, y: e.clientY, tx: txRef.current, ty: tyRef.current };
+    };
+
+    const onMouseMove = (e) => {
+      if (!mouseDownRef.current) return;
+      const dx = e.clientX - mouseDownRef.current.x;
+      const dy = e.clientY - mouseDownRef.current.y;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) didDragRef.current = true;
+      txRef.current = mouseDownRef.current.tx + dx;
+      tyRef.current = mouseDownRef.current.ty + dy;
+      setPos({ x: txRef.current, y: tyRef.current });
+    };
+
+    const onMouseUp = () => {
+      mouseDownRef.current = null;
     };
 
     el.addEventListener('touchstart', onTouchStart, { passive: true });
     el.addEventListener('touchmove', onTouchMove, { passive: false });
     el.addEventListener('touchend', onTouchEnd, { passive: true });
     el.addEventListener('wheel', onWheel, { passive: false });
+    el.addEventListener('mousedown', onMouseDown);
+    el.addEventListener('mousemove', onMouseMove);
+    el.addEventListener('mouseup', onMouseUp);
     return () => {
       el.removeEventListener('touchstart', onTouchStart);
       el.removeEventListener('touchmove', onTouchMove);
       el.removeEventListener('touchend', onTouchEnd);
       el.removeEventListener('wheel', onWheel);
+      el.removeEventListener('mousedown', onMouseDown);
+      el.removeEventListener('mousemove', onMouseMove);
+      el.removeEventListener('mouseup', onMouseUp);
     };
-  }, []);
+  }, [resetZoom]);
 
   return (
     <div
@@ -77,10 +142,11 @@ const ZoomableImage = ({ src, alt }) => {
         width: '100%', height: '100%',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         overflow: 'hidden',
-        cursor: scale > 1 ? 'zoom-out' : 'zoom-in',
+        cursor: scale > 1 ? 'grab' : 'zoom-in',
       }}
       onClick={(e) => {
-        if (scale > 1) { e.stopPropagation(); scaleRef.current = 1; setScale(1); }
+        if (didDragRef.current) { e.stopPropagation(); return; }
+        if (scale > 1) { e.stopPropagation(); resetZoom(); }
       }}
     >
       <img
@@ -91,7 +157,7 @@ const ZoomableImage = ({ src, alt }) => {
           maxWidth: '95%',
           maxHeight: '95vh',
           objectFit: 'contain',
-          transform: `scale(${scale})`,
+          transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
           transition: pinching ? 'none' : 'transform 0.18s ease',
           userSelect: 'none',
           WebkitUserSelect: 'none',
@@ -116,7 +182,6 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   const x = useMotionValue(0);
   const pointerStartRef = useRef(null);
   const xBaseRef = useRef(0);
-  const prevIndexRef = useRef(initialIndex);
 
   const showNav = updates.length > 1;
 
@@ -131,30 +196,24 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
     }
   }, [x]);
 
+  // On open: instantly position track at the opened post, no animation
   useLayoutEffect(() => {
     if (show && containerRef.current) {
       const w = containerRef.current.offsetWidth;
       setSlideWidth(w);
       setCurrentIndex(initialIndex);
       setFullscreen(false);
-      prevIndexRef.current = initialIndex;
       x.set(-initialIndex * w);
     }
   }, [show, initialIndex, x]);
-
-  useEffect(() => {
-    if (show && currentIndex !== prevIndexRef.current) {
-      prevIndexRef.current = currentIndex;
-      snapTo(currentIndex);
-    }
-  }, [currentIndex, show, snapTo]);
 
   const update = updates[currentIndex];
 
   const goTo = useCallback((idx) => {
     setCurrentIndex(idx);
     setFullscreen(false);
-  }, []);
+    snapTo(idx);
+  }, [snapTo]);
 
   const goPrev = useCallback(() => {
     goTo((currentIndex - 1 + updates.length) % updates.length);
@@ -210,12 +269,10 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
     const threshold = 48;
     if (delta < -threshold && currentIndex < updates.length - 1) {
       const next = currentIndex + 1;
-      prevIndexRef.current = next;
       setCurrentIndex(next);
       snapTo(next);
     } else if (delta > threshold && currentIndex > 0) {
       const prev = currentIndex - 1;
-      prevIndexRef.current = prev;
       setCurrentIndex(prev);
       snapTo(prev);
     } else {
@@ -254,9 +311,10 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   return (
     <>
       <div className={styles.backdrop} onClick={onClose} />
-      <div className={styles.modalWrap}>
+      <div className={styles.modalWrap} onClick={onClose}>
         <motion.div
           className={styles.modal}
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.97, y: 6 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.97, y: 6 }}
