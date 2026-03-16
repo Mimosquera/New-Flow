@@ -212,21 +212,21 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
                 custom={direction}
                 className={styles.slideContent}
                 variants={{
-                  enter: (dir) => ({ opacity: 0, x: dir * 50 }),
+                  enter: (dir) => ({ opacity: 0, x: dir * 22 }),
                   center: { opacity: 1, x: 0 },
-                  exit: (dir) => ({ opacity: 0, x: dir * -50 }),
+                  exit: (dir) => ({ opacity: 0, x: dir * -22 }),
                 }}
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.11, ease: [0.25, 0.1, 0.25, 1] }}
                 drag={showNav ? 'x' : false}
                 dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.12}
+                dragElastic={0.05}
                 dragDirectionLock
                 onDragEnd={(_, { offset }) => {
-                  if (offset.x < -60) goNext();
-                  else if (offset.x > 60) goPrev();
+                  if (offset.x < -38) goNext();
+                  else if (offset.x > 38) goPrev();
                 }}
                 style={{ cursor: showNav ? 'grab' : 'default' }}
               >

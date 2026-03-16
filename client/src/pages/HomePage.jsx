@@ -15,6 +15,27 @@ import { useTranslation } from '../hooks/useTranslation.js';
 import { useTranslateItems } from '../hooks/useTranslateItems.js';
 import styles from './HomePage.module.css';
 
+const POSTS_CACHE_KEY = 'nf_posts_v2';
+const POSTS_CACHE_TTL = 2 * 60 * 60 * 1000;
+
+const loadPostsCache = () => {
+  try {
+    const raw = localStorage.getItem(POSTS_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Date.now() - parsed.ts > POSTS_CACHE_TTL) { localStorage.removeItem(POSTS_CACHE_KEY); return null; }
+    return parsed;
+  } catch { return null; }
+};
+
+const savePostsCache = (posts, total) => {
+  try {
+    localStorage.setItem(POSTS_CACHE_KEY, JSON.stringify({ posts, total, ts: Date.now() }));
+  } catch {}
+};
+
+const SKELETON_MIN_MS = 420;
+
 const sectionVariants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
@@ -147,9 +168,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
   useEffect(() => () => stopAutoScroll(), [stopAutoScroll]);
 
   const [news, setNews] = useState([]);
-  const [displayCount, setDisplayCount] = useState(pageSize);
   const [totalUpdates, setTotalUpdates] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [selectedUpdateIndex, setSelectedUpdateIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
@@ -173,50 +194,118 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const translating = translatingServices || translatingNews;
 
   const fetchServices = useCallback(async () => {
+    const t0 = Date.now();
     try {
       const response = await serviceService.getAll();
       setServices(response.data);
     } catch (error) {
       console.error('Error fetching services:', error);
     } finally {
-      setServicesLoading(false);
-    }
-  }, []);
-
-  const fetchUpdates = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await updateService.getAll();
-      setNews(response.data.updates);
-      setTotalUpdates(response.data.total);
-    } catch (error) {
-      console.error('Error fetching updates:', error);
-    } finally {
-      setLoading(false);
+      const remaining = SKELETON_MIN_MS - (Date.now() - t0);
+      if (remaining > 0) {
+        setTimeout(() => setServicesLoading(false), remaining);
+      } else {
+        setServicesLoading(false);
+      }
     }
   }, []);
 
   useEffect(() => {
     const token = getToken();
     setIsLoggedIn(!!token);
-    fetchUpdates();
     fetchServices();
-  }, [fetchUpdates, fetchServices]);
 
-  const [viewMorePending, setViewMorePending] = useState(false);
+    const cached = loadPostsCache();
+    if (cached) {
+      const postsToShow = cached.posts.slice(0, pageSize);
+      const cachedIds = postsToShow.map(p => p.id).join(',');
 
-  const handleViewMore = () => {
+      let syncResult = null;
+      let initialRevealDone = false;
+
+      const reveal = (posts, total) => {
+        setNews(posts);
+        setTotalUpdates(total);
+        setLoading(false);
+      };
+
+      const timer = setTimeout(() => {
+        initialRevealDone = true;
+        if (syncResult) {
+          reveal(syncResult.posts, syncResult.total);
+          if (syncResult.isNew) savePostsCache(syncResult.posts, syncResult.total);
+        } else {
+          reveal(postsToShow, cached.total);
+        }
+      }, SKELETON_MIN_MS);
+
+      updateService.getAll(pageSize, 0)
+        .then(({ data }) => {
+          if (!data.updates?.length) return;
+          const freshIds = data.updates.map(p => p.id).join(',');
+          const isNew = freshIds !== cachedIds;
+          syncResult = { posts: data.updates, total: data.total, isNew };
+          if (initialRevealDone) {
+            if (isNew) {
+              setLoading(true);
+              setTimeout(() => {
+                reveal(data.updates, data.total);
+                savePostsCache(data.updates, data.total);
+              }, SKELETON_MIN_MS);
+            } else {
+              savePostsCache(data.updates, data.total);
+            }
+          }
+        })
+        .catch(() => {});
+
+      return () => clearTimeout(timer);
+    } else {
+      const t0 = Date.now();
+      updateService.getAll(pageSize, 0)
+        .then(({ data }) => {
+          setNews(data.updates);
+          setTotalUpdates(data.total);
+          savePostsCache(data.updates, data.total);
+        })
+        .catch(err => console.error('Error fetching updates:', err))
+        .finally(() => {
+          const remaining = SKELETON_MIN_MS - (Date.now() - t0);
+          if (remaining > 0) {
+            setTimeout(() => setLoading(false), remaining);
+          } else {
+            setLoading(false);
+          }
+        });
+    }
+  }, [fetchServices, pageSize]);
+
+  const handleViewMore = useCallback(async () => {
     hapticLight();
-    setViewMorePending(true);
-    setTimeout(() => {
-      const increment = window.innerWidth < 768 ? 2 : 4;
-      setDisplayCount(prev => prev + increment);
-      setViewMorePending(false);
-    }, 380);
-  };
+    setLoadingMore(true);
+    const t0 = Date.now();
+    let result = null;
+    try {
+      const { data } = await updateService.getAll(pageSize, news.length);
+      result = { merged: [...news, ...data.updates], total: data.total };
+    } catch (err) {
+      console.error('Error fetching more updates:', err);
+    }
+    const finish = () => {
+      if (result) {
+        setNews(result.merged);
+        setTotalUpdates(result.total);
+        savePostsCache(result.merged, result.total);
+      }
+      setLoadingMore(false);
+    };
+    const remaining = SKELETON_MIN_MS - (Date.now() - t0);
+    if (remaining > 0) setTimeout(finish, remaining);
+    else finish();
+  }, [news, pageSize]);
 
   const handleShowLess = () => {
-    setDisplayCount(pageSize);
+    setNews(prev => prev.slice(0, pageSize));
     setTimeout(() => {
       updatesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
@@ -245,8 +334,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     navigate('/appointments', { state: { selectedService: service } });
   };
 
-  const displayedNews = translatedNews.slice(0, displayCount);
-  const hasMore = displayCount < totalUpdates;
+  const hasMore = news.length < totalUpdates;
 
   const loopedServices = (() => {
     if (!translatedServices.length) return [];
@@ -385,7 +473,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
               {translatedServices.map((service, idx) => (
                 <motion.div
                   key={service.id}
-                  className={styles.serviceCard}
+                  className={`${styles.serviceCard}${expandedServiceId === service.id ? ` ${styles.serviceCardExpanded}` : ''}`}
                   style={{ width: 'min(300px, 80vw)' }}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
@@ -448,7 +536,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   {loopedServices.map((service, idx) => (
                     <div key={service._key} className={styles.carouselSlide}>
                       <motion.div
-                        className={styles.serviceCard}
+                        className={`${styles.serviceCard}${expandedServiceId === service.id ? ` ${styles.serviceCardExpanded}` : ''}`}
                         style={{ height: '100%' }}
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
@@ -550,7 +638,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 </div>
               ))}
             </div>
-          ) : displayedNews.length === 0 ? (
+          ) : translatedNews.length === 0 ? (
             <div className="text-center" style={{ color: 'rgba(255,255,255,0.6)' }}>
               <p>{t('noUpdates')}</p>
             </div>
@@ -558,7 +646,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <>
               <div className="row g-3">
                 <AnimatePresence initial={false}>
-                {displayedNews.map((article) => (
+                {translatedNews.map((article) => (
                   <motion.div
                     key={article.id}
                     className="col-6 col-lg-3 mb-2"
@@ -568,7 +656,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   </motion.div>
                 ))}
                 </AnimatePresence>
-                {viewMorePending && Array.from({ length: pageSize }).map((_, i) => (
+                {loadingMore && Array.from({ length: pageSize }).map((_, i) => (
                   <motion.div
                     key={`skeleton-${i}`}
                     className="col-6 col-lg-3 mb-2"
@@ -598,12 +686,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
                 viewport={{ once: true, amount: 0.8 }}
                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
               >
-                {hasMore && !viewMorePending && (
+                {hasMore && !loadingMore && (
                   <button className={`${styles.fancyButton} me-2`} onClick={handleViewMore}>
                     {t('viewMore')}
                   </button>
                 )}
-                {displayCount > pageSize && (
+                {news.length > pageSize && (
                   <button className={styles.fancyButtonOutline} onClick={() => { hapticLight(); handleShowLess(); }}>
                     {t('showLess')}
                   </button>
