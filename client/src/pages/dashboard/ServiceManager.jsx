@@ -318,9 +318,10 @@ export const ServiceManager = () => {
                       {editingService ? t('updateService') : t('addService')}
                     </button>
                     {editingService && (
-                      <button 
-                        type="button" 
-                        className="btn btn-secondary"
+                      <button
+                        type="button"
+                        className="btn"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500', fontSize: '0.88rem' }}
                         onClick={handleCancelEdit}
                       >
                         {t('cancel')}
@@ -403,7 +404,8 @@ export const ServiceManager = () => {
                                 </button>
                                 <span style={{ display: 'inline-block', width: '1px', height: '24px', background: 'rgba(70,161,161,0.3)', margin: '0 0.5rem', verticalAlign: 'middle' }}></span>
                                 <button
-                                  className="btn btn-outline-danger d-flex align-items-center gap-1"
+                                  className="btn btn-sm d-flex align-items-center gap-1"
+                                  style={{ background: 'rgba(220,53,69,0.15)', color: '#ff7b7b', border: '1px solid rgba(220,53,69,0.35)', borderRadius: '6px', fontWeight: '600' }}
                                   onClick={() => handleDelete(service?.id)}
                                   disabled={!service?.id}
                                 >

@@ -52,6 +52,10 @@ export const authService = {
 
   updateEmployeePassword: (data) => apiClient.put('/auth/update-employee-password', data),
 
+  updateEmployeeName: (data) => apiClient.put('/auth/update-employee-name', data),
+
+  updateEmployeeEmail: (data) => apiClient.put('/auth/update-employee-email', data),
+
   deleteEmployee: (employeeId, adminPassword) => {
     return apiClient.delete(`/auth/employee/${employeeId}`, {
       data: { adminPassword }
@@ -67,6 +71,8 @@ export const authService = {
   }),
 
   deleteProfileImage: () => apiClient.delete('/auth/profile/image'),
+
+  verifyPassword: (data) => apiClient.post('/auth/verify-password', data),
 
   forgotPassword: (data) => apiClient.post('/auth/forgot-password', data),
 

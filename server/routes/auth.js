@@ -209,6 +209,85 @@ router.put('/update-employee-password', verifyToken, async (req, res) => {
   }
 });
 
+// PUT /api/auth/update-employee-name
+router.put('/update-employee-name', verifyToken, async (req, res) => {
+  try {
+    const { employeeId, newName, adminPassword } = req.body;
+
+    if (!employeeId || !newName || !adminPassword) {
+      return res.status(400).json({ message: 'Employee ID, new name, and admin password are required' });
+    }
+
+    if (req.user.email !== process.env.SEED_EMPLOYEE_EMAIL) {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    const requestingUser = await User.findByPk(req.user.id);
+    const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
+    if (!isValidAdminPassword) {
+      return res.status(401).json({ message: 'Invalid admin password' });
+    }
+
+    const employee = await User.findByPk(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    if (!employee.isEmployee) {
+      return res.status(400).json({ message: 'User is not an employee' });
+    }
+
+    await employee.update({ name: newName.trim() });
+
+    res.json({ message: 'Employee name updated successfully', user: employee.toJSON() });
+  } catch (error) {
+    console.error('Update employee name error:', error);
+    res.status(500).json({ message: error.message || 'Failed to update employee name' });
+  }
+});
+
+// PUT /api/auth/update-employee-email
+router.put('/update-employee-email', verifyToken, async (req, res) => {
+  try {
+    const { employeeId, newEmail, adminPassword } = req.body;
+
+    if (!employeeId || !newEmail || !adminPassword) {
+      return res.status(400).json({ message: 'Employee ID, new email, and admin password are required' });
+    }
+
+    if (req.user.email !== process.env.SEED_EMPLOYEE_EMAIL) {
+      return res.status(403).json({ message: 'Access denied. Admin only.' });
+    }
+
+    const requestingUser = await User.findByPk(req.user.id);
+    const isValidAdminPassword = await requestingUser.verifyPassword(adminPassword);
+    if (!isValidAdminPassword) {
+      return res.status(401).json({ message: 'Invalid admin password' });
+    }
+
+    const existing = await User.findOne({ where: { email: newEmail.trim().toLowerCase() } });
+    if (existing) {
+      return res.status(400).json({ message: 'Email already registered' });
+    }
+
+    const employee = await User.findByPk(employeeId);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    if (!employee.isEmployee) {
+      return res.status(400).json({ message: 'User is not an employee' });
+    }
+
+    await employee.update({ email: newEmail.trim().toLowerCase() });
+
+    res.json({ message: 'Employee email updated successfully', user: employee.toJSON() });
+  } catch (error) {
+    console.error('Update employee email error:', error);
+    res.status(500).json({ message: error.message || 'Failed to update employee email' });
+  }
+});
+
 // DELETE /api/auth/employee/:id
 router.delete('/employee/:id', verifyToken, async (req, res) => {
   try {
@@ -251,6 +330,17 @@ router.delete('/employee/:id', verifyToken, async (req, res) => {
     console.error('Delete employee error:', error);
     res.status(500).json({ message: error.message || 'Failed to delete employee' });
   }
+});
+
+// POST /api/auth/verify-password
+router.post('/verify-password', verifyToken, async (req, res) => {
+  const { password } = req.body;
+  if (!password) return res.status(400).json({ message: 'Password is required' });
+  const user = await User.findByPk(req.user.id);
+  if (!user) return res.status(404).json({ message: 'User not found' });
+  const isValid = await user.verifyPassword(password);
+  if (!isValid) return res.status(401).json({ message: 'Incorrect password' });
+  res.json({ valid: true });
 });
 
 // GET /api/auth/profile

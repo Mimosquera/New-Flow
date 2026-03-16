@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, FileText, PenLine } from 'lucide-react';
@@ -16,20 +16,18 @@ const INITIAL_DISPLAY = 4;
 const LOAD_MORE_BATCH = 8;
 
 const cardStyle = {
-  background: 'linear-gradient(160deg, rgb(8, 16, 26) 0%, rgba(5, 38, 60, 0.92) 100%)',
-  border: '1px solid rgba(255, 255, 255, 0.07)',
-  borderTop: '1.5px solid rgba(58, 171, 219, 0.25)',
-  borderRadius: '16px',
+  background: 'rgba(5, 60, 82, 0.45)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  border: '1px solid rgba(58, 171, 219, 0.2)',
+  borderRadius: '14px',
   overflow: 'hidden',
-  marginBottom: '0.75rem',
 };
 
 const cardTitleStyle = {
-  fontFamily: "'Space Grotesk', sans-serif",
-  color: '#fff',
+  color: '#e0f7f7',
   fontWeight: '600',
   fontSize: '0.88rem',
-  letterSpacing: '-0.01em',
   cursor: 'pointer',
   flex: 1,
   margin: 0,
@@ -37,8 +35,7 @@ const cardTitleStyle = {
 };
 
 const cardTextStyle = {
-  fontFamily: "'Inter', sans-serif",
-  color: 'rgba(255,255,255,0.52)',
+  color: 'rgba(255,255,255,0.6)',
   fontSize: '0.78rem',
   lineHeight: '1.55',
   cursor: 'pointer',
@@ -46,12 +43,10 @@ const cardTextStyle = {
 };
 
 const cardMetaStyle = {
-  fontFamily: "'Inter', sans-serif",
   fontSize: '0.68rem',
-  color: 'rgba(255,255,255,0.28)',
+  color: 'rgba(58,171,219,0.55)',
   fontWeight: '500',
-  letterSpacing: '0.02em',
-  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
+  borderTop: '1px solid rgba(58, 171, 219, 0.12)',
   paddingTop: '0.5rem',
   marginTop: '0.25rem',
   display: 'flex',
@@ -66,18 +61,18 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
     : null;
 
   return (
-    <div style={{ ...cardStyle, marginBottom: 0, height: '100%' }}>
+    <div style={{ ...cardStyle, height: '100%' }}>
       <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
         <h6 style={cardTitleStyle} onClick={onOpen}>{update.title}</h6>
 
         {src && (
           <div
             className="mt-3 mb-2"
-            style={{ cursor: 'pointer', position: 'relative', borderRadius: '12px', overflow: 'hidden' }}
+            style={{ cursor: 'pointer', position: 'relative', paddingBottom: '56.25%', borderRadius: '12px', overflow: 'hidden' }}
             onClick={onOpen}
           >
             {!imgLoaded && (
-              <div className="sk" style={{ position: 'absolute', inset: 0, height: '100%', borderRadius: '12px', zIndex: 1 }} />
+              <div className="sk" style={{ position: 'absolute', inset: 0, borderRadius: '12px', zIndex: 1 }} />
             )}
             {update.media_type === 'image' ? (
               <img
@@ -85,16 +80,14 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
                 alt={update.title}
                 loading="lazy"
                 decoding="async"
-                className="img-fluid rounded"
-                style={{ maxHeight: '200px', width: '100%', objectFit: 'cover', borderRadius: '12px', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
                 onLoad={() => setImgLoaded(true)}
                 onError={() => setImgLoaded(true)}
               />
             ) : (
               <video
                 src={src}
-                className="w-100"
-                style={{ maxHeight: '200px', objectFit: 'cover', borderRadius: '12px', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
                 onLoadedData={() => setImgLoaded(true)}
                 onError={() => setImgLoaded(true)}
               />
@@ -188,6 +181,8 @@ export const PostsManager = () => {
   const [editMediaFile, setEditMediaFile] = useState(null);
   const [editLoading, setEditLoading] = useState(false);
 
+  const formCardRef = useRef(null);
+
   const handleUpdateClick = (update) => {
     const idx = translatedUpdates.findIndex(u => u.id === update.id);
     setSelectedUpdateIndex(idx >= 0 ? idx : 0);
@@ -279,29 +274,34 @@ export const PostsManager = () => {
 
   const handleMediaChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (!file) return;
+    if (mediaPreview?.url?.startsWith('blob:')) URL.revokeObjectURL(mediaPreview.url);
+    if (editingId) {
+      setEditMediaFile(file);
+    } else {
       setMediaFile(file);
-      
-      const previewUrl = URL.createObjectURL(file);
-      setMediaPreview({
-        url: previewUrl,
-        type: file.type.startsWith('image/') ? 'image' : 'video'
-      });
     }
+    setMediaPreview({ url: URL.createObjectURL(file), type: file.type.startsWith('image/') ? 'image' : 'video' });
   };
 
   const handleRemoveMedia = () => {
-    if (mediaPreview) {
-      URL.revokeObjectURL(mediaPreview.url);
-    }
-    setMediaFile(null);
+    if (mediaPreview?.url?.startsWith('blob:')) URL.revokeObjectURL(mediaPreview.url);
     setMediaPreview(null);
+    if (editingId) {
+      setEditMediaFile(null);
+    } else {
+      setMediaFile(null);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setSuccess(null);
-    handleFormSubmit(e);
+    if (editingId) {
+      handleEditSave(editingId);
+    } else {
+      setSuccess(null);
+      handleFormSubmit(e);
+    }
   };
 
   const handleDelete = async (id) => {
@@ -326,12 +326,25 @@ export const PostsManager = () => {
     setEditingId(updateId);
     setEditForm({ title: original.title, content: original.content });
     setEditMediaFile(null);
+    setMediaFile(null);
+    if (original.media_url) {
+      const src = original.media_url.startsWith('http')
+        ? original.media_url
+        : `${SERVER_BASE_URL}${original.media_url}`;
+      setMediaPreview({ url: src, type: original.media_type || 'image' });
+    } else {
+      setMediaPreview(null);
+    }
+    setShowForm(true);
+    setTimeout(() => formCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
   };
 
   const handleEditCancel = () => {
     setEditingId(null);
     setEditForm({ title: '', content: '' });
     setEditMediaFile(null);
+    if (mediaPreview?.url?.startsWith('blob:')) URL.revokeObjectURL(mediaPreview.url);
+    setMediaPreview(null);
   };
 
   const handleEditSave = async (updateId) => {
@@ -347,7 +360,10 @@ export const PostsManager = () => {
       hapticSuccess();
       setSuccess(t('updateEdited'));
       setEditingId(null);
+      setEditForm({ title: '', content: '' });
       setEditMediaFile(null);
+      if (mediaPreview?.url?.startsWith('blob:')) URL.revokeObjectURL(mediaPreview.url);
+      setMediaPreview(null);
     } catch (error) {
       hapticWarning();
       console.error('Error editing update:', error);
@@ -372,7 +388,7 @@ export const PostsManager = () => {
         <div className="row justify-content-center">
           {/* Post New Update Form */}
           <div className="col-lg-4 mb-4">
-            <div className="post-update-card" style={{ ...cardStyle, marginBottom: '0' }}>
+            <div className="post-update-card" ref={formCardRef}>
               <div
                 className="d-flex justify-content-between align-items-center collapsible-header"
                 style={{
@@ -383,11 +399,11 @@ export const PostsManager = () => {
                   padding: '0.75rem 1rem',
                   borderRadius: (isDesktop || showForm) ? '0.75rem 0.75rem 0 0' : '0.75rem',
                 }}
-                onClick={() => setShowForm(!showForm)}
+                onClick={() => !editingId && setShowForm(!showForm)}
               >
                 <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>
                   <PenLine size={15} />
-                  {t('postUpdate')}
+                  {editingId ? t('editPost') : t('postUpdate')}
                 </h5>
                 <span className="d-lg-none">
                   {showForm ? <ChevronUp size={16} style={{ color: '#3aabdb' }} /> : <ChevronDown size={16} style={{ color: '#3aabdb' }} />}
@@ -425,8 +441,8 @@ export const PostsManager = () => {
                     label={t('title')}
                     name="title"
                     type="text"
-                    value={formData.title}
-                    onChange={handleChange}
+                    value={editingId ? editForm.title : formData.title}
+                    onChange={editingId ? (e) => setEditForm(p => ({ ...p, title: e.target.value })) : handleChange}
                     required
                   />
 
@@ -437,8 +453,8 @@ export const PostsManager = () => {
                       name="content"
                       className="form-control"
                       rows="5"
-                      value={formData.content}
-                      onChange={handleChange}
+                      value={editingId ? editForm.content : formData.content}
+                      onChange={editingId ? (e) => setEditForm(p => ({ ...p, content: e.target.value })) : handleChange}
                       placeholder={t('contentPlaceholder')}
                       required
                     />
@@ -466,7 +482,7 @@ export const PostsManager = () => {
                         {t('chooseFile')}
                       </label>
                       <span className="file-info-text">
-                        {mediaFile ? mediaFile.name : t('noFileChosen')}
+                        {(editingId ? editMediaFile : mediaFile)?.name ?? t('noFileChosen')}
                       </span>
                     </div>
                     <input
@@ -509,12 +525,23 @@ export const PostsManager = () => {
                     </div>
                   )}
 
-                  <div className="d-flex justify-content-center">
+                  <div className="d-flex justify-content-center gap-2">
+                    {editingId && (
+                      <button
+                        type="button"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '8px', padding: '0.35rem 1rem', fontSize: '0.82rem' }}
+                        onClick={handleEditCancel}
+                      >
+                        {t('cancel')}
+                      </button>
+                    )}
                     <button
                       type="submit"
                       className="btn post-update-btn"
+                      disabled={editingId ? editLoading : false}
                     >
-                      {t('post')}
+                      {editingId ? (editLoading ? '…' : t('save')) : t('post')}
                     </button>
                   </div>
                 </form>
@@ -574,60 +601,8 @@ export const PostsManager = () => {
                   const isOwner = currentUser?.id === update.user_id;
                   const canManage = isAdmin || isOwner;
 
-                  if (editingId === update.id) {
-                    return (
-                      <div key={update.id} className="col-6">
-                        <div style={{ ...cardStyle, marginBottom: 0, height: '100%', padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                          <input
-                            className="form-control form-control-sm"
-                            value={editForm.title}
-                            onChange={(e) => setEditForm(prev => ({ ...prev, title: e.target.value }))}
-                            placeholder={t('title')}
-                          />
-                          <textarea
-                            className="form-control form-control-sm"
-                            rows="4"
-                            value={editForm.content}
-                            onChange={(e) => setEditForm(prev => ({ ...prev, content: e.target.value }))}
-                            placeholder={t('content')}
-                          />
-                          <div className="d-flex align-items-center gap-2">
-                            <label
-                              htmlFor={`edit-media-${update.id}`}
-                              className="btn btn-sm mb-0"
-                              style={{ cursor: 'pointer', fontSize: '0.7rem', padding: '0.2rem 0.6rem', background: 'rgba(58,171,219,0.1)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '6px' }}
-                            >
-                              {t('chooseFile')}
-                            </label>
-                            <span style={{ fontSize: '0.68rem', color: 'rgba(255,255,255,0.4)' }}>
-                              {editMediaFile ? editMediaFile.name : t('noFileChosen')}
-                            </span>
-                            <input type="file" id={`edit-media-${update.id}`} className="d-none" accept="image/*,video/*" onChange={(e) => setEditMediaFile(e.target.files[0] || null)} />
-                          </div>
-                          <div className="d-flex gap-2 justify-content-end mt-auto">
-                            <button
-                              className="btn btn-sm"
-                              style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem', background: 'none', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '6px' }}
-                              onClick={handleEditCancel}
-                            >
-                              {t('cancel')}
-                            </button>
-                            <button
-                              className="btn btn-sm"
-                              style={{ fontSize: '0.72rem', padding: '0.2rem 0.65rem', background: 'rgba(58,171,219,0.18)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.45)', borderRadius: '6px' }}
-                              onClick={() => handleEditSave(update.id)}
-                              disabled={editLoading}
-                            >
-                              {editLoading ? '…' : t('save')}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  }
-
                   return (
-                  <div key={update.id} className="col-6">
+                  <div key={update.id} className="col-6" style={editingId === update.id ? { outline: '1.5px solid rgba(58,171,219,0.45)', borderRadius: '14px' } : {}}>
                     <PostCard
                       update={update}
                       onOpen={() => handleUpdateClick(update)}

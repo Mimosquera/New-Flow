@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { AnimatePresence, motion } from 'framer-motion';
 import { User, Lock, Camera, Trash2, LogOut, Pencil } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
@@ -21,6 +22,7 @@ export const ProfileManager = ({ onLogout }) => {
     bio: ''
   });
   const [isEditingLogin, setIsEditingLogin] = useState(false);
+  const [loginStep, setLoginStep] = useState(1);
   const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
   const [loginFormData, setLoginFormData] = useState({
     name: '',
@@ -36,6 +38,7 @@ export const ProfileManager = ({ onLogout }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [alerts, setAlerts] = useState({ error: null, success: null });
   const [loading, setLoading] = useState(false);
+  const [verifyLoading, setVerifyLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
@@ -74,11 +77,13 @@ export const ProfileManager = ({ onLogout }) => {
 
   const handleEditLogin = () => {
     setIsEditingLogin(true);
+    setLoginStep(1);
     setAlerts({ error: null, success: null });
   };
 
   const handleCancelLogin = () => {
     setIsEditingLogin(false);
+    setLoginStep(1);
     setLoginFormData({
       name: profile.name,
       email: profile.email,
@@ -87,6 +92,26 @@ export const ProfileManager = ({ onLogout }) => {
       confirmPassword: ''
     });
     setAlerts({ error: null, success: null });
+  };
+
+  const handleNextStep = async () => {
+    if (!loginFormData.currentPassword) {
+      hapticWarning();
+      setAlerts({ error: t('currentPasswordRequired'), success: null });
+      return;
+    }
+    setVerifyLoading(true);
+    setAlerts({ error: null, success: null });
+    try {
+      await authService.verifyPassword({ password: loginFormData.currentPassword });
+      setLoginStep(2);
+    } catch (error) {
+      hapticWarning();
+      const msg = error.response?.status === 401 ? t('invalidCurrentPassword') : t('currentPasswordRequired');
+      setAlerts({ error: msg, success: null });
+    } finally {
+      setVerifyLoading(false);
+    }
   };
 
   const handleLoginChange = (e) => {
@@ -429,7 +454,7 @@ export const ProfileManager = ({ onLogout }) => {
                       onClick={() => fileInputRef.current?.click()}
                       className="btn btn-sm d-flex align-items-center gap-1"
                       disabled={uploadingImage}
-                      style={{ backgroundColor: SECONDARY_COLOR, color: 'white', border: 'none', fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
+                      style={{ background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.4)', fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
                     >
                       <Camera size={12} />
                       {imagePreview ? t('changeProfileImage') : t('uploadProfileImage')}
@@ -438,9 +463,9 @@ export const ProfileManager = ({ onLogout }) => {
                       <button
                         type="button"
                         onClick={handleImageRemove}
-                        className="btn btn-sm btn-outline-danger d-flex align-items-center gap-1"
+                        className="btn btn-sm d-flex align-items-center gap-1"
                         disabled={uploadingImage}
-                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
+                        style={{ background: 'rgba(220,53,69,0.15)', color: '#ff7b7b', border: '1px solid rgba(220,53,69,0.35)', fontSize: '0.8rem', padding: '0.3rem 0.75rem' }}
                       >
                         <Trash2 size={12} />
                         {t('removeProfileImage')}
@@ -467,7 +492,7 @@ export const ProfileManager = ({ onLogout }) => {
                   <button type="submit" className="btn post-update-btn" disabled={loading || uploadingImage}>
                     {loading || uploadingImage ? t('updating') : t('save')}
                   </button>
-                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-secondary btn-sm" disabled={loading || uploadingImage}>
+                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={loading || uploadingImage}>
                     {t('cancel')}
                   </button>
                 </div>
@@ -518,57 +543,77 @@ export const ProfileManager = ({ onLogout }) => {
             )}
 
             {isEditingLogin && (
-              <form onSubmit={handleLoginSubmit} style={{ padding: '1rem' }}>
-                <div className="alert alert-info" style={{ fontSize: '0.85rem', marginBottom: '1rem' }}>
-                  {t('verifyIdentity')}
-                </div>
-
-                <div className="mb-3">
-                  <label htmlFor="currentPassword" className="form-label">{t('currentPassword')} *</label>
-                  <input type="password" id="currentPassword" name="currentPassword" className="form-control" value={loginFormData.currentPassword} onChange={handleLoginChange} required autoComplete="current-password" />
-                </div>
-
-                <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-                <h6 style={{ color: '#3aabdb', marginBottom: '0.75rem' }}>{t('accountInfo')}</h6>
-
-                <div className="row g-2 mb-2">
-                  <div className="col-12 col-sm-6">
-                    <label htmlFor="name" className="form-label">{t('name')} *</label>
-                    <input type="text" id="name" name="name" className="form-control" value={loginFormData.name} onChange={handleLoginChange} required autoComplete="name" />
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <label htmlFor="email" className="form-label">{t('email')} *</label>
-                    <input type="email" id="email" name="email" className="form-control" value={loginFormData.email} onChange={handleLoginChange} required autoComplete="email" />
-                  </div>
-                </div>
-
-                <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-
-                <h6 style={{ color: '#3aabdb', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem' }}>
-                  {t('leaveBlankToKeepPassword')}
-                </p>
-
-                <div className="row g-2 mb-3">
-                  <div className="col-12 col-sm-6">
-                    <label htmlFor="newPassword" className="form-label">{t('newPassword')}</label>
-                    <input type="password" id="newPassword" name="newPassword" className="form-control" value={loginFormData.newPassword} onChange={handleLoginChange} autoComplete="new-password" />
-                  </div>
-                  <div className="col-12 col-sm-6">
-                    <label htmlFor="confirmPassword" className="form-label">{t('confirmPassword')}</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" className="form-control" value={loginFormData.confirmPassword} onChange={handleLoginChange} autoComplete="new-password" />
-                  </div>
-                </div>
-
-                <div className="d-flex gap-2">
-                  <button type="submit" className="btn post-update-btn" disabled={loading}>
-                    {loading ? t('updating') : t('save')}
-                  </button>
-                  <button type="button" onClick={handleCancelLogin} className="btn btn-secondary btn-sm" disabled={loading}>
-                    {t('cancel')}
-                  </button>
-                </div>
+              <form onSubmit={handleLoginSubmit} style={{ padding: '1rem', overflow: 'hidden' }}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {loginStep === 1 ? (
+                    <motion.div
+                      key="login-step1"
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.55)', marginBottom: '0.85rem' }}>
+                        {t('verifyIdentity')}
+                      </p>
+                      <div className="mb-4">
+                        <label htmlFor="currentPassword" className="form-label">{t('currentPassword')} *</label>
+                        <input type="password" id="currentPassword" name="currentPassword" className="form-control" value={loginFormData.currentPassword} onChange={handleLoginChange} autoComplete="current-password" />
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button type="button" className="btn post-update-btn" onClick={handleNextStep} disabled={verifyLoading}>
+                          {verifyLoading ? t('loading') : t('continueBtn')}
+                        </button>
+                        <button type="button" onClick={handleCancelLogin} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={verifyLoading}>
+                          {t('cancel')}
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="login-step2"
+                      initial={{ opacity: 0, x: 18 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -18 }}
+                      transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                    >
+                      <h6 style={{ color: '#3aabdb', marginBottom: '0.75rem' }}>{t('accountInfo')}</h6>
+                      <div className="row g-2 mb-2">
+                        <div className="col-12 col-sm-6">
+                          <label htmlFor="name" className="form-label">{t('name')} *</label>
+                          <input type="text" id="name" name="name" className="form-control" value={loginFormData.name} onChange={handleLoginChange} required autoComplete="name" />
+                        </div>
+                        <div className="col-12 col-sm-6">
+                          <label htmlFor="email" className="form-label">{t('email')} *</label>
+                          <input type="email" id="email" name="email" className="form-control" value={loginFormData.email} onChange={handleLoginChange} required autoComplete="email" />
+                        </div>
+                      </div>
+                      <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
+                      <h6 style={{ color: '#3aabdb', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
+                      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem' }}>
+                        {t('leaveBlankToKeepPassword')}
+                      </p>
+                      <div className="row g-2 mb-3">
+                        <div className="col-12 col-sm-6">
+                          <label htmlFor="newPassword" className="form-label">{t('newPassword')}</label>
+                          <input type="password" id="newPassword" name="newPassword" className="form-control" value={loginFormData.newPassword} onChange={handleLoginChange} autoComplete="new-password" />
+                        </div>
+                        <div className="col-12 col-sm-6">
+                          <label htmlFor="confirmPassword" className="form-label">{t('confirmPassword')}</label>
+                          <input type="password" id="confirmPassword" name="confirmPassword" className="form-control" value={loginFormData.confirmPassword} onChange={handleLoginChange} autoComplete="new-password" />
+                        </div>
+                      </div>
+                      <div className="d-flex gap-2">
+                        <button type="submit" className="btn post-update-btn" disabled={loading}>
+                          {loading ? t('updating') : t('save')}
+                        </button>
+                        <button type="button" onClick={handleCancelLogin} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={loading}>
+                          {t('cancel')}
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </form>
             )}
           </div>

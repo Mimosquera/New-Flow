@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus } from 'lucide-react';
+import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus, Pencil, AtSign } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
@@ -14,16 +14,37 @@ export const TeamManager = () => {
   const [loadingEmployees, setLoadingEmployees] = useState(true);
   const [expandedEmployeeId, setExpandedEmployeeId] = useState(null);
   const [showCreateForm, setShowCreateForm] = useState(window.innerWidth >= 992);
-  const [alerts, setAlerts] = useState({ error: null, success: null, editError: null, editSuccess: null });
+  const [alerts, setAlerts] = useState({
+    error: null, success: null,
+    editError: null, editSuccess: null,
+    nameError: null, nameSuccess: null,
+    emailError: null, emailSuccess: null,
+  });
+
+  const [editPasswordStep, setEditPasswordStep] = useState('form');
   const [editPasswordData, setEditPasswordData] = useState({ newPassword: '', adminPassword: '' });
   const [editLoading, setEditLoading] = useState(false);
+
+  const [editNameStep, setEditNameStep] = useState('form');
+  const [editNameData, setEditNameData] = useState({ newName: '', adminPassword: '' });
+  const [editNameLoading, setEditNameLoading] = useState(false);
+
+  const [editEmailStep, setEditEmailStep] = useState('form');
+  const [editEmailData, setEditEmailData] = useState({ newEmail: '', adminPassword: '' });
+  const [editEmailLoading, setEditEmailLoading] = useState(false);
+
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [deletePasswordData, setDeletePasswordData] = useState({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
 
   useEffect(() => { fetchEmployees(); }, []);
 
-  const clearAlerts = () => setAlerts({ error: null, success: null, editError: null, editSuccess: null });
+  const clearAlerts = () => setAlerts({
+    error: null, success: null,
+    editError: null, editSuccess: null,
+    nameError: null, nameSuccess: null,
+    emailError: null, emailSuccess: null,
+  });
   const setAlert = (type, value) => setAlerts(prev => ({ ...prev, [type]: value }));
 
   const handleError = (err, defaultKey) => {
@@ -87,23 +108,74 @@ export const TeamManager = () => {
   const toggleEmployee = (employeeId) => {
     setExpandedEmployeeId(expandedEmployeeId === employeeId ? null : employeeId);
     setEditPasswordData({ newPassword: '', adminPassword: '' });
+    setEditPasswordStep('form');
+    setEditNameData({ newName: '', adminPassword: '' });
+    setEditNameStep('form');
+    setEditEmailData({ newEmail: '', adminPassword: '' });
+    setEditEmailStep('form');
     clearAlerts();
   };
 
-  const handleEditPasswordChange = (e) => {
-    const { name, value } = e.target;
-    setEditPasswordData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleUpdatePassword = async (e, employeeId) => {
+  // Edit Email — step 1: validate new email
+  const handleEditEmailNext = (e) => {
     e.preventDefault();
     clearAlerts();
-    if (!editPasswordData.newPassword || !editPasswordData.adminPassword) {
+    if (!editEmailData.newEmail.trim()) {
+      setAlert('emailError', t('pleaseFillRequired'));
+      return;
+    }
+    setEditEmailStep('confirm');
+  };
+
+  // Edit Email — step 2: confirm with admin password
+  const handleConfirmUpdateEmail = async (e, employeeId) => {
+    e.preventDefault();
+    clearAlerts();
+    if (!editEmailData.adminPassword) {
+      setAlert('emailError', t('pleaseFillRequired'));
+      return;
+    }
+    setEditEmailLoading(true);
+    try {
+      await authService.updateEmployeeEmail({
+        employeeId,
+        newEmail: editEmailData.newEmail.trim(),
+        adminPassword: editEmailData.adminPassword
+      });
+      hapticSuccess();
+      setAlert('emailSuccess', t('emailUpdatedSuccess'));
+      setEditEmailData({ newEmail: '', adminPassword: '' });
+      setEditEmailStep('form');
+      fetchEmployees();
+    } catch (err) {
+      hapticWarning();
+      setAlert('emailError', handleError(err, 'errorUpdatingEmail'));
+    } finally {
+      setEditEmailLoading(false);
+    }
+  };
+
+  // Edit Password — step 1: validate new password
+  const handleEditPasswordNext = (e) => {
+    e.preventDefault();
+    clearAlerts();
+    if (!editPasswordData.newPassword) {
       setAlert('editError', t('pleaseFillRequired'));
       return;
     }
     if (editPasswordData.newPassword.length < 6) {
       setAlert('editError', t('passwordMinLength'));
+      return;
+    }
+    setEditPasswordStep('confirm');
+  };
+
+  // Edit Password — step 2: confirm with admin password
+  const handleConfirmUpdatePassword = async (e, employeeId) => {
+    e.preventDefault();
+    clearAlerts();
+    if (!editPasswordData.adminPassword) {
+      setAlert('editError', t('pleaseFillRequired'));
       return;
     }
     setEditLoading(true);
@@ -116,11 +188,51 @@ export const TeamManager = () => {
       hapticSuccess();
       setAlert('editSuccess', t('passwordUpdatedSuccess'));
       setEditPasswordData({ newPassword: '', adminPassword: '' });
+      setEditPasswordStep('form');
     } catch (err) {
       hapticWarning();
       setAlert('editError', handleError(err, 'errorUpdatingPassword'));
     } finally {
       setEditLoading(false);
+    }
+  };
+
+  // Edit Name — step 1: validate new name
+  const handleEditNameNext = (e) => {
+    e.preventDefault();
+    clearAlerts();
+    if (!editNameData.newName.trim()) {
+      setAlert('nameError', t('pleaseFillRequired'));
+      return;
+    }
+    setEditNameStep('confirm');
+  };
+
+  // Edit Name — step 2: confirm with admin password
+  const handleConfirmUpdateName = async (e, employeeId) => {
+    e.preventDefault();
+    clearAlerts();
+    if (!editNameData.adminPassword) {
+      setAlert('nameError', t('pleaseFillRequired'));
+      return;
+    }
+    setEditNameLoading(true);
+    try {
+      await authService.updateEmployeeName({
+        employeeId,
+        newName: editNameData.newName.trim(),
+        adminPassword: editNameData.adminPassword
+      });
+      hapticSuccess();
+      setAlert('nameSuccess', t('nameUpdatedSuccess'));
+      setEditNameData({ newName: '', adminPassword: '' });
+      setEditNameStep('form');
+      fetchEmployees();
+    } catch (err) {
+      hapticWarning();
+      setAlert('nameError', handleError(err, 'errorUpdatingName'));
+    } finally {
+      setEditNameLoading(false);
     }
   };
 
@@ -240,11 +352,7 @@ export const TeamManager = () => {
           <button
             className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
             onClick={() => toggleEmployee(employee.id)}
-            style={{
-              color: '#fff',
-              background: 'transparent',
-              fontWeight: 600
-            }}
+            style={{ color: '#fff', background: 'transparent', fontWeight: 600 }}
           >
             <div>
               <h5 className="mb-1" style={{ color: expandedEmployeeId === employee.id ? '#fff' : '#e0f7f7', fontWeight: 700 }}>{employee.name}</h5>
@@ -254,6 +362,7 @@ export const TeamManager = () => {
               ? <ChevronUp size={18} style={{ color: '#3aabdb', flexShrink: 0 }} />
               : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />}
           </button>
+
           <AnimatePresence initial={false}>
           {expandedEmployeeId === employee.id && (
             <motion.div
@@ -264,74 +373,286 @@ export const TeamManager = () => {
               style={{ overflow: 'hidden' }}
             >
             <div className="p-3 border-top" style={{ borderColor: 'rgba(58, 171, 219, 0.25)' }}>
+
+              {/* Edit Name */}
+              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
+                <Pencil size={15} />
+                {t('editEmployeeName')}
+              </h6>
+              {alerts.nameError && <Alert type="danger" message={alerts.nameError} onClose={() => setAlert('nameError', null)} />}
+              {alerts.nameSuccess && <Alert type="success" message={alerts.nameSuccess} onClose={() => setAlert('nameSuccess', null)} />}
+
+              <AnimatePresence mode="wait" initial={false}>
+                {editNameStep === 'form' ? (
+                  <motion.form
+                    key="name-form"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={handleEditNameNext}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
+                  >
+                    <div className="mb-3">
+                      <label htmlFor={`newName-${employee.id}`} className="form-label">{t('newName')} *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id={`newName-${employee.id}`}
+                        value={editNameData.newName}
+                        onChange={(e) => setEditNameData(prev => ({ ...prev, newName: e.target.value }))}
+                        placeholder={t('namePlaceholder')}
+                        autoComplete="off"
+                        required
+                      />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <button type="submit" className="btn post-update-btn">
+                        {t('updateName')}
+                      </button>
+                    </div>
+                  </motion.form>
+                ) : (
+                  <motion.form
+                    key="name-confirm"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={(e) => handleConfirmUpdateName(e, employee.id)}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
+                  >
+                    <p className="mb-3" style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.85rem' }}>
+                      Renaming <strong style={{ color: '#fff' }}>{employee.name}</strong> → <strong style={{ color: '#3aabdb' }}>{editNameData.newName}</strong>
+                    </p>
+                    <div className="mb-3">
+                      <label htmlFor={`nameAdminPw-${employee.id}`} className="form-label">{t('yourAdminPassword')} *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id={`nameAdminPw-${employee.id}`}
+                        value={editNameData.adminPassword}
+                        onChange={(e) => setEditNameData(prev => ({ ...prev, adminPassword: e.target.value }))}
+                        placeholder={t('enterYourPassword')}
+                        autoComplete="current-password"
+                        required
+                        autoFocus
+                      />
+                      <small className="text-muted">{t('adminPasswordRequired')}</small>
+                    </div>
+                    <div className="d-flex gap-2 justify-content-center">
+                      <button type="submit" className="btn post-update-btn" disabled={editNameLoading}>
+                        {editNameLoading ? t('updating') : t('confirm')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => { setEditNameStep('form'); setEditNameData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
+                        disabled={editNameLoading}
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+
+              {/* Edit Email */}
+              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
+                <AtSign size={15} />
+                {t('editEmployeeEmail')}
+              </h6>
+              {alerts.emailError && <Alert type="danger" message={alerts.emailError} onClose={() => setAlert('emailError', null)} />}
+              {alerts.emailSuccess && <Alert type="success" message={alerts.emailSuccess} onClose={() => setAlert('emailSuccess', null)} />}
+
+              <AnimatePresence mode="wait" initial={false}>
+                {editEmailStep === 'form' ? (
+                  <motion.form
+                    key="email-form"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={handleEditEmailNext}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
+                  >
+                    <div className="mb-3">
+                      <label htmlFor={`newEmail-${employee.id}`} className="form-label">{t('newEmail')} *</label>
+                      <input
+                        type="email"
+                        className="form-control"
+                        id={`newEmail-${employee.id}`}
+                        value={editEmailData.newEmail}
+                        onChange={(e) => setEditEmailData(prev => ({ ...prev, newEmail: e.target.value }))}
+                        placeholder={t('emailPlaceholder')}
+                        autoComplete="off"
+                        required
+                      />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <button type="submit" className="btn post-update-btn">
+                        {t('updateEmail')}
+                      </button>
+                    </div>
+                  </motion.form>
+                ) : (
+                  <motion.form
+                    key="email-confirm"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={(e) => handleConfirmUpdateEmail(e, employee.id)}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
+                  >
+                    <p className="mb-3" style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.85rem' }}>
+                      {employee.email} → <strong style={{ color: '#3aabdb' }}>{editEmailData.newEmail}</strong>
+                    </p>
+                    <div className="mb-3">
+                      <label htmlFor={`emailAdminPw-${employee.id}`} className="form-label">{t('yourAdminPassword')} *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id={`emailAdminPw-${employee.id}`}
+                        value={editEmailData.adminPassword}
+                        onChange={(e) => setEditEmailData(prev => ({ ...prev, adminPassword: e.target.value }))}
+                        placeholder={t('enterYourPassword')}
+                        autoComplete="current-password"
+                        required
+                        autoFocus
+                      />
+                      <small className="text-muted">{t('adminPasswordRequired')}</small>
+                    </div>
+                    <div className="d-flex gap-2 justify-content-center">
+                      <button type="submit" className="btn post-update-btn" disabled={editEmailLoading}>
+                        {editEmailLoading ? t('updating') : t('confirm')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => { setEditEmailStep('form'); setEditEmailData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
+                        disabled={editEmailLoading}
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+
+              {/* Edit Password */}
               <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
                 <Key size={15} />
                 {t('editPassword')}
               </h6>
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
-              <form onSubmit={(e) => handleUpdatePassword(e, employee.id)} noValidate style={{ maxWidth: '360px', margin: '0 auto' }}>
-                <div className="mb-3">
-                  <label htmlFor={`newPassword-${employee.id}`} className="form-label">{t('newPassword')} *</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id={`newPassword-${employee.id}`}
-                    name="newPassword"
-                    value={editPasswordData.newPassword}
-                    onChange={handleEditPasswordChange}
-                    placeholder={t('passwordPlaceholder')}
-                    autoComplete="new-password"
-                    minLength={6}
-                    required
-                  />
-                </div>
-                <div className="mb-3">
-                  <label htmlFor={`adminPassword-${employee.id}`} className="form-label">{t('yourAdminPassword')} *</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id={`adminPassword-${employee.id}`}
-                    name="adminPassword"
-                    value={editPasswordData.adminPassword}
-                    onChange={handleEditPasswordChange}
-                    placeholder={t('enterYourPassword')}
-                    autoComplete="current-password"
-                    required
-                  />
-                  <small className="text-muted">{t('adminPasswordRequired')}</small>
-                </div>
-                <div className="d-flex justify-content-center">
-                  <button
-                    type="submit"
-                    className="btn post-update-btn"
-                    disabled={editLoading}
+
+              <AnimatePresence mode="wait" initial={false}>
+                {editPasswordStep === 'form' ? (
+                  <motion.form
+                    key="pw-form"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={handleEditPasswordNext}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
                   >
-                    {editLoading ? t('updating') : t('updatePassword')}
-                  </button>
-                </div>
-              </form>
+                    <div className="mb-3">
+                      <label htmlFor={`newPassword-${employee.id}`} className="form-label">{t('newPassword')} *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id={`newPassword-${employee.id}`}
+                        name="newPassword"
+                        value={editPasswordData.newPassword}
+                        onChange={(e) => setEditPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                        placeholder={t('passwordPlaceholder')}
+                        autoComplete="new-password"
+                        minLength={6}
+                        required
+                      />
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <button type="submit" className="btn post-update-btn">
+                        {t('updatePassword')}
+                      </button>
+                    </div>
+                  </motion.form>
+                ) : (
+                  <motion.form
+                    key="pw-confirm"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.18 }}
+                    onSubmit={(e) => handleConfirmUpdatePassword(e, employee.id)}
+                    noValidate
+                    style={{ maxWidth: '360px', margin: '0 auto' }}
+                  >
+                    <div className="mb-3">
+                      <label htmlFor={`adminPassword-${employee.id}`} className="form-label">{t('yourAdminPassword')} *</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        id={`adminPassword-${employee.id}`}
+                        name="adminPassword"
+                        value={editPasswordData.adminPassword}
+                        onChange={(e) => setEditPasswordData(prev => ({ ...prev, adminPassword: e.target.value }))}
+                        placeholder={t('enterYourPassword')}
+                        autoComplete="current-password"
+                        required
+                        autoFocus
+                      />
+                      <small className="text-muted">{t('adminPasswordRequired')}</small>
+                    </div>
+                    <div className="d-flex gap-2 justify-content-center">
+                      <button type="submit" className="btn post-update-btn" disabled={editLoading}>
+                        {editLoading ? t('updating') : t('confirm')}
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => { setEditPasswordStep('form'); setEditPasswordData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
+                        disabled={editLoading}
+                      >
+                        {t('cancel')}
+                      </button>
+                    </div>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
               <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+
+              {/* Remove Employee */}
               <div className="mt-4">
-                <h6 className="mb-3 text-danger section-header d-flex align-items-center gap-2">
+                <div className="d-flex justify-content-center mb-3">
+                <button
+                  className="btn p-0 section-header d-flex align-items-center gap-2 remove-employee-btn"
+                  style={{ color: '#ff8585', fontWeight: 700, fontSize: '1rem', background: 'none', border: 'none', outline: 'none', boxShadow: 'none' }}
+                  onClick={() => showDeleteConfirm === employee.id ? handleCancelDelete(employee.id) : setShowDeleteConfirm(employee.id)}
+                >
                   <UserMinus size={15} />
                   {t('removeEmployee')}
-                </h6>
-                {!showDeleteConfirm || showDeleteConfirm !== employee.id ? (
-                  <div className="d-flex justify-content-center">
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => setShowDeleteConfirm(employee.id)}
-                    >
-                      {t('removeFromSystem')}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="border border-danger rounded p-3" style={{ background: 'rgba(220, 53, 69, 0.08)' }}>
-                    <p className="mb-3 section-header" style={{ color: '#3aabdb', fontWeight: 600 }}>
-                      <strong>{t('confirmDeleteEmployee')}</strong>
+                </button>
+                </div>
+                {showDeleteConfirm === employee.id && (
+                  <div>
+                    <p className="mb-2" style={{ color: '#ff8585', fontWeight: 600, fontSize: '0.9rem' }}>
+                      {t('confirmDeleteEmployee')}
                     </p>
-                    <p className="text-danger mb-3">{t('deleteEmployeeWarning')}</p>
+                    <p className="mb-3" style={{ color: 'rgba(255,160,160,0.8)', fontSize: '0.82rem' }}>{t('deleteEmployeeWarning')}</p>
                     <div className="mb-3">
                       <label htmlFor={`deleteAdminPassword-${employee.id}`} className="form-label">{t('yourAdminPassword')} *</label>
                       <input
@@ -343,18 +664,20 @@ export const TeamManager = () => {
                         placeholder={t('enterYourPassword')}
                         autoComplete="current-password"
                       />
-                      <small className="text-muted">{t('adminPasswordRequired')}</small>
+                      <small style={{ color: 'rgba(255,160,160,0.6)', fontSize: '0.75rem' }}>{t('adminPasswordRequired')}</small>
                     </div>
                     <div className="d-flex gap-2 justify-content-center">
                       <button
-                        className="btn btn-danger btn-sm"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(220,53,69,0.8)', color: '#fff', border: 'none', fontWeight: 600 }}
                         onClick={() => handleDeleteEmployee(employee.id)}
                         disabled={deleteLoading === employee.id}
                       >
                         {deleteLoading === employee.id ? t('deleting') : t('confirmDelete')}
                       </button>
                       <button
-                        className="btn btn-secondary btn-sm"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.2)', fontWeight: 500 }}
                         onClick={() => handleCancelDelete(employee.id)}
                         disabled={deleteLoading === employee.id}
                       >
@@ -364,6 +687,7 @@ export const TeamManager = () => {
                   </div>
                 )}
               </div>
+
             </div>
             </motion.div>
           )}

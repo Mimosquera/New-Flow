@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
@@ -208,38 +209,6 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     return translatedAppointments.filter(apt => apt?.status === filter);
   }, [filter, translatedAppointments]);
 
-  if (loading) {
-    return (
-      <div className="container py-4">
-        <div className="row justify-content-center g-3">
-          <div className="col-12 col-lg-3 d-none d-lg-block">
-            <div className="sk-card p-3" style={{ borderRadius: '1rem' }}>
-              {Array.from({ length: 6 }).map((_, i) => (
-                <span key={i} className="sk d-block mb-2" style={{ height: '30px', borderRadius: '6px', animationDelay: `${i * 0.08}s` }} />
-              ))}
-            </div>
-          </div>
-          <div className="col-12 col-lg-7">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
-                <div className="d-flex justify-content-between align-items-center mb-2">
-                  <span className="sk" style={{ height: '22px', width: '90px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
-                  <span className="sk" style={{ height: '22px', width: '65px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
-                </div>
-                <span className="sk mb-2" style={{ height: '16px', width: '58%', animationDelay: `${i * 0.12}s` }} />
-                <span className="sk mb-3" style={{ height: '13px', width: '42%', animationDelay: `${i * 0.12}s` }} />
-                <div className="d-flex gap-2">
-                  <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
-                  <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const filterOptions = [
     { value: 'all', label: t('allAppointments') },
     { value: 'upcoming', label: t('upcoming') },
@@ -325,6 +294,38 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
         {/* Right: Appointments list */}
         <div className="col-12 col-lg-7">
+          <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="skeleton"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="sk-card mb-3 p-3" style={{ animationDelay: `${i * 0.12}s` }}>
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="sk" style={{ height: '22px', width: '90px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
+                    <span className="sk" style={{ height: '22px', width: '65px', borderRadius: '12px', animationDelay: `${i * 0.12}s` }} />
+                  </div>
+                  <span className="sk mb-2" style={{ height: '16px', width: '58%', animationDelay: `${i * 0.12}s` }} />
+                  <span className="sk mb-3" style={{ height: '13px', width: '42%', animationDelay: `${i * 0.12}s` }} />
+                  <div className="d-flex gap-2">
+                    <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
+                    <span className="sk" style={{ height: '32px', width: '80px', borderRadius: '8px', animationDelay: `${i * 0.12}s` }} />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              key={filter}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+            >
           {filteredAppointments.length === 0 ? (
             <div className="alert mb-0 no-appointments-message appointments-no-results">
               {filter === 'all' ? t('noAppointments') : `${t('no')} ${t(filter)} ${t('appointments').toLowerCase()}.`}
@@ -481,6 +482,9 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
               ))}
             </div>
           )}
+            </motion.div>
+          )}
+          </AnimatePresence>
         </div>
       </div>
 

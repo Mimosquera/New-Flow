@@ -282,22 +282,21 @@ a:focus:not(:focus-visible) {
 /* Logout button */
 .logout-btn {
   background: none !important;
-  color: rgba(255, 255, 255, 0.55) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: rgba(185, 28, 28, 0.6) !important;
+  border: 1px solid rgba(185, 28, 28, 0.2) !important;
   border-radius: 8px !important;
   font-size: 0.8rem !important;
   padding: 0.35rem 0.9rem !important;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease !important;
+  transition: color 0.2s ease, border-color 0.2s ease !important;
 }
 @media (hover: hover) {
   .logout-btn:hover {
-    color: #ff6b6b !important;
-    border-color: rgba(255, 107, 107, 0.45) !important;
-    background: rgba(255, 107, 107, 0.08) !important;
+    color: rgba(185, 28, 28, 0.9) !important;
+    border-color: rgba(185, 28, 28, 0.4) !important;
   }
 }
 .logout-btn:active {
-  color: #ff6b6b !important;
+  color: rgb(185, 28, 28) !important;
 }
 
 /* Tab header shadow */
@@ -490,6 +489,18 @@ a:focus:not(:focus-visible) {
   }
 }
 
+.remove-employee-btn {
+  transition: color 0.2s ease !important;
+}
+@media (hover: hover) {
+  .remove-employee-btn:hover {
+    color: #ff6b6b !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+}
+
 /* Update/Post Listing Cards */
 .updates-list .card {
   background: linear-gradient(135deg, #fff 0%, #e8f4f8 100%);
@@ -534,44 +545,44 @@ a:focus:not(:focus-visible) {
 
 /* Load More / Hide Posts Buttons */
 .load-more-btn {
-  background: linear-gradient(135deg, rgb(5, 60, 82) 0%, #0d5c6e 100%);
+  background: rgb(5, 45, 63);
   color: #fff;
-  border: 1.5px solid #3aabdb;
+  border: 1px solid rgba(58, 171, 219, 0.35);
   border-radius: 0.5rem;
   padding: 0.4rem 1.25rem;
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-.load-more-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0d5c6e 0%, #3aabdb 100%);
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(58, 171, 219, 0.35);
+@media (hover: hover) {
+  .load-more-btn:hover:not(:disabled) {
+    background: rgba(5, 45, 63, 0.8);
+    box-shadow: 0 4px 14px rgba(5, 45, 63, 0.2);
+    color: #fff;
+  }
 }
 .load-more-btn:disabled {
-  opacity: 0.65;
+  opacity: 0.45;
   cursor: not-allowed;
-  color: #ccc;
 }
 
 .hide-posts-btn {
   background: transparent !important;
-  color: rgba(255, 255, 255, 0.65) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.25) !important;
+  color: rgba(5, 45, 63, 0.5) !important;
+  border: 1.5px solid rgba(5, 45, 63, 0.2) !important;
   border-radius: 0.5rem;
   padding: 0.4rem 1.25rem;
   font-weight: 600;
   font-size: 0.85rem;
   letter-spacing: 0.02em;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 @media (hover: hover) {
   .hide-posts-btn:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: #fff !important;
-    border-color: rgba(255, 255, 255, 0.45) !important;
+    background: transparent !important;
+    color: rgba(5, 45, 63, 0.8) !important;
+    border-color: rgba(5, 45, 63, 0.4) !important;
   }
 }
 /* App Styles */
