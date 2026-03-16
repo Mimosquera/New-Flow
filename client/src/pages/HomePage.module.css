@@ -842,10 +842,6 @@
   height: auto;
   display: block;
   margin: 0 auto;
-  position: relative;
-  filter:
-    drop-shadow(0 0 18px rgba(58, 171, 219, 0.28))
-    drop-shadow(0 4px 28px rgba(0, 0, 0, 0.55));
 }
 
 @media (min-width: 768px) {
@@ -957,6 +953,7 @@
   align-items: center;
   gap: 0.75rem;
   padding-top: 1.25rem;
+  padding-bottom: 1.5rem;
   margin-top: 0.5rem;
   border-top: 1px solid rgba(58, 171, 219, 0.1);
 }

@@ -217,18 +217,19 @@ export const EmployeeLoginPage = () => {
             </motion.div>
           )}
         </AnimatePresence>
+        <div className={styles.pageControls}>
+          <div style={{ transform: 'scale(0.78)', transformOrigin: 'center' }}>
+            <LanguageToggle darkText />
+          </div>
+          <button
+            className={styles.homeBtn}
+            onClick={() => { hapticLight(); navigate('/'); }}
+            aria-label={t('backToHome')}
+          >
+            <ArrowLeft size={20} strokeWidth={2.5} />
+          </button>
+        </div>
       </div>
-
-      <footer className={styles.footer}>
-        <LanguageToggle darkText />
-        <button
-          className={styles.homeBtn}
-          onClick={() => { hapticLight(); navigate('/'); }}
-          aria-label={t('backToHome')}
-        >
-          <ArrowLeft size={16} />
-        </button>
-      </footer>
     </div>
   );
 };

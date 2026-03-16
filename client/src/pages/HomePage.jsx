@@ -775,7 +775,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
             </motion.div>
           </motion.div>
           <div className={styles.footerControls}>
-            <LanguageToggle />
+            <div style={{ transform: 'scale(0.78)', transformOrigin: 'center' }}>
+              <LanguageToggle />
+            </div>
             <button
               className={styles.employeeAccessBtn}
               onClick={() => { hapticLight(); navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login'); }}

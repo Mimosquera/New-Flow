@@ -550,24 +550,28 @@ export const AppointmentsPage = () => {
             )}
           </AnimatePresence>
         </form>
-        {phase > 1 && !success && (
-          <button
-            type="button"
-            className={styles.backLink}
-            onClick={() => goTo(phase - 1)}
-          >
-            ← {t('edit')}
-          </button>
-        )}
-        <ReviewsCarousel mini />
+        <div className={styles.bottomGroup}>
+          {phase > 1 && !success && (
+            <button
+              type="button"
+              className={styles.backLink}
+              onClick={() => goTo(phase - 1)}
+            >
+              ← {t('edit')}
+            </button>
+          )}
+          <ReviewsCarousel mini />
+        </div>
         <div className={styles.pageFooter}>
-          <LanguageToggle darkText />
+          <div style={{ transform: 'scale(0.78)', transformOrigin: 'center' }}>
+            <LanguageToggle darkText />
+          </div>
           <button
             className={styles.homeBtn}
             onClick={() => { hapticLight(); navigate('/'); }}
             aria-label={t('backToHome')}
           >
-            <ArrowLeft size={16} />
+            <ArrowLeft size={20} strokeWidth={2.5} />
           </button>
         </div>
       </div>

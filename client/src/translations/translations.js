@@ -430,7 +430,7 @@ export const translations = {
 
   es: {
     // Navbar
-    employeeDashboard: 'Dashboard',
+    employeeDashboard: 'Panel',
     employeeLogin: 'Acceso de Empleados',
     
     // Hero Section
