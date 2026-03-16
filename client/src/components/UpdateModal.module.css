@@ -80,9 +80,27 @@
 
 /* ── Scrollable body ─────────────────────────────────────── */
 .body {
+  overflow: hidden;
+  flex: 1 1 auto;
+  position: relative;
+}
+
+.track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.track:active {
+  cursor: grabbing;
+}
+
+.slide {
+  flex-shrink: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  flex: 1 1 auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
 }

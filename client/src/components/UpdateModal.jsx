@@ -1,5 +1,5 @@
 import { useState, useEffect, useLayoutEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, animate, useMotionValue } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
@@ -110,19 +110,46 @@ const mediaUrl = (url) => {
 export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [fullscreen, setFullscreen] = useState(false);
-  const [direction, setDirection] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
   const { t, language } = useTranslation();
+  const containerRef = useRef(null);
+  const x = useMotionValue(0);
+  const pointerStartRef = useRef(null);
+  const xBaseRef = useRef(0);
+  const prevIndexRef = useRef(initialIndex);
+
+  const showNav = updates.length > 1;
+
+  const snapTo = useCallback((idx, instant = false) => {
+    const w = containerRef.current?.offsetWidth ?? 0;
+    if (!w) return;
+    const target = -idx * w;
+    if (instant) {
+      x.set(target);
+    } else {
+      animate(x, target, { type: 'spring', stiffness: 360, damping: 36, mass: 0.85 });
+    }
+  }, [x]);
 
   useLayoutEffect(() => {
-    if (show) {
+    if (show && containerRef.current) {
+      const w = containerRef.current.offsetWidth;
+      setSlideWidth(w);
       setCurrentIndex(initialIndex);
       setFullscreen(false);
-      setDirection(0);
+      prevIndexRef.current = initialIndex;
+      x.set(-initialIndex * w);
     }
-  }, [show, initialIndex]);
+  }, [show, initialIndex, x]);
+
+  useEffect(() => {
+    if (show && currentIndex !== prevIndexRef.current) {
+      prevIndexRef.current = currentIndex;
+      snapTo(currentIndex);
+    }
+  }, [currentIndex, show, snapTo]);
 
   const update = updates[currentIndex];
-  const showNav = updates.length > 1;
 
   const goTo = useCallback((idx) => {
     setCurrentIndex(idx);
@@ -130,12 +157,10 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   }, []);
 
   const goPrev = useCallback(() => {
-    setDirection(-1);
     goTo((currentIndex - 1 + updates.length) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
   const goNext = useCallback(() => {
-    setDirection(1);
     goTo((currentIndex + 1) % updates.length);
   }, [currentIndex, updates.length, goTo]);
 
@@ -154,6 +179,49 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
     document.body.style.overflow = show && update ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [show, update]);
+
+  const onPointerDown = useCallback((e) => {
+    if (!showNav) return;
+    pointerStartRef.current = e.clientX;
+    xBaseRef.current = x.get();
+    e.currentTarget.setPointerCapture(e.pointerId);
+  }, [showNav, x]);
+
+  const onPointerMove = useCallback((e) => {
+    if (pointerStartRef.current === null) return;
+    const delta = e.clientX - pointerStartRef.current;
+    const w = containerRef.current?.offsetWidth ?? 0;
+    const minX = -(updates.length - 1) * w;
+    const maxX = 0;
+    const raw = xBaseRef.current + delta;
+    if (raw > maxX) {
+      x.set(maxX + (raw - maxX) * 0.3);
+    } else if (raw < minX) {
+      x.set(minX + (raw - minX) * 0.3);
+    } else {
+      x.set(raw);
+    }
+  }, [updates.length, x]);
+
+  const onPointerUp = useCallback((e) => {
+    if (pointerStartRef.current === null) return;
+    const delta = e.clientX - pointerStartRef.current;
+    pointerStartRef.current = null;
+    const threshold = 48;
+    if (delta < -threshold && currentIndex < updates.length - 1) {
+      const next = currentIndex + 1;
+      prevIndexRef.current = next;
+      setCurrentIndex(next);
+      snapTo(next);
+    } else if (delta > threshold && currentIndex > 0) {
+      const prev = currentIndex - 1;
+      prevIndexRef.current = prev;
+      setCurrentIndex(prev);
+      snapTo(prev);
+    } else {
+      snapTo(currentIndex);
+    }
+  }, [currentIndex, updates.length, snapTo]);
 
   if (!show || !update) return null;
 
@@ -183,11 +251,6 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
     );
   }
 
-  const dateStr = new Date(update.date).toLocaleDateString(
-    language === 'es' ? 'es-ES' : 'en-US',
-    { year: 'numeric', month: 'short', day: 'numeric' }
-  );
-
   return (
     <>
       <div className={styles.backdrop} onClick={onClose} />
@@ -215,56 +278,60 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
             </AnimatePresence>
           </div>
 
-          {/* Body */}
-          <div className={styles.body}>
-            <AnimatePresence mode="wait" custom={direction}>
-              <motion.div
-                key={currentIndex}
-                custom={direction}
-                className={styles.slideContent}
-                variants={{
-                  enter: (dir) => ({ opacity: 0, x: dir * 22 }),
-                  center: { opacity: 1, x: 0 },
-                  exit: (dir) => ({ opacity: 0, x: dir * -22 }),
-                }}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{ duration: 0.11, ease: [0.25, 0.1, 0.25, 1] }}
-                drag={showNav ? 'x' : false}
-                dragConstraints={{ left: 0, right: 0 }}
-                dragElastic={0.05}
-                dragDirectionLock
-                onDragEnd={(_, { offset }) => {
-                  if (offset.x < -38) goNext();
-                  else if (offset.x > 38) goPrev();
-                }}
-                style={{ cursor: showNav ? 'grab' : 'default' }}
-              >
-                {src && (
-                  <div className={styles.mediaWrap} onClick={() => setFullscreen(true)}>
-                    {update.media_type === 'image' ? (
-                      <img src={src} alt={update.title} className={styles.mediaImg} />
-                    ) : (
-                      <video src={src} className={styles.mediaVideo} controls />
-                    )}
+          {/* Body — carousel track */}
+          <div className={styles.body} ref={containerRef}>
+            <motion.div
+              className={styles.track}
+              style={{
+                x,
+                width: slideWidth ? slideWidth * updates.length : '100%',
+              }}
+              onPointerDown={onPointerDown}
+              onPointerMove={onPointerMove}
+              onPointerUp={onPointerUp}
+              onPointerCancel={onPointerUp}
+            >
+              {updates.map((upd, idx) => {
+                const updSrc = mediaUrl(upd.media_url);
+                const dateStr = new Date(upd.date).toLocaleDateString(
+                  language === 'es' ? 'es-ES' : 'en-US',
+                  { year: 'numeric', month: 'short', day: 'numeric' }
+                );
+                return (
+                  <div
+                    key={upd.id}
+                    className={styles.slide}
+                    style={{ width: slideWidth || '100%' }}
+                  >
+                    <div className={styles.slideContent}>
+                      {updSrc && (
+                        <div
+                          className={styles.mediaWrap}
+                          onClick={() => { if (idx === currentIndex) setFullscreen(true); }}
+                        >
+                          {upd.media_type === 'image' ? (
+                            <img src={updSrc} alt={upd.title} className={styles.mediaImg} />
+                          ) : (
+                            <video src={updSrc} className={styles.mediaVideo} controls />
+                          )}
+                        </div>
+                      )}
+
+                      <p className={styles.content}>{upd.content}</p>
+
+                      <div className={styles.meta}>
+                        <span className={styles.metaDot} />
+                        <span className={styles.metaText}>{dateStr}</span>
+                        <span className={styles.metaDot} />
+                        <span className={`${styles.metaText} ${styles.metaAuthor}`}>
+                          {upd.author}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                )}
-
-                <p className={styles.content}>{update.content}</p>
-
-                <div className={styles.meta}>
-                  <span className={styles.metaDot} />
-                  <span className={styles.metaText}>
-                    {dateStr}
-                  </span>
-                  <span className={styles.metaDot} />
-                  <span className={`${styles.metaText} ${styles.metaAuthor}`}>
-                    {update.author}
-                  </span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                );
+              })}
+            </motion.div>
           </div>
 
           {/* Footer */}
