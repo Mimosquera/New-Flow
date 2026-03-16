@@ -10,6 +10,7 @@ export const translations = {
     heroDescription: 'Experience excellence in grooming. Your style, our craft.',
     requestAppointment: 'Book Now',
     requestShort: 'Request',
+    bookShort: 'Book',
     
     // Services Section
     servicesTitle: 'Our Services',
@@ -102,8 +103,12 @@ export const translations = {
     pleaseFillRequired: 'Please fill in all required fields',
     timeNotAvailable: 'Selected time is not available. Please choose an available time slot.',
     
+    // Reviews Section
+    reviewsTitle: 'What Our Clients Say',
+    reviewsOnGoogle: 'reviews on Google',
+
     // Employee Login
-    employeeLoginTitle: 'Employee Login',
+    employeeLoginTitle: 'Verify Your Identity',
     password: 'Password',
     login: 'Login',
     loginError: 'Invalid email or password',
@@ -297,6 +302,7 @@ export const translations = {
     
     // Additional keys
     backToHome: 'Back',
+    employeeAccess: 'Employee Access',
     hello: 'Hello',
     postsAndUpdates: 'Posts & Updates',
     postsTab: 'Posts & Updates',
@@ -433,6 +439,7 @@ export const translations = {
     heroDescription: 'Experimenta la excelencia en el cuidado personal. Tu estilo, nuestra pasión.',
     requestAppointment: 'Reservar Ahora',
     requestShort: 'Solicitar',
+    bookShort: 'Reservar',
     
     // Services Section
     servicesTitle: 'Nuestros Servicios',
@@ -525,8 +532,12 @@ export const translations = {
     pleaseFillRequired: 'Por favor, completa todos los campos obligatorios',
     timeNotAvailable: 'El horario seleccionado no está disponible. Por favor, elige un horario disponible.',
     
+    // Reviews Section
+    reviewsTitle: '¿Qué Dicen Nuestros Clientes?',
+    reviewsOnGoogle: 'reseñas en Google',
+
     // Employee Login
-    employeeLoginTitle: 'Acceso de Empleados',
+    employeeLoginTitle: 'Verifica tu Identidad',
     password: 'Contraseña',
     login: 'Iniciar Sesión',
     loginError: 'Correo electrónico o contraseña inválidos',
@@ -718,6 +729,7 @@ export const translations = {
     
     // Additional keys
     backToHome: 'Volver',
+    employeeAccess: 'Acceso Empleados',
     hello: 'Hola',
     postsAndUpdates: 'Publicaciones y Actualizaciones',
     postsTab: 'Publicaciones',

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
@@ -202,9 +202,6 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
           {/* Header */}
           <div className={styles.header}>
             <h2 className={styles.title}>{update.title}</h2>
-            <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-              <X size={15} strokeWidth={2} />
-            </button>
           </div>
 
           {/* Body */}

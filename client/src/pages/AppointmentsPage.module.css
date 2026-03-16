@@ -13,69 +13,6 @@
   }
 }
 
-/* ─── Navbar ─────────────────────────────────────────────────────────────────── */
-.apptNavbar {
-  flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.97) 0%, rgba(5, 60, 82, 0.97) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(58, 171, 219, 0.2);
-  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.5);
-  padding: calc(env(safe-area-inset-top, 0px) + 0.5rem) 0 0.5rem;
-}
-
-.apptNavbarInner {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.apptNavLogoBtn {
-  background: transparent;
-  border: none;
-  padding: 0.2rem 0.3rem;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  transition: opacity 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-@media (hover: hover) {
-  .apptNavLogoBtn:hover {
-    opacity: 0.75;
-  }
-}
-
-.apptNavLogo {
-  height: clamp(22px, 5vw, 30px);
-  flex-shrink: 0;
-  display: block;
-}
-
-.apptNavHomeBtn {
-  background: transparent;
-  border: none;
-  padding: 0.3rem;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.75);
-  transition: color 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-
-@media (hover: hover) {
-  .apptNavHomeBtn:hover {
-    color: #fff;
-  }
-}
 
 /* ─── Content ────────────────────────────────────────────────────────────────── */
 .contentWrapper {
@@ -85,9 +22,39 @@
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 0.75rem 1rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
+  padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1rem 0.5rem;
   overflow-y: auto;
   scrollbar-width: none;
+}
+
+/* ─── Page Footer ─────────────────────────────────────────────────────────────── */
+.pageFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0 calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+  margin-top: 0.1rem;
+}
+
+.homeBtn {
+  background: transparent;
+  border: none;
+  padding: 0.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.38);
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .homeBtn:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
 }
 
 .contentWrapper::-webkit-scrollbar {
@@ -142,9 +109,7 @@
   border-radius: 24px;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(58, 171, 219, 0.08);
   overflow: hidden;
-  width: fit-content;
-  min-width: min(300px, 100%);
-  max-width: min(400px, 100%);
+  width: min(380px, 100%);
   margin: 0 auto;
 }
 
@@ -530,8 +495,7 @@
 @media (max-width: 768px) {
   .formCard {
     border-radius: 20px;
-    min-width: min(300px, 100%);
-    max-width: 100%;
+    width: min(380px, 100%);
   }
 
   .cardHeader {
@@ -561,19 +525,8 @@
   }
 
   .dateTimeRow {
-    gap: 0.5rem;
-  }
-
-  .dateTimeRow .formControl,
-  .dateTimeRow .formSelect {
-    padding: 0.45rem 0.4rem;
-    font-size: 0.8rem;
-  }
-
-  .dateTimeRow .formSelect {
-    padding-right: 1.4rem;
-    background-position: right 0.3rem center;
-    background-size: 10px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .textarea {
@@ -588,20 +541,3 @@
 
 }
 
-@media (max-width: 480px) {
-  .dateTimeRow {
-    gap: 0.3rem;
-  }
-
-  .dateTimeRow .formControl,
-  .dateTimeRow .formSelect {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.3rem;
-  }
-
-  .dateTimeRow .formSelect {
-    padding-right: 1.2rem;
-    background-position: right 0.2rem center;
-    background-size: 8px;
-  }
-}

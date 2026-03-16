@@ -395,6 +395,23 @@
   flex-direction: column;
   gap: 0.6rem;
   height: 100%;
+  position: relative;
+}
+
+.serviceCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.serviceCardBookOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.6rem;
 }
 
 .serviceCardTitle {
@@ -826,6 +843,9 @@
   display: block;
   margin: 0 auto;
   position: relative;
+  filter:
+    drop-shadow(0 0 18px rgba(58, 171, 219, 0.28))
+    drop-shadow(0 4px 28px rgba(0, 0, 0, 0.55));
 }
 
 @media (min-width: 768px) {
@@ -847,7 +867,7 @@
 .contactSection {
   background: linear-gradient(145deg, rgb(3, 14, 20) 0%, rgba(5, 60, 82, 0.9) 50%, rgb(3, 20, 30) 100%);
   border-top: 1px solid rgba(58, 171, 219, 0.4);
-  padding: 2.25rem 0 2rem;
+  padding: 2.25rem 0 0.5rem;
 }
 
 @media (min-width: 768px) {
@@ -917,7 +937,7 @@
 
 @media (max-width: 768px) {
   .contactSection {
-    padding: 2.5rem 0 3.2rem;
+    padding: 2.5rem 0 0.5rem;
   }
 
   .contactTitle {
@@ -927,6 +947,38 @@
 
   .contactCard {
     padding: 1rem 0.8rem;
+  }
+}
+
+/* ─── Footer Controls (Language + Employee Access) ──────────────────────────── */
+.footerControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(58, 171, 219, 0.1);
+}
+
+.employeeAccessBtn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.28);
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  transition: color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .employeeAccessBtn:hover {
+    color: rgba(255, 255, 255, 0.55);
   }
 }
 

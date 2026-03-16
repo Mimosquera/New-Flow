@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  House, Scissors, Users, User, Mail, Phone,
+  ArrowLeft, Scissors, Users, User, Mail, Phone,
   CalendarDays, Clock, StickyNote, CheckCircle2,
 } from 'lucide-react';
 import { Alert } from '../components/Common/index.jsx';
@@ -191,34 +191,6 @@ export const AppointmentsPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <nav className={styles.apptNavbar}>
-        <div className={styles.apptNavbarInner}>
-          <button
-            className={styles.apptNavLogoBtn}
-            onClick={() => { hapticLight(); navigate('/'); }}
-            aria-label={t('backToHome')}
-          >
-            <img
-              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-              alt="New Flow"
-              className={styles.apptNavLogo}
-            />
-          </button>
-          <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <button
-              className={styles.apptNavHomeBtn}
-              onClick={() => { hapticLight(); navigate('/'); }}
-              aria-label={t('backToHome')}
-            >
-              <House size={18} />
-            </button>
-            <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', marginLeft: '-10px' }}>
-              <LanguageToggle darkText />
-            </div>
-          </div>
-        </div>
-      </nav>
-
       <div className={styles.contentWrapper}>
         <form
           onSubmit={handleSubmit}
@@ -588,6 +560,16 @@ export const AppointmentsPage = () => {
           </button>
         )}
         <ReviewsCarousel mini />
+        <div className={styles.pageFooter}>
+          <LanguageToggle darkText />
+          <button
+            className={styles.homeBtn}
+            onClick={() => { hapticLight(); navigate('/'); }}
+            aria-label={t('backToHome')}
+          >
+            <ArrowLeft size={16} />
+          </button>
+        </div>
       </div>
 
       <ScrollToTop />

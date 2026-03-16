@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
+import { ArrowLeft, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
 import { removeToken, decodeToken, getToken, isTokenValid } from '../utils/tokenUtils.js';
 import { hapticLight } from '../utils/haptics.js';
 import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
@@ -260,7 +260,7 @@ export default function EmployeeDashboard() {
               onClick={() => navigate('/')}
               title={t('backToHome')}
             >
-              <Home size={19} />
+              <ArrowLeft size={19} />
             </button>
             <div style={{ width: '53px', height: '24px', position: 'relative', flexShrink: 0 }}>
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>

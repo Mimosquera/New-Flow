@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Alert } from '../components/Common/index.jsx';
 import { useForm } from '../hooks/useForm.js';
@@ -89,25 +90,6 @@ export const EmployeeLoginPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <nav className={styles.navbar}>
-        <div className={styles.navbarInner}>
-          <button
-            className={styles.navLogoBtn}
-            onClick={() => { hapticLight(); navigate('/'); }}
-            aria-label={t('backToHome')}
-          >
-            <img
-              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-              alt="New Flow"
-              className={styles.navLogo}
-            />
-          </button>
-          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
-            <LanguageToggle darkText />
-          </div>
-        </div>
-      </nav>
-
       <div className={styles.contentWrapper}>
         <AnimatePresence mode="wait">
           {!showForgot ? (
@@ -238,11 +220,14 @@ export const EmployeeLoginPage = () => {
       </div>
 
       <footer className={styles.footer}>
-        <img
-          src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
-          alt="New Flow"
-          className={styles.footerLogo}
-        />
+        <LanguageToggle darkText />
+        <button
+          className={styles.homeBtn}
+          onClick={() => { hapticLight(); navigate('/'); }}
+          aria-label={t('backToHome')}
+        >
+          <ArrowLeft size={16} />
+        </button>
       </footer>
     </div>
   );

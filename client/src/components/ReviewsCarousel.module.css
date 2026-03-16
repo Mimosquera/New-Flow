@@ -6,9 +6,9 @@
 }
 
 .wrapperMini {
-  width: 100%;
-  max-width: 210px;
-  margin-top: 2.75rem;
+  width: 175px;
+  max-width: 175px;
+  margin-top: 1.5rem;
 }
 
 /* ─── Header ─────────────────────────────────────────────────────────────────── */
@@ -244,7 +244,7 @@
   text-decoration: none;
   color: rgba(255, 255, 255, 0.35);
   font-size: 0.72rem;
-  margin-top: 0.85rem;
+  margin-top: 0.6rem;
   margin-bottom: 0;
   transition: color 0.2s ease;
   -webkit-tap-highlight-color: transparent;

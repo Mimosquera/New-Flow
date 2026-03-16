@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from '../hooks/useTranslation.js';
 import {
   reviews as staticReviews,
   GOOGLE_RATING as staticRating,
@@ -99,6 +100,7 @@ ReviewCard.propTypes = {
 };
 
 export const ReviewsCarousel = ({ mini = false }) => {
+  const { t } = useTranslation();
   const trackRef = useRef(null);
   const fadeRef = useRef(null);
   const resumeTimerRef = useRef(null);
@@ -156,7 +158,7 @@ export const ReviewsCarousel = ({ mini = false }) => {
     <div className={`${styles.wrapper} ${mini ? styles.wrapperMini : ''}`}>
       {!mini && (
         <div className={styles.header}>
-          <h2 className={styles.heading}>What Our Clients Say</h2>
+          <h2 className={styles.heading}>{t('reviewsTitle')}</h2>
           <a
             href={GOOGLE_MAPS_URL}
             target="_blank"
@@ -167,7 +169,7 @@ export const ReviewsCarousel = ({ mini = false }) => {
             <span className={styles.ratingText}>
               <span className={styles.ratingScore}>{rating}</span>
               <Stars count={rating} />
-              <span className={styles.ratingCount}>· {reviewCount} reviews</span>
+              <span className={styles.ratingCount}>{reviewCount} {t('reviewsOnGoogle')}</span>
             </span>
           </a>
         </div>
@@ -198,8 +200,7 @@ export const ReviewsCarousel = ({ mini = false }) => {
           <GoogleIcon />
           <span>{rating}</span>
           <Stars count={rating} muted />
-          <span>·</span>
-          <span className={styles.miniLinkReviews}>{reviewCount} reviews on Google</span>
+          <span className={styles.miniLinkReviews}>{reviewCount} {t('reviewsOnGoogle')}</span>
         </a>
       )}
     </div>

@@ -259,55 +259,14 @@ export const HomePage = ({ onNavigateToBooking }) => {
 
   const [aboutGlowing, setAboutGlowing] = useState(false);
 
-  const navbarRef = useRef(null);
-  const [showNavbar, setShowNavbar] = useState(false);
-  const lastScrollYRef = useRef(0);
-
   useEffect(() => {
     document.body.style.background = '#000000';
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     requestAnimationFrame(() => window.scrollTo(0, 0));
-
-    const handleNavScroll = () => {
-      const current = window.scrollY;
-      const prev = lastScrollYRef.current;
-      setShowNavbar(current < prev && current > 80);
-      lastScrollYRef.current = current;
-    };
-
-    window.addEventListener('scroll', handleNavScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleNavScroll);
   }, []);
 
   return (
     <div className={styles.homePage}>
-      {/* Navigation Bar */}
-      <motion.nav
-        className={styles.navbar}
-        ref={navbarRef}
-        initial={{ y: 'calc(-100% - 4px)' }}
-        animate={{ y: showNavbar ? 0 : 'calc(-100% - 4px)' }}
-        transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-      >
-        <div className="container d-flex flex-nowrap justify-content-between align-items-center" style={{ gap: '0.5rem' }}>
-          <button
-            className={styles.navLogoBtn}
-            onClick={() => navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login')}
-            aria-label={t(isLoggedIn ? 'employeeDashboard' : 'employeeLogin')}
-          >
-            <img
-              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
-              alt="New Flow Logo"
-              decoding="async"
-              style={{ height: 'clamp(22px, 5vw, 32px)', flexShrink: 0 }}
-            />
-          </button>
-          <div style={{ transform: 'scale(0.78)', transformOrigin: 'right center', flexShrink: 0 }}>
-            <LanguageToggle darkText />
-          </div>
-        </div>
-      </motion.nav>
-
       {/* Hero Section */}
       <motion.section
         className={`text-white ${styles.heroSection}`}
@@ -434,36 +393,39 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   ref={el => serviceCardsRef.current[idx] = el}
                 >
                   <div className={styles.serviceCardBody}>
-                    <h5 className={styles.serviceCardTitle}>{service.name}</h5>
-                    <p className={styles.serviceCardDesc}>{service.description}</p>
-                    <span className={styles.serviceCardPrice}>
-                      {service.price_max
-                        ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
-                        : `$${parseFloat(service.price).toFixed(2)}`}
-                    </span>
-                    <AnimatePresence>
-                      {expandedServiceId === service.id && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
-                          style={{ overflow: 'hidden' }}
-                        >
-                          <button
-                            className={styles.serviceBookBtn}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.currentTarget.blur();
-                              hapticSuccess();
-                              handleRequestAppointment(service);
-                            }}
-                          >
-                            {t('requestShort')}
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    <motion.div
+                      className={styles.serviceCardInfo}
+                      animate={{ opacity: expandedServiceId === service.id ? 0 : 1 }}
+                      transition={{ duration: 0.18 }}
+                      style={{ pointerEvents: expandedServiceId === service.id ? 'none' : 'auto' }}
+                    >
+                      <h5 className={styles.serviceCardTitle}>{service.name}</h5>
+                      <p className={styles.serviceCardDesc}>{service.description}</p>
+                      <span className={styles.serviceCardPrice}>
+                        {service.price_max
+                          ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
+                          : `$${parseFloat(service.price).toFixed(2)}`}
+                      </span>
+                    </motion.div>
+                    <motion.div
+                      className={styles.serviceCardBookOverlay}
+                      animate={{ opacity: expandedServiceId === service.id ? 1 : 0 }}
+                      initial={{ opacity: 0 }}
+                      transition={{ duration: 0.2, delay: expandedServiceId === service.id ? 0.12 : 0 }}
+                      style={{ pointerEvents: expandedServiceId === service.id ? 'auto' : 'none' }}
+                    >
+                      <button
+                        className={styles.serviceBookBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.currentTarget.blur();
+                          hapticSuccess();
+                          handleRequestAppointment(service);
+                        }}
+                      >
+                        {t('bookShort')}
+                      </button>
+                    </motion.div>
                   </div>
                 </motion.div>
               ))}
@@ -494,36 +456,39 @@ export const HomePage = ({ onNavigateToBooking }) => {
                         ref={el => serviceCardsRef.current[idx] = el}
                       >
                         <div className={styles.serviceCardBody}>
-                          <h5 className={styles.serviceCardTitle}>{service.name}</h5>
-                          <p className={styles.serviceCardDesc}>{service.description}</p>
-                          <span className={styles.serviceCardPrice}>
-                            {service.price_max
-                              ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
-                              : `$${parseFloat(service.price).toFixed(2)}`}
-                          </span>
-                          <AnimatePresence>
-                            {expandedServiceId === service.id && (
-                              <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.26, ease: [0.4, 0, 0.2, 1] }}
-                                style={{ overflow: 'hidden' }}
-                              >
-                                <button
-                                  className={styles.serviceBookBtn}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    e.currentTarget.blur();
-                                    hapticSuccess();
-                                    handleRequestAppointment(service);
-                                  }}
-                                >
-                                  {t('requestShort')}
-                                </button>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
+                          <motion.div
+                            className={styles.serviceCardInfo}
+                            animate={{ opacity: expandedServiceId === service.id ? 0 : 1 }}
+                            transition={{ duration: 0.18 }}
+                            style={{ pointerEvents: expandedServiceId === service.id ? 'none' : 'auto' }}
+                          >
+                            <h5 className={styles.serviceCardTitle}>{service.name}</h5>
+                            <p className={styles.serviceCardDesc}>{service.description}</p>
+                            <span className={styles.serviceCardPrice}>
+                              {service.price_max
+                                ? `$${parseFloat(service.price).toFixed(2)} – $${parseFloat(service.price_max).toFixed(2)}`
+                                : `$${parseFloat(service.price).toFixed(2)}`}
+                            </span>
+                          </motion.div>
+                          <motion.div
+                            className={styles.serviceCardBookOverlay}
+                            animate={{ opacity: expandedServiceId === service.id ? 1 : 0 }}
+                            initial={{ opacity: 0 }}
+                            transition={{ duration: 0.2, delay: expandedServiceId === service.id ? 0.12 : 0 }}
+                            style={{ pointerEvents: expandedServiceId === service.id ? 'auto' : 'none' }}
+                          >
+                            <button
+                              className={styles.serviceBookBtn}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.currentTarget.blur();
+                                hapticSuccess();
+                                handleRequestAppointment(service);
+                              }}
+                            >
+                              {t('bookShort')}
+                            </button>
+                          </motion.div>
                         </div>
                       </motion.div>
                     </div>
@@ -739,7 +704,6 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       {/* Contact Section */}
-      {/* Contact Section */}
       <motion.section
         className={styles.contactSection}
         variants={sectionVariants}
@@ -810,6 +774,15 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </div>
             </motion.div>
           </motion.div>
+          <div className={styles.footerControls}>
+            <LanguageToggle />
+            <button
+              className={styles.employeeAccessBtn}
+              onClick={() => { hapticLight(); navigate(isLoggedIn ? '/employee-dashboard' : '/employee-login'); }}
+            >
+              {t(isLoggedIn ? 'employeeDashboard' : 'employeeAccess')}
+            </button>
+          </div>
         </div>
       </motion.section>
 
