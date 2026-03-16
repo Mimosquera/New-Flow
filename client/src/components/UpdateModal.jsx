@@ -194,10 +194,10 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
       <div className={styles.modalWrap}>
         <motion.div
           className={styles.modal}
-          initial={{ opacity: 0, scale: 0.97, y: 12 }}
+          initial={{ opacity: 0, scale: 0.97, y: 6 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.97, y: 12 }}
-          transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+          exit={{ opacity: 0, scale: 0.97, y: 6 }}
+          transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Header */}
           <div className={styles.header}>
