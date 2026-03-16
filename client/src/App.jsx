@@ -1,12 +1,12 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { HomePage } from './pages/HomePage.jsx';
-import { AppointmentsPage } from './pages/AppointmentsPage.jsx';
-import { EmployeeLoginPage } from './pages/EmployeeLoginPage.jsx';
-import { PasswordResetPage } from './pages/PasswordResetPage.jsx';
-import EmployeeDashboard from './pages/EmployeeDashboard.jsx';
-import { CancelAppointmentPage } from './pages/CancelAppointmentPage.jsx';
+import { HomePage } from './pages/home/HomePage.jsx';
+import { BookingPage } from './pages/book/BookingPage.jsx';
+import { LoginPage } from './pages/login/LoginPage.jsx';
+import { PasswordResetPage } from './pages/reset-password/PasswordResetPage.jsx';
+import DashboardPage from './pages/dashboard/DashboardPage.jsx';
+import { CancelPage } from './pages/cancel/CancelPage.jsx';
 import { LanguageProvider } from './contexts/LanguageContext.jsx';
 
 const pageVariants = {
@@ -64,11 +64,11 @@ function App() {
           >
             <Routes location={location}>
               <Route path="/" element={<HomePage onNavigateToBooking={handleBookingClick} />} />
-              <Route path="/appointments" element={<AppointmentsPage />} />
-              <Route path="/employee-login" element={<EmployeeLoginPage />} />
+              <Route path="/appointments" element={<BookingPage />} />
+              <Route path="/employee-login" element={<LoginPage />} />
               <Route path="/reset-password/:token" element={<PasswordResetPage />} />
-              <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
-              <Route path="/cancel-appointment/:id" element={<CancelAppointmentPage />} />
+              <Route path="/employee-dashboard" element={<DashboardPage />} />
+              <Route path="/cancel-appointment/:id" element={<CancelPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.div>

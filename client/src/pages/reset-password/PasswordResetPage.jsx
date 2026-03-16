@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Alert, FormInput } from '../components/Common/index.jsx';
-import { authService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { LanguageToggle } from '../components/LanguageToggle.jsx';
+import { Alert, FormInput } from '../../components/common/index.jsx';
+import { authService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { LanguageToggle } from '../../components/LanguageToggle.jsx';
 
 const THEME_COLOR = 'rgb(5, 60, 82)';
 const MAX_FORM_WIDTH = '450px';
@@ -99,7 +99,7 @@ export const PasswordResetPage = () => {
       <div style={{ width: '100%', maxWidth: MAX_FORM_WIDTH }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <img
-            src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+            src={new URL('../../assets/images/logo-transparent.png', import.meta.url).href}
             alt="New Flow Logo"
             style={{ maxWidth: '200px', height: 'auto' }}
           />

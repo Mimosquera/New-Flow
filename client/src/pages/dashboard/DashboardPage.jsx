@@ -2,19 +2,19 @@ import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
-import { removeToken, decodeToken, getToken, isTokenValid } from '../utils/tokenUtils.js';
-import { hapticLight } from '../utils/haptics.js';
-import { AppointmentsManager } from '../components/AppointmentsManager.jsx';
-import { UpdatePoster } from '../components/UpdatePoster.jsx';
-import { ServiceManager } from '../components/ServiceManager.jsx';
-import { AvailabilityManager } from '../components/AvailabilityManager.jsx';
-import { EmployeeManager } from '../components/EmployeeManager.jsx';
-import { ProfileManager } from '../components/ProfileManager.jsx';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { LanguageToggle } from '../components/LanguageToggle.jsx';
-import { ScrollToTop } from '../components/ScrollToTop.jsx';
+import { removeToken, decodeToken, getToken, isTokenValid } from '../../utils/tokenUtils.js';
+import { hapticLight } from '../../utils/haptics.js';
+import { AppointmentsManager } from './AppointmentsManager.jsx';
+import { PostsManager } from './PostsManager.jsx';
+import { ServiceManager } from './ServiceManager.jsx';
+import { AvailabilityManager } from './AvailabilityManager.jsx';
+import { TeamManager } from './TeamManager.jsx';
+import { ProfileManager } from './ProfileManager.jsx';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { LanguageToggle } from '../../components/LanguageToggle.jsx';
+import { ScrollToTop } from '../../components/ScrollToTop.jsx';
 
-export default function EmployeeDashboard() {
+export default function DashboardPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,7 +27,7 @@ export default function EmployeeDashboard() {
     sessionStorage.setItem('dashboardVisited', 'true');
     return 'profile';
   });
-  
+
   const [employeeName, setEmployeeName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [appointmentFilter, setAppointmentFilter] = useState('all');
@@ -123,7 +123,7 @@ export default function EmployeeDashboard() {
           {/* Left: Logo + name badge */}
           <div className="d-flex align-items-center" style={{ gap: '0.5rem', flexShrink: 0 }}>
             <img
-              src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+              src={new URL('../../assets/images/logo-transparent.png', import.meta.url).href}
               alt="Logo"
               decoding="async"
               style={{ height: '1.4rem', flexShrink: 0 }}
@@ -282,7 +282,7 @@ export default function EmployeeDashboard() {
           style={{ flex: 1 }}
         >
           {activeTab === 'appointments' && <AppointmentsManager filter={appointmentFilter} setFilter={setAppointmentFilter} />}
-          {activeTab === 'updates' && <UpdatePoster />}
+          {activeTab === 'updates' && <PostsManager />}
           {activeTab === 'services' && <ServiceManager />}
           {activeTab === 'availability' && <AvailabilityManager />}
           {activeTab === 'profile' && (
@@ -293,7 +293,7 @@ export default function EmployeeDashboard() {
               }}
             />
           )}
-          {activeTab === 'team' && isAdmin && <EmployeeManager />}
+          {activeTab === 'team' && isAdmin && <TeamManager />}
         </motion.div>
       </AnimatePresence>
 

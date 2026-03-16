@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, ChevronUp, FileText, PenLine } from 'lucide-react';
-import { Alert, FormInput } from './Common/index.jsx';
-import { useForm } from '../hooks/useForm.js';
-import { updateService, SERVER_BASE_URL } from '../services/api.js';
-import { UpdateModal } from './UpdateModal.jsx';
-import { decodeToken, getToken } from '../utils/tokenUtils.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { useTranslateItems } from '../hooks/useTranslateItems.js';
-import { hapticSuccess, hapticWarning, hapticMedium } from '../utils/haptics.js';
+import { Alert, FormInput } from '../../components/common/index.jsx';
+import { useForm } from '../../hooks/useForm.js';
+import { postsService, SERVER_BASE_URL } from '../../services/api.js';
+import { PostModal } from '../../components/PostModal.jsx';
+import { decodeToken, getToken } from '../../utils/tokenUtils.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { useTranslateItems } from '../../hooks/useTranslateItems.js';
+import { hapticSuccess, hapticWarning, hapticMedium } from '../../utils/haptics.js';
 
 const INITIAL_FETCH = 5;
 const INITIAL_DISPLAY = 4;
@@ -148,7 +148,7 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
   );
 };
 
-export const UpdatePoster = () => {
+export const PostsManager = () => {
   const { t, language } = useTranslation();
   const [updates, setUpdates] = useState([]);
   const [translatedUpdates] = useTranslateItems(updates, ['title', 'content', 'author'], language);
@@ -184,7 +184,7 @@ export const UpdatePoster = () => {
   const fetchUpdates = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await updateService.getAll(INITIAL_FETCH);
+      const response = await postsService.getAll(INITIAL_FETCH);
       setUpdates(response.data.updates);
       setTotalUpdates(response.data.total);
       setDisplayCount(INITIAL_DISPLAY);
@@ -202,7 +202,7 @@ export const UpdatePoster = () => {
       try {
         setLoadingMore(true);
         const needed = newDisplayCount - updates.length;
-        const response = await updateService.getAll(needed, updates.length);
+        const response = await postsService.getAll(needed, updates.length);
         setUpdates(prev => [...prev, ...response.data.updates]);
         setTotalUpdates(response.data.total);
       } catch (error) {
@@ -248,7 +248,7 @@ export const UpdatePoster = () => {
         formDataToSend.append('media', mediaFile);
       }
 
-      const response = await updateService.create(formDataToSend);
+      const response = await postsService.create(formDataToSend);
       setUpdates([response.data, ...updates]);
       setTotalUpdates(prev => prev + 1);
       setDisplayCount(prev => prev + 1);
@@ -289,7 +289,7 @@ export const UpdatePoster = () => {
 
   const handleDelete = async (id) => {
     try {
-      await updateService.delete(id);
+      await postsService.delete(id);
       const remaining = updates.filter(u => u.id !== id);
       setUpdates(remaining);
       setTotalUpdates(prev => prev - 1);
@@ -325,7 +325,7 @@ export const UpdatePoster = () => {
       formData.append('title', editForm.title);
       formData.append('content', editForm.content);
       if (editMediaFile) formData.append('media', editMediaFile);
-      const response = await updateService.update(updateId, formData);
+      const response = await postsService.update(updateId, formData);
       setUpdates(prev => prev.map(u => u.id === updateId ? response.data : u));
       hapticSuccess();
       setSuccess(t('updateEdited'));
@@ -673,7 +673,7 @@ export const UpdatePoster = () => {
       </div>
 
     {/* Update Modal */}
-    <UpdateModal
+    <PostModal
       updates={translatedUpdates}
       initialIndex={selectedUpdateIndex}
       show={showModal}

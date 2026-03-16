@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
-import { Alert } from './Common/index.jsx';
-import { appointmentService } from '../services/api.js';
-import { decodeToken, getToken } from '../utils/tokenUtils.js';
-import { isAppointmentUpcoming, formatDateDisplay, formatTimeDisplay } from '../utils/dateUtils.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { translateObject } from '../services/translationService.js';
-import { hapticSuccess, hapticWarning, hapticMedium } from '../utils/haptics.js';
+import { Alert } from '../../components/common/index.jsx';
+import { appointmentService } from '../../services/api.js';
+import { decodeToken, getToken } from '../../utils/tokenUtils.js';
+import { isAppointmentUpcoming, formatDateDisplay, formatTimeDisplay } from '../../utils/dateUtils.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { translateObject } from '../../services/translationService.js';
+import { hapticSuccess, hapticWarning, hapticMedium } from '../../utils/haptics.js';
 
 const DANGER_COLOR = '#dc3545';
 const FILTER_ALL = 'all';
@@ -56,7 +56,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const token = getToken();

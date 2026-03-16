@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { appointmentService } from '../services/api';
-import apiClient from '../services/api';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
+import { appointmentService } from '../../services/api';
+import apiClient from '../../services/api';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 
-export function CancelAppointmentPage() {
+export function CancelPage() {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ export function CancelAppointmentPage() {
   const [appointment, setAppointment] = useState(null);
   const [fetchingAppointment, setFetchingAppointment] = useState(true);
 
-  // Fetch appointment details on mount
   useEffect(() => {
     const fetchAppointment = async () => {
       try {
@@ -130,7 +129,7 @@ export function CancelAppointmentPage() {
               textAlign: 'center',
               lineHeight: '1.6',
             }}>
-              {appointment?.status === 'pending' 
+              {appointment?.status === 'pending'
                 ? t('confirmCancelRequest')
                 : t('confirmCancelAppointment')}
             </p>

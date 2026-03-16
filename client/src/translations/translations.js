@@ -8,7 +8,7 @@ export const translations = {
     heroTitle: 'NEW FLOW',
     heroSubtitle: 'Premium Barber & Hair Salon',
     heroDescription: 'Experience excellence in grooming. Your style, our craft.',
-    requestAppointment: 'Book Now',
+    bookNow: 'Book Now',
     requestShort: 'Request',
     bookShort: 'Book',
     
@@ -437,7 +437,7 @@ export const translations = {
     heroTitle: 'NEW FLOW',
     heroSubtitle: 'Barbería y Salón de Peluquería Premium',
     heroDescription: 'Experimenta la excelencia en el cuidado personal. Tu estilo, nuestra pasión.',
-    requestAppointment: 'Reservar Ahora',
+    bookNow: 'Reservar Ahora',
     requestShort: 'Solicitar',
     bookShort: 'Reservar',
     

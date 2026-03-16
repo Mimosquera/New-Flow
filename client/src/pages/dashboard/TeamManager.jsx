@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus } from 'lucide-react';
-import { Alert } from './Common/index.jsx';
-import { authService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
+import { Alert } from '../../components/common/index.jsx';
+import { authService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 60, 82)';
 
-export const EmployeeManager = () => {
+export const TeamManager = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
   const [employees, setEmployees] = useState([]);

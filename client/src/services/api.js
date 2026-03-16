@@ -79,7 +79,7 @@ export const dataService = {
   getEmployees: () => apiClient.get('/data/employees'),
 };
 
-export const updateService = {
+export const postsService = {
   getAll: (limit, offset) => {
     const params = {};
     if (limit) params.limit = limit;

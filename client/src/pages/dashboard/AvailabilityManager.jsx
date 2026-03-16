@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Clock, CalendarOff, ChevronDown, ChevronUp, Pencil, Trash2, Check, X } from 'lucide-react';
-import { Alert } from './Common/index.jsx';
-import { availabilityService, dataService, blockedDateService } from '../services/api.js';
-import { decodeToken, getToken } from '../utils/tokenUtils.js';
-import { useTranslation } from '../hooks/useTranslation.js';
+import { Alert } from '../../components/common/index.jsx';
+import { availabilityService, dataService, blockedDateService } from '../../services/api.js';
+import { decodeToken, getToken } from '../../utils/tokenUtils.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
 import { BlockedDatesManager } from './BlockedDatesManager.jsx';
 
 // Constants

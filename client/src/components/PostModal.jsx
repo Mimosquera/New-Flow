@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useTranslation } from '../hooks/useTranslation.js';
 import { SERVER_BASE_URL } from '../services/api.js';
-import styles from './UpdateModal.module.css';
+import styles from '../styles/components/PostModal.module.css';
 
 const ZoomableImage = ({ src, alt }) => {
   const wrapRef = useRef(null);
@@ -323,7 +323,7 @@ const mediaUrl = (url) => {
   return url.startsWith('http') ? url : `${SERVER_BASE_URL}${url}`;
 };
 
-export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
+export const PostModal = ({ updates = [], initialIndex = 0, show, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [fullscreen, setFullscreen] = useState(false);
   const [slideWidth, setSlideWidth] = useState(0);
@@ -565,7 +565,7 @@ export const UpdateModal = ({ updates = [], initialIndex = 0, show, onClose }) =
   );
 };
 
-UpdateModal.propTypes = {
+PostModal.propTypes = {
   updates: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number,
     title: PropTypes.string,

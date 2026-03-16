@@ -4,16 +4,16 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { Clock, Phone, AtSign, MapPin } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { getToken } from '../utils/tokenUtils.js';
-import { hapticLight, hapticMedium, hapticSuccess } from '../utils/haptics.js';
-import { updateService, serviceService, SERVER_BASE_URL } from '../services/api.js';
-import { UpdateModal } from '../components/UpdateModal.jsx';
-import { LanguageToggle } from '../components/LanguageToggle.jsx';
-import { ScrollToTop } from '../components/ScrollToTop.jsx';
-import { ReviewsCarousel } from '../components/ReviewsCarousel.jsx';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { useTranslateItems } from '../hooks/useTranslateItems.js';
-import styles from './HomePage.module.css';
+import { getToken } from '../../utils/tokenUtils.js';
+import { hapticLight, hapticMedium, hapticSuccess } from '../../utils/haptics.js';
+import { postsService, serviceService, SERVER_BASE_URL } from '../../services/api.js';
+import { PostModal } from '../../components/PostModal.jsx';
+import { LanguageToggle } from '../../components/LanguageToggle.jsx';
+import { ScrollToTop } from '../../components/ScrollToTop.jsx';
+import { ReviewsCarousel } from '../../components/ReviewsCarousel.jsx';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { useTranslateItems } from '../../hooks/useTranslateItems.js';
+import styles from '../../styles/pages/HomePage.module.css';
 
 const POSTS_CACHE_KEY = 'nf_posts_v2';
 const POSTS_CACHE_TTL = 2 * 60 * 60 * 1000;
@@ -239,7 +239,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         }
       }, SKELETON_MIN_MS);
 
-      updateService.getAll(pageSize, 0)
+      postsService.getAll(pageSize, 0)
         .then(({ data }) => {
           if (!data.updates?.length) return;
           const freshIds = data.updates.map(p => p.id).join(',');
@@ -262,7 +262,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       return () => clearTimeout(timer);
     } else {
       const t0 = Date.now();
-      updateService.getAll(pageSize, 0)
+      postsService.getAll(pageSize, 0)
         .then(({ data }) => {
           setNews(data.updates);
           setTotalUpdates(data.total);
@@ -286,7 +286,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
     const t0 = Date.now();
     let result = null;
     try {
-      const { data } = await updateService.getAll(pageSize, news.length);
+      const { data } = await postsService.getAll(pageSize, news.length);
       result = { merged: [...news, ...data.updates], total: data.total };
     } catch (err) {
       console.error('Error fetching more updates:', err);
@@ -372,7 +372,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
               transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <img
-                src={new URL('../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
+                src={new URL('../../assets/images/full-logo-transparent-nobuffer.png', import.meta.url).href}
                 alt="New Flow"
                 className={styles.heroVideo}
               />
@@ -402,7 +402,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
                     onNavigateToBooking();
                   }}
                 >
-                  {t('requestAppointment')}
+                  {t('bookNow')}
                 </button>
               </motion.div>
             </div>
@@ -738,7 +738,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             >
               <div className={styles.aboutLogoWrap}>
                 <img
-                  src={new URL('../assets/images/logo-transparent.png', import.meta.url).href}
+                  src={new URL('../../assets/images/logo-transparent.png', import.meta.url).href}
                   alt="New Flow Team"
                   loading="lazy"
                   decoding="async"
@@ -876,7 +876,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         </div>
       </motion.section>
 
-      <UpdateModal updates={translatedNews} initialIndex={selectedUpdateIndex} show={showModal} onClose={handleCloseModal} />
+      <PostModal updates={translatedNews} initialIndex={selectedUpdateIndex} show={showModal} onClose={handleCloseModal} />
       <ScrollToTop hidden={showModal} />
     </div>
   );

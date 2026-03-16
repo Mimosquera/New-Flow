@@ -7,7 +7,7 @@ import {
   REVIEW_COUNT as reviewCount,
   GOOGLE_MAPS_URL,
 } from '../data/reviews.js';
-import styles from './ReviewsCarousel.module.css';
+import styles from '../styles/components/ReviewsCarousel.module.css';
 
 const GoogleIcon = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" style={{ flexShrink: 0 }}>

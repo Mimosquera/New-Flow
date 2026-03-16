@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, FormInput } from './Common/index.jsx';
-import { useForm } from '../hooks/useForm.js';
-import { blockedDateService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
+import { Alert, FormInput } from '../../components/common/index.jsx';
+import { useForm } from '../../hooks/useForm.js';
+import { blockedDateService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
 
 // Constants
 const INITIAL_FORM_DATA = {

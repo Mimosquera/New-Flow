@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { User, Lock, Camera, Trash2, LogOut, Pencil } from 'lucide-react';
-import { Alert } from './Common/index.jsx';
-import { authService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { setToken } from '../utils/tokenUtils.js';
-import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
+import { Alert } from '../../components/common/index.jsx';
+import { authService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { setToken } from '../../utils/tokenUtils.js';
+import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 60, 82)';
 const SECONDARY_COLOR = '#3aabdb';

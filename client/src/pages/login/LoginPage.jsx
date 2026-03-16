@@ -2,19 +2,19 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Alert } from '../components/Common/index.jsx';
-import { useForm } from '../hooks/useForm.js';
-import { authService } from '../services/api.js';
-import { setToken } from '../utils/tokenUtils.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { LanguageToggle } from '../components/LanguageToggle.jsx';
-import styles from './EmployeeLoginPage.module.css';
-import { hapticSuccess, hapticWarning, hapticLight } from '../utils/haptics.js';
+import { Alert } from '../../components/common/index.jsx';
+import { useForm } from '../../hooks/useForm.js';
+import { authService } from '../../services/api.js';
+import { setToken } from '../../utils/tokenUtils.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { LanguageToggle } from '../../components/LanguageToggle.jsx';
+import styles from '../../styles/pages/LoginPage.module.css';
+import { hapticSuccess, hapticWarning, hapticLight } from '../../utils/haptics.js';
 
 const slideIn = { initial: { opacity: 0, x: 24 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -24 } };
 const slideBack = { initial: { opacity: 0, x: -24 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: 24 } };
 
-export const EmployeeLoginPage = () => {
+export const LoginPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import PropTypes from 'prop-types';
-import styles from './LanguageToggle.module.css';
+import styles from '../styles/components/LanguageToggle.module.css';
 import { hapticLight } from '../utils/haptics.js';
 
 export const LanguageToggle = ({ inverse = false, darkText = false }) => {

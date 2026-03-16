@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Scissors, Plus, Pencil, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import { Alert, FormInput } from './Common/index.jsx';
-import { useForm } from '../hooks/useForm.js';
-import { serviceService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { useTranslateItems } from '../hooks/useTranslateItems.js';
-import { hapticSuccess, hapticWarning } from '../utils/haptics.js';
+import { Alert, FormInput } from '../../components/common/index.jsx';
+import { useForm } from '../../hooks/useForm.js';
+import { serviceService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { useTranslateItems } from '../../hooks/useTranslateItems.js';
+import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 60, 82)';
 

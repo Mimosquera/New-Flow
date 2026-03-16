@@ -6,16 +6,16 @@ import {
   ArrowLeft, Scissors, Users, User, Mail, Phone,
   CalendarDays, Clock, StickyNote, CheckCircle2,
 } from 'lucide-react';
-import { Alert } from '../components/Common/index.jsx';
-import { useForm } from '../hooks/useForm.js';
-import { serviceService, availabilityService, appointmentService, dataService } from '../services/api.js';
-import { useTranslation } from '../hooks/useTranslation.js';
-import { useTranslateItems } from '../hooks/useTranslateItems.js';
-import { ScrollToTop } from '../components/ScrollToTop.jsx';
-import { LanguageToggle } from '../components/LanguageToggle.jsx';
-import { ReviewsCarousel } from '../components/ReviewsCarousel.jsx';
-import styles from './AppointmentsPage.module.css';
-import { hapticSuccess, hapticWarning, hapticLight } from '../utils/haptics.js';
+import { Alert } from '../../components/common/index.jsx';
+import { useForm } from '../../hooks/useForm.js';
+import { serviceService, availabilityService, appointmentService, dataService } from '../../services/api.js';
+import { useTranslation } from '../../hooks/useTranslation.js';
+import { useTranslateItems } from '../../hooks/useTranslateItems.js';
+import { ScrollToTop } from '../../components/ScrollToTop.jsx';
+import { LanguageToggle } from '../../components/LanguageToggle.jsx';
+import { ReviewsCarousel } from '../../components/ReviewsCarousel.jsx';
+import styles from '../../styles/pages/BookingPage.module.css';
+import { hapticSuccess, hapticWarning, hapticLight } from '../../utils/haptics.js';
 
 const slideVariants = {
   enterForward:  { opacity: 0, x: 32 },
@@ -40,7 +40,7 @@ const StepProgress = ({ current }) => (
 
 StepProgress.propTypes = { current: PropTypes.number.isRequired };
 
-export const AppointmentsPage = () => {
+export const BookingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, language } = useTranslation();
