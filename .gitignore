@@ -56,3 +56,6 @@ MAINTENANCE.md
 # User uploads (regenerated in production)
 server/uploads/*
 !server/uploads/.gitkeep
+
+# Claude Code worktrees
+.claude/worktrees/
