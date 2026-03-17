@@ -6,7 +6,6 @@ html, body {
 
 /* ─── Hide scrollbar utility ─────────────────────────────────────────────────── */
 .hide-scrollbar {
-  scrollbar-width: none;
   -ms-overflow-style: none;
 }
 .hide-scrollbar::-webkit-scrollbar {
@@ -376,8 +375,8 @@ a:focus:not(:focus-visible) {
 /* Employee Dashboard Post Update Card Theme */
 .post-update-card {
   background: rgba(5, 60, 82, 0.55);
-  backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   border: 1px solid rgba(58, 171, 219, 0.2) !important;
   color: #fff;
   border-radius: 1rem;
@@ -668,10 +667,10 @@ a:focus:not(:focus-visible) {
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
   border-radius: 0.75rem;
   overflow: hidden;
-  transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
+  transform: translateZ(0);
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -683,10 +682,10 @@ a:focus:not(:focus-visible) {
   padding: 1.5rem;
   border-radius: 0;
   margin: 0;
-  transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
+  transform: translateZ(0);
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   position: relative;
 }
 
@@ -694,8 +693,8 @@ a:focus:not(:focus-visible) {
   padding: 2rem;
   background: white;
   margin: 0;
-  transform: translateZ(0);
   -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 
@@ -916,10 +915,10 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transform: translateZ(0);
   -webkit-transform: translateZ(0);
-  backface-visibility: hidden;
+  transform: translateZ(0);
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 /* Responsive Styles */
@@ -958,7 +957,7 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
 
   /* Form Container */
   .form-container {
-    min-height: auto;
+    min-height: 0;
     padding: 2rem 1rem;
   }
 
@@ -1003,8 +1002,8 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
 /* Appointment card */
 .appointment-card {
   background: rgba(5, 60, 82, 0.5) !important;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(58, 171, 219, 0.2) !important;
   border-left: 4px solid #3aabdb !important;
   border-radius: 16px !important;
@@ -1060,8 +1059,8 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
 /* Appointment no-results alert */
 .appointments-no-results {
   background: rgba(5, 60, 82, 0.45) !important;
-  backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.75) !important;
   border: 1px solid rgba(58, 171, 219, 0.2) !important;
   border-radius: 12px !important;
