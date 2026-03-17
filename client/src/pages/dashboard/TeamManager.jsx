@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus, Pencil, AtSign } from 'lucide-react';
+import { UserPlus, Users, ChevronDown, ChevronUp, Key, UserMinus, Pencil, AtSign, X } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
@@ -13,7 +13,7 @@ export const TeamManager = () => {
   const [loading, setLoading] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(true);
   const [expandedEmployeeId, setExpandedEmployeeId] = useState(null);
-  const [showCreateForm, setShowCreateForm] = useState(window.innerWidth >= 992);
+  const [showCreateForm, setShowCreateForm] = useState(false);
   const [alerts, setAlerts] = useState({
     error: null, success: null,
     editError: null, editSuccess: null,
@@ -281,11 +281,14 @@ export const TeamManager = () => {
   };
 
   const renderCreateForm = () => (
-    <div className="p-4">
-      <p className="file-info-text mb-4 employee-info-black text-center">{t('createEmployeeDescription')}</p>
+    <div style={{ padding: '1.15rem', borderBottom: '1px solid rgba(70,161,161,0.12)' }}>
+      <h6 style={{ margin: '0 0 0.85rem', color: '#3aabdb', fontWeight: 600, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+        <UserPlus size={13} /> {t('createEmployee')}
+      </h6>
+      <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.78rem', lineHeight: 1.5, marginBottom: '0.85rem' }}>{t('createEmployeeDescription')}</p>
       {alerts.error && <Alert type="danger" message={alerts.error} onClose={() => setAlert('error', null)} />}
       {alerts.success && <Alert type="success" message={alerts.success} onClose={() => setAlert('success', null)} />}
-      <form onSubmit={handleSubmit} noValidate style={{ maxWidth: '380px', margin: '0 auto' }}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className="mb-3">
           <label htmlFor="name" className="form-label">{t('name')} *</label>
           <input
@@ -313,7 +316,7 @@ export const TeamManager = () => {
             autoComplete="email"
             required
           />
-          <small className="file-info-text employee-info-black">{t('employeeEmailNote')}</small>
+          <small style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem' }}>{t('employeeEmailNote')}</small>
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">{t('password')} *</label>
@@ -329,10 +332,10 @@ export const TeamManager = () => {
             minLength={6}
             required
           />
-          <small className="file-info-text employee-info-black">{t('employeePasswordNote')}</small>
+          <small style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.75rem' }}>{t('employeePasswordNote')}</small>
         </div>
-        <div className="mt-2 d-flex justify-content-center">
-          <button type="submit" className="btn post-update-btn" disabled={loading}>
+        <div className="d-flex gap-2">
+          <button type="submit" className="btn" disabled={loading} style={{ background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '600' }}>
             {loading ? t('creating') : t('createEmployee')}
           </button>
         </div>
@@ -344,30 +347,26 @@ export const TeamManager = () => {
     const adminEmail = import.meta.env.VITE_SEED_EMPLOYEE_EMAIL;
     const filteredEmployees = employees.filter(emp => emp.email !== adminEmail);
     return (
-    <div className="list-group">
-      {filteredEmployees.map((employee) => (
+    <div>
+      {filteredEmployees.map((employee, index) => (
         <div
           key={employee.id}
-          className={`list-group-item p-0${expandedEmployeeId === employee.id ? ' expanded-employee-card' : ''}`}
           style={{
-            background: expandedEmployeeId === employee.id ? undefined : 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(70,161,161,0.2)',
-            borderRadius: '10px',
-            marginBottom: '0.5rem'
+            borderBottom: index < filteredEmployees.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
           }}
         >
           <button
-            className="btn btn-link text-start text-decoration-none w-100 p-3 d-flex justify-content-between align-items-center"
+            className="btn btn-link text-start text-decoration-none w-100 d-flex justify-content-between align-items-center"
             onClick={() => toggleEmployee(employee.id)}
-            style={{ color: '#fff', background: 'transparent', fontWeight: 600 }}
+            style={{ color: '#fff', background: 'transparent', fontWeight: 600, padding: '0.85rem 1.15rem', outline: 'none', boxShadow: 'none' }}
           >
-            <div>
-              <h5 className="mb-1" style={{ color: expandedEmployeeId === employee.id ? '#fff' : '#e0f7f7', fontWeight: 700 }}>{employee.name}</h5>
-              <small style={{ color: 'rgba(255,255,255,0.55)' }}>{employee.email}</small>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ fontWeight: 700, fontSize: '0.9rem', color: expandedEmployeeId === employee.id ? '#fff' : '#e0f7f7', lineHeight: 1.3 }}>{employee.name}</div>
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.76rem', marginTop: '0.15rem' }}>{employee.email}</div>
             </div>
             {expandedEmployeeId === employee.id
-              ? <ChevronUp size={18} style={{ color: '#3aabdb', flexShrink: 0 }} />
-              : <ChevronDown size={18} style={{ color: 'rgba(255,255,255,0.5)', flexShrink: 0 }} />}
+              ? <ChevronUp size={16} style={{ color: '#3aabdb', flexShrink: 0 }} />
+              : <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.35)', flexShrink: 0 }} />}
           </button>
 
           <AnimatePresence initial={false}>
@@ -379,7 +378,7 @@ export const TeamManager = () => {
               transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
               style={{ overflow: 'hidden' }}
             >
-            <div className="p-3 border-top" style={{ borderColor: 'rgba(58, 171, 219, 0.25)' }}>
+            <div style={{ padding: '0.65rem 1.15rem 0.85rem', borderTop: '1px solid rgba(58,171,219,0.15)' }}>
 
               {/* Edit Name */}
               <button
@@ -774,31 +773,45 @@ export const TeamManager = () => {
 
   return (
     <div className="container py-4">
-      <div className="row g-4 align-items-start justify-content-center">
+      <div className="row justify-content-center">
+        <div className="col-lg-8 col-xl-7">
+          <div className="post-update-card" style={{ overflow: 'hidden' }}>
 
-        {/* Left: Create Employee */}
-        <div className="col-12 col-lg-4">
-          <div className="card post-update-card shadow-sm">
-            <div
-              className="d-flex justify-content-between align-items-center collapsible-header"
-              style={{
-                background: 'rgba(3, 25, 38, 0.45)',
-                borderBottom: showCreateForm ? '1px solid rgba(70,161,161,0.2)' : 'none',
-                color: 'white',
-                cursor: 'pointer',
-                padding: '0.75rem 1rem',
-                borderRadius: showCreateForm ? '0.75rem 0.75rem 0 0' : '0.75rem',
-              }}
-              onClick={() => setShowCreateForm(!showCreateForm)}
-            >
-              <h3 className="card-title mb-0 create-employee-title d-flex align-items-center gap-2" style={{ fontSize: '1rem' }}>
-                <UserPlus size={16} />
-                {t('createEmployee')}
-              </h3>
-              {showCreateForm
-                ? <ChevronUp size={16} style={{ color: '#3aabdb', flexShrink: 0 }} />
-                : <ChevronDown size={16} style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }} />}
+            {/* Header */}
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '0.85rem 1.15rem',
+              borderBottom: '1px solid rgba(70,161,161,0.15)',
+              background: 'rgba(3, 25, 38, 0.45)',
+            }}>
+              <h5 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', fontWeight: 700, fontSize: '1rem' }}>
+                <Users size={16} />
+                {t('manageEmployees')}
+              </h5>
+              <button
+                onClick={() => {
+                  if (showCreateForm) {
+                    setShowCreateForm(false);
+                  } else {
+                    setShowCreateForm(true);
+                    clearAlerts();
+                  }
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: '0.3rem',
+                  background: showCreateForm ? 'rgba(255,255,255,0.06)' : 'rgba(58,171,219,0.15)',
+                  color: showCreateForm ? 'rgba(255,255,255,0.6)' : '#3aabdb',
+                  border: `1px solid ${showCreateForm ? 'rgba(255,255,255,0.15)' : 'rgba(58,171,219,0.35)'}`,
+                  borderRadius: '8px', padding: '0.28rem 0.7rem',
+                  fontSize: '0.76rem', fontWeight: 600, cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {showCreateForm ? <X size={13} /> : <><UserPlus size={13} /> {t('createEmployee')}</>}
+              </button>
             </div>
+
+            {/* Inline Create Form */}
             <AnimatePresence initial={false}>
               {showCreateForm && (
                 <motion.div
@@ -812,56 +825,33 @@ export const TeamManager = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
-        </div>
 
-        {/* Right: Manage Employees */}
-        <div className="col-12 col-lg-6">
-          <div className="card post-update-card shadow-sm">
-            <div className="card-body">
-              <h3 className="card-title mb-4 create-employee-title d-flex align-items-center gap-2">
-                <Users size={18} />
-                {t('manageEmployees')}
-              </h3>
-              {loadingEmployees ? (
-                <div className="list-group">
-                  {Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="sk-card mb-2 p-3 d-flex justify-content-between align-items-center">
+            {/* Employee List */}
+            {loadingEmployees ? (
+              <div>
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} style={{ padding: '0.85rem 1.15rem', borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div style={{ flex: 1 }}>
-                        <span className="sk mb-2" style={{ height: '17px', width: '140px', animationDelay: `${i * 0.12}s` }} />
-                        <span className="sk" style={{ height: '12px', width: '190px', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk" style={{ height: '15px', width: '130px', display: 'block', animationDelay: `${i * 0.12}s` }} />
+                        <span className="sk" style={{ height: '11px', width: '180px', display: 'block', marginTop: '0.35rem', animationDelay: `${i * 0.12}s` }} />
                       </div>
-                      <span className="sk" style={{ height: '22px', width: '22px', borderRadius: '50%', animationDelay: `${i * 0.12}s` }} />
+                      <span className="sk" style={{ height: '20px', width: '20px', borderRadius: '50%', flexShrink: 0, animationDelay: `${i * 0.12}s` }} />
                     </div>
-                  ))}
-                </div>
-              ) : employees.length === 0 ? (
-                <p className="employee-info-black text-center py-4">{t('noEmployeesYet')}</p>
-              ) : (
-                renderEmployeeList()
-              )}
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: '1rem',
-              background: 'rgba(58,171,219,0.08)',
-              border: '1px solid rgba(58,171,219,0.2)',
-              borderRadius: '12px',
-              padding: '0.85rem 1rem',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '0.6rem',
-            }}
-          >
-            <span style={{ flexShrink: 0, marginTop: '1px', color: '#3aabdb', opacity: 0.7 }}>ℹ</span>
-            <p style={{ margin: 0, fontSize: '0.78rem', lineHeight: '1.6', color: 'rgba(255,255,255,0.55)' }}>
-              <strong style={{ color: 'rgba(255,255,255,0.75)', fontWeight: '600' }}>{t('note')}</strong>{' '}
-              {t('employeeAccountNote')}
-            </p>
+                  </div>
+                ))}
+              </div>
+            ) : employees.length === 0 ? (
+              <div style={{ padding: '2.5rem 1.5rem', textAlign: 'center' }}>
+                <Users size={32} style={{ color: 'rgba(255,255,255,0.1)', marginBottom: '0.6rem' }} />
+                <p style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.85rem', margin: 0 }}>{t('noEmployeesYet')}</p>
+              </div>
+            ) : (
+              renderEmployeeList()
+            )}
+
           </div>
         </div>
-
       </div>
     </div>
   );

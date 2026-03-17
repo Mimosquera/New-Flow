@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
+import { LayoutGrid, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
 import { removeToken, decodeToken, getToken, isTokenValid } from '../../utils/tokenUtils.js';
 import { hapticLight } from '../../utils/haptics.js';
 import { AppointmentsManager } from './AppointmentsManager.jsx';
@@ -170,11 +170,6 @@ export default function DashboardPage() {
                 </button>
               </li>
               <li className="nav-item">
-                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'availability' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('availability'); }}>
-                  <Clock size={13} />{t('availability')}
-                </button>
-              </li>
-              <li className="nav-item">
                 <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'updates' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('updates'); }}>
                   <FileText size={13} />{t('postsTab')}
                 </button>
@@ -182,6 +177,11 @@ export default function DashboardPage() {
               <li className="nav-item">
                 <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'services' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('services'); }}>
                   <Scissors size={13} />{t('services')}
+                </button>
+              </li>
+              <li className="nav-item">
+                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'availability' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('availability'); }}>
+                  <Clock size={13} />{t('availability')}
                 </button>
               </li>
               {isAdmin && (
@@ -200,9 +200,9 @@ export default function DashboardPage() {
               const tabOptions = [
                 { value: 'profile', label: t('profile'), icon: <User size={13} /> },
                 { value: 'appointments', label: t('appointments'), icon: <Calendar size={13} /> },
-                { value: 'availability', label: t('availability'), icon: <Clock size={13} /> },
                 { value: 'updates', label: t('postsTab'), icon: <FileText size={13} /> },
                 { value: 'services', label: t('services'), icon: <Scissors size={13} /> },
+                { value: 'availability', label: t('availability'), icon: <Clock size={13} /> },
                 ...(isAdmin ? [{ value: 'team', label: t('team'), icon: <Users size={13} /> }] : []),
               ];
               const active = tabOptions.find(o => o.value === activeTab);
@@ -267,7 +267,7 @@ export default function DashboardPage() {
               onClick={() => navigate('/')}
               title={t('backToHome')}
             >
-              <Home size={17} />
+              <LayoutGrid size={17} />
             </button>
             <div style={{ width: '53px', height: '24px', position: 'relative', flexShrink: 0 }}>
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>

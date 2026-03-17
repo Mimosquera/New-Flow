@@ -381,8 +381,8 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                     </span>
                   </div>
 
-                  {expandedIds.has(apt.id) && (
-                    <AnimatePresence initial={false}>
+                  <AnimatePresence initial={false}>
+                    {expandedIds.has(apt.id) && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
@@ -425,8 +425,8 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                         )}
                       </div>
                     </motion.div>
-                    </AnimatePresence>
-                  )}
+                    )}
+                  </AnimatePresence>
 
                   {apt.status === 'pending' && (
                     <div className="d-flex gap-2 mt-3">

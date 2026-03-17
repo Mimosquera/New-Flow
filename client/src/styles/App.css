@@ -4,6 +4,15 @@ html, body {
   touch-action: pan-x pan-y;
 }
 
+/* ─── Hide scrollbar utility ─────────────────────────────────────────────────── */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* ─── Global Skeleton Loading ────────────────────────────────────────────────── */
 @keyframes skeletonShimmer {
   0%   { background-position: -300% 0; }

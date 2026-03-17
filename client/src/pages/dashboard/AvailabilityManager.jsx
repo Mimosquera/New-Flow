@@ -183,95 +183,7 @@ export const AvailabilityManager = () => {
     <div className="container py-4">
       <div className="row g-4 align-items-start justify-content-center">
 
-        {/* Left: Edit Availability (combined card) */}
-        <div className="col-12 col-lg-5">
-          <div className="card post-update-card shadow-sm">
-            <div style={{ background: 'rgba(3,25,38,0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', padding: '0.75rem 1rem', borderRadius: '0.75rem 0.75rem 0 0' }}>
-              <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>
-                <Clock size={15} />
-                {t('editAvailability')}
-              </h5>
-            </div>
-
-            {/* Segmented tab control */}
-            <div style={{ padding: '0.65rem 0.75rem 0.65rem', display: 'flex', gap: '0.35rem', background: 'rgba(3,25,38,0.2)' }}>
-              <button style={tabBtnStyle(activeTab === 'schedule')} onClick={() => setActiveTab('schedule')}>
-                <Clock size={13} /> {t('scheduleTab')}
-              </button>
-              <button style={tabBtnStyle(activeTab === 'blocked')} onClick={() => setActiveTab('blocked')}>
-                <CalendarOff size={13} /> {t('blockDatesTab')}
-              </button>
-            </div>
-
-            <AnimatePresence mode="wait" initial={false}>
-              {activeTab === 'schedule' ? (
-                <motion.div key="schedule" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }} transition={{ duration: 0.18 }}>
-                  <div className="p-3">
-                    {success && <Alert message={success} type="success" onClose={() => setSuccess(null)} />}
-                    {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
-
-                    <form onSubmit={handleSubmit} noValidate>
-                      <div className="mb-3">
-                        <div className="form-label" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', marginBottom: '0.45rem' }}>{t('daysOfWeek')}</div>
-                        <div style={{ display: 'flex', gap: '0.3rem' }}>
-                          {DAYS.map(day => {
-                            const sel = formData.selectedDays.includes(day.value);
-                            return (
-                              <button
-                                key={day.value}
-                                type="button"
-                                title={day.label}
-                                onClick={() => handleDayToggle(day.value)}
-                                style={{
-                                  flex: '1 1 0',
-                                  height: '40px',
-                                  borderRadius: '8px',
-                                  fontSize: '0.78rem',
-                                  fontWeight: '700',
-                                  cursor: 'pointer',
-                                  border: sel ? '2px solid #3aabdb' : '1px solid rgba(255,255,255,0.15)',
-                                  background: sel ? 'rgba(58,171,219,0.2)' : 'rgba(255,255,255,0.04)',
-                                  color: sel ? '#3aabdb' : 'rgba(255,255,255,0.45)',
-                                  transition: 'all 0.15s ease',
-                                }}
-                              >
-                                {day.short}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-
-                      <div className="row g-2 mb-3">
-                        <div className="col-6">
-                          <label htmlFor="startTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('startTime')}</label>
-                          <input id="startTime" type="time" name="startTime" className="form-control" value={formData.startTime} onChange={(e) => setFormData(p => ({ ...p, startTime: e.target.value }))} required autoComplete="off" />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="endTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('endTime')}</label>
-                          <input id="endTime" type="time" name="endTime" className="form-control" value={formData.endTime} onChange={(e) => setFormData(p => ({ ...p, endTime: e.target.value }))} required autoComplete="off" />
-                        </div>
-                      </div>
-
-                      <button type="submit" className="btn post-update-btn w-100">{t('addAvailability')}</button>
-                    </form>
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div key="blocked" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.18 }}>
-                  <BlockedDatesManager
-                    blockedDates={blockedDates}
-                    onBlockedDateChange={fetchBlockedDates}
-                    isAdmin={isAdmin}
-                    employees={employees}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Right: Your Schedule (compact) */}
+        {/* Left: Your Schedule (compact) */}
         <div className="col-12 col-lg-5">
           <div className="card post-update-card shadow-sm">
             <div
@@ -294,7 +206,7 @@ export const AvailabilityManager = () => {
                   transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
                   style={{ overflow: 'hidden' }}
                 >
-                  <div className="p-3">
+                  <div className="p-3 hide-scrollbar" style={{ maxHeight: '50vh', overflowY: 'auto' }}>
                     {/* Filters */}
                     {isAdmin && (
                       <div className="mb-3 d-flex flex-column gap-1">
@@ -465,6 +377,94 @@ export const AvailabilityManager = () => {
                       </div>
                     )}
                   </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Right: Edit Availability (combined card) */}
+        <div className="col-12 col-lg-5">
+          <div className="card post-update-card shadow-sm">
+            <div style={{ background: 'rgba(3,25,38,0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', padding: '0.75rem 1rem', borderRadius: '0.75rem 0.75rem 0 0' }}>
+              <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', color: '#fff', fontWeight: '700' }}>
+                <Clock size={15} />
+                {t('editAvailability')}
+              </h5>
+            </div>
+
+            {/* Segmented tab control */}
+            <div style={{ padding: '0.65rem 0.75rem 0.65rem', display: 'flex', gap: '0.35rem', background: 'rgba(3,25,38,0.2)' }}>
+              <button style={tabBtnStyle(activeTab === 'schedule')} onClick={() => setActiveTab('schedule')}>
+                <Clock size={13} /> {t('scheduleTab')}
+              </button>
+              <button style={tabBtnStyle(activeTab === 'blocked')} onClick={() => setActiveTab('blocked')}>
+                <CalendarOff size={13} /> {t('blockDatesTab')}
+              </button>
+            </div>
+
+            <AnimatePresence mode="wait" initial={false}>
+              {activeTab === 'schedule' ? (
+                <motion.div key="schedule" initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 8 }} transition={{ duration: 0.18 }}>
+                  <div className="p-3">
+                    {success && <Alert message={success} type="success" onClose={() => setSuccess(null)} />}
+                    {error && <Alert message={error} type="danger" onClose={() => setError(null)} />}
+
+                    <form onSubmit={handleSubmit} noValidate>
+                      <div className="mb-3">
+                        <div className="form-label" style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', marginBottom: '0.45rem' }}>{t('daysOfWeek')}</div>
+                        <div style={{ display: 'flex', gap: '0.3rem' }}>
+                          {DAYS.map(day => {
+                            const sel = formData.selectedDays.includes(day.value);
+                            return (
+                              <button
+                                key={day.value}
+                                type="button"
+                                title={day.label}
+                                onClick={() => handleDayToggle(day.value)}
+                                style={{
+                                  flex: '1 1 0',
+                                  height: '40px',
+                                  borderRadius: '8px',
+                                  fontSize: '0.78rem',
+                                  fontWeight: '700',
+                                  cursor: 'pointer',
+                                  border: sel ? '2px solid #3aabdb' : '1px solid rgba(255,255,255,0.15)',
+                                  background: sel ? 'rgba(58,171,219,0.2)' : 'rgba(255,255,255,0.04)',
+                                  color: sel ? '#3aabdb' : 'rgba(255,255,255,0.45)',
+                                  transition: 'all 0.15s ease',
+                                }}
+                              >
+                                {day.short}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="row g-2 mb-3">
+                        <div className="col-6">
+                          <label htmlFor="startTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('startTime')}</label>
+                          <input id="startTime" type="time" name="startTime" className="form-control" value={formData.startTime} onChange={(e) => setFormData(p => ({ ...p, startTime: e.target.value }))} required autoComplete="off" />
+                        </div>
+                        <div className="col-6">
+                          <label htmlFor="endTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('endTime')}</label>
+                          <input id="endTime" type="time" name="endTime" className="form-control" value={formData.endTime} onChange={(e) => setFormData(p => ({ ...p, endTime: e.target.value }))} required autoComplete="off" />
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn post-update-btn w-100">{t('addAvailability')}</button>
+                    </form>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div key="blocked" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} transition={{ duration: 0.18 }}>
+                  <BlockedDatesManager
+                    blockedDates={blockedDates}
+                    onBlockedDateChange={fetchBlockedDates}
+                    isAdmin={isAdmin}
+                    employees={employees}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
