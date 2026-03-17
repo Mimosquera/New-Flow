@@ -1,11 +1,14 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, FormInput } from '../../components/Common/index.jsx';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/style.css';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { Alert } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { blockedDateService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 
-// Constants
 const INITIAL_FORM_DATA = {
   startDate: '',
   endDate: '',
@@ -14,102 +17,56 @@ const INITIAL_FORM_DATA = {
   reason: '',
 };
 
-const THEME_COLOR = 'rgb(5, 60, 82)';
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
-const DATE_TIME_REFERENCE = '2000-01-01T';
 
-const DATE_FORMAT_OPTIONS = {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-};
-
-const TIME_FORMAT_OPTIONS = {
-  hour: 'numeric',
-  minute: '2-digit',
-  hour12: true,
-};
+const DATE_FORMAT_OPTIONS = { month: 'short', day: 'numeric', year: 'numeric' };
+const TIME_FORMAT_OPTIONS = { hour: 'numeric', minute: '2-digit', hour12: true };
 
 const formatDate = (dateStr, locale = 'en-US') => {
   if (!dateStr) return '';
-  const dateObj = new Date(dateStr + 'T00:00:00');
-  return isNaN(dateObj.getTime()) ? dateStr : dateObj.toLocaleDateString(locale, DATE_FORMAT_OPTIONS);
+  const d = new Date(dateStr + 'T00:00:00');
+  return isNaN(d.getTime()) ? dateStr : d.toLocaleDateString(locale, DATE_FORMAT_OPTIONS);
 };
 
 const formatTime = (timeStr, locale = 'en-US') => {
   if (!timeStr) return '';
-  const timeObj = new Date(DATE_TIME_REFERENCE + timeStr);
-  return isNaN(timeObj.getTime()) ? timeStr : timeObj.toLocaleTimeString(locale, TIME_FORMAT_OPTIONS);
+  const d = new Date('2000-01-01T' + timeStr);
+  return isNaN(d.getTime()) ? timeStr : d.toLocaleTimeString(locale, TIME_FORMAT_OPTIONS);
 };
 
-const getDayDifference = (date1, date2) => {
-  // Normalize to UTC midnight to avoid timezone issues
-  const d1 = new Date(Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate()));
-  const d2 = new Date(Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate()));
-  return Math.round((d2 - d1) / MILLISECONDS_PER_DAY);
+const getDayDiff = (d1, d2) => {
+  const a = new Date(Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate()));
+  const b = new Date(Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate()));
+  return Math.round((b - a) / MILLISECONDS_PER_DAY);
 };
 
-const canGroupEntries = (current, group, dayDiff) => {
-  if (dayDiff !== 1) return false;
-  if (current?.startTime !== group?.startTime) return false;
-  if (current?.endTime !== group?.endTime) return false;
-  
-  if (current?.userId !== group?.userId) return false;
+const canGroup = (cur, grp, diff) =>
+  diff === 1 &&
+  cur?.startTime === grp?.startTime &&
+  cur?.endTime === grp?.endTime &&
+  cur?.userId === grp?.userId &&
+  (cur?.reason || '').trim() === (grp?.reason || '').trim();
 
-  const currentReason = (current?.reason || '').trim();
-  const groupReason = (group?.reason || '').trim();
-  
-  return currentReason === groupReason;
-};
-
-const groupConsecutiveBlocks = (blockedDates) => {
-  if (!Array.isArray(blockedDates) || blockedDates.length === 0) {
-    return [];
-  }
-
-  const sorted = [...blockedDates].sort((a, b) => {
-    const dateCompare = new Date(a.date) - new Date(b.date);
-    if (dateCompare !== 0) return dateCompare;
-    return (a.startTime || '').localeCompare(b.startTime || '');
+const groupConsecutive = (dates) => {
+  if (!dates?.length) return [];
+  const sorted = [...dates].sort((a, b) => {
+    const d = new Date(a.date) - new Date(b.date);
+    return d !== 0 ? d : (a.startTime || '').localeCompare(b.startTime || '');
   });
-
-    const groups = [];
-    let currentGroup = {
-      startDate: sorted[0].date,
-      endDate: sorted[0].date,
-      startTime: sorted[0].startTime,
-      endTime: sorted[0].endTime,
-      reason: sorted[0].reason || '',
-      userId: sorted[0].userId,
-      userName: sorted[0].user?.name || 'Unknown',
-      ids: [sorted[0].id],
-    };
-
-    for (let i = 1; i < sorted.length; i++) {
-      const current = sorted[i];
-      const prevDate = new Date(sorted[i - 1].date);
-      const currentDate = new Date(current.date);
-      const dayDiff = getDayDifference(prevDate, currentDate);
-
-      if (canGroupEntries(current, currentGroup, dayDiff)) {
-        currentGroup.endDate = current.date;
-        currentGroup.ids.push(current.id);
-      } else {
-        groups.push({ ...currentGroup });
-        currentGroup = {
-          startDate: current.date,
-          endDate: current.date,
-          startTime: current.startTime,
-          endTime: current.endTime,
-          reason: current.reason || '',
-          userId: current.userId,
-          userName: current.user?.name || 'Unknown',
-          ids: [current.id],
-        };
-      }
+  const groups = [];
+  let cur = { startDate: sorted[0].date, endDate: sorted[0].date, startTime: sorted[0].startTime, endTime: sorted[0].endTime, reason: sorted[0].reason || '', userId: sorted[0].userId, userName: sorted[0].user?.name || 'Unknown', ids: [sorted[0].id] };
+  for (let i = 1; i < sorted.length; i++) {
+    const entry = sorted[i];
+    const diff = getDayDiff(new Date(sorted[i - 1].date), new Date(entry.date));
+    if (canGroup(entry, cur, diff)) {
+      cur.endDate = entry.date;
+      cur.ids.push(entry.id);
+    } else {
+      groups.push({ ...cur });
+      cur = { startDate: entry.date, endDate: entry.date, startTime: entry.startTime, endTime: entry.endTime, reason: entry.reason || '', userId: entry.userId, userName: entry.user?.name || 'Unknown', ids: [entry.id] };
     }
-    
-  groups.push(currentGroup);
+  }
+  groups.push(cur);
   return groups;
 };
 
@@ -117,355 +74,192 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
   const { t, language } = useTranslation();
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
-  const [showBlockedDates, setShowBlockedDates] = useState(false);
+  const [showList, setShowList] = useState(false);
   const [selectedEmployeeFilter, setSelectedEmployeeFilter] = useState('all');
+  const [dateRange, setDateRange] = useState(undefined);
 
   const handleFormSubmit = async (data) => {
+    if (!data.startDate) {
+      setError(t('pleaseSelectDate'));
+      return;
+    }
     try {
       await blockedDateService.create(data);
       setSuccess(t('blockedDateCreatedSuccess'));
       setError(null);
       setFormData(INITIAL_FORM_DATA);
-      if (typeof onBlockedDateChange === 'function') {
-        onBlockedDateChange();
-      }
+      setDateRange(undefined);
+      onBlockedDateChange?.();
     } catch (err) {
-      const errorMessage = err?.response?.data?.error || err?.message || t('failedToBlockDate');
-      setError(errorMessage);
+      setError(err?.response?.data?.error || err?.message || t('failedToBlockDate'));
       setSuccess(null);
-      console.error('Error creating blocked dates:', err);
     }
   };
 
-  const { formData, handleChange, handleSubmit, setFormData } = useForm(
-    INITIAL_FORM_DATA,
-    handleFormSubmit
-  );
+  const { formData, handleChange, handleSubmit, setFormData } = useForm(INITIAL_FORM_DATA, handleFormSubmit);
+
+  useEffect(() => {
+    if (dateRange?.from) {
+      const to = dateRange.to || dateRange.from;
+      setFormData(prev => ({
+        ...prev,
+        startDate: dateRange.from.toISOString().split('T')[0],
+        endDate: to.toISOString().split('T')[0],
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, startDate: '', endDate: '' }));
+    }
+  }, [dateRange, setFormData]);
 
   const handleDeleteGroup = async (ids) => {
-    if (!Array.isArray(ids) || ids.length === 0) {
-      console.warn('No IDs provided for deletion');
-      return;
-    }
-
-    const count = ids.length;
-    const confirmMessage = count > 1 
-      ? `${t('confirmUnblockDates')} ${count} ${t('datesQuestion')}`
+    if (!ids?.length) return;
+    const msg = ids.length > 1
+      ? `${t('confirmUnblockDates')} ${ids.length} ${t('datesQuestion')}`
       : t('confirmDeleteBlockedDate');
-    
-    if (!window.confirm(confirmMessage)) return;
-
+    if (!window.confirm(msg)) return;
     try {
       await Promise.all(ids.map(id => blockedDateService.delete(id)));
       setSuccess(t('blockedDateDeletedSuccess'));
       setError(null);
-      if (typeof onBlockedDateChange === 'function') {
-        onBlockedDateChange();
-      }
+      onBlockedDateChange?.();
     } catch (err) {
-      const errorMessage = err?.response?.data?.error || err?.message || t('failedUnblockDates');
-      setError(errorMessage);
-      setSuccess(null);
-      console.error('Error deleting blocked dates:', err);
+      setError(err?.response?.data?.error || err?.message || t('failedUnblockDates'));
     }
   };
 
-  const today = new Date().toISOString().split('T')[0];
-  
-  // Filter blocked dates by selected employee if admin
-  const filteredBlockedDates = useMemo(() => {
-    if (!isAdmin || selectedEmployeeFilter === 'all') {
-      return blockedDates;
-    }
-    return blockedDates.filter(blocked => blocked?.userId === selectedEmployeeFilter);
-  }, [blockedDates, isAdmin, selectedEmployeeFilter]);
-  
-  const consecutiveGroups = useMemo(
-    () => groupConsecutiveBlocks(filteredBlockedDates), 
-    [filteredBlockedDates]
-  );
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  const hasBlockedDates = Array.isArray(filteredBlockedDates) && filteredBlockedDates.length > 0;
+  const filteredDates = useMemo(() => {
+    if (!isAdmin || selectedEmployeeFilter === 'all') return blockedDates;
+    return blockedDates.filter(b => b?.userId === selectedEmployeeFilter);
+  }, [blockedDates, isAdmin, selectedEmployeeFilter]);
+
+  const groups = useMemo(() => groupConsecutive(filteredDates), [filteredDates]);
+  const locale = language === 'es' ? 'es-ES' : 'en-US';
+
+  const selectedRangeLabel = dateRange?.from
+    ? dateRange.to && dateRange.to.getTime() !== dateRange.from.getTime()
+      ? `${formatDate(dateRange.from.toISOString().split('T')[0], locale)} — ${formatDate(dateRange.to.toISOString().split('T')[0], locale)}`
+      : formatDate(dateRange.from.toISOString().split('T')[0], locale)
+    : null;
 
   return (
-    <>
+    <div className="p-3">
       {error && <Alert type="danger" message={error} onClose={() => setError(null)} />}
       {success && <Alert type="success" message={success} onClose={() => setSuccess(null)} />}
 
-      <div className="card post-update-card mb-4 shadow-sm block-date-card-border" style={{ background: 'rgba(255,255,255,0.05)' }}>
-        <div className="card-body p-3">
-          <h6 className="mb-3 block-date-title" style={{ color: 'white' }}>
-            {t('blockDateAndTime')}
-          </h6>
-          <form onSubmit={handleSubmit}>
-            <div className="row g-3">
-              <div className="col-6">
-                <FormInput
-                  label={t('startDate')}
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  required
-                  min={today}
-                  autocomplete="off"
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label={t('endDate')}
-                  type="date"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  required
-                  min={formData.startDate || today}
-                  autocomplete="off"
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label={t('startTime')}
-                  type="time"
-                  name="startTime"
-                  value={formData.startTime}
-                  onChange={handleChange}
-                  required
-                  autocomplete="off"
-                />
-              </div>
-              <div className="col-6">
-                <FormInput
-                  label={t('endTime')}
-                  type="time"
-                  name="endTime"
-                  value={formData.endTime}
-                  onChange={handleChange}
-                  required
-                  autocomplete="off"
-                />
-              </div>
-              <div className="col-12">
-                <FormInput
-                  label={t('reasonForBlock')}
-                  type="text"
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleChange}
-                  placeholder={t('reasonPlaceholder')}
-                  autocomplete="off"
-                />
-              </div>
-              <div className="col-12 d-flex justify-content-center">
-                <button
-                  type="submit"
-                  className="btn"
-                  style={{
-                    backgroundColor: THEME_COLOR,
-                    color: 'white',
-                    fontWeight: '500',
-                  }}
-                >
-                  {t('blockDate')}
-                </button>
-              </div>
-            </div>
-          </form>
+      <form onSubmit={handleSubmit} noValidate>
+        {/* Calendar */}
+        <div className="avail-calendar-wrap mb-3">
+          <DayPicker
+            mode="range"
+            selected={dateRange}
+            onSelect={setDateRange}
+            disabled={{ before: today }}
+            showOutsideDays={false}
+          />
         </div>
-      </div>
 
-      <div>
-        <div 
-          onClick={() => setShowBlockedDates(!showBlockedDates)}
-          style={{ 
-            cursor: 'pointer', 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center',
-            marginBottom: '1rem'
-          }}
+        {selectedRangeLabel && (
+          <div className="mb-3" style={{ background: 'rgba(58,171,219,0.1)', border: '1px solid rgba(58,171,219,0.25)', borderRadius: '8px', padding: '0.45rem 0.75rem', fontSize: '0.8rem', color: '#3aabdb', fontWeight: '600' }}>
+            {selectedRangeLabel}
+          </div>
+        )}
+
+        <div className="row g-2 mb-2">
+          <div className="col-6">
+            <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('startTime')}</label>
+            <input type="time" name="startTime" className="form-control form-control-sm" value={formData.startTime} onChange={handleChange} required autoComplete="off" />
+          </div>
+          <div className="col-6">
+            <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('endTime')}</label>
+            <input type="time" name="endTime" className="form-control form-control-sm" value={formData.endTime} onChange={handleChange} required autoComplete="off" />
+          </div>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('reasonForBlock')}</label>
+          <input type="text" name="reason" className="form-control form-control-sm" value={formData.reason} onChange={handleChange} placeholder={t('reasonPlaceholder')} autoComplete="off" />
+        </div>
+
+        <button type="submit" className="btn post-update-btn w-100">
+          {t('blockDate')}
+        </button>
+      </form>
+
+      {/* Blocked Dates List */}
+      <div className="mt-3">
+        <button
+          className="btn w-100 d-flex justify-content-between align-items-center p-2"
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(58,171,219,0.15)', borderRadius: '8px', color: 'rgba(255,255,255,0.65)', fontSize: '0.82rem', fontWeight: '600' }}
+          onClick={() => setShowList(v => !v)}
         >
-          <h6 className="mb-0" style={{ fontSize: '0.95rem', fontWeight: '600', color: THEME_COLOR }}>
-            {t('blockedDates')}
-          </h6>
-          <span style={{ fontSize: '1.2rem', color: THEME_COLOR, fontWeight: 'bold' }}>
-            {showBlockedDates ? '−' : '+'}
-          </span>
-        </div>
-        
-        {showBlockedDates && (
-          <>
-            {/* Admin Employee Filter */}
-            {isAdmin && employees.length > 0 && (
-              <div className="mb-3">
-                <select
-                  id="employeeFilter"
-                  name="employeeFilter"
-                  className="form-select form-select-sm"
-                  style={{ maxWidth: '300px' }}
-                  value={selectedEmployeeFilter}
-                  onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
-                  autoComplete="off"
-                >
-                  <option value="all">{t('allEmployees')}</option>
-                  {employees.map(emp => (
-                    <option key={emp.id} value={emp.id}>{emp.name}</option>
-                  ))}
-                </select>
-              </div>
-            )}
-            
-            {!hasBlockedDates ? (
-              <div className="text-center py-4">
-                <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
-                  {t('noBlockedDates')}
-                </p>
-              </div>
-            ) : (
-              <>
-                {/* Desktop Table View */}
-                <div className="d-none d-md-block table-responsive">
-                  <table className="table table-sm table-hover align-middle mb-0">
-                    <thead>
-                      <tr style={{ borderBottom: `2px solid ${THEME_COLOR}` }}>
-                        {isAdmin && (
-                          <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
-                            {t('employee')}
-                          </th>
-                        )}
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
-                          {t('dateRange')}
-                        </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
-                          {t('timeRange')}
-                        </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
-                          {t('reason')}
-                        </th>
-                        <th style={{ fontWeight: '500', color: THEME_COLOR, padding: '8px', fontSize: '0.85rem' }}>
-                          {t('actions')}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {consecutiveGroups.map((group, index) => {
-                        if (!group) return null;
+          <span>{t('upcomingBlocks')} {groups.length > 0 && `(${groups.length})`}</span>
+          {showList ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </button>
 
-                        const locale = language === 'es' ? 'es-ES' : 'en-US';
-                        const dateRangeStr = group.startDate === group.endDate
-                          ? formatDate(group.startDate, locale)
-                          : `${formatDate(group.startDate, locale)} - ${formatDate(group.endDate, locale)}`;
+        <AnimatePresence initial={false}>
+          {showList && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="pt-2">
+                {isAdmin && employees.length > 0 && (
+                  <select
+                    className="form-select form-select-sm mb-2 appointments-filter-select"
+                    value={selectedEmployeeFilter}
+                    onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
+                  >
+                    <option value="all">{t('allEmployees')}</option>
+                    {employees.map(e => <option key={e.id} value={e.id}>{e.name}</option>)}
+                  </select>
+                )}
 
-                        const timeRangeStr = `${formatTime(group.startTime, locale)} - ${formatTime(group.endTime, locale)}`;
-
-                        return (
-                          <tr key={group.ids?.[0] || index}>
-                            {isAdmin && (
-                              <td style={{ padding: '8px', fontSize: '0.85rem', fontWeight: '500', color: THEME_COLOR }}>
-                                {group.userName || t('unknown')}
-                              </td>
-                            )}
-                            <td style={{ padding: '8px', fontSize: '0.85rem' }}>{dateRangeStr}</td>
-                            <td style={{ padding: '8px', fontSize: '0.85rem' }}>{timeRangeStr}</td>
-                            <td style={{ padding: '8px', fontSize: '0.85rem' }}>
-                              {group.reason || <span className="text-muted">—</span>}
-                            </td>
-                            <td style={{ padding: '8px' }}>
-                              <button
-                                className="btn btn-sm btn-outline-danger"
-                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
-                                onClick={() => handleDeleteGroup(group.ids)}
-                                disabled={!group.ids || group.ids.length === 0}
-                              >
-                                {t('unblock')}
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Mobile Card View */}
-                <div className="d-md-none">
-                  {consecutiveGroups.map((group, index) => {
-                    if (!group) return null;
-
-                    const locale = language === 'es' ? 'es-ES' : 'en-US';
-                    const dateRangeStr = group.startDate === group.endDate
-                      ? formatDate(group.startDate, locale)
-                      : `${formatDate(group.startDate, locale)} - ${formatDate(group.endDate, locale)}`;
-
-                    const timeRangeStr = `${formatTime(group.startTime, locale)} - ${formatTime(group.endTime, locale)}`;
-
-                    return (
-                      <div key={group.ids?.[0] || index} className="card post-update-card mb-2 shadow-sm border-0">
-                        <div className="card-body p-3">
-                          {isAdmin && (
-                            <div className="mb-2">
-                              <small className="text-muted d-block">{t('employee')}</small>
-                              <strong style={{ color: THEME_COLOR }}>{group.userName || t('unknown')}</strong>
-                            </div>
-                          )}
-                          <div className="mb-2">
-                            <small className="text-muted d-block">{t('dateRange')}</small>
-                            <strong>{dateRangeStr}</strong>
+                {groups.length === 0 ? (
+                  <p style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.8rem', textAlign: 'center', padding: '0.75rem 0' }}>{t('noBlockedDates')}</p>
+                ) : (
+                  <div className="d-flex flex-column gap-2">
+                    {groups.map((grp, i) => {
+                      const dateStr = grp.startDate === grp.endDate
+                        ? formatDate(grp.startDate, locale)
+                        : `${formatDate(grp.startDate, locale)} – ${formatDate(grp.endDate, locale)}`;
+                      const timeStr = `${formatTime(grp.startTime, locale)} – ${formatTime(grp.endTime, locale)}`;
+                      return (
+                        <div key={grp.ids?.[0] || i} style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(58,171,219,0.12)', borderRadius: '8px', padding: '0.5rem 0.7rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            {isAdmin && <div style={{ fontSize: '0.7rem', color: '#3aabdb', fontWeight: '600', marginBottom: '0.1rem' }}>{grp.userName}</div>}
+                            <div style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.85)', fontWeight: '500' }}>{dateStr}</div>
+                            <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.45)' }}>{timeStr}{grp.reason && ` · ${grp.reason}`}</div>
                           </div>
-                          <div className="mb-2">
-                            <small className="text-muted d-block">{t('timeRange')}</small>
-                            <strong>{timeRangeStr}</strong>
-                          </div>
-                          {group.reason && (
-                            <div className="mb-2">
-                              <small className="text-muted d-block">{t('reason')}</small>
-                              <span>{group.reason}</span>
-                            </div>
-                          )}
                           <button
-                            className="btn btn-sm btn-outline-danger mt-2"
-                            onClick={() => handleDeleteGroup(group.ids)}
-                            disabled={!group.ids || group.ids.length === 0}
+                            className="btn btn-sm"
+                            style={{ background: 'rgba(220,53,69,0.15)', color: '#ff7b7b', border: '1px solid rgba(220,53,69,0.3)', borderRadius: '6px', padding: '0.25rem 0.45rem', flexShrink: 0 }}
+                            onClick={() => handleDeleteGroup(grp.ids)}
                           >
-                            {t('unblock')}
+                            <Trash2 size={12} />
                           </button>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-          </>
-        )}
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </>
+    </div>
   );
 };
 
 BlockedDatesManager.propTypes = {
-  blockedDates: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
-      startTime: PropTypes.string.isRequired,
-      endTime: PropTypes.string.isRequired,
-      reason: PropTypes.string,
-      userId: PropTypes.string,
-      user: PropTypes.shape({
-        id: PropTypes.string,
-        name: PropTypes.string,
-        email: PropTypes.string,
-      }),
-    })
-  ),
+  blockedDates: PropTypes.array,
   onBlockedDateChange: PropTypes.func.isRequired,
   isAdmin: PropTypes.bool,
-  employees: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-      email: PropTypes.string,
-    })
-  ),
+  employees: PropTypes.array,
 };

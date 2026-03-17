@@ -1104,6 +1104,108 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   padding: 0.85rem 1.25rem !important;
 }
 
+/* ── react-day-picker dark theme (Availability tab) ───────────────────── */
+.avail-calendar-wrap {
+  display: flex;
+  justify-content: center;
+}
+.avail-calendar-wrap .rdp-root {
+  --rdp-accent-color: #3aabdb;
+  --rdp-accent-background-color: rgba(58, 171, 219, 0.18);
+  --rdp-day-width: 36px;
+  --rdp-day-height: 36px;
+  --rdp-day_button-width: 34px;
+  --rdp-day_button-height: 34px;
+  --rdp-day_button-border-radius: 8px;
+  --rdp-selected-border: 1.5px solid #3aabdb;
+  --rdp-range_start-color: #fff;
+  --rdp-range_end-color: #fff;
+  --rdp-range_start-background: #3aabdb;
+  --rdp-range_end-background: #3aabdb;
+  --rdp-range_start-date-background-color: #3aabdb;
+  --rdp-range_end-date-background-color: #3aabdb;
+  --rdp-range_middle-background-color: rgba(58, 171, 219, 0.15);
+  --rdp-range_middle-color: rgba(255, 255, 255, 0.85);
+  --rdp-today-color: #3aabdb;
+  --rdp-font-family: inherit;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.82rem;
+}
+/* Calendar background */
+.avail-calendar-wrap .rdp-month_caption,
+.avail-calendar-wrap .rdp-nav,
+.avail-calendar-wrap .rdp-months {
+  color: rgba(255, 255, 255, 0.85);
+}
+/* Weekday header labels */
+.avail-calendar-wrap .rdp-weekday {
+  color: #3aabdb;
+  font-weight: 600;
+  font-size: 0.72rem;
+  opacity: 1;
+}
+/* Default day */
+.avail-calendar-wrap .rdp-day_button {
+  color: rgba(255, 255, 255, 0.75);
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+@media (hover: hover) {
+  .avail-calendar-wrap .rdp-day_button:hover:not([disabled]) {
+    background: rgba(58, 171, 219, 0.2) !important;
+    color: #fff !important;
+  }
+}
+/* Outside / disabled days */
+.avail-calendar-wrap .rdp-day--outside .rdp-day_button,
+.avail-calendar-wrap .rdp-day--disabled .rdp-day_button {
+  color: rgba(255, 255, 255, 0.2);
+}
+/* Today highlight */
+.avail-calendar-wrap .rdp-day--today .rdp-day_button {
+  color: #3aabdb;
+  font-weight: 700;
+  border: 1px solid rgba(58, 171, 219, 0.4);
+}
+/* Selected single / range start & end */
+.avail-calendar-wrap .rdp-day--selected .rdp-day_button,
+.avail-calendar-wrap .rdp-day--range_start .rdp-day_button,
+.avail-calendar-wrap .rdp-day--range_end .rdp-day_button {
+  background: #3aabdb !important;
+  color: #fff !important;
+  border: none !important;
+  font-weight: 700;
+}
+/* Range middle */
+.avail-calendar-wrap .rdp-day--range_middle .rdp-day_button {
+  background: rgba(58, 171, 219, 0.15) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  border-radius: 0;
+}
+/* Nav buttons */
+.avail-calendar-wrap .rdp-nav .rdp-button_previous,
+.avail-calendar-wrap .rdp-nav .rdp-button_next {
+  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  transition: color 0.15s, background 0.15s;
+}
+@media (hover: hover) {
+  .avail-calendar-wrap .rdp-nav .rdp-button_previous:hover,
+  .avail-calendar-wrap .rdp-nav .rdp-button_next:hover {
+    color: #3aabdb;
+    background: rgba(58, 171, 219, 0.12);
+  }
+}
+/* Month/year caption */
+.avail-calendar-wrap .rdp-month_caption .rdp-caption_label,
+.avail-calendar-wrap .rdp-caption_label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 /* Extra-small screens */
 @media (max-width: 400px) {
   .dashboard-header h1 {

@@ -61,7 +61,11 @@
       "Bash(do)",
       "Bash(python3 -c \":*)",
       "Bash(done)",
-      "Bash(grep -v \"^$\")"
+      "Bash(grep -v \"^$\")",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:daypicker.dev)",
+      "Bash(npm install:*)",
+      "Bash(node -e \"const p = require\\(''./node_modules/react-day-picker/package.json''\\); console.log\\(p.version\\)\")"
     ]
   }
 }
