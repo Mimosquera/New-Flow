@@ -240,6 +240,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
             </label>
             <select
               id="statusFilter"
+              name="statusFilter"
               className="form-select d-inline-block w-auto appointments-filter-select"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
@@ -381,7 +382,14 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                   </div>
 
                   {expandedIds.has(apt.id) && (
-                    <>
+                    <AnimatePresence initial={false}>
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                      style={{ overflow: 'hidden' }}
+                    >
                       <hr />
                       <div className="mb-2">
                         <strong>{t('email')}:</strong> {apt.customerEmail}<br />
@@ -416,7 +424,8 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                           </>
                         )}
                       </div>
-                    </>
+                    </motion.div>
+                    </AnimatePresence>
                   )}
 
                   {apt.status === 'pending' && (
@@ -510,6 +519,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                   </label>
                   <textarea
                     id="employeeNote"
+                    name="employeeNote"
                     className="form-control"
                     rows="3"
                     value={employeeNote}

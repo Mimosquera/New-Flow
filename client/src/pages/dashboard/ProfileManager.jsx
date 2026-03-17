@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { User, Lock, Camera, Trash2, LogOut, Pencil } from 'lucide-react';
+import { User, Lock, Camera, Trash2, LogOut, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
@@ -43,6 +43,7 @@ export const ProfileManager = ({ onLogout }) => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
+  const [showPasswordFields, setShowPasswordFields] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -400,8 +401,9 @@ export const ProfileManager = ({ onLogout }) => {
               )}
             </div>
 
-            {!isEditingAboutMe && (
-              <div style={{ padding: '0.85rem 1rem' }}>
+            <AnimatePresence mode="wait" initial={false}>
+            {!isEditingAboutMe ? (
+              <motion.div key="about-view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} style={{ padding: '0.85rem 1rem' }}>
                 <div className="d-flex align-items-start gap-3">
                   <div style={{ flexShrink: 0 }}>
                     {imagePreview ? (
@@ -422,13 +424,13 @@ export const ProfileManager = ({ onLogout }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {isEditingAboutMe && (
-              <form onSubmit={handleAboutMeSubmit} style={{ padding: '1rem' }}>
+              </motion.div>
+            ) : (
+              <motion.form key="about-edit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} onSubmit={handleAboutMeSubmit} style={{ padding: '1rem' }}>
                 <input
                   type="file"
+                  id="profileImage"
+                  name="profileImage"
                   ref={fileInputRef}
                   onChange={handleImageSelect}
                   accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
@@ -490,15 +492,16 @@ export const ProfileManager = ({ onLogout }) => {
                 </div>
 
                 <div className="d-flex gap-2">
-                  <button type="submit" className="btn post-update-btn" disabled={loading || uploadingImage}>
+                  <button type="submit" className="btn" disabled={loading || uploadingImage} style={{ background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '600' }}>
                     {loading || uploadingImage ? t('updating') : t('save')}
                   </button>
-                  <button type="button" onClick={handleCancelAboutMe} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={loading || uploadingImage}>
+                  <button type="button" onClick={handleCancelAboutMe} className="btn" style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '500' }} disabled={loading || uploadingImage}>
                     {t('cancel')}
                   </button>
                 </div>
-              </form>
+              </motion.form>
             )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -522,8 +525,9 @@ export const ProfileManager = ({ onLogout }) => {
               )}
             </div>
 
-            {!isEditingLogin && (
-              <div style={{ padding: '0.85rem 1rem' }}>
+            <AnimatePresence mode="wait" initial={false}>
+            {!isEditingLogin ? (
+              <motion.div key="login-view" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} style={{ padding: '0.85rem 1rem' }}>
                 <div className="row g-2 mb-3">
                   <div className="col-12 col-sm-6">
                     <div style={sectionLabelStyle}>{t('name')}</div>
@@ -540,11 +544,9 @@ export const ProfileManager = ({ onLogout }) => {
                 >
                   {t('forgotPassword')}
                 </button>
-              </div>
-            )}
-
-            {isEditingLogin && (
-              <form onSubmit={handleLoginSubmit} style={{ padding: '1rem', overflow: 'hidden' }}>
+              </motion.div>
+            ) : (
+              <motion.form key="login-edit" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} onSubmit={handleLoginSubmit} style={{ padding: '1rem', overflow: 'hidden' }}>
                 <AnimatePresence mode="wait" initial={false}>
                   {loginStep === 1 ? (
                     <motion.div
@@ -562,10 +564,10 @@ export const ProfileManager = ({ onLogout }) => {
                         <input type="password" id="currentPassword" name="currentPassword" className="form-control" value={loginFormData.currentPassword} onChange={handleLoginChange} autoComplete="current-password" />
                       </div>
                       <div className="d-flex gap-2">
-                        <button type="button" className="btn post-update-btn" onClick={handleNextStep} disabled={verifyLoading}>
+                        <button type="button" className="btn" onClick={handleNextStep} disabled={verifyLoading} style={{ background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '600' }}>
                           {verifyLoading ? t('loading') : t('continueBtn')}
                         </button>
-                        <button type="button" onClick={handleCancelLogin} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={verifyLoading}>
+                        <button type="button" onClick={handleCancelLogin} className="btn" style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '500' }} disabled={verifyLoading}>
                           {t('cancel')}
                         </button>
                       </div>
@@ -590,8 +592,27 @@ export const ProfileManager = ({ onLogout }) => {
                         </div>
                       </div>
                       <hr style={{ margin: '1rem 0', borderColor: 'rgba(255,255,255,0.1)' }} />
-                      <h6 style={{ color: '#3aabdb', marginBottom: '0.25rem' }}>{t('changePassword')}</h6>
-                      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordFields(v => !v)}
+                        style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', padding: '0.35rem 0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', color: showPasswordFields ? '#3aabdb' : 'rgba(255,255,255,0.5)', fontSize: '0.82rem', fontWeight: '600', marginBottom: '0.25rem' }}
+                      >
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <Lock size={13} />
+                          {t('changePassword')}
+                        </span>
+                        {showPasswordFields ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                      </button>
+                      <AnimatePresence initial={false}>
+                      {showPasswordFields && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.5)', marginBottom: '0.75rem', marginTop: '0.5rem' }}>
                         {t('leaveBlankToKeepPassword')}
                       </p>
                       <div className="row g-2 mb-3">
@@ -604,19 +625,23 @@ export const ProfileManager = ({ onLogout }) => {
                           <input type="password" id="confirmPassword" name="confirmPassword" className="form-control" value={loginFormData.confirmPassword} onChange={handleLoginChange} autoComplete="new-password" />
                         </div>
                       </div>
-                      <div className="d-flex gap-2">
-                        <button type="submit" className="btn post-update-btn" disabled={loading}>
+                      </motion.div>
+                      )}
+                      </AnimatePresence>
+                      <div className="d-flex gap-2" style={{ marginTop: '0.75rem' }}>
+                        <button type="submit" className="btn" disabled={loading} style={{ background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '600' }}>
                           {loading ? t('updating') : t('save')}
                         </button>
-                        <button type="button" onClick={handleCancelLogin} className="btn btn-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }} disabled={loading}>
+                        <button type="button" onClick={handleCancelLogin} className="btn" style={{ background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: '8px', padding: '0.3rem 1rem', fontSize: '0.78rem', fontWeight: '500' }} disabled={loading}>
                           {t('cancel')}
                         </button>
                       </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </form>
+              </motion.form>
             )}
+            </AnimatePresence>
           </div>
 
         </div>
@@ -634,12 +659,21 @@ export const ProfileManager = ({ onLogout }) => {
         </div>
       )}
 
+      <AnimatePresence>
       {showForgotPassword && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
           style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}
           onClick={() => setShowForgotPassword(false)}
         >
-          <div
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.92, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             style={{ backgroundColor: 'white', padding: '2rem', borderRadius: '24px', maxWidth: '500px', width: '90%', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}
             onClick={(e) => e.stopPropagation()}
           >
@@ -661,9 +695,10 @@ export const ProfileManager = ({ onLogout }) => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 };

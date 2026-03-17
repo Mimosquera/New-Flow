@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, FileText, PenLine, Pencil, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, PenLine, Pencil, X, AlertTriangle } from 'lucide-react';
 import { Alert, FormInput } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { postsService, SERVER_BASE_URL } from '../../services/api.js';
@@ -171,6 +171,8 @@ export const PostsManager = () => {
   const [editForm, setEditForm] = useState({ title: '', content: '' });
   const [editMediaFile, setEditMediaFile] = useState(null);
   const [editLoading, setEditLoading] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const formCardRef = useRef(null);
 
@@ -296,6 +298,7 @@ export const PostsManager = () => {
   };
 
   const handleDelete = async (id) => {
+    setDeleteLoading(true);
     try {
       await postsService.delete(id);
       const remaining = updates.filter(u => u.id !== id);
@@ -304,10 +307,13 @@ export const PostsManager = () => {
       setDisplayCount(prev => Math.min(prev, remaining.length));
       hapticMedium();
       setSuccess(t('updateDeleted'));
+      setDeleteConfirmId(null);
     } catch (error) {
       hapticWarning();
       console.error('Error deleting update:', error);
       alert(t('error'));
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -384,7 +390,7 @@ export const PostsManager = () => {
                 className="d-flex justify-content-between align-items-center collapsible-header"
                 style={{
                   background: 'rgba(3, 25, 38, 0.45)',
-                  borderBottom: '1px solid rgba(70,161,161,0.2)',
+                  borderBottom: (isDesktop || showForm) ? '1px solid rgba(70,161,161,0.2)' : 'none',
                   color: 'white',
                   cursor: 'pointer',
                   padding: '0.75rem 1rem',
@@ -547,7 +553,7 @@ export const PostsManager = () => {
           <div className="col-lg-8">
             <div
               className="d-flex justify-content-between align-items-center collapsible-header mb-0"
-              style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: '1px solid rgba(70,161,161,0.2)', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showUpdates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
+              style={{ background: 'rgba(3, 25, 38, 0.45)', borderBottom: showUpdates ? '1px solid rgba(70,161,161,0.2)' : 'none', color: 'white', cursor: 'pointer', padding: '0.75rem 1rem', borderRadius: showUpdates ? '0.75rem 0.75rem 0 0' : '0.75rem' }}
               onClick={() => setShowUpdates(!showUpdates)}
             >
               <h5 className="mb-0 d-flex align-items-center gap-2" style={{ fontSize: '1rem', fontWeight: '700' }}>
@@ -597,7 +603,7 @@ export const PostsManager = () => {
                     <PostCard
                       update={update}
                       onOpen={() => handleUpdateClick(update)}
-                      onDelete={() => handleDelete(update.id)}
+                      onDelete={() => setDeleteConfirmId(update.id)}
                       onEdit={() => handleEditStart(update.id)}
                       canManage={canManage}
                       t={t}
@@ -654,6 +660,55 @@ export const PostsManager = () => {
           </div>
         </div>
       </div>
+
+    {/* Delete Confirmation Modal */}
+    <AnimatePresence>
+      {deleteConfirmId !== null && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: '1rem' }}
+          onClick={() => !deleteLoading && setDeleteConfirmId(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.92, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            style={{ background: 'rgba(5, 40, 60, 0.95)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', border: '1px solid rgba(220,53,69,0.3)', borderRadius: '16px', padding: '1.5rem', maxWidth: '360px', width: '100%', textAlign: 'center' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(220,53,69,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+              <AlertTriangle size={22} style={{ color: '#ff7b7b' }} />
+            </div>
+            <h6 style={{ color: '#fff', fontWeight: '700', fontSize: '1rem', marginBottom: '0.5rem' }}>{t('deletePost') || 'Delete Post?'}</h6>
+            <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.85rem', marginBottom: '1.25rem', lineHeight: '1.5' }}>
+              {t('deletePostConfirmation') || 'This action cannot be undone. Are you sure you want to delete this post?'}
+            </p>
+            <div className="d-flex gap-2 justify-content-center">
+              <button
+                className="btn btn-sm"
+                style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', padding: '0.4rem 1.2rem', fontWeight: '600', fontSize: '0.85rem' }}
+                onClick={() => setDeleteConfirmId(null)}
+                disabled={deleteLoading}
+              >
+                {t('cancel')}
+              </button>
+              <button
+                className="btn btn-sm"
+                style={{ background: 'rgba(220,53,69,0.8)', color: '#fff', border: '1px solid rgba(220,53,69,0.6)', borderRadius: '8px', padding: '0.4rem 1.2rem', fontWeight: '600', fontSize: '0.85rem' }}
+                onClick={() => handleDelete(deleteConfirmId)}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? '...' : t('delete')}
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
 
     {/* Update Modal */}
     <PostModal

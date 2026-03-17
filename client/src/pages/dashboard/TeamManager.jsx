@@ -711,8 +711,16 @@ export const TeamManager = () => {
                   {t('removeEmployee')}
                 </button>
                 </div>
+                <AnimatePresence initial={false}>
                 {showDeleteConfirm === employee.id && (
-                  <div>
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div>
                     <p className="mb-2" style={{ color: '#ff8585', fontWeight: 600, fontSize: '0.9rem' }}>
                       {t('confirmDeleteEmployee')}
                     </p>
@@ -748,8 +756,10 @@ export const TeamManager = () => {
                         {t('cancel')}
                       </button>
                     </div>
-                  </div>
+                    </div>
+                  </motion.div>
                 )}
+                </AnimatePresence>
               </div>
 
             </div>
@@ -832,8 +842,23 @@ export const TeamManager = () => {
               )}
             </div>
           </div>
-          <div className="alert alert-info mt-4" style={{ borderRadius: '16px' }}>
-            <strong>{t('note')}</strong> {t('employeeAccountNote')}
+          <div
+            style={{
+              marginTop: '1rem',
+              background: 'rgba(58,171,219,0.08)',
+              border: '1px solid rgba(58,171,219,0.2)',
+              borderRadius: '12px',
+              padding: '0.85rem 1rem',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.6rem',
+            }}
+          >
+            <span style={{ flexShrink: 0, marginTop: '1px', color: '#3aabdb', opacity: 0.7 }}>ℹ</span>
+            <p style={{ margin: 0, fontSize: '0.78rem', lineHeight: '1.6', color: 'rgba(255,255,255,0.55)' }}>
+              <strong style={{ color: 'rgba(255,255,255,0.75)', fontWeight: '600' }}>{t('note')}</strong>{' '}
+              {t('employeeAccountNote')}
+            </p>
           </div>
         </div>
 

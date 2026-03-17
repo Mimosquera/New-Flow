@@ -222,8 +222,14 @@ export default function DashboardPage() {
                     <span>{active?.label}</span>
                     <ChevronDown size={11} style={{ color: '#3aabdb', marginLeft: '0.1rem', transform: mobileTabOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s ease' }} />
                   </button>
+                  <AnimatePresence>
                   {mobileTabOpen && (
-                    <div style={{
+                    <motion.div
+                      initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                      transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
+                      style={{
                       position: 'absolute', top: 'calc(100% + 6px)', left: '50%', transform: 'translateX(-50%)',
                       background: 'rgba(3, 25, 38, 0.97)', backdropFilter: 'blur(18px)',
                       border: '1.5px solid rgba(58, 171, 219, 0.4)', borderRadius: '10px',
@@ -246,8 +252,9 @@ export default function DashboardPage() {
                           {label}
                         </button>
                       ))}
-                    </div>
+                    </motion.div>
                   )}
+                  </AnimatePresence>
                 </>
               );
             })()}
@@ -299,15 +306,26 @@ export default function DashboardPage() {
 
       <ScrollToTop />
 
+      <AnimatePresence>
       {showSessionModal && (
-        <div style={{
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{
           position: 'fixed', inset: 0, zIndex: 9999,
           backgroundColor: 'rgba(0,0,0,0.88)',
           backdropFilter: 'blur(10px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           padding: '1rem',
         }}>
-          <div style={{
+          <motion.div
+            initial={{ scale: 0.92, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.92, opacity: 0 }}
+            transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+            style={{
             background: 'linear-gradient(135deg, rgb(5,45,63) 0%, rgb(3,35,50) 100%)',
             border: '1.5px solid rgba(70,161,161,0.4)',
             borderRadius: '18px',
@@ -335,9 +353,10 @@ export default function DashboardPage() {
             >
               {t('logBackIn')}
             </button>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }

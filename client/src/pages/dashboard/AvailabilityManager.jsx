@@ -8,7 +8,6 @@ import { useTranslation } from '../../hooks/useTranslation.js';
 import { BlockedDatesManager } from './BlockedDatesManager.jsx';
 
 const DEFAULT_FORM = { selectedDays: [], startTime: '08:00', endTime: '21:00' };
-const FILTER_ALL = 'all';
 const TIME_OPTS = { hour: 'numeric', minute: '2-digit', hour12: true };
 
 export const AvailabilityManager = () => {
@@ -34,10 +33,12 @@ export const AvailabilityManager = () => {
   const [formData, setFormData] = useState(DEFAULT_FORM);
   const [isAdmin, setIsAdmin] = useState(false);
   const [employees, setEmployees] = useState([]);
-  const [employeeFilter, setEmployeeFilter] = useState(FILTER_ALL);
-  const [dayFilter, setDayFilter] = useState(FILTER_ALL);
+  const [employeeFilter, setEmployeeFilter] = useState([]);
+  const [dayFilter, setDayFilter] = useState([]);
   const [activeTab, setActiveTab] = useState('schedule');
   const [showSchedule, setShowSchedule] = useState(true);
+  const [showEmployeeChips, setShowEmployeeChips] = useState(false);
+  const [showDayChips, setShowDayChips] = useState(false);
 
   const fetchEmployees = useCallback(async () => {
     try {
@@ -141,10 +142,18 @@ export const AvailabilityManager = () => {
     return isNaN(d.getTime()) ? ts : d.toLocaleTimeString('en-US', TIME_OPTS);
   }, []);
 
+  const toggleEmployeeFilter = useCallback((id) => {
+    setEmployeeFilter(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  }, []);
+
+  const toggleDayFilter = useCallback((val) => {
+    setDayFilter(prev => prev.includes(val) ? prev.filter(x => x !== val) : [...prev, val]);
+  }, []);
+
   const grouped = useMemo(() => {
     let list = availabilities;
-    if (isAdmin && employeeFilter !== FILTER_ALL) list = list.filter(a => a?.user?.id === employeeFilter);
-    if (isAdmin && dayFilter !== FILTER_ALL) list = list.filter(a => String(a?.dayOfWeek) === dayFilter);
+    if (isAdmin && employeeFilter.length > 0) list = list.filter(a => employeeFilter.includes(a?.user?.id));
+    if (isAdmin && dayFilter.length > 0) list = list.filter(a => dayFilter.includes(String(a?.dayOfWeek)));
     return list.reduce((acc, a) => {
       if (typeof a?.dayOfWeek !== 'number') return acc;
       if (!acc[a.dayOfWeek]) acc[a.dayOfWeek] = [];
@@ -288,17 +297,105 @@ export const AvailabilityManager = () => {
                   <div className="p-3">
                     {/* Filters */}
                     {isAdmin && (
-                      <div className="d-flex flex-wrap gap-2 mb-3">
+                      <div className="mb-3 d-flex flex-column gap-1">
                         {employees.length > 0 && (
-                          <select className="form-select form-select-sm appointments-filter-select" style={{ width: 'auto' }} value={employeeFilter} onChange={e => setEmployeeFilter(e.target.value)}>
-                            <option value="all">{t('allEmployees')}</option>
-                            {employees.map(emp => <option key={emp.id} value={emp.id}>{emp.name}</option>)}
-                          </select>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => setShowEmployeeChips(v => !v)}
+                              style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', padding: '0.3rem 0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', color: employeeFilter.length > 0 ? '#3aabdb' : 'rgba(255,255,255,0.5)', fontSize: '0.78rem', fontWeight: '600' }}
+                            >
+                              <span>{t('allEmployees')}{employeeFilter.length > 0 && ` (${employeeFilter.length})`}</span>
+                              {showEmployeeChips ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                            </button>
+                            <AnimatePresence initial={false}>
+                              {showEmployeeChips && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                                  style={{ overflow: 'hidden' }}
+                                >
+                                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', paddingTop: '0.35rem', paddingBottom: '0.25rem' }}>
+                                    {employees.map(emp => {
+                                      const sel = employeeFilter.includes(emp.id);
+                                      return (
+                                        <button
+                                          key={emp.id}
+                                          type="button"
+                                          onClick={() => toggleEmployeeFilter(emp.id)}
+                                          style={{
+                                            padding: '0.25rem 0.6rem',
+                                            borderRadius: '6px',
+                                            fontSize: '0.75rem',
+                                            fontWeight: '600',
+                                            cursor: 'pointer',
+                                            border: sel ? '1.5px solid #3aabdb' : '1px solid rgba(255,255,255,0.15)',
+                                            background: sel ? 'rgba(58,171,219,0.2)' : 'rgba(255,255,255,0.04)',
+                                            color: sel ? '#3aabdb' : 'rgba(255,255,255,0.45)',
+                                            transition: 'all 0.15s ease',
+                                          }}
+                                        >
+                                          {emp.name}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
                         )}
-                        <select className="form-select form-select-sm appointments-filter-select" style={{ width: 'auto' }} value={dayFilter} onChange={e => setDayFilter(e.target.value)}>
-                          <option value="all">{t('allDays')}</option>
-                          {DAYS.map(d => <option key={d.value} value={String(d.value)}>{d.label}</option>)}
-                        </select>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={() => setShowDayChips(v => !v)}
+                            style={{ background: 'none', border: 'none', outline: 'none', boxShadow: 'none', padding: '0.3rem 0', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', color: dayFilter.length > 0 ? '#3aabdb' : 'rgba(255,255,255,0.5)', fontSize: '0.78rem', fontWeight: '600' }}
+                          >
+                            <span>{t('allDays')}{dayFilter.length > 0 && ` (${dayFilter.length})`}</span>
+                            {showDayChips ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+                          </button>
+                          <AnimatePresence initial={false}>
+                            {showDayChips && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                                style={{ overflow: 'hidden' }}
+                              >
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', paddingTop: '0.35rem', paddingBottom: '0.25rem' }}>
+                                  {DAYS.map(d => {
+                                    const sel = dayFilter.includes(String(d.value));
+                                    return (
+                                      <button
+                                        key={d.value}
+                                        type="button"
+                                        onClick={() => toggleDayFilter(String(d.value))}
+                                        style={{
+                                          padding: '0.25rem 0.5rem',
+                                          borderRadius: '6px',
+                                          fontSize: '0.75rem',
+                                          fontWeight: '700',
+                                          cursor: 'pointer',
+                                          border: sel ? '1.5px solid #3aabdb' : '1px solid rgba(255,255,255,0.15)',
+                                          background: sel ? 'rgba(58,171,219,0.2)' : 'rgba(255,255,255,0.04)',
+                                          color: sel ? '#3aabdb' : 'rgba(255,255,255,0.45)',
+                                          transition: 'all 0.15s ease',
+                                          minWidth: '36px',
+                                          textAlign: 'center',
+                                        }}
+                                      >
+                                        {d.short}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
                       </div>
                     )}
 

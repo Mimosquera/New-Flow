@@ -270,6 +270,7 @@ export const ServiceManager = () => {
                     <div className="form-check">
                       <input
                         id="priceRangeCheckbox"
+                        name="priceRangeCheckbox"
                         type="checkbox"
                         className="form-check-input"
                         checked={isPriceRange}

@@ -169,18 +169,18 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
 
         <div className="row g-2 mb-2">
           <div className="col-6">
-            <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('startTime')}</label>
-            <input type="time" name="startTime" className="form-control form-control-sm" value={formData.startTime} onChange={handleChange} required autoComplete="off" />
+            <label htmlFor="blockedStartTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('startTime')}</label>
+            <input id="blockedStartTime" type="time" name="startTime" className="form-control form-control-sm" value={formData.startTime} onChange={handleChange} required autoComplete="off" />
           </div>
           <div className="col-6">
-            <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('endTime')}</label>
-            <input type="time" name="endTime" className="form-control form-control-sm" value={formData.endTime} onChange={handleChange} required autoComplete="off" />
+            <label htmlFor="blockedEndTime" className="form-label" style={{ fontSize: '0.78rem' }}>{t('endTime')}</label>
+            <input id="blockedEndTime" type="time" name="endTime" className="form-control form-control-sm" value={formData.endTime} onChange={handleChange} required autoComplete="off" />
           </div>
         </div>
 
         <div className="mb-3">
-          <label className="form-label" style={{ fontSize: '0.78rem' }}>{t('reasonForBlock')}</label>
-          <input type="text" name="reason" className="form-control form-control-sm" value={formData.reason} onChange={handleChange} placeholder={t('reasonPlaceholder')} autoComplete="off" />
+          <label htmlFor="blockedReason" className="form-label" style={{ fontSize: '0.78rem' }}>{t('reasonForBlock')}</label>
+          <input id="blockedReason" type="text" name="reason" className="form-control form-control-sm" value={formData.reason} onChange={handleChange} placeholder={t('reasonPlaceholder')} autoComplete="off" />
         </div>
 
         <button type="submit" className="btn post-update-btn w-100">
@@ -211,6 +211,9 @@ export const BlockedDatesManager = ({ blockedDates = [], onBlockedDateChange, is
               <div className="pt-2">
                 {isAdmin && employees.length > 0 && (
                   <select
+                    id="blockedEmployeeFilter"
+                    name="blockedEmployeeFilter"
+                    aria-label={t('allEmployees')}
                     className="form-select form-select-sm mb-2 appointments-filter-select"
                     value={selectedEmployeeFilter}
                     onChange={(e) => setSelectedEmployeeFilter(e.target.value)}
