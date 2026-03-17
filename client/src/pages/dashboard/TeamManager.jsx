@@ -33,6 +33,10 @@ export const TeamManager = () => {
   const [editEmailData, setEditEmailData] = useState({ newEmail: '', adminPassword: '' });
   const [editEmailLoading, setEditEmailLoading] = useState(false);
 
+  const [showEditName, setShowEditName] = useState(false);
+  const [showEditEmail, setShowEditEmail] = useState(false);
+  const [showEditPassword, setShowEditPassword] = useState(false);
+
   const [deleteLoading, setDeleteLoading] = useState(null);
   const [deletePasswordData, setDeletePasswordData] = useState({});
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(null);
@@ -113,6 +117,9 @@ export const TeamManager = () => {
     setEditNameStep('form');
     setEditEmailData({ newEmail: '', adminPassword: '' });
     setEditEmailStep('form');
+    setShowEditName(false);
+    setShowEditEmail(false);
+    setShowEditPassword(false);
     clearAlerts();
   };
 
@@ -375,10 +382,24 @@ export const TeamManager = () => {
             <div className="p-3 border-top" style={{ borderColor: 'rgba(58, 171, 219, 0.25)' }}>
 
               {/* Edit Name */}
-              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
-                <Pencil size={15} />
-                {t('editEmployeeName')}
-              </h6>
+              <button
+                className="btn w-100 d-flex justify-content-between align-items-center p-2 mb-1"
+                style={{ background: showEditName ? 'rgba(58,171,219,0.1)' : 'rgba(255,255,255,0.04)', border: '1px solid rgba(58,171,219,0.2)', borderRadius: '8px', color: '#3aabdb', fontWeight: 700, fontSize: '0.88rem' }}
+                onClick={() => { setShowEditName(v => !v); setShowEditEmail(false); setShowEditPassword(false); clearAlerts(); }}
+              >
+                <span className="d-flex align-items-center gap-2"><Pencil size={14} />{t('editEmployeeName')}</span>
+                {showEditName ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+              <AnimatePresence initial={false}>
+              {showEditName && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: 'hidden' }}
+              >
+              <div className="pt-3 pb-2">
               {alerts.nameError && <Alert type="danger" message={alerts.nameError} onClose={() => setAlert('nameError', null)} />}
               {alerts.nameSuccess && <Alert type="success" message={alerts.nameSuccess} onClose={() => setAlert('nameSuccess', null)} />}
 
@@ -448,7 +469,8 @@ export const TeamManager = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn btn-secondary btn-sm"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }}
                         onClick={() => { setEditNameStep('form'); setEditNameData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
                         disabled={editNameLoading}
                       >
@@ -458,14 +480,32 @@ export const TeamManager = () => {
                   </motion.form>
                 )}
               </AnimatePresence>
+              </div>
+              </motion.div>
+              )}
+              </AnimatePresence>
 
-              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+              <div className="my-2" />
 
               {/* Edit Email */}
-              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
-                <AtSign size={15} />
-                {t('editEmployeeEmail')}
-              </h6>
+              <button
+                className="btn w-100 d-flex justify-content-between align-items-center p-2 mb-1"
+                style={{ background: showEditEmail ? 'rgba(58,171,219,0.1)' : 'rgba(255,255,255,0.04)', border: '1px solid rgba(58,171,219,0.2)', borderRadius: '8px', color: '#3aabdb', fontWeight: 700, fontSize: '0.88rem' }}
+                onClick={() => { setShowEditEmail(v => !v); setShowEditName(false); setShowEditPassword(false); clearAlerts(); }}
+              >
+                <span className="d-flex align-items-center gap-2"><AtSign size={14} />{t('editEmployeeEmail')}</span>
+                {showEditEmail ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+              <AnimatePresence initial={false}>
+              {showEditEmail && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: 'hidden' }}
+              >
+              <div className="pt-3 pb-2">
               {alerts.emailError && <Alert type="danger" message={alerts.emailError} onClose={() => setAlert('emailError', null)} />}
               {alerts.emailSuccess && <Alert type="success" message={alerts.emailSuccess} onClose={() => setAlert('emailSuccess', null)} />}
 
@@ -535,7 +575,8 @@ export const TeamManager = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn btn-secondary btn-sm"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }}
                         onClick={() => { setEditEmailStep('form'); setEditEmailData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
                         disabled={editEmailLoading}
                       >
@@ -545,14 +586,32 @@ export const TeamManager = () => {
                   </motion.form>
                 )}
               </AnimatePresence>
+              </div>
+              </motion.div>
+              )}
+              </AnimatePresence>
 
-              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+              <div className="my-2" />
 
               {/* Edit Password */}
-              <h6 className="mb-3 section-header d-flex align-items-center gap-2" style={{ color: '#3aabdb', fontWeight: 700 }}>
-                <Key size={15} />
-                {t('editPassword')}
-              </h6>
+              <button
+                className="btn w-100 d-flex justify-content-between align-items-center p-2 mb-1"
+                style={{ background: showEditPassword ? 'rgba(58,171,219,0.1)' : 'rgba(255,255,255,0.04)', border: '1px solid rgba(58,171,219,0.2)', borderRadius: '8px', color: '#3aabdb', fontWeight: 700, fontSize: '0.88rem' }}
+                onClick={() => { setShowEditPassword(v => !v); setShowEditName(false); setShowEditEmail(false); clearAlerts(); }}
+              >
+                <span className="d-flex align-items-center gap-2"><Key size={14} />{t('editPassword')}</span>
+                {showEditPassword ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+              </button>
+              <AnimatePresence initial={false}>
+              {showEditPassword && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                style={{ overflow: 'hidden' }}
+              >
+              <div className="pt-3 pb-2">
               {alerts.editError && <Alert type="danger" message={alerts.editError} onClose={() => setAlert('editError', null)} />}
               {alerts.editSuccess && <Alert type="success" message={alerts.editSuccess} onClose={() => setAlert('editSuccess', null)} />}
 
@@ -622,7 +681,8 @@ export const TeamManager = () => {
                       </button>
                       <button
                         type="button"
-                        className="btn btn-secondary btn-sm"
+                        className="btn btn-sm"
+                        style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '8px', fontWeight: '500' }}
                         onClick={() => { setEditPasswordStep('form'); setEditPasswordData(prev => ({ ...prev, adminPassword: '' })); clearAlerts(); }}
                         disabled={editLoading}
                       >
@@ -632,8 +692,12 @@ export const TeamManager = () => {
                   </motion.form>
                 )}
               </AnimatePresence>
+              </div>
+              </motion.div>
+              )}
+              </AnimatePresence>
 
-              <hr className="my-4 section-divider" style={{ borderColor: '#3aabdb', borderWidth: '2px' }} />
+              <hr className="my-3 section-divider" style={{ borderColor: 'rgba(58,171,219,0.2)', borderWidth: '1px' }} />
 
               {/* Remove Employee */}
               <div className="mt-4">

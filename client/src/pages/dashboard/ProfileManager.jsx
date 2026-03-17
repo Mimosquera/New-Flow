@@ -342,7 +342,8 @@ export const ProfileManager = ({ onLogout }) => {
 
   const cardHeaderStyle = {
     padding: '0.7rem 1rem',
-    borderBottom: '1px solid rgba(70,161,161,0.15)',
+    background: 'rgba(3, 25, 38, 0.45)',
+    borderBottom: '1px solid rgba(70,161,161,0.2)',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -383,7 +384,7 @@ export const ProfileManager = ({ onLogout }) => {
         <div className="col-12 col-md-5 col-xl-4">
           <div style={profileCardStyle}>
             <div style={cardHeaderStyle}>
-              <h6 style={{ margin: 0, color: '#3aabdb', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <h6 style={{ margin: 0, color: '#fff', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <User size={13} />
                 {t('aboutMe')}
               </h6>
@@ -505,7 +506,7 @@ export const ProfileManager = ({ onLogout }) => {
         <div className="col-12 col-md-6 col-xl-4">
           <div style={profileCardStyle}>
             <div style={cardHeaderStyle}>
-              <h6 style={{ margin: 0, color: '#3aabdb', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <h6 style={{ margin: 0, color: '#fff', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Lock size={13} />
                 {t('accountLogin')}
               </h6>

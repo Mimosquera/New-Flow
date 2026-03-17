@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban } from 'lucide-react';
+import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban, User } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { appointmentService } from '../../services/api.js';
 import { decodeToken, getToken } from '../../utils/tokenUtils.js';
@@ -178,16 +178,16 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
   }, []);
 
   const getStatusBadgeStyle = useCallback((apt) => {
-    const base = { fontWeight: '500', letterSpacing: '0.3px', padding: '0.35em 0.75em', borderRadius: '8px', fontSize: '0.78rem' };
+    const base = { fontWeight: '600', letterSpacing: '0.3px', padding: '0.3em 0.75em', borderRadius: '20px', fontSize: '0.75rem', display: 'inline-block' };
     const status = apt?.status;
     switch (status) {
-      case STATUS_PENDING: return { ...base, background: 'linear-gradient(135deg, #f9a825, #fbc02d)', color: '#3e2723' };
+      case STATUS_PENDING: return { ...base, background: 'rgba(251,192,45,0.15)', color: '#fbc02d', border: '1px solid rgba(251,192,45,0.35)' };
       case STATUS_ACCEPTED: return isUpcoming(apt)
-        ? { ...base, background: 'linear-gradient(135deg, #0288d1, #03a9f4)', color: '#fff' }
-        : { ...base, background: 'linear-gradient(135deg, #2e7d6f, #3aabdb)', color: '#fff' };
-      case STATUS_DECLINED: return { ...base, background: 'linear-gradient(135deg, #c62828, #e53935)', color: '#fff' };
-      case STATUS_CANCELLED: return { ...base, background: 'linear-gradient(135deg, #546e7a, #78909c)', color: '#fff' };
-      default: return { ...base, background: '#78909c', color: '#fff' };
+        ? { ...base, background: 'rgba(58,171,219,0.15)', color: '#3aabdb', border: '1px solid rgba(58,171,219,0.35)' }
+        : { ...base, background: 'rgba(46,171,130,0.15)', color: '#3abda0', border: '1px solid rgba(46,171,130,0.35)' };
+      case STATUS_DECLINED: return { ...base, background: 'rgba(220,53,69,0.15)', color: '#ff7b7b', border: '1px solid rgba(220,53,69,0.35)' };
+      case STATUS_CANCELLED: return { ...base, background: 'rgba(120,144,156,0.15)', color: 'rgba(255,255,255,0.55)', border: '1px solid rgba(120,144,156,0.3)' };
+      default: return { ...base, background: 'rgba(120,144,156,0.15)', color: 'rgba(255,255,255,0.55)', border: '1px solid rgba(120,144,156,0.3)' };
     }
   }, [isUpcoming]);
 
@@ -367,6 +367,10 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       <strong>{t('service')}:</strong>&nbsp;{apt.service?.name || 'N/A'}
                     </span>
                     <span className="d-flex align-items-center gap-1 mb-1">
+                      <User size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                      <strong>{t('requestedEmployee')}</strong>&nbsp;{apt.employee?.name || t('noPreference')}
+                    </span>
+                    <span className="d-flex align-items-center gap-1 mb-1">
                       <Calendar size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
                       <strong>{t('date')}:</strong>&nbsp;{formatDateDisplay(apt.date, language === 'es' ? 'es-ES' : 'en-US')}
                     </span>
@@ -382,12 +386,7 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       <div className="mb-2">
                         <strong>{t('email')}:</strong> {apt.customerEmail}<br />
                         <strong>{t('phone')}:</strong> {apt.customerPhone}<br />
-                        <strong>{t('requestedEmployee')}</strong> {apt.employee?.name || t('noPreference')}<br />
-                        {apt.customerNotes && (
-                          <>
-                            <strong>{t('customerNote')}:</strong> {apt.customerNotes}<br />
-                          </>
-                        )}
+                        <strong>{t('customerNote')}:</strong> {apt.customerNotes || <span style={{ color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>{t('noNotesEntered')}</span>}<br />
                         {apt.acceptedBy && (
                           <>
                             <strong>{t('acceptedBy')}</strong> {isAdmin || apt.acceptedBy.id !== currentUser?.id 
@@ -422,52 +421,50 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
 
                   {apt.status === 'pending' && (
                     <div className="d-flex gap-2 mt-3">
-                      <div className="btn-group btn-group-sm" style={{ whiteSpace: 'nowrap' }}>
-                        <button
-                          className="btn d-flex align-items-center gap-1"
-                          style={{
-                            background: 'linear-gradient(135deg, rgb(5, 60, 82), rgb(10, 65, 90))',
-                            color: '#fff',
-                            border: '1.5px solid #3aabdb',
-                            borderRadius: '8px',
-                            fontWeight: '500',
-                            fontSize: '0.85rem',
-                            padding: '0.35rem 0.85rem',
-                            boxShadow: '0 2px 8px rgba(58, 171, 219, 0.3)'
-                          }}
-                          onClick={() => handleAccept(apt)}
-                        >
-                          <Check size={14} /> {t('accept')}
-                        </button>
-                        <button
-                          className="btn d-flex align-items-center gap-1"
-                          style={{
-                            background: 'transparent',
-                            color: '#dc3545',
-                            border: '1.5px solid #dc3545',
-                            borderRadius: '8px',
-                            fontWeight: '500',
-                            fontSize: '0.85rem',
-                            padding: '0.35rem 0.85rem'
-                          }}
-                          onClick={() => handleDecline(apt)}
-                        >
-                          <X size={14} /> {t('decline')}
-                        </button>
-                      </div>
+                      <button
+                        className="btn btn-sm d-flex align-items-center gap-1"
+                        style={{
+                          background: 'linear-gradient(135deg, rgb(5, 60, 82), rgb(10, 65, 90))',
+                          color: '#fff',
+                          border: '1.5px solid #3aabdb',
+                          borderRadius: '8px',
+                          fontWeight: '500',
+                          fontSize: '0.85rem',
+                          padding: '0.35rem 0.85rem',
+                          boxShadow: '0 2px 8px rgba(58, 171, 219, 0.3)'
+                        }}
+                        onClick={() => handleAccept(apt)}
+                      >
+                        <Check size={14} /> {t('accept')}
+                      </button>
+                      <button
+                        className="btn btn-sm d-flex align-items-center gap-1"
+                        style={{
+                          background: 'rgba(220,53,69,0.35)',
+                          color: '#fff',
+                          border: '1.5px solid rgba(220,53,69,0.5)',
+                          borderRadius: '8px',
+                          fontWeight: '500',
+                          fontSize: '0.85rem',
+                          padding: '0.35rem 0.85rem'
+                        }}
+                        onClick={() => handleDecline(apt)}
+                      >
+                        <X size={14} /> {t('decline')}
+                      </button>
                     </div>
                   )}
 
                   {apt.status === 'accepted' && (isAdmin || apt.acceptedBy?.id === currentUser?.id) && (
                     <div className="d-flex gap-2 mt-3">
                       <button
-                        className="btn btn-sm"
-                        style={{ 
-                          background: 'transparent', 
-                          color: '#dc3545', 
-                          border: '1.5px solid #dc3545', 
-                          borderRadius: '8px', 
-                          fontWeight: '500', 
+                        className="btn btn-sm d-flex align-items-center gap-1"
+                        style={{
+                          background: 'rgba(220,53,69,0.35)',
+                          color: '#fff',
+                          border: '1.5px solid rgba(220,53,69,0.5)',
+                          borderRadius: '8px',
+                          fontWeight: '500',
                           fontSize: '0.85rem',
                           padding: '0.3rem 0.75rem'
                         }}

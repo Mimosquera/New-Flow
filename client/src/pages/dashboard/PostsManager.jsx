@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, FileText, PenLine } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, PenLine, Pencil, X } from 'lucide-react';
 import { Alert, FormInput } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
 import { postsService, SERVER_BASE_URL } from '../../services/api.js';
@@ -24,31 +24,37 @@ const cardStyle = {
   overflow: 'hidden',
 };
 
-const cardTitleStyle = {
-  color: '#e0f7f7',
-  fontWeight: '600',
-  fontSize: '0.88rem',
-  cursor: 'pointer',
+const cardBodyStyle = {
+  padding: '0.6rem 0.75rem 0.65rem',
+  display: 'flex',
+  flexDirection: 'column',
   flex: 1,
+  gap: '0.3rem',
+};
+
+const cardTitleStyle = {
+  color: 'rgba(255,255,255,0.92)',
+  fontWeight: '600',
+  fontSize: '0.82rem',
   margin: 0,
-  lineHeight: '1.35',
+  lineHeight: '1.4',
 };
 
 const cardTextStyle = {
-  color: 'rgba(255,255,255,0.6)',
-  fontSize: '0.78rem',
+  color: 'rgba(255,255,255,0.5)',
+  fontSize: '0.73rem',
   lineHeight: '1.55',
-  cursor: 'pointer',
   margin: 0,
+  flex: 1,
 };
 
 const cardMetaStyle = {
-  fontSize: '0.68rem',
+  fontSize: '0.66rem',
   color: 'rgba(58,171,219,0.55)',
   fontWeight: '500',
-  borderTop: '1px solid rgba(58, 171, 219, 0.12)',
-  paddingTop: '0.5rem',
-  marginTop: '0.25rem',
+  borderTop: '1px solid rgba(58,171,219,0.1)',
+  paddingTop: '0.45rem',
+  marginTop: 'auto',
   display: 'flex',
   alignItems: 'center',
   gap: '0.4rem',
@@ -61,82 +67,67 @@ const PostCard = ({ update, onOpen, onDelete, onEdit, canManage, t }) => {
     : null;
 
   return (
-    <div style={{ ...cardStyle, height: '100%' }}>
-      <div style={{ padding: '0.75rem 1rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <h6 style={cardTitleStyle} onClick={onOpen}>{update.title}</h6>
-
-        {src && (
-          <div
-            className="mt-3 mb-2"
-            style={{ cursor: 'pointer', position: 'relative', paddingBottom: '56.25%', borderRadius: '12px', overflow: 'hidden' }}
-            onClick={onOpen}
+    <div style={{ ...cardStyle, height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer', position: 'relative' }} onClick={onOpen}>
+      {canManage && (
+        <div
+          className="d-flex gap-2"
+          style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', zIndex: 3 }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            className="btn"
+            style={{ background: 'rgba(5,30,45,0.8)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(58,171,219,0.3)', borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3aabdb', padding: 0 }}
+            onClick={onEdit}
+            title={t('edit')}
           >
-            {!imgLoaded && (
-              <div className="sk" style={{ position: 'absolute', inset: 0, borderRadius: '12px', zIndex: 1 }} />
-            )}
-            {update.media_type === 'image' ? (
-              <img
-                src={src}
-                alt={update.title}
-                loading="lazy"
-                decoding="async"
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
-                onLoad={() => setImgLoaded(true)}
-                onError={() => setImgLoaded(true)}
-              />
-            ) : (
-              <video
-                src={src}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
-                onLoadedData={() => setImgLoaded(true)}
-                onError={() => setImgLoaded(true)}
-              />
-            )}
-          </div>
-        )}
-
-        <p style={cardTextStyle} onClick={onOpen}>
-          {update.content.length > 150 ? update.content.substring(0, 150) + '...' : update.content}
+            <Pencil size={14} />
+          </button>
+          <button
+            className="btn"
+            style={{ background: 'rgba(5,30,45,0.8)', backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', border: '1px solid rgba(220,53,69,0.35)', borderRadius: '9px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ff7b7b', padding: 0 }}
+            onClick={onDelete}
+            title={t('delete')}
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
+      {src && (
+        <div style={{ position: 'relative', flexShrink: 0, overflow: 'hidden', borderRadius: '14px 14px 0 0' }}>
+          {!imgLoaded && (
+            <div className="sk" style={{ position: 'absolute', inset: 0, zIndex: 1 }} />
+          )}
+          {update.media_type === 'image' ? (
+            <img
+              src={src}
+              alt={update.title}
+              loading="lazy"
+              decoding="async"
+              style={{ width: '100%', height: '130px', objectFit: 'cover', display: 'block', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+              onLoad={() => setImgLoaded(true)}
+              onError={() => setImgLoaded(true)}
+            />
+          ) : (
+            <video
+              src={src}
+              style={{ width: '100%', height: '130px', objectFit: 'cover', display: 'block', opacity: imgLoaded ? 1 : 0, transition: 'opacity 0.35s ease' }}
+              onLoadedData={() => setImgLoaded(true)}
+              onError={() => setImgLoaded(true)}
+            />
+          )}
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg, rgba(5,30,45,0.8) 0%, rgba(5,30,45,0.05) 60%, transparent 100%)', pointerEvents: 'none' }} />
+        </div>
+      )}
+      <div style={cardBodyStyle}>
+        <h6 style={cardTitleStyle}>{update.title}</h6>
+        <p style={cardTextStyle}>
+          {update.content.length > 110 ? update.content.substring(0, 110) + '…' : update.content}
         </p>
         <div style={cardMetaStyle}>
           <span>{new Date(update.date).toLocaleDateString()}</span>
           <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(58,171,219,0.5)', flexShrink: 0 }} />
           <span style={{ color: 'rgba(58,171,219,0.65)' }}>{update.author}</span>
         </div>
-        {canManage && (
-          <div className="d-flex gap-1 mt-2">
-            <button
-              className="btn btn-sm"
-              style={{
-                background: 'rgba(58, 171, 219, 0.12)',
-                color: '#3aabdb',
-                border: '1px solid rgba(58, 171, 219, 0.35)',
-                borderRadius: '8px',
-                padding: '0.15rem 0.5rem',
-                fontSize: '0.7rem',
-                fontWeight: '600',
-              }}
-              onClick={(e) => { e.stopPropagation(); onEdit(); }}
-            >
-              {t('edit')}
-            </button>
-            <button
-              className="btn btn-sm"
-              style={{
-                background: 'rgba(220, 53, 69, 0.2)',
-                color: '#ff7b7b',
-                border: '1px solid rgba(220, 53, 69, 0.4)',
-                borderRadius: '8px',
-                padding: '0.15rem 0.5rem',
-                fontSize: '0.7rem',
-                fontWeight: '600',
-              }}
-              onClick={(e) => { e.stopPropagation(); onDelete(); }}
-            >
-              {t('delete')}
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -281,22 +281,22 @@ a:focus:not(:focus-visible) {
 
 /* Logout button */
 .logout-btn {
-  background: none !important;
-  color: rgba(185, 28, 28, 0.6) !important;
-  border: 1px solid rgba(185, 28, 28, 0.2) !important;
+  background: rgba(220, 53, 69, 0.35) !important;
+  color: #fff !important;
+  border: 1.5px solid rgba(220, 53, 69, 0.5) !important;
   border-radius: 8px !important;
   font-size: 0.8rem !important;
   padding: 0.35rem 0.9rem !important;
-  transition: color 0.2s ease, border-color 0.2s ease !important;
+  transition: background 0.2s ease, border-color 0.2s ease !important;
 }
 @media (hover: hover) {
   .logout-btn:hover {
-    color: rgba(185, 28, 28, 0.9) !important;
-    border-color: rgba(185, 28, 28, 0.4) !important;
+    background: rgba(220, 53, 69, 0.5) !important;
+    border-color: rgba(220, 53, 69, 0.7) !important;
   }
 }
 .logout-btn:active {
-  color: rgb(185, 28, 28) !important;
+  background: rgba(220, 53, 69, 0.65) !important;
 }
 
 /* Tab header shadow */
@@ -545,44 +545,43 @@ a:focus:not(:focus-visible) {
 
 /* Load More / Hide Posts Buttons */
 .load-more-btn {
-  background: rgb(5, 45, 63);
+  background: rgb(5, 60, 82);
   color: #fff;
-  border: 1px solid rgba(58, 171, 219, 0.35);
-  border-radius: 0.5rem;
-  padding: 0.4rem 1.25rem;
+  border: 1px solid rgba(58, 171, 219, 0.45);
+  border-radius: 20px;
+  padding: 0.38rem 1.5rem;
   font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 @media (hover: hover) {
   .load-more-btn:hover:not(:disabled) {
-    background: rgba(5, 45, 63, 0.8);
-    box-shadow: 0 4px 14px rgba(5, 45, 63, 0.2);
+    background: rgb(7, 75, 100);
+    border-color: rgba(58, 171, 219, 0.7);
     color: #fff;
   }
 }
 .load-more-btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
 .hide-posts-btn {
-  background: transparent !important;
-  color: rgba(5, 45, 63, 0.5) !important;
-  border: 1.5px solid rgba(5, 45, 63, 0.2) !important;
-  border-radius: 0.5rem;
-  padding: 0.4rem 1.25rem;
+  background: transparent;
+  color: rgba(5, 60, 82, 0.65);
+  border: 1px solid rgba(5, 60, 82, 0.25);
+  border-radius: 20px;
+  padding: 0.38rem 1.5rem;
   font-weight: 600;
-  font-size: 0.85rem;
-  letter-spacing: 0.02em;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 @media (hover: hover) {
   .hide-posts-btn:hover {
-    background: transparent !important;
-    color: rgba(5, 45, 63, 0.8) !important;
-    border-color: rgba(5, 45, 63, 0.4) !important;
+    color: rgba(5, 60, 82, 0.9);
+    border-color: rgba(5, 60, 82, 0.45);
   }
 }
 /* App Styles */
@@ -1051,9 +1050,11 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
 
 /* Appointment no-results alert */
 .appointments-no-results {
-  background: linear-gradient(135deg, #f0fafa 0%, #e3f3f3 100%) !important;
-  color: rgb(5, 60, 82) !important;
-  border: 1.5px solid rgba(58, 171, 219, 0.3) !important;
+  background: rgba(5, 60, 82, 0.45) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(255, 255, 255, 0.75) !important;
+  border: 1px solid rgba(58, 171, 219, 0.2) !important;
   border-radius: 12px !important;
   font-weight: 500 !important;
 }
@@ -1076,24 +1077,25 @@ background: linear-gradient(135deg, rgb(0, 0, 0) 0%, rgb(5, 60, 82) 100%);
   font-size: 1.05rem !important;
 }
 .appointment-modal .modal-body {
-  background: linear-gradient(180deg, #ffffff 0%, #f0fafa 100%) !important;
-  color: rgb(5, 60, 82) !important;
+  background: rgba(5, 30, 45, 0.98) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
   padding: 1.25rem !important;
 }
 .appointment-modal .modal-body strong {
-  color: rgb(5, 60, 82);
+  color: rgba(255, 255, 255, 0.95);
 }
 .appointment-modal .modal-body .form-control {
-  border-color: rgba(58, 171, 219, 0.4) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(58, 171, 219, 0.35) !important;
   border-radius: 10px !important;
-  color: rgb(5, 60, 82) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
 }
 .appointment-modal .modal-body .form-control:focus {
   border-color: #3aabdb !important;
   box-shadow: 0 0 0 0.2rem rgba(58, 171, 219, 0.2) !important;
 }
 .appointment-modal .modal-body .form-label {
-  color: rgb(5, 60, 82) !important;
+  color: rgba(255, 255, 255, 0.65) !important;
   font-weight: 500 !important;
 }
 .appointment-modal .modal-footer {
