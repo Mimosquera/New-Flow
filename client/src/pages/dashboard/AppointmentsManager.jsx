@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import PropTypes from 'prop-types';
-import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban, User } from 'lucide-react';
+import { Calendar, Clock, Filter, Scissors, ChevronDown, ChevronUp, Check, X, Ban, User, Mail, Phone, MessageSquare, UserCheck } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { appointmentService } from '../../services/api.js';
 import { decodeToken, getToken } from '../../utils/tokenUtils.js';
@@ -391,37 +391,52 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
                       style={{ overflow: 'hidden' }}
                     >
                       <hr />
-                      <div className="mb-2">
-                        <strong>{t('email')}:</strong> {apt.customerEmail}<br />
-                        <strong>{t('phone')}:</strong> {apt.customerPhone}<br />
-                        <strong>{t('customerNote')}:</strong> {apt.customerNotes || <span style={{ color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>{t('noNotesEntered')}</span>}<br />
+                      <div className="mb-2" style={{ fontSize: '0.9rem' }}>
+                        <span className="d-flex align-items-center gap-1 mb-1">
+                          <Mail size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                          <strong>{t('email')}:</strong>&nbsp;{apt.customerEmail}
+                        </span>
+                        <span className="d-flex align-items-center gap-1 mb-1">
+                          <Phone size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                          <strong>{t('phone')}:</strong>&nbsp;{apt.customerPhone}
+                        </span>
+                        <span className="d-flex align-items-start gap-1 mb-1">
+                          <MessageSquare size={13} style={{ color: '#3aabdb', flexShrink: 0, marginTop: '0.15rem' }} />
+                          <span><strong>{t('customerNote')}:</strong>&nbsp;{apt.customerNotes || <span style={{ color: 'rgba(255,255,255,0.35)', fontStyle: 'italic' }}>{t('noNotesEntered')}</span>}</span>
+                        </span>
                         {apt.acceptedBy && (
-                          <>
-                            <strong>{t('acceptedBy')}</strong> {isAdmin || apt.acceptedBy.id !== currentUser?.id 
+                          <span className="d-flex align-items-center gap-1 mb-1">
+                            <UserCheck size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                            <strong>{t('acceptedBy')}</strong>&nbsp;{isAdmin || apt.acceptedBy.id !== currentUser?.id 
                               ? apt.acceptedBy.name 
-                              : t('you')}<br />
-                          </>
+                              : t('you')}
+                          </span>
                         )}
                         {apt.status === 'cancelled' && (
                           <>
-                            <strong>{t('cancelledBy')}:</strong> {(() => {
-                              if (!apt.cancelledBy) return t('customer');
-                              if (apt.cancelledBy === 'customer') return t('customer');
-                              if (apt.cancelledBy === 'employee') return t('employee');
-                              if (apt.cancelledBy === 'admin') return t('admin');
-                              return apt.cancelledBy;
-                            })()}<br />
+                            <span className="d-flex align-items-center gap-1 mb-1">
+                              <Ban size={13} style={{ color: DANGER_COLOR, flexShrink: 0 }} />
+                              <strong>{t('cancelledBy')}:</strong>&nbsp;{(() => {
+                                if (!apt.cancelledBy) return t('customer');
+                                if (apt.cancelledBy === 'customer') return t('customer');
+                                if (apt.cancelledBy === 'employee') return t('employee');
+                                if (apt.cancelledBy === 'admin') return t('admin');
+                                return apt.cancelledBy;
+                              })()}
+                            </span>
                             {apt.employeeNote && (
-                              <>
-                                <strong>{t('cancellationReason')}:</strong> {apt.employeeNote}<br />
-                              </>
+                              <span className="d-flex align-items-start gap-1 mb-1">
+                                <MessageSquare size={13} style={{ color: DANGER_COLOR, flexShrink: 0, marginTop: '0.15rem' }} />
+                                <span><strong>{t('cancellationReason')}:</strong>&nbsp;{apt.employeeNote}</span>
+                              </span>
                             )}
                           </>
                         )}
                         {apt.status !== 'cancelled' && apt.employeeNote && (
-                          <>
-                            <strong>{t('employeeNote')}:</strong> {apt.employeeNote}<br />
-                          </>
+                          <span className="d-flex align-items-start gap-1 mb-1">
+                            <MessageSquare size={13} style={{ color: '#3aabdb', flexShrink: 0, marginTop: '0.15rem' }} />
+                            <span><strong>{t('employeeNote')}:</strong>&nbsp;{apt.employeeNote}</span>
+                          </span>
                         )}
                       </div>
                     </motion.div>

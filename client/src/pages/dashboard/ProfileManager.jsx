@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 import { AnimatePresence, motion } from 'framer-motion';
-import { User, Lock, Camera, Trash2, LogOut, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
+import { User, Lock, Camera, Trash2, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
@@ -11,7 +10,7 @@ import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
 const THEME_COLOR = 'rgb(5, 60, 82)';
 const SECONDARY_COLOR = '#3aabdb';
 
-export const ProfileManager = ({ onLogout }) => {
+export const ProfileManager = () => {
   const { t } = useTranslation();
   const fileInputRef = useRef(null);
 
@@ -647,18 +646,6 @@ export const ProfileManager = ({ onLogout }) => {
         </div>
       </div>
 
-      {onLogout && !isEditingLogin && (
-        <div className="text-center mt-3">
-          <button
-            onClick={() => { if (window.confirm(t('logoutConfirm'))) onLogout(); }}
-            className="btn logout-btn d-inline-flex align-items-center gap-2"
-          >
-            <LogOut size={14} />
-            {t('logout')}
-          </button>
-        </div>
-      )}
-
       <AnimatePresence>
       {showForgotPassword && (
         <motion.div
@@ -701,8 +688,4 @@ export const ProfileManager = ({ onLogout }) => {
       </AnimatePresence>
     </div>
   );
-};
-
-ProfileManager.propTypes = {
-  onLogout: PropTypes.func,
 };

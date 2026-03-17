@@ -115,6 +115,9 @@ export const translations = {
     
     // Employee Dashboard
     welcomeBack: 'Welcome back',
+    settings: 'Settings',
+    home: 'Home',
+    dashboard: 'Dashboard',
     logout: 'Logout',
     logoutConfirm: 'Are you sure you want to log out?',
     sessionExpired: 'Session Expired',
@@ -564,6 +567,9 @@ export const translations = {
     
     // Employee Dashboard
     welcomeBack: 'Bienvenido de nuevo',
+    settings: 'Configuración',
+    home: 'Inicio',
+    dashboard: 'Panel',
     logout: 'Cerrar Sesión',
     logoutConfirm: '¿Estás seguro de que quieres cerrar sesión?',
     sessionExpired: 'Sesión Expirada',

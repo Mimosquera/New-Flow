@@ -1,5 +1,4 @@
 {
-    "vscode-pets.petType": "snake",
     "cSpell.words": [
         "algunos",
         "ampm",
@@ -14,5 +13,7 @@
         "Servicios",
         "VITE",
         "Zoomable"
-    ]
+    ],
+    "vscode-pets.petColor": "magical",
+    "vscode-pets.petType": "snake"
 }

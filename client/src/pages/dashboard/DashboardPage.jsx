@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutGrid, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown } from 'lucide-react';
+import { LayoutGrid, User, Calendar, Clock, FileText, Scissors, Users, ChevronDown, Home, LogOut, Settings } from 'lucide-react';
 import { removeToken, decodeToken, getToken, isTokenValid } from '../../utils/tokenUtils.js';
 import { hapticLight } from '../../utils/haptics.js';
 import { AppointmentsManager } from './AppointmentsManager.jsx';
@@ -22,16 +22,20 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState(() => {
     const isRefresh = sessionStorage.getItem('dashboardVisited') === 'true';
     if (isRefresh) {
-      return localStorage.getItem('employeeDashboardTab') || 'profile';
+      const saved = localStorage.getItem('employeeDashboardTab') || 'appointments';
+      return saved === 'profile' ? 'appointments' : saved;
     }
     sessionStorage.setItem('dashboardVisited', 'true');
-    return 'profile';
+    return 'appointments';
   });
 
   const [employeeName, setEmployeeName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
   const [appointmentFilter, setAppointmentFilter] = useState('all');
   const [showSessionModal, setShowSessionModal] = useState(() => !isTokenValid(getToken()));
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [previousTab, setPreviousTab] = useState('appointments');
+  const settingsRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('employeeDashboardTab', activeTab);
@@ -69,6 +73,9 @@ export default function DashboardPage() {
     const handleClickOutside = (e) => {
       if (mobileTabRef.current && !mobileTabRef.current.contains(e.target)) {
         setMobileTabOpen(false);
+      }
+      if (settingsRef.current && !settingsRef.current.contains(e.target)) {
+        setSettingsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -157,13 +164,9 @@ export default function DashboardPage() {
           </div>
 
           {/* Center: Desktop tabs */}
+          {activeTab !== 'profile' && (
           <div className="d-none d-lg-flex" style={{ flex: 1, justifyContent: 'center' }}>
             <ul className="nav nav-tabs mb-0 dashboard-tabs" style={{ flexWrap: 'nowrap', borderBottom: 'none' }}>
-              <li className="nav-item">
-                <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'profile' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('profile'); }}>
-                  <User size={13} />{t('profile')}
-                </button>
-              </li>
               <li className="nav-item">
                 <button className={`nav-link d-flex align-items-center gap-1 ${activeTab === 'appointments' ? 'active' : ''}`} onClick={() => { hapticLight(); setActiveTab('appointments'); }}>
                   <Calendar size={13} />{t('appointments')}
@@ -193,12 +196,13 @@ export default function DashboardPage() {
               )}
             </ul>
           </div>
+          )}
 
           {/* Center: Mobile tab dropdown */}
+          {activeTab !== 'profile' && (
           <div ref={mobileTabRef} className="d-lg-none" style={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative' }}>
             {(() => {
               const tabOptions = [
-                { value: 'profile', label: t('profile'), icon: <User size={13} /> },
                 { value: 'appointments', label: t('appointments'), icon: <Calendar size={13} /> },
                 { value: 'updates', label: t('postsTab'), icon: <FileText size={13} /> },
                 { value: 'services', label: t('services'), icon: <Scissors size={13} /> },
@@ -259,20 +263,121 @@ export default function DashboardPage() {
               );
             })()}
           </div>
+          )}
 
-          {/* Right: Home + Language toggle */}
+          {/* Center spacer when on profile tab */}
+          {activeTab === 'profile' && (
+            <div style={{ flex: 1 }} />
+          )}
+
+          {/* Right: Language toggle + Settings */}
           <div className="d-flex align-items-center" style={{ gap: '0.4rem', flexShrink: 0 }}>
-            <button
-              className="btn btn-sm dashboard-home-btn"
-              onClick={() => navigate('/')}
-              title={t('backToHome')}
-            >
-              <LayoutGrid size={17} />
-            </button>
             <div style={{ width: '53px', height: '24px', position: 'relative', flexShrink: 0 }}>
               <div style={{ transform: 'scale(0.75)', transformOrigin: 'top left', position: 'absolute', top: 0, left: 0 }}>
                 <LanguageToggle inverse />
               </div>
+            </div>
+            <div ref={settingsRef} style={{ position: 'relative' }}>
+              <button
+                className="btn btn-sm dashboard-home-btn"
+                onClick={() => { hapticLight(); setSettingsOpen(prev => !prev); }}
+                title={t('settings')}
+                style={{ position: 'relative' }}
+              >
+                <Settings size={17} style={{ transition: 'transform 0.3s ease', transform: settingsOpen ? 'rotate(90deg)' : 'rotate(0deg)' }} />
+              </button>
+              <AnimatePresence>
+              {settingsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -6, scale: 0.96 }}
+                  transition={{ duration: 0.15, ease: [0.4, 0, 0.2, 1] }}
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    background: 'rgba(3, 25, 38, 0.97)',
+                    backdropFilter: 'blur(18px)',
+                    border: '1.5px solid rgba(58, 171, 219, 0.4)',
+                    borderRadius: '10px',
+                    zIndex: 2000,
+                    minWidth: '0',
+                    padding: '0.35rem 0',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.45)',
+                  }}
+                >
+                  <button
+                    onClick={() => { hapticLight(); setSettingsOpen(false); navigate('/'); }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '0.45rem',
+                      width: '100%', padding: '0.5rem 0.75rem', background: 'none',
+                      border: 'none', color: 'rgba(255, 255, 255, 0.85)',
+                      fontSize: '0.8rem', fontWeight: '400', whiteSpace: 'nowrap',
+                      cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >
+                    <Home size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                    {t('home')}
+                  </button>
+
+                  <div style={{ height: '1px', background: 'rgba(58, 171, 219, 0.15)', margin: '0.15rem 0.6rem' }} />
+
+                  {activeTab === 'profile' ? (
+                    <button
+                      onClick={() => { hapticLight(); setSettingsOpen(false); setActiveTab(previousTab); }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '0.45rem',
+                        width: '100%', padding: '0.5rem 0.75rem', background: 'none',
+                        border: 'none', color: 'rgba(255, 255, 255, 0.85)',
+                        fontSize: '0.8rem', fontWeight: '400', whiteSpace: 'nowrap',
+                        cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                      }}
+                    >
+                      <LayoutGrid size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                      {t('dashboard')}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { hapticLight(); setSettingsOpen(false); setPreviousTab(activeTab); setActiveTab('profile'); }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '0.45rem',
+                        width: '100%', padding: '0.5rem 0.75rem', background: 'none',
+                        border: 'none', color: 'rgba(255, 255, 255, 0.85)',
+                        fontSize: '0.8rem', fontWeight: '400', whiteSpace: 'nowrap',
+                        cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                      }}
+                    >
+                      <User size={13} style={{ color: '#3aabdb', flexShrink: 0 }} />
+                      {t('myProfile')}
+                    </button>
+                  )}
+
+                  <div style={{ height: '1px', background: 'rgba(58, 171, 219, 0.15)', margin: '0.15rem 0.6rem' }} />
+
+                  <button
+                    onClick={() => {
+                      hapticLight();
+                      setSettingsOpen(false);
+                      if (window.confirm(t('logoutConfirm'))) {
+                        removeToken();
+                        navigate('/');
+                      }
+                    }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '0.45rem',
+                      width: '100%', padding: '0.5rem 0.75rem', background: 'none',
+                      border: 'none', color: '#ff7b7b',
+                      fontSize: '0.8rem', fontWeight: '500', whiteSpace: 'nowrap',
+                      cursor: 'pointer', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >
+                    <LogOut size={13} />
+                    {t('logout')}
+                  </button>
+                </motion.div>
+              )}
+              </AnimatePresence>
             </div>
           </div>
 
@@ -293,12 +398,7 @@ export default function DashboardPage() {
           {activeTab === 'services' && <ServiceManager />}
           {activeTab === 'availability' && <AvailabilityManager />}
           {activeTab === 'profile' && (
-            <ProfileManager
-              onLogout={() => {
-                removeToken();
-                navigate('/');
-              }}
-            />
+            <ProfileManager />
           )}
           {activeTab === 'team' && isAdmin && <TeamManager />}
         </motion.div>

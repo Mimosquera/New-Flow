@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useEmblaCarousel from 'embla-carousel-react';
-import { Clock, Phone, AtSign, MapPin } from 'lucide-react';
+import { Clock, Phone, AtSign, MapPin, LayoutGrid } from 'lucide-react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { getToken } from '../../utils/tokenUtils.js';
@@ -405,6 +405,23 @@ export const HomePage = ({ onNavigateToBooking }) => {
                   {t('bookNow')}
                 </button>
               </motion.div>
+              {isLoggedIn && (
+                <motion.div
+                  className={styles.heroCta}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.95, ease: [0.22, 1, 0.36, 1] }}
+                  style={{ marginTop: '0.75rem' }}
+                >
+                  <button
+                    className={styles.heroDashboardBtn}
+                    onClick={() => { hapticLight(); navigate('/employee-dashboard'); }}
+                  >
+                    <LayoutGrid size={13} />
+                    {t('employeeDashboard')}
+                  </button>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>
