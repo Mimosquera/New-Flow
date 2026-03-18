@@ -66,6 +66,8 @@ export const authService = {
 
   updateProfile: (data) => apiClient.put('/auth/profile', data),
 
+  updateNotificationPrefs: (data) => apiClient.put('/auth/profile', data),
+
   uploadProfileImage: (formData) => apiClient.post('/auth/profile/image', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),

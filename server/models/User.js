@@ -46,6 +46,28 @@ export const User = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    emailLanguage: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'both',
+      field: 'email_language',
+    },
+    smsLanguage: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'both',
+      field: 'sms_language',
+    },
+    notificationSettings: {
+      type: DataTypes.JSONB,
+      allowNull: false,
+      defaultValue: {
+        newAppointments: true,
+        confirmations: true,
+        cancellations: true,
+      },
+      field: 'notification_settings',
+    },
   },
   {
     tableName: 'users',

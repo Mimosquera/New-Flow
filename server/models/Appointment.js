@@ -71,6 +71,24 @@ export const Appointment = sequelize.define(
         key: 'id',
       },
     },
+    customerLanguage: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'en',
+      field: 'customer_language',
+    },
+    notifyByEmail: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      field: 'notify_by_email',
+    },
+    notifyBySms: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+      field: 'notify_by_sms',
+    },
   },
   {
     tableName: 'appointments',

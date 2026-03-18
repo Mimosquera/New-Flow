@@ -278,6 +278,58 @@
 }
 
 /* ─── Help / Alert text ──────────────────────────────────────────────────────── */
+
+/* ─── Notification Toggles ───────────────────────────────────────────────────── */
+.notifToggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.notifToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.notifToggle input {
+  display: none;
+}
+
+.notifToggleTrack {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.notifToggle input:checked + .notifToggleTrack {
+  background: rgba(58, 171, 219, 0.65);
+}
+
+.notifToggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.notifToggle input:checked + .notifToggleTrack .notifToggleThumb {
+  transform: translateX(16px);
+}
+
 .helpText {
   display: block;
   margin-top: 0.4rem;

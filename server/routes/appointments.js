@@ -129,7 +129,7 @@ router.get('/public/:id', async (req, res) => {
 // POST /api/appointments
 router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPhone', 'serviceId', 'date', 'time']), async (req, res) => {
   try {
-    const { customerName, customerEmail, customerPhone, serviceId, employeeId, date, time, customerNotes } = req.body;
+    const { customerName, customerEmail, customerPhone, serviceId, employeeId, date, time, customerNotes, notifyByEmail, notifyBySms, customerLanguage } = req.body;
 
     const service = await Service.findByPk(serviceId);
     if (!service) {
@@ -169,6 +169,9 @@ router.post('/', validateRequired(['customerName', 'customerEmail', 'customerPho
       time,
       status: STATUS_PENDING,
       customerNotes: customerNotes || null,
+      customerLanguage: customerLanguage === 'es' ? 'es' : 'en',
+      notifyByEmail: notifyByEmail !== false,
+      notifyBySms: notifyBySms !== false,
     });
 
     Promise.all([

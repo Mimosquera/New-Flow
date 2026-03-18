@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, Scissors, Users, User, Mail, Phone,
-  CalendarDays, Clock, StickyNote, CheckCircle2,
+  CalendarDays, Clock, StickyNote, CheckCircle2, Bell,
 } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { useForm } from '../../hooks/useForm.js';
@@ -84,6 +84,8 @@ export const BookingPage = () => {
       date: '',
       time: '',
       notes: '',
+      notifyByEmail: true,
+      notifyBySms: true,
     },
     async (data) => {
       if (!data.name || !data.email || !data.phone || !data.service || !data.date || !data.time) {
@@ -104,6 +106,9 @@ export const BookingPage = () => {
         date: data.date,
         time: time24hr,
         customerNotes: data.notes || null,
+        notifyByEmail: data.notifyByEmail,
+        notifyBySms: data.notifyBySms,
+        customerLanguage: language,
       });
       hapticSuccess();
       setSuccess(t('appointmentRequested'));
@@ -317,6 +322,39 @@ export const BookingPage = () => {
                       autoComplete="tel"
                       placeholder={t('phone')}
                     />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>
+                      <Bell size={12} />
+                      {t('notificationPreferences')}
+                    </label>
+                    <div className={styles.notifToggles}>
+                      <label className={styles.notifToggle}>
+                        <input
+                          type="checkbox"
+                          checked={formData.notifyByEmail}
+                          onChange={(e) => setFormData(prev => ({ ...prev, notifyByEmail: e.target.checked }))}
+                        />
+                        <span className={styles.notifToggleTrack}>
+                          <span className={styles.notifToggleThumb} />
+                        </span>
+                        <Mail size={13} />
+                        <span>{t('emailNotifications')}</span>
+                      </label>
+                      <label className={styles.notifToggle}>
+                        <input
+                          type="checkbox"
+                          checked={formData.notifyBySms}
+                          onChange={(e) => setFormData(prev => ({ ...prev, notifyBySms: e.target.checked }))}
+                        />
+                        <span className={styles.notifToggleTrack}>
+                          <span className={styles.notifToggleThumb} />
+                        </span>
+                        <Phone size={13} />
+                        <span>{t('textNotifications')}</span>
+                      </label>
+                    </div>
                   </div>
 
                   <button

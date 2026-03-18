@@ -357,7 +357,10 @@ router.get('/profile', verifyToken, async (req, res) => {
       email: user.email,
       isEmployee: user.isEmployee,
       profileImageUrl: user.profileImageUrl,
-      bio: user.bio
+      bio: user.bio,
+      emailLanguage: user.emailLanguage,
+      smsLanguage: user.smsLanguage,
+      notificationSettings: user.notificationSettings
     });
   } catch (error) {
     console.error('Get profile error:', error);
@@ -418,6 +421,33 @@ router.put('/profile', verifyToken, async (req, res) => {
     if (email) updateData.email = email.trim().toLowerCase();
     if (newPassword) updateData.password = newPassword;
     if (bio !== undefined) updateData.bio = bio.trim() || null;
+
+    const validLangs = ['en', 'es', 'both', 'none'];
+    if (req.body.emailLanguage !== undefined) {
+      if (validLangs.includes(req.body.emailLanguage)) {
+        updateData.emailLanguage = req.body.emailLanguage;
+      }
+    }
+    if (req.body.smsLanguage !== undefined) {
+      if (validLangs.includes(req.body.smsLanguage)) {
+        updateData.smsLanguage = req.body.smsLanguage;
+      }
+    }
+
+    if (req.body.notificationSettings !== undefined) {
+      const settings = req.body.notificationSettings;
+      if (typeof settings === 'object' && settings !== null) {
+        const validKeys = ['newAppointments', 'confirmations', 'cancellations'];
+        const sanitized = {};
+        for (const key of validKeys) {
+          if (key in settings) {
+            sanitized[key] = Boolean(settings[key]);
+          }
+        }
+        const current = user.notificationSettings || { newAppointments: true, confirmations: true, cancellations: true };
+        updateData.notificationSettings = { ...current, ...sanitized };
+      }
+    }
 
     await user.update(updateData);
 

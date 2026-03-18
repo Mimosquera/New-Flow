@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { User, Lock, Camera, Trash2, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
+import { User, Lock, Camera, Trash2, Pencil, ChevronDown, ChevronUp, Bell, Mail, CalendarCheck, CalendarX, Globe } from 'lucide-react';
 import { Alert } from '../../components/Common/index.jsx';
 import { authService } from '../../services/api.js';
 import { useTranslation } from '../../hooks/useTranslation.js';
 import { setToken } from '../../utils/tokenUtils.js';
-import { hapticSuccess, hapticWarning } from '../../utils/haptics.js';
+import { hapticSuccess, hapticWarning, hapticLight } from '../../utils/haptics.js';
 
 const THEME_COLOR = 'rgb(5, 60, 82)';
 const SECONDARY_COLOR = '#3aabdb';
@@ -43,6 +43,9 @@ export const ProfileManager = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [notifPrefs, setNotifPrefs] = useState({ emailLanguage: 'both', smsLanguage: 'both' });
+  const [notifSettings, setNotifSettings] = useState({ newAppointments: true, confirmations: true, cancellations: true });
+  const [savingNotifPrefs, setSavingNotifPrefs] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -70,6 +73,15 @@ export const ProfileManager = () => {
         bio: data.bio || ''
       });
       setImagePreview(data.profileImageUrl || null);
+      setNotifPrefs({
+        emailLanguage: data.emailLanguage || 'both',
+        smsLanguage: data.smsLanguage || 'both',
+      });
+      setNotifSettings({
+        newAppointments: data.notificationSettings?.newAppointments !== false,
+        confirmations: data.notificationSettings?.confirmations !== false,
+        cancellations: data.notificationSettings?.cancellations !== false,
+      });
     } catch {
       setAlerts({ error: t('failedToLoadProfile'), success: null });
     }
@@ -328,6 +340,46 @@ export const ProfileManager = () => {
       setAlerts({ error: t('failedToSendResetLink'), success: null });
     } finally {
       setResetLoading(false);
+    }
+  };
+
+  const handleNotifPrefChange = async (type, value) => {
+    hapticLight();
+    const newPrefs = { ...notifPrefs, [type]: value };
+    setNotifPrefs(newPrefs);
+    setSavingNotifPrefs(true);
+    try {
+      await authService.updateNotificationPrefs({
+        emailLanguage: newPrefs.emailLanguage,
+        smsLanguage: newPrefs.smsLanguage,
+      });
+      hapticSuccess();
+      setAlerts({ error: null, success: t('notifPrefsUpdated') });
+    } catch {
+      hapticWarning();
+      setNotifPrefs(prev => ({ ...prev, [type]: notifPrefs[type] }));
+      setAlerts({ error: t('notifPrefsFailed'), success: null });
+    } finally {
+      setSavingNotifPrefs(false);
+    }
+  };
+
+  const handleNotifSettingToggle = async (key) => {
+    hapticLight();
+    const prev = { ...notifSettings };
+    const updated = { ...notifSettings, [key]: !notifSettings[key] };
+    setNotifSettings(updated);
+    setSavingNotifPrefs(true);
+    try {
+      await authService.updateNotificationPrefs({ notificationSettings: updated });
+      hapticSuccess();
+      setAlerts({ error: null, success: t('notifPrefsUpdated') });
+    } catch {
+      hapticWarning();
+      setNotifSettings(prev);
+      setAlerts({ error: t('notifPrefsFailed'), success: null });
+    } finally {
+      setSavingNotifPrefs(false);
     }
   };
 
@@ -643,6 +695,150 @@ export const ProfileManager = () => {
             </AnimatePresence>
           </div>
 
+        </div>
+      </div>
+
+      {/* Notification Preferences Card */}
+      <div className="row justify-content-center g-3 mt-1">
+        <div className="col-12 col-xl-8">
+          <div style={profileCardStyle}>
+            <div style={cardHeaderStyle}>
+              <h6 style={{ margin: 0, color: '#fff', fontWeight: '700', fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Bell size={13} />
+                {t('notificationPreferences')}
+              </h6>
+              {savingNotifPrefs && (
+                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)' }}>{t('updating')}</span>
+              )}
+            </div>
+            <div style={{ padding: '1rem' }}>
+              {/* Notification Type Toggles */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+                {[
+                  { key: 'newAppointments', icon: Mail, label: t('notifNewAppointments'), desc: t('notifNewAppointmentsDesc') },
+                  { key: 'confirmations', icon: CalendarCheck, label: t('notifConfirmations'), desc: t('notifConfirmationsDesc') },
+                  { key: 'cancellations', icon: CalendarX, label: t('notifCancellations'), desc: t('notifCancellationsDesc') },
+                ].map((item, i, arr) => {
+                  const Icon = item.icon;
+                  const isOn = notifSettings[item.key];
+                  return (
+                    <div
+                      key={item.key}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '0.75rem 0',
+                        borderBottom: i < arr.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flex: 1, minWidth: 0 }}>
+                        <div style={{
+                          width: 30, height: 30, borderRadius: '8px',
+                          background: isOn ? 'rgba(58,171,219,0.12)' : 'rgba(255,255,255,0.04)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          flexShrink: 0, transition: 'background 0.2s ease',
+                        }}>
+                          <Icon size={14} style={{ color: isOn ? SECONDARY_COLOR : 'rgba(255,255,255,0.25)', transition: 'color 0.2s ease' }} />
+                        </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.82rem', fontWeight: '600' }}>{item.label}</div>
+                          <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: '0.72rem', lineHeight: '1.3' }}>{item.desc}</div>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleNotifSettingToggle(item.key)}
+                        disabled={savingNotifPrefs}
+                        aria-label={`${item.label} ${isOn ? 'on' : 'off'}`}
+                        style={{
+                          position: 'relative',
+                          width: 40, height: 22,
+                          borderRadius: 11,
+                          border: 'none',
+                          cursor: 'pointer',
+                          flexShrink: 0,
+                          marginLeft: '0.75rem',
+                          background: isOn ? 'rgba(58,171,219,0.55)' : 'rgba(255,255,255,0.1)',
+                          transition: 'background 0.25s ease',
+                          padding: 0,
+                        }}
+                      >
+                        <motion.div
+                          animate={{ x: isOn ? 19 : 1 }}
+                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                          style={{
+                            position: 'absolute',
+                            top: 2, left: 0,
+                            width: 18, height: 18,
+                            borderRadius: '50%',
+                            background: '#fff',
+                            boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                          }}
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Email Language Preference */}
+              <div style={{ marginTop: '1rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', marginBottom: '0.55rem' }}>
+                  <Globe size={13} style={{ color: SECONDARY_COLOR }} />
+                  <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.82rem', fontWeight: '600' }}>{t('emailLanguage')}</span>
+                </div>
+                <div style={{ display: 'flex', borderRadius: '10px', overflow: 'hidden', border: '1px solid rgba(58,171,219,0.2)', background: 'rgba(0,0,0,0.15)' }}>
+                  {[
+                    { value: 'en', label: t('notifEnglish') },
+                    { value: 'es', label: t('notifSpanish') },
+                    { value: 'both', label: t('notifBoth') },
+                  ].map((opt, i, arr) => (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => handleNotifPrefChange('emailLanguage', opt.value)}
+                      disabled={savingNotifPrefs}
+                      style={{
+                        flex: 1,
+                        padding: '0.42rem 0.2rem',
+                        fontSize: '0.72rem',
+                        fontWeight: notifPrefs.emailLanguage === opt.value ? '700' : '500',
+                        background: notifPrefs.emailLanguage === opt.value
+                          ? 'rgba(58,171,219,0.2)'
+                          : 'transparent',
+                        color: notifPrefs.emailLanguage === opt.value
+                          ? SECONDARY_COLOR
+                          : 'rgba(255,255,255,0.4)',
+                        border: 'none',
+                        borderRight: i < arr.length - 1 ? '1px solid rgba(58,171,219,0.12)' : 'none',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        position: 'relative',
+                      }}
+                    >
+                      {opt.label}
+                      {notifPrefs.emailLanguage === opt.value && (
+                        <motion.div
+                          layoutId="email-indicator"
+                          style={{
+                            position: 'absolute',
+                            bottom: 0,
+                            left: '20%',
+                            right: '20%',
+                            height: '2px',
+                            background: SECONDARY_COLOR,
+                            borderRadius: '2px',
+                          }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

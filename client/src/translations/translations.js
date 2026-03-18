@@ -449,6 +449,25 @@ export const translations = {
     backToLogin: 'Back to Login',
     invalidResetLink: 'Invalid Reset Link',
     resetLinkExpiredMessage: 'This password reset link is invalid or has expired. Please request a new reset link.',
+
+    // Notification Preferences
+    notifications: 'Notifications',
+    notificationPreferences: 'Notification Preferences',
+    emailNotifications: 'Email Notifications',
+    textNotifications: 'Text Notifications',
+    notifEnglish: 'English',
+    notifSpanish: 'Spanish',
+    notifBoth: 'Both',
+    notifNone: 'Off',
+    notifPrefsUpdated: 'Notification preferences updated!',
+    notifPrefsFailed: 'Failed to update notification preferences',
+    notifNewAppointments: 'New Appointment Requests',
+    notifNewAppointmentsDesc: 'Get notified when customers submit new booking requests',
+    notifConfirmations: 'Booking Confirmations',
+    notifConfirmationsDesc: 'Get notified when you accept and confirm an appointment',
+    notifCancellations: 'Cancellation Alerts',
+    notifCancellationsDesc: 'Get notified when a customer cancels their appointment',
+    emailLanguage: 'Email Language',
   },
 
   es: {
@@ -900,6 +919,25 @@ export const translations = {
     backToLogin: 'Volver al Inicio de Sesión',
     invalidResetLink: 'Enlace de Restablecimiento Inválido',
     resetLinkExpiredMessage: 'Este enlace de restablecimiento de contraseña es inválido o ha expirado. Por favor, solicite un nuevo enlace de restablecimiento.',
+
+    // Preferencias de Notificación
+    notifications: 'Notificaciones',
+    notificationPreferences: 'Preferencias de Notificación',
+    emailNotifications: 'Notificaciones por Correo',
+    textNotifications: 'Notificaciones por Texto',
+    notifEnglish: 'Inglés',
+    notifSpanish: 'Español',
+    notifBoth: 'Ambos',
+    notifNone: 'Desactivar',
+    notifPrefsUpdated: '¡Preferencias de notificación actualizadas!',
+    notifPrefsFailed: 'Error al actualizar preferencias de notificación',
+    notifNewAppointments: 'Nuevas Solicitudes de Cita',
+    notifNewAppointmentsDesc: 'Recibe notificaciones cuando los clientes envían nuevas solicitudes',
+    notifConfirmations: 'Confirmaciones de Reserva',
+    notifConfirmationsDesc: 'Recibe notificaciones cuando aceptas y confirmas una cita',
+    notifCancellations: 'Alertas de Cancelación',
+    notifCancellationsDesc: 'Recibe notificaciones cuando un cliente cancela su cita',
+    emailLanguage: 'Idioma de Correo',
   }
 };
 
