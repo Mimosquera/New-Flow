@@ -58,4 +58,16 @@ server/uploads/*
 !server/uploads/.gitkeep
 
 # Claude Code worktrees
-.claude/worktrees/
+.claude/
+
+# VS Code
+.vscode/
+
+# Local scripts
+run-heroku-migration.bat
+
+# Internal documentation (not for public repo)
+DOCS/
+
+# Archived/dev-only scripts
+server/scripts/archive/
