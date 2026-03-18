@@ -66,7 +66,9 @@ export const AppointmentsManager = ({ filter: externalFilter, setFilter: externa
       setCurrentUser(decoded);
       setIsAdmin(decoded?.email === import.meta.env.VITE_SEED_EMPLOYEE_EMAIL);
     }
-    fetchAppointments();
+    // Small delay ensures component is fully mounted after SPA navigation animations
+    const timer = setTimeout(() => fetchAppointments(), 50);
+    return () => clearTimeout(timer);
   }, [fetchAppointments]);
 
   useEffect(() => {

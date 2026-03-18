@@ -74,7 +74,7 @@ export const BookingPage = () => {
     fetchData();
   }, []);
 
-  const { formData, handleChange: originalHandleChange, handleSubmit: handleFormSubmit, error, setError } = useForm(
+  const { formData, setFormData, handleChange: originalHandleChange, handleSubmit: handleFormSubmit, error, setError } = useForm(
     {
       name: '',
       email: '',
