@@ -36,6 +36,8 @@ const savePostsCache = (posts, total) => {
 
 const SKELETON_MIN_MS = 420;
 
+let hasPlayedIntro = false;
+
 const sectionVariants = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
@@ -137,6 +139,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [servicesLoading, setServicesLoading] = useState(true);
   const [expandedServiceId, setExpandedServiceId] = useState(null);
   const serviceCardsRef = useRef([]);
+  const servicesSectionRef = useRef(null);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -177,6 +180,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const updatesEndRef = useRef(null);
+  const isFirstVisit = useRef(!hasPlayedIntro);
+
+  useEffect(() => { hasPlayedIntro = true; }, []);
 
   const handleUpdateClick = (article) => {
     hapticLight();
@@ -358,7 +364,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       {/* Hero Section */}
       <motion.section
         className={`text-white ${styles.heroSection}`}
-        initial={{ opacity: 0 }}
+        initial={isFirstVisit.current ? { opacity: 0 } : false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.7 }}
       >
@@ -367,7 +373,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {/* Logo image — centered brand header */}
             <motion.div
               className={styles.heroVideoWrap}
-              initial={{ opacity: 0, y: 20, scale: 0.94 }}
+              initial={isFirstVisit.current ? { opacity: 0, y: 20, scale: 0.94 } : false}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
             >
@@ -382,17 +388,17 @@ export const HomePage = ({ onNavigateToBooking }) => {
             <div className={styles.heroTextBlock}>
               <motion.p
                 className={styles.heroSubtitle}
-                initial={{ opacity: 0, y: 12 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 12 } : false}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.8, delay: isFirstVisit.current ? 0.5 : 0, ease: [0.22, 1, 0.36, 1] }}
               >
                 {t('heroSubtitle')}
               </motion.p>
               <motion.div
                 className={styles.heroCta}
-                initial={{ opacity: 0, y: 10 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 10 } : false}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.8, delay: isFirstVisit.current ? 0.7 : 0, ease: [0.22, 1, 0.36, 1] }}
               >
                 <button
                   className={styles.requestButton}
@@ -408,9 +414,9 @@ export const HomePage = ({ onNavigateToBooking }) => {
               {isLoggedIn && (
                 <motion.div
                   className={styles.heroCta}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={isFirstVisit.current ? { opacity: 0, y: 8 } : false}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.95, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.6, delay: isFirstVisit.current ? 0.95 : 0, ease: [0.22, 1, 0.36, 1] }}
                   style={{ marginTop: '0.75rem' }}
                 >
                   <button
@@ -429,9 +435,12 @@ export const HomePage = ({ onNavigateToBooking }) => {
         {/* Scroll indicator */}
         <motion.div
           className={styles.scrollIndicator}
-          initial={{ opacity: 0 }}
+          initial={isFirstVisit.current ? { opacity: 0 } : false}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.6 }}
+          transition={{ delay: isFirstVisit.current ? 1.2 : 0, duration: 0.6 }}
+          onClick={() => servicesSectionRef.current?.scrollIntoView({ behavior: 'smooth' })}
+          role="button"
+          aria-label="Scroll to services"
         >
           <motion.div
             animate={{ y: [0, 9, 0] }}
@@ -445,11 +454,11 @@ export const HomePage = ({ onNavigateToBooking }) => {
       </motion.section>
 
       {/* Services Section */}
-      <section className={styles.servicesSection}>
+      <section ref={servicesSectionRef} className={styles.servicesSection}>
         <div className="container-xxl px-3 px-md-4">
           <motion.h2
             className={styles.sectionHeading}
-            initial={{ opacity: 0, y: 28 }}
+            initial={isFirstVisit.current ? { opacity: 0, y: 28 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
@@ -457,10 +466,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {t('servicesTitle')}
           </motion.h2>
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
+            initial={isFirstVisit.current ? { opacity: 0, y: 28 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: 0.12 }}
+            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: isFirstVisit.current ? 0.12 : 0 }}
           >
           {servicesLoading ? (
             <div className={styles.carouselViewport}>
@@ -623,7 +632,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
         <div className="container">
           <motion.h2
             className={styles.sectionHeading}
-            initial={{ opacity: 0, y: 28 }}
+            initial={isFirstVisit.current ? { opacity: 0, y: 28 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
@@ -631,10 +640,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
             {t('updatesTitle')}
           </motion.h2>
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
+            initial={isFirstVisit.current ? { opacity: 0, y: 32 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.05 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: isFirstVisit.current ? 0.1 : 0 }}
           >
           {loading || translating ? (
             <div className="row g-3">
@@ -698,7 +707,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
               </div>
               <motion.div
                 className="text-center mt-5"
-                initial={{ opacity: 0, y: 16 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 16 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.8 }}
                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
@@ -725,7 +734,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.section
         className={styles.reviewsSection}
         variants={sectionVariants}
-        initial="hidden"
+        initial={isFirstVisit.current ? 'hidden' : false}
         whileInView="visible"
         viewport={{ once: true, amount: 0.08 }}
       >
@@ -738,7 +747,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.section
         className={`${styles.aboutSection}${aboutGlowing ? ` ${styles.aboutGlowing}` : ''}`}
         variants={sectionVariants}
-        initial="hidden"
+        initial={isFirstVisit.current ? 'hidden' : false}
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
         onViewportEnter={() => setTimeout(() => setAboutGlowing(true), 1200)}
@@ -748,10 +757,10 @@ export const HomePage = ({ onNavigateToBooking }) => {
           <div className={styles.aboutRow}>
             <motion.div
               className={`mb-5 mb-md-0 ${styles.aboutLogoCol}`}
-              initial={{ opacity: 0, x: -30 }}
+              initial={isFirstVisit.current ? { opacity: 0, x: -30 } : false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.6, delay: isFirstVisit.current ? 0.2 : 0 }}
             >
               <div className={styles.aboutLogoWrap}>
                 <img
@@ -767,39 +776,39 @@ export const HomePage = ({ onNavigateToBooking }) => {
               <motion.h2
                 className="fw-bold mb-3"
                 style={{ color: '#fff' }}
-                initial={{ opacity: 0, y: 20 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 20 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.5, delay: isFirstVisit.current ? 0.2 : 0, ease: [0.4, 0, 0.2, 1] }}
               >
                 {t('aboutTitle')}
               </motion.h2>
               <motion.p
                 className="mb-3"
                 style={{ color: 'rgba(255,255,255,0.75)' }}
-                initial={{ opacity: 0, y: 18 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 18 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.32, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.5, delay: isFirstVisit.current ? 0.32 : 0, ease: [0.4, 0, 0.2, 1] }}
               >
                 {t('aboutParagraph1')}
               </motion.p>
               <motion.p
                 className="mb-3"
                 style={{ color: 'rgba(255,255,255,0.75)' }}
-                initial={{ opacity: 0, y: 18 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 18 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.44, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.5, delay: isFirstVisit.current ? 0.44 : 0, ease: [0.4, 0, 0.2, 1] }}
               >
                 {t('aboutParagraph2')}
               </motion.p>
               <motion.p
                 style={{ color: 'rgba(255,255,255,0.75)' }}
-                initial={{ opacity: 0, y: 18 }}
+                initial={isFirstVisit.current ? { opacity: 0, y: 18 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.56, ease: [0.4, 0, 0.2, 1] }}
+                transition={{ duration: 0.5, delay: isFirstVisit.current ? 0.56 : 0, ease: [0.4, 0, 0.2, 1] }}
               >
                 {t('aboutParagraph3')}
               </motion.p>
@@ -812,7 +821,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
       <motion.section
         className={styles.contactSection}
         variants={sectionVariants}
-        initial="hidden"
+        initial={isFirstVisit.current ? 'hidden' : false}
         whileInView="visible"
         viewport={{ once: true, amount: 0.15 }}
       >
@@ -826,7 +835,7 @@ export const HomePage = ({ onNavigateToBooking }) => {
           <motion.div
             className={`row text-center ${styles.contactRow}`}
             variants={staggerContainer}
-            initial="hidden"
+            initial={isFirstVisit.current ? 'hidden' : false}
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
           >
